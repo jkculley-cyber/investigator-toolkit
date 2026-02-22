@@ -20,7 +20,12 @@ export default function LoginPage() {
   // After profile loads, redirect based on role
   useEffect(() => {
     if (profile) {
-      const destination = from || (profile.role === 'parent' ? '/parent' : '/dashboard')
+      let destination = from
+      if (!destination) {
+        if (profile.role === 'parent') destination = '/parent'
+        else if (profile.role === 'waypoint_admin') destination = '/waypoint-admin'
+        else destination = '/dashboard'
+      }
       navigate(destination, { replace: true })
     }
   }, [profile, from, navigate])

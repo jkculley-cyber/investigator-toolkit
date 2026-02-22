@@ -13,6 +13,16 @@ const navigatorNavigation = [
   { name: 'Reports', path: '/navigator/reports', icon: ReportsIcon },
 ]
 
+const meridianNavigation = [
+  { name: 'SPED Overview',     path: '/meridian',                icon: DashboardIcon },
+  { name: 'ARD Timelines',     path: '/meridian/timelines',      icon: PlansIcon     },
+  { name: 'Dyslexia / HB 3928',path: '/meridian/dyslexia',       icon: ComplianceIcon},
+  { name: 'Folder Readiness',  path: '/meridian/folders',        icon: ImportIcon    },
+  { name: 'CAP Tracker',       path: '/meridian/cap',            icon: AlertsIcon    },
+  { name: 'Waypoint Sync',     path: '/meridian/waypoint-sync',  icon: MatrixIcon    },
+  { name: 'Data Integration',  path: '/meridian/integration',    icon: SettingsIcon  },
+]
+
 // Staff navigation items
 // product: 'waypoint' — only shown when district has Waypoint licensed
 // no product field     — always shown (role/feature still apply)
@@ -95,7 +105,9 @@ export default function Sidebar() {
   const isParent = profile?.role === 'parent'
   const showWaypoint = !isParent && hasProduct('waypoint')
   const showNavigator = !isParent && hasProduct('navigator')
-  const showProductHeaders = showWaypoint && showNavigator
+  const showMeridian = !isParent && hasProduct('meridian')
+  const activeProductCount = [showWaypoint, showNavigator, showMeridian].filter(Boolean).length
+  const showProductHeaders = activeProductCount > 1
 
   function itemVisible(item) {
     if (item.roles && !hasRole(item.roles)) return false
@@ -149,6 +161,33 @@ export default function Sidebar() {
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                     isActive
                       ? 'bg-blue-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  )
+                }
+              >
+                <item.icon className="h-5 w-5 flex-shrink-0" />
+                <span className="flex-1">{item.name}</span>
+              </NavLink>
+            ))}
+          </>
+        )}
+
+        {/* Meridian section */}
+        {showMeridian && (
+          <>
+            <div className="pt-3 pb-1 px-3">
+              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest">Meridian</p>
+            </div>
+            {meridianNavigation.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === '/meridian'}
+                className={({ isActive }) =>
+                  cn(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                    isActive
+                      ? 'bg-purple-600 text-white'
                       : 'text-gray-300 hover:bg-gray-800 hover:text-white'
                   )
                 }

@@ -16,6 +16,16 @@ import NavigatorSupportsPage from './pages/navigator/NavigatorSupportsPage'
 import NavigatorStudentPage from './pages/navigator/NavigatorStudentPage'
 import NavigatorReportsPage from './pages/navigator/NavigatorReportsPage'
 
+// Meridian pages
+import MeridianDashboardPage from './pages/meridian/MeridianDashboardPage'
+import MeridianTimelinesPage from './pages/meridian/MeridianTimelinesPage'
+import MeridianStudentDetailPage from './pages/meridian/MeridianStudentDetailPage'
+import MeridianDyslexiaPage from './pages/meridian/MeridianDyslexiaPage'
+import MeridianFolderReadinessPage from './pages/meridian/MeridianFolderReadinessPage'
+import MeridianCAPTrackerPage from './pages/meridian/MeridianCAPTrackerPage'
+import MeridianWaypointSyncPage from './pages/meridian/MeridianWaypointSyncPage'
+import MeridianIntegrationPage from './pages/meridian/MeridianIntegrationPage'
+
 // Public pages
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
@@ -115,6 +125,18 @@ function App() {
               <Route path="/navigator/supports" element={<RequireRole roles={STAFF_ROLES}><NavigatorSupportsPage /></RequireRole>} />
               <Route path="/navigator/students/:id" element={<RequireRole roles={STAFF_ROLES}><NavigatorStudentPage /></RequireRole>} />
               <Route path="/navigator/reports" element={<RequireRole roles={STAFF_ROLES}><NavigatorReportsPage /></RequireRole>} />
+            </Route>
+
+            {/* ── Meridian product routes ── */}
+            <Route element={<RequireProduct product="meridian"><Outlet /></RequireProduct>}>
+              <Route path="/meridian" element={<RequireRole roles={STAFF_ROLES}><MeridianDashboardPage /></RequireRole>} />
+              <Route path="/meridian/timelines" element={<RequireRole roles={STAFF_ROLES}><MeridianTimelinesPage /></RequireRole>} />
+              <Route path="/meridian/students/:studentId" element={<RequireRole roles={STAFF_ROLES}><MeridianStudentDetailPage /></RequireRole>} />
+              <Route path="/meridian/dyslexia" element={<RequireRole roles={STAFF_ROLES}><MeridianDyslexiaPage /></RequireRole>} />
+              <Route path="/meridian/folders" element={<RequireRole roles={STAFF_ROLES}><MeridianFolderReadinessPage /></RequireRole>} />
+              <Route path="/meridian/cap" element={<RequireRole roles={STAFF_ROLES}><MeridianCAPTrackerPage /></RequireRole>} />
+              <Route path="/meridian/waypoint-sync" element={<RequireRole roles={STAFF_ROLES}><MeridianWaypointSyncPage /></RequireRole>} />
+              <Route path="/meridian/integration" element={<RequireRole roles={STAFF_ROLES}><MeridianIntegrationPage /></RequireRole>} />
             </Route>
 
             {/* ── Settings — always accessible to admin regardless of product ── */}

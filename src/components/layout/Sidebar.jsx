@@ -127,7 +127,7 @@ export default function Sidebar() {
           <div>
             <h1 className="text-sm font-bold leading-tight">
               <span className="text-orange-400">Compass</span>
-              <span className="text-white"> Pathways</span>
+              <span className="text-purple-400"> Pathways</span>
             </h1>
             <p className="text-xs text-gray-400">Behavioral Solutions</p>
           </div>

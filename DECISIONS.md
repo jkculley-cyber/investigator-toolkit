@@ -12,6 +12,9 @@
 
 | Date | Decision | Context |
 |------|----------|---------|
+| 2026-02-21 | **Product suite architecture: one codebase, product-level gating.** Districts get a `products TEXT[]` in `districts.settings` (e.g. `["waypoint","navigator"]`). `hasProduct()` in AuthContext gates access. `RequireProduct` component wraps routes. `waypoint_admin` (district=null) sees all products. | Avoids separate codebases while keeping clear product boundaries for sales and billing. |
+| 2026-02-21 | **Navigator module built into Waypoint app.** Routes `/navigator/*`, sidebar section gated by `hasProduct('navigator')`. DB tables: `navigator_referrals`, `navigator_placements`, `navigator_supports` (migration 037). Navigator sidebar uses blue active state to visually differentiate from Waypoint's orange. | ISS/OSS tracker as separate product allows upsell from Navigator → full Waypoint DAEP management. |
+| 2026-02-21 | **Pricing published on marketing site.** Waypoint from $4,500/yr, Navigator from $2,500/yr, Meridian from $3,500/yr. Suite bundle → contact for pricing. These are starting prices, not caps. | Pre-pilot stage; prices are directional. Update before first signed contract. |
 | 2026-02-21 | **PWA implemented manually (no vite-plugin-pwa).** `public/manifest.json` + `public/sw.js` + index.html meta tags. Service worker uses network-first for navigation, cache-first for static assets, skips all `supabase.co` requests. | vite-plugin-pwa had peer dependency conflicts with Vite 7. Manual implementation is simpler and sufficient for pre-pilot stage. |
 | 2026-02-21 | **`vite.config.js` includes `optimizeDeps: { include: ['react-is'] }`.** | recharts v3 requires `react-is` but Rollup 4 can't resolve it from recharts' internal ESM path without pre-bundling. |
 | 2026-02-21 | **Email sender uses `onboarding@resend.dev` (Resend sandbox) until `waypointdaep.com` domain is verified.** Edge Function `send-notification` deployed to project `kvxecksvkimcgwhxxyhw`. | Domain verification requires DNS access. Sandbox sender fully functional for testing. |
@@ -45,8 +48,10 @@
 
 | Date | Decision | Context |
 |------|----------|---------|
+| 2026-02-21 | **Migration 037 adds Navigator tables and updates `provision_new_district` RPC.** The RPC now accepts `p_products TEXT[] DEFAULT ARRAY['waypoint']` and stores it in `districts.settings.products`. Existing districts default to `["waypoint"]` (no migration needed — JSONB defaults). | Backward compatible. |
+| 2026-02-21 | **Navigator FK constraint names.** PostgREST disambiguation hints in useNavigator.js: `navigator_referrals_reported_by_fkey`, `navigator_referrals_reviewed_by_fkey`, `navigator_placements_assigned_by_fkey`, `navigator_placements_parent_notified_by_fkey`, `navigator_supports_assigned_by_fkey`, `navigator_supports_assigned_to_fkey`. | These are auto-named by Postgres (format: `{table}_{column}_fkey`) since no explicit constraint names were given in migration 037. |
 | 2026-02-19 | **Single Supabase project, multi-tenant via `district_id`.** All districts share one database. RLS enforces row-level isolation. | Simplest operational model for early stage. Re-evaluate at 50+ districts or if a district requires data residency. |
-| 2026-02-19 | **Migrations numbered sequentially (001–027).** Each migration is idempotent where possible (`IF NOT EXISTS`, `IF EXISTS`, `DROP CONSTRAINT IF EXISTS`). | Allows re-running migrations safely in development. |
+| 2026-02-19 | **Migrations numbered sequentially (001–037).** Each migration is idempotent where possible (`IF NOT EXISTS`, `IF EXISTS`, `DROP CONSTRAINT IF EXISTS`). | Allows re-running migrations safely in development. |
 
 ---
 

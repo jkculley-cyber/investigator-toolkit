@@ -401,6 +401,42 @@
   }
   .products-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
   .product-card.full-width { grid-column: 1 / -1; }
+
+  /* SUITE CALLOUT */
+  .suite-callout {
+    background: linear-gradient(135deg, rgba(107,47,160,0.15), rgba(232,134,42,0.08));
+    border: 1px solid rgba(232,134,42,0.25);
+    border-radius: 16px; padding: 40px;
+    text-align: center; margin-top: 40px;
+    position: relative; overflow: hidden;
+  }
+  .suite-callout::before {
+    content: 'CLEAR PATH SUITE';
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: linear-gradient(90deg, var(--amber), var(--orange));
+    color: white; font-size: 0.6rem; font-weight: 700;
+    padding: 3px 16px; border-radius: 3px; letter-spacing: 0.12em;
+    white-space: nowrap;
+  }
+  .suite-callout h3 {
+    font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
+    color: var(--text); margin-bottom: 12px;
+  }
+  .suite-callout p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .suite-products { display: flex; justify: center; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 24px; }
+  .suite-badge {
+    font-size: 0.8rem; font-weight: 700; padding: 6px 18px; border-radius: 6px;
+    border: 1px solid rgba(232,134,42,0.4); color: var(--amber-light);
+    background: rgba(232,134,42,0.1);
+  }
+  .pricing-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
+  .pricing-tag {
+    text-align: center; padding: 14px 20px;
+    background: rgba(14,6,24,0.6); border: 1px solid var(--border-purple);
+    border-radius: 12px; min-width: 140px;
+  }
+  .pricing-tag .price { font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700; color: var(--amber-light); }
+  .pricing-tag .price-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.04em; }
   .product-card.full-width .slides-embed {
     position: relative; width: 100%;
     height: min(56vw, 520px);
@@ -636,7 +672,7 @@
           <div class="node-info">
             <h4>Compass Pathway</h4>
             <p>Behavior &amp; Compliance Support</p>
-            <span class="node-badge badge-active"><a href="https://waypoint.clearpathedgroup.com" class="waypoint-link" target="_blank" rel="noopener noreferrer">Waypoint</a> · Meridian</span>
+            <span class="node-badge badge-active"><a href="https://waypoint.clearpathedgroup.com" class="waypoint-link" target="_blank" rel="noopener noreferrer">Waypoint</a> · Navigator · Meridian</span>
           </div>
         </div>
         <div class="path-node">
@@ -705,6 +741,7 @@
       <p>Helping campuses navigate student behavior, discipline compliance, and intervention frameworks — so every student can find their direction.</p>
       <div class="pathway-products">
         <a href="https://waypoint.clearpathedgroup.com" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><span class="product-chip">Waypoint</span></a>
+        <span class="product-chip">Navigator</span>
         <span class="product-chip">Meridian</span>
       </div>
     </div>
@@ -742,12 +779,13 @@
         <p>Behavior &amp; Compliance Solutions</p>
       </div>
     </div>
-    <p class="spotlight-desc">Our flagship pathway provides campuses and districts with proven tools to manage, document, and improve student behavior outcomes — while maintaining full compliance with state and federal requirements. Two powerful products. One clear direction.</p>
+    <p class="spotlight-desc">Our flagship pathway provides campuses and districts with proven tools to manage, document, and improve student behavior outcomes — while maintaining full compliance with state and federal requirements. Three powerful products. One clear direction.</p>
     <div class="products-grid">
       <div class="product-card full-width">
         <div class="product-card-icon">📍</div>
         <h3><a href="https://waypoint.clearpathedgroup.com" class="waypoint-link" target="_blank" rel="noopener noreferrer">Waypoint</a></h3>
         <p>Texas DAEP compliance management — from incident documentation and approval chains to SPED compliance blocking, parent portals, and transition plans. See it in action below.</p>
+        <div style="font-size:0.8rem;color:var(--amber);font-weight:700;margin-bottom:8px;">Starting at $4,500/yr</div>
         <div class="slides-embed">
           <iframe src="https://docs.google.com/presentation/d/1nQHIEbh-nBX7SUVkxiCV8HHO0rOzaQEm/embed?start=false&loop=false&delayms=5000"
             allowfullscreen
@@ -756,9 +794,24 @@
         </div>
       </div>
       <div class="product-card">
+        <div class="product-card-icon">🧭</div>
+        <h3>Navigator</h3>
+        <p>ISS and OSS management built for campus administrators — track referrals, document placements, assign proactive supports, and catch escalation patterns before they reach DAEP.</p>
+        <div style="font-size:0.8rem;color:var(--amber);font-weight:700;margin-bottom:12px;">Starting at $2,500/yr</div>
+        <ul class="feature-list">
+          <li>Referral intake and admin review workflow</li>
+          <li>ISS / OSS placement tracking with re-entry plans</li>
+          <li>Proactive supports: CICO, behavior contracts, counseling</li>
+          <li>Escalation alerts (3+ OSS in 90 days → DAEP review)</li>
+          <li>Student behavior risk scoring</li>
+          <li>Referral trend reports &amp; offense code analytics</li>
+        </ul>
+      </div>
+      <div class="product-card">
         <div class="product-card-icon">⭐</div>
         <h3>Meridian</h3>
-        <p>A comprehensive compliance and systems alignment solution to help campuses reach peak performance — ensuring every policy, plan, and practice is aligned.</p>
+        <p>A comprehensive SPED compliance engine to help campuses reach peak performance — ensuring every policy, plan, and practice aligns with state and federal requirements.</p>
+        <div style="font-size:0.8rem;color:var(--amber);font-weight:700;margin-bottom:12px;">Starting at $3,500/yr</div>
         <ul class="feature-list">
           <li>PBIS &amp; MTSS framework alignment</li>
           <li>FBA/BIP development &amp; review support</li>
@@ -766,6 +819,25 @@
           <li>Campus systems coaching</li>
         </ul>
       </div>
+    </div>
+
+    <!-- Suite Callout -->
+    <div class="suite-callout fade-up">
+      <h3>Bundle All Three — Clear Path Suite</h3>
+      <p>Get Waypoint, Navigator, and Meridian in a single district subscription. One platform. Complete coverage from ISS referral to DAEP placement to SPED compliance.</p>
+      <div class="suite-products">
+        <span class="suite-badge">📍 Waypoint</span>
+        <span class="suite-badge">🧭 Navigator</span>
+        <span class="suite-badge">⭐ Meridian</span>
+      </div>
+      <div class="pricing-row">
+        <div class="pricing-tag"><div class="price">Waypoint</div><div class="price-label">from $4,500/yr</div></div>
+        <div class="pricing-tag" style="border-color:rgba(232,134,42,0.5);"><div class="price" style="color:var(--amber-glow);">+ Navigator</div><div class="price-label">from $2,500/yr</div></div>
+        <div class="pricing-tag"><div class="price">+ Meridian</div><div class="price-label">from $3,500/yr</div></div>
+      </div>
+      <a href="mailto:support@clearpathedgroup.com?subject=Clear Path Suite Inquiry" class="btn-primary" style="font-size:0.85rem;padding:12px 28px;display:inline-flex;">
+        Contact Us for Suite Pricing →
+      </a>
     </div>
   </div>
 </section>
@@ -816,9 +888,12 @@
       <p>Purposeful pathways for districts and campuses across Texas. Pending state approval.</p>
     </div>
     <div class="footer-links">
-      <h4>Pathways</h4>
+      <h4>Pathways &amp; Products</h4>
       <ul>
         <li><a href="#compass">🧭 Compass — Behavior &amp; Compliance</a></li>
+        <li><a href="#compass">📍 Waypoint — DAEP Management</a></li>
+        <li><a href="#compass">🧭 Navigator — ISS/OSS Tracker</a></li>
+        <li><a href="#compass">⭐ Meridian — SPED Compliance</a></li>
         <li><a href="#pathways">🧱 Cornerstone — Instructional Support</a></li>
         <li><a href="#pathways">🌅 Horizon — PD &amp; Coaching</a></li>
         <li><a href="#pathways">🏔️ Summit — Leadership</a></li>

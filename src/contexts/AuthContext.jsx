@@ -189,6 +189,13 @@ export function AuthProvider({ children }) {
     return hasFeatureAccess(tier, featureName)
   }
 
+  function hasProduct(productName) {
+    // waypoint_admin (district=null) sees all products
+    if (!district) return true
+    const products = district?.settings?.products || ['waypoint']
+    return products.includes(productName)
+  }
+
   const value = {
     session,
     user: session?.user || null,
@@ -202,6 +209,7 @@ export function AuthProvider({ children }) {
     signOut,
     hasRole,
     hasFeature,
+    hasProduct,
     isAdmin,
     isStaff,
     districtId: profile?.district_id || null,

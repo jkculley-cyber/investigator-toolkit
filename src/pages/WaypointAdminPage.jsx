@@ -5,6 +5,8 @@ import { format } from 'date-fns'
 
 const TIERS = ['essential', 'professional', 'enterprise']
 const CAMPUS_TYPES = ['elementary', 'middle', 'high', 'daep', 'jjaep', 'other']
+const ALL_PRODUCTS = ['waypoint', 'navigator', 'meridian']
+const PRODUCT_LABELS = { waypoint: 'Waypoint', navigator: 'Navigator', meridian: 'Meridian' }
 
 const TIER_COLORS = {
   essential:    'bg-gray-100 text-gray-700',
@@ -98,6 +100,7 @@ export default function WaypointAdminPage() {
                   <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">District Name</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">TEA ID</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Tier</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Products</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Campuses</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Users</th>
                   <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Provisioned</th>
@@ -113,6 +116,9 @@ export default function WaypointAdminPage() {
                       <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium capitalize ${TIER_COLORS[d.tier] || TIER_COLORS.essential}`}>
                         {d.tier}
                       </span>
+                    </td>
+                    <td className="px-4 py-3 text-gray-400 text-xs">
+                      {(d.settings?.products || ['waypoint']).join(', ')}
                     </td>
                     <td className="px-4 py-3 text-gray-300">{d.campus_count}</td>
                     <td className="px-4 py-3 text-gray-300">{d.user_count}</td>
@@ -162,6 +168,8 @@ function ManageDistrictDrawer({ district, onClose, onRefresh }) {
   const [showAddCampus, setShowAddCampus] = useState(false)
   const [tier, setTier] = useState(district.tier)
   const [savingTier, setSavingTier] = useState(false)
+  const [products, setProducts] = useState(district.settings?.products || ['waypoint'])
+  const [savingProducts, setSavingProducts] = useState(false)
 
   // New campus form
   const [newCampusName, setNewCampusName] = useState('')
@@ -195,6 +203,30 @@ function ManageDistrictDrawer({ district, onClose, onRefresh }) {
     } else {
       onRefresh()
     }
+  }
+
+  const handleSaveProducts = async () => {
+    if (products.length === 0) {
+      alert('At least one product must be selected.')
+      return
+    }
+    setSavingProducts(true)
+    const { error } = await supabase
+      .from('districts')
+      .update({ settings: { ...district.settings, products } })
+      .eq('id', district.id)
+    setSavingProducts(false)
+    if (error) {
+      alert('Failed to save products: ' + error.message)
+    } else {
+      onRefresh()
+    }
+  }
+
+  const toggleProduct = (p) => {
+    setProducts(prev =>
+      prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]
+    )
   }
 
   const handleAddCampus = async (e) => {
@@ -258,6 +290,31 @@ function ManageDistrictDrawer({ district, onClose, onRefresh }) {
                   {savingTier ? 'Saving…' : 'Save'}
                 </button>
               </div>
+            </div>
+
+            {/* Products */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-300 mb-2">Licensed Products</h3>
+              <div className="space-y-2 mb-3">
+                {ALL_PRODUCTS.map(p => (
+                  <label key={p} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={products.includes(p)}
+                      onChange={() => toggleProduct(p)}
+                      className="w-4 h-4 accent-orange-500"
+                    />
+                    <span className="text-sm text-gray-200 capitalize">{PRODUCT_LABELS[p]}</span>
+                  </label>
+                ))}
+              </div>
+              <button
+                onClick={handleSaveProducts}
+                disabled={savingProducts}
+                className="px-3 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-700 text-white text-xs font-medium rounded-lg transition-colors"
+              >
+                {savingProducts ? 'Saving…' : 'Save Products'}
+              </button>
             </div>
 
             {/* Campuses */}
@@ -341,6 +398,7 @@ function ProvisionModal({ onClose, onSuccess }) {
   const [teaDistrictId, setTeaDistrictId] = useState('')
   const [state, setState] = useState('TX')
   const [tier, setTier] = useState('professional')
+  const [selectedProducts, setSelectedProducts] = useState(['waypoint'])
 
   // Step 2 — Campus
   const [campusName, setCampusName] = useState('')
@@ -369,6 +427,7 @@ function ProvisionModal({ onClose, onSuccess }) {
         p_tea_id: teaDistrictId.trim(),
         p_state: state.trim(),
         p_tier: tier,
+        p_products: selectedProducts,
       })
       if (de) throw new Error(`District: ${de.message}`)
 
@@ -474,6 +533,23 @@ function ProvisionModal({ onClose, onSuccess }) {
                 {TIERS.map(t => <option key={t} value={t} className="capitalize">{t.charAt(0).toUpperCase() + t.slice(1)}</option>)}
               </Select>
             </Field>
+            <Field label="Licensed Products *">
+              <div className="space-y-1.5 mt-1">
+                {ALL_PRODUCTS.map(p => (
+                  <label key={p} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={selectedProducts.includes(p)}
+                      onChange={() => setSelectedProducts(prev =>
+                        prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p]
+                      )}
+                      className="w-4 h-4 accent-orange-500"
+                    />
+                    <span className="text-sm text-gray-200">{PRODUCT_LABELS[p]}</span>
+                  </label>
+                ))}
+              </div>
+            </Field>
           </>
         )}
 
@@ -519,6 +595,7 @@ function ProvisionModal({ onClose, onSuccess }) {
                 <ReviewRow label="TEA ID" value={teaDistrictId} />
                 <ReviewRow label="State" value={state} />
                 <ReviewRow label="Tier" value={<span className="capitalize">{tier}</span>} />
+                <ReviewRow label="Products" value={selectedProducts.map(p => PRODUCT_LABELS[p]).join(', ')} />
               </ReviewSection>
               <ReviewSection title="Campus">
                 <ReviewRow label="Name" value={campusName} />

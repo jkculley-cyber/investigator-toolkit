@@ -5,6 +5,14 @@ import { cn } from '../../lib/utils'
 import { COMPLIANCE_ROLES, ALERT_ROLES, ROLES, DAEP_ROLES } from '../../lib/constants'
 import AlertBadge from '../alerts/AlertBadge'
 
+const navigatorNavigation = [
+  { name: 'Nav Dashboard', path: '/navigator', icon: DashboardIcon },
+  { name: 'Referrals', path: '/navigator/referrals', icon: ReferralIcon },
+  { name: 'Placements', path: '/navigator/placements', icon: PlacementIcon },
+  { name: 'Supports', path: '/navigator/supports', icon: SupportsIcon },
+  { name: 'Reports', path: '/navigator/reports', icon: ReportsIcon },
+]
+
 // Staff navigation items
 const staffNavigation = [
   {
@@ -165,7 +173,7 @@ const parentNavigation = [
 ]
 
 export default function Sidebar() {
-  const { profile, hasRole, hasFeature, signOut } = useAuth()
+  const { profile, hasRole, hasFeature, hasProduct, signOut } = useAuth()
   const { alertCount } = useNotifications()
 
   const isParent = profile?.role === 'parent'
@@ -175,6 +183,7 @@ export default function Sidebar() {
     if (item.feature && !hasFeature(item.feature)) return false
     return true
   })
+  const showNavigator = !isParent && hasProduct && hasProduct('navigator')
 
   return (
     <aside className="flex flex-col w-64 bg-gray-900 text-white min-h-screen">
@@ -224,6 +233,33 @@ export default function Sidebar() {
               )}
             </NavLink>
           )
+        )}
+
+        {/* Navigator section — only if licensed */}
+        {showNavigator && (
+          <>
+            <div className="pt-3 pb-1 px-3">
+              <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest">Navigator</p>
+            </div>
+            {navigatorNavigation.map((item) => (
+              <NavLink
+                key={item.path}
+                to={item.path}
+                end={item.path === '/navigator'}
+                className={({ isActive }) =>
+                  cn(
+                    'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                    isActive
+                      ? 'bg-blue-600 text-white'
+                      : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                  )
+                }
+              >
+                <item.icon className="h-5 w-5 flex-shrink-0" />
+                <span className="flex-1">{item.name}</span>
+              </NavLink>
+            ))}
+          </>
         )}
       </nav>
 
@@ -405,6 +441,22 @@ function ScoringIcon({ className }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+    </svg>
+  )
+}
+
+function PlacementIcon({ className }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z" />
+    </svg>
+  )
+}
+
+function SupportsIcon({ className }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
     </svg>
   )
 }

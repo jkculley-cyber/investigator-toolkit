@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-02-21
+> Last updated: 2026-02-21 (Session E — Navigator + Product Suite)
 
 ---
 
@@ -8,15 +8,28 @@
 - **Development phase:** Pre-pilot — product feature-complete, ready for first district pitch
 - **Waypoint app URL:** `https://waypoint.clearpathedgroup.com` (also `app.clearpathedgroup.com`)
 - **Company website:** `https://clearpathedgroup.com` (marketing site, static HTML in `clearpath-site/`)
-- **Marketing site features:** Waypoint links → waypoint.clearpathedgroup.com, Google Slides embed (DAEP deck) inside Waypoint product card, SEO meta/sitemap/robots.txt
+- **Marketing site features:** All 3 products (Waypoint, Navigator, Meridian) + Clear Path Suite bundle callout. Pricing tags visible. Google Slides embed (DAEP deck) in Waypoint card. SEO meta/sitemap/robots.txt.
 - **Hosting:** Cloudflare Pages — `waypoint` project (app), `clearpath-site` project (marketing site)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
-- **Migrations applied:** 001–036
+- **Migrations applied:** 001–036 (production). **037 written, NOT YET applied — run via SQL Editor before testing Navigator.**
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
 - **Waypoint admin:** `admin@waypoint.internal` / `Waypoint2025!` → `/waypoint-admin`
 - **Email notifications:** Live via Resend (`onboarding@resend.dev` sandbox sender) — Edge Function deployed
 
 ---
+
+## Product Suite (New — Session E)
+
+| Product | Status | Gate |
+|---------|--------|------|
+| Waypoint (DAEP) | Live | Default, all districts |
+| Navigator (ISS/OSS) | Built, needs migration 037 applied | `hasProduct('navigator')` |
+| Meridian (SPED) | Follow-up session — migrate from separate codebase | `hasProduct('meridian')` |
+
+- Product provisioning: WaypointAdminPage Step 1 has product checkboxes; Manage drawer has product toggle
+- `districts.settings.products` stores the array (JSONB, no migration needed for existing districts — they default to `["waypoint"]`)
+- Navigator sidebar section uses **blue** active state (vs orange for Waypoint)
+- `RequireProduct` component at `src/components/auth/RequireProduct.jsx`
 
 ## What's Working
 
@@ -67,14 +80,15 @@
 
 ## Pending / Not Done
 
-1. **Resend sender domain** — currently using `onboarding@resend.dev` sandbox. Verify `waypointdaep.com` in Resend → Domains, then update `FROM_EMAIL` in `supabase/functions/send-notification/index.ts` and redeploy.
-2. **Supabase auth SMTP** — default has 3/hr rate limit. Configure custom SMTP before pilot go-live.
-3. **Supabase redirect URLs** — add `https://waypoint.clearpathedgroup.com/reset-password` to Supabase Auth → URL Configuration → Redirect URLs.
-4. **Google Search Console** — register clearpathedgroup.com to accelerate search indexing.
-5. **SSO** — requested but not implemented.
-6. **Pricing** — tiers defined, dollar amounts not set. See market analysis: $6K / $10K / $18K / custom tiers recommended.
-7. **First pilot district** — not yet contracted. Product is sales-ready.
-8. **Compass** — companion product discussed but not yet scoped.
+1. **Apply migration 037** — Navigator tables not live yet. Run `supabase/migrations/037_navigator_schema.sql` via SQL Editor before testing Navigator. URL: https://supabase.com/dashboard/project/kvxecksvkimcgwhxxyhw/sql/new
+2. **Add Navigator product to demo district** — After 037 applied, update Lone Star ISD in `/waypoint-admin` → Manage → Licensed Products → check Navigator. This enables the sidebar section for testing.
+3. **Meridian migration** — Port Meridian (from `C:\Users\jkcul\Downloads\meridian`) into Waypoint: migrations 038+, pages at `src/pages/meridian/`, gated by `hasProduct('meridian')`.
+4. **Resend sender domain** — currently using `onboarding@resend.dev` sandbox. Verify `waypointdaep.com` in Resend → Domains, then update `FROM_EMAIL` in `supabase/functions/send-notification/index.ts` and redeploy.
+5. **Supabase auth SMTP** — default has 3/hr rate limit. Configure custom SMTP before pilot go-live.
+6. **Supabase redirect URLs** — add `https://waypoint.clearpathedgroup.com/reset-password` to Supabase Auth → URL Configuration → Redirect URLs.
+7. **Google Search Console** — register clearpathedgroup.com to accelerate search indexing.
+8. **First pilot district** — not yet contracted. Product is sales-ready.
+9. **Deploy updated marketing site** — push `clearpath-site/index.html` to Cloudflare Pages.
 
 ---
 
@@ -96,6 +110,6 @@
 
 ## Don't Touch Right Now
 
-- `supabase/migrations/` — migrations 001–036 applied to production; don't re-run earlier ones
+- `supabase/migrations/` — migrations 001–036 applied to production; 037 written but NOT applied yet; don't re-run earlier ones
 - `.env.local` — credentials live here; do not commit
 - Demo seed data (Lone Star ISD) — keep intact for demos

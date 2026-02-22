@@ -6,6 +6,15 @@ import AppShell from './components/layout/AppShell'
 import RequireAuth from './components/auth/RequireAuth'
 import RequireRole from './components/auth/RequireRole'
 import RequireTier from './components/auth/RequireTier'
+import RequireProduct from './components/auth/RequireProduct'
+
+// Navigator pages
+import NavigatorDashboardPage from './pages/navigator/NavigatorDashboardPage'
+import NavigatorReferralsPage from './pages/navigator/NavigatorReferralsPage'
+import NavigatorPlacementsPage from './pages/navigator/NavigatorPlacementsPage'
+import NavigatorSupportsPage from './pages/navigator/NavigatorSupportsPage'
+import NavigatorStudentPage from './pages/navigator/NavigatorStudentPage'
+import NavigatorReportsPage from './pages/navigator/NavigatorReportsPage'
 
 // Public pages
 import LandingPage from './pages/LandingPage'
@@ -137,6 +146,14 @@ function App() {
                 </RequireRole>
               }
             />
+
+            {/* Navigator — gated by hasProduct('navigator') */}
+            <Route path="/navigator" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorDashboardPage /></RequireProduct></RequireRole>} />
+            <Route path="/navigator/referrals" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorReferralsPage /></RequireProduct></RequireRole>} />
+            <Route path="/navigator/placements" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorPlacementsPage /></RequireProduct></RequireRole>} />
+            <Route path="/navigator/supports" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorSupportsPage /></RequireProduct></RequireRole>} />
+            <Route path="/navigator/students/:id" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorStudentPage /></RequireProduct></RequireRole>} />
+            <Route path="/navigator/reports" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorReportsPage /></RequireProduct></RequireRole>} />
 
             {/* Settings */}
             <Route

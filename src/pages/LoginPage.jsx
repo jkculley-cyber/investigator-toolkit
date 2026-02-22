@@ -12,12 +12,12 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState(null)
 
-  const { signIn, signInWithOAuth, profile } = useAuth()
+  const { signIn, signInWithOAuth, profile, hasProduct } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || null
 
-  // After profile loads, redirect based on role
+  // After profile loads, redirect based on role and licensed products
   useEffect(() => {
     if (profile) {
       if (profile.role === 'waypoint_admin') {
@@ -26,11 +26,13 @@ export default function LoginPage() {
         const safe = from && !from.startsWith('/waypoint-admin') ? from : '/parent'
         navigate(safe, { replace: true })
       } else {
-        const safe = from && !from.startsWith('/waypoint-admin') ? from : '/dashboard'
+        // Smart default: prefer /dashboard (Waypoint) unless district only has Navigator
+        const defaultPath = hasProduct('waypoint') ? '/dashboard' : '/navigator'
+        const safe = from && !from.startsWith('/waypoint-admin') ? from : defaultPath
         navigate(safe, { replace: true })
       }
     }
-  }, [profile, from, navigate])
+  }, [profile, from, navigate, hasProduct])
 
   const handleOAuth = async (provider) => {
     setError('')

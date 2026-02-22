@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 
 // Layout
@@ -70,142 +70,57 @@ function App() {
 
           {/* Authenticated routes - Staff only (AppShell layout with sidebar) */}
           <Route element={<RequireAuth><AppShell /></RequireAuth>}>
-            <Route path="/dashboard" element={<RequireRole roles={STAFF_ROLES}><DashboardPage /></RequireRole>} />
 
-            {/* Students */}
-            <Route path="/students" element={<RequireRole roles={STAFF_ROLES}><StudentsPage /></RequireRole>} />
-            <Route path="/students/:id" element={<RequireRole roles={STAFF_ROLES}><StudentDetailPage /></RequireRole>} />
+            {/* ── Waypoint product routes ── */}
+            <Route element={<RequireProduct product="waypoint"><Outlet /></RequireProduct>}>
+              <Route path="/dashboard" element={<RequireRole roles={STAFF_ROLES}><DashboardPage /></RequireRole>} />
 
-            {/* Incidents */}
-            <Route path="/incidents" element={<RequireRole roles={STAFF_ROLES}><IncidentsPage /></RequireRole>} />
-            <Route path="/incidents/new" element={<RequireRole roles={STAFF_ROLES}><NewIncidentPage /></RequireRole>} />
-            <Route path="/incidents/:id" element={<RequireRole roles={STAFF_ROLES}><IncidentDetailPage /></RequireRole>} />
+              <Route path="/students" element={<RequireRole roles={STAFF_ROLES}><StudentsPage /></RequireRole>} />
+              <Route path="/students/:id" element={<RequireRole roles={STAFF_ROLES}><StudentDetailPage /></RequireRole>} />
 
-            {/* Compliance */}
-            <Route
-              path="/compliance"
-              element={
-                <RequireRole roles={COMPLIANCE_ROLES}>
-                  <RequireTier feature="compliance">
-                    <CompliancePage />
-                  </RequireTier>
-                </RequireRole>
-              }
-            />
+              <Route path="/incidents" element={<RequireRole roles={STAFF_ROLES}><IncidentsPage /></RequireRole>} />
+              <Route path="/incidents/new" element={<RequireRole roles={STAFF_ROLES}><NewIncidentPage /></RequireRole>} />
+              <Route path="/incidents/:id" element={<RequireRole roles={STAFF_ROLES}><IncidentDetailPage /></RequireRole>} />
 
-            {/* Alerts */}
-            <Route
-              path="/alerts"
-              element={
-                <RequireRole roles={ALERT_ROLES}>
-                  <RequireTier feature="alerts">
-                    <AlertsPage />
-                  </RequireTier>
-                </RequireRole>
-              }
-            />
+              <Route path="/compliance" element={<RequireRole roles={COMPLIANCE_ROLES}><RequireTier feature="compliance"><CompliancePage /></RequireTier></RequireRole>} />
+              <Route path="/alerts" element={<RequireRole roles={ALERT_ROLES}><RequireTier feature="alerts"><AlertsPage /></RequireTier></RequireRole>} />
 
-            {/* Transition Plans */}
-            <Route path="/plans" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="transition_plans"><TransitionPlansPage /></RequireTier></RequireRole>} />
-            <Route path="/plans/new" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="transition_plans"><NewTransitionPlanPage /></RequireTier></RequireRole>} />
-            <Route path="/plans/:id" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="transition_plans"><TransitionPlanDetailPage /></RequireTier></RequireRole>} />
+              <Route path="/plans" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="transition_plans"><TransitionPlansPage /></RequireTier></RequireRole>} />
+              <Route path="/plans/new" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="transition_plans"><NewTransitionPlanPage /></RequireTier></RequireRole>} />
+              <Route path="/plans/:id" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="transition_plans"><TransitionPlanDetailPage /></RequireTier></RequireRole>} />
 
-            {/* DAEP Dashboard */}
-            <Route path="/daep" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="daep_dashboard"><DaepDashboardPage /></RequireTier></RequireRole>} />
-            <Route path="/daep/phone-return" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="phone_return"><PhoneReturnPage /></RequireTier></RequireRole>} />
-            <Route path="/daep/orientations" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="daep_dashboard"><OrientationSchedulePage /></RequireTier></RequireRole>} />
-            <Route path="/daep/scoring" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="daep_dashboard"><DaepScoringPage /></RequireTier></RequireRole>} />
+              <Route path="/daep" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="daep_dashboard"><DaepDashboardPage /></RequireTier></RequireRole>} />
+              <Route path="/daep/phone-return" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="phone_return"><PhoneReturnPage /></RequireTier></RequireRole>} />
+              <Route path="/daep/orientations" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="daep_dashboard"><OrientationSchedulePage /></RequireTier></RequireRole>} />
+              <Route path="/daep/scoring" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="daep_dashboard"><DaepScoringPage /></RequireTier></RequireRole>} />
 
-            {/* Teacher Referral */}
-            <Route path="/referral" element={<RequireRole roles={STAFF_ROLES}><TeacherReferralPage /></RequireRole>} />
+              <Route path="/referral" element={<RequireRole roles={STAFF_ROLES}><TeacherReferralPage /></RequireRole>} />
+              <Route path="/calendar" element={<RequireRole roles={STAFF_ROLES}><CalendarPage /></RequireRole>} />
 
-            {/* Calendar */}
-            <Route path="/calendar" element={<RequireRole roles={STAFF_ROLES}><CalendarPage /></RequireRole>} />
+              <Route path="/matrix" element={<RequireRole roles={STAFF_ROLES}><DisciplineMatrixPage /></RequireRole>} />
+              <Route path="/matrix/editor" element={<RequireRole roles={[ROLES.ADMIN]}><RequireTier feature="matrix_editor"><MatrixEditorPage /></RequireTier></RequireRole>} />
 
-            {/* Discipline Matrix */}
-            <Route path="/matrix" element={<RequireRole roles={STAFF_ROLES}><DisciplineMatrixPage /></RequireRole>} />
-            <Route
-              path="/matrix/editor"
-              element={
-                <RequireRole roles={[ROLES.ADMIN]}>
-                  <RequireTier feature="matrix_editor">
-                    <MatrixEditorPage />
-                  </RequireTier>
-                </RequireRole>
-              }
-            />
+              <Route path="/reports" element={<RequireRole roles={[ROLES.ADMIN, ROLES.PRINCIPAL]}><RequireTier feature="reports"><ReportsPage /></RequireTier></RequireRole>} />
 
-            {/* Reports */}
-            <Route
-              path="/reports"
-              element={
-                <RequireRole roles={[ROLES.ADMIN, ROLES.PRINCIPAL]}>
-                  <RequireTier feature="reports">
-                    <ReportsPage />
-                  </RequireTier>
-                </RequireRole>
-              }
-            />
+              <Route path="/settings/offense-codes" element={<RequireRole roles={[ROLES.ADMIN]}><OffenseCodeManagerPage /></RequireRole>} />
+              <Route path="/settings/orientation" element={<RequireRole roles={[ROLES.ADMIN]}><OrientationSettingsPage /></RequireRole>} />
+              <Route path="/settings/import-data" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="data_import"><ImportDataPage /></RequireTier></RequireRole>} />
+            </Route>
 
-            {/* Navigator — gated by hasProduct('navigator') */}
-            <Route path="/navigator" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorDashboardPage /></RequireProduct></RequireRole>} />
-            <Route path="/navigator/referrals" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorReferralsPage /></RequireProduct></RequireRole>} />
-            <Route path="/navigator/placements" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorPlacementsPage /></RequireProduct></RequireRole>} />
-            <Route path="/navigator/supports" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorSupportsPage /></RequireProduct></RequireRole>} />
-            <Route path="/navigator/students/:id" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorStudentPage /></RequireProduct></RequireRole>} />
-            <Route path="/navigator/reports" element={<RequireRole roles={STAFF_ROLES}><RequireProduct product="navigator"><NavigatorReportsPage /></RequireProduct></RequireRole>} />
+            {/* ── Navigator product routes ── */}
+            <Route element={<RequireProduct product="navigator"><Outlet /></RequireProduct>}>
+              <Route path="/navigator" element={<RequireRole roles={STAFF_ROLES}><NavigatorDashboardPage /></RequireRole>} />
+              <Route path="/navigator/referrals" element={<RequireRole roles={STAFF_ROLES}><NavigatorReferralsPage /></RequireRole>} />
+              <Route path="/navigator/placements" element={<RequireRole roles={STAFF_ROLES}><NavigatorPlacementsPage /></RequireRole>} />
+              <Route path="/navigator/supports" element={<RequireRole roles={STAFF_ROLES}><NavigatorSupportsPage /></RequireRole>} />
+              <Route path="/navigator/students/:id" element={<RequireRole roles={STAFF_ROLES}><NavigatorStudentPage /></RequireRole>} />
+              <Route path="/navigator/reports" element={<RequireRole roles={STAFF_ROLES}><NavigatorReportsPage /></RequireRole>} />
+            </Route>
 
-            {/* Settings */}
-            <Route
-              path="/settings"
-              element={
-                <RequireRole roles={[ROLES.ADMIN]}>
-                  <SettingsPage />
-                </RequireRole>
-              }
-            />
-            <Route
-              path="/settings/offense-codes"
-              element={
-                <RequireRole roles={[ROLES.ADMIN]}>
-                  <OffenseCodeManagerPage />
-                </RequireRole>
-              }
-            />
-            <Route
-              path="/settings/orientation"
-              element={
-                <RequireRole roles={[ROLES.ADMIN]}>
-                  <OrientationSettingsPage />
-                </RequireRole>
-              }
-            />
-            <Route
-              path="/settings/import-data"
-              element={
-                <RequireRole roles={STAFF_ROLES}>
-                  <RequireTier feature="data_import">
-                    <ImportDataPage />
-                  </RequireTier>
-                </RequireRole>
-              }
-            />
-            <Route
-              path="/settings/users"
-              element={
-                <RequireRole roles={[ROLES.ADMIN]}>
-                  <UserManagementPage />
-                </RequireRole>
-              }
-            />
-            <Route
-              path="/settings/notifications"
-              element={
-                <RequireRole roles={STAFF_ROLES}>
-                  <NotificationPreferencesPage />
-                </RequireRole>
-              }
-            />
+            {/* ── Settings — always accessible to admin regardless of product ── */}
+            <Route path="/settings" element={<RequireRole roles={[ROLES.ADMIN]}><SettingsPage /></RequireRole>} />
+            <Route path="/settings/users" element={<RequireRole roles={[ROLES.ADMIN]}><UserManagementPage /></RequireRole>} />
+            <Route path="/settings/notifications" element={<RequireRole roles={STAFF_ROLES}><NotificationPreferencesPage /></RequireRole>} />
           </Route>
 
           {/* Kiosk - standalone full-screen layout (no AppShell) */}

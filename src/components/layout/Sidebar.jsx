@@ -14,152 +14,32 @@ const navigatorNavigation = [
 ]
 
 // Staff navigation items
+// product: 'waypoint' — only shown when district has Waypoint licensed
+// no product field     — always shown (role/feature still apply)
 const staffNavigation = [
-  {
-    name: 'Dashboard',
-    path: '/dashboard',
-    icon: DashboardIcon,
-    roles: null, // all staff
-  },
-  {
-    name: 'Students',
-    path: '/students',
-    icon: StudentsIcon,
-    roles: null,
-  },
-  {
-    name: 'Incidents',
-    path: '/incidents',
-    icon: IncidentsIcon,
-    roles: null,
-  },
-  {
-    name: 'Compliance',
-    path: '/compliance',
-    icon: ComplianceIcon,
-    roles: COMPLIANCE_ROLES,
-    feature: 'compliance',
-  },
-  {
-    name: 'Alerts',
-    path: '/alerts',
-    icon: AlertsIcon,
-    roles: ALERT_ROLES,
-    feature: 'alerts',
-  },
-  {
-    name: 'Transition Plans',
-    path: '/plans',
-    icon: PlansIcon,
-    roles: null,
-    feature: 'transition_plans',
-  },
-  {
-    name: 'DAEP Dashboard',
-    path: '/daep',
-    icon: DaepIcon,
-    roles: DAEP_ROLES,
-    feature: 'daep_dashboard',
-  },
-  {
-    name: 'Phone Return',
-    path: '/daep/phone-return',
-    icon: PhoneIcon,
-    roles: DAEP_ROLES,
-    feature: 'phone_return',
-  },
-  {
-    name: 'Orientations',
-    path: '/daep/orientations',
-    icon: CalendarIcon,
-    roles: DAEP_ROLES,
-    feature: 'daep_dashboard',
-  },
-  {
-    name: 'Discipline Matrix',
-    path: '/matrix',
-    icon: MatrixIcon,
-    roles: null,
-  },
-  {
-    name: 'Submit Referral',
-    path: '/referral',
-    icon: ReferralIcon,
-    roles: [ROLES.TEACHER],
-  },
-  {
-    name: 'My Referrals',
-    path: '/incidents?filter=cbc_queue',
-    icon: IncidentsIcon,
-    roles: [ROLES.CBC],
-  },
-  {
-    name: 'My Cases',
-    path: '/incidents?filter=sss_queue',
-    icon: IncidentsIcon,
-    roles: [ROLES.SSS],
-  },
-  {
-    name: '504 Reviews',
-    path: '/incidents?filter=504_queue',
-    icon: ComplianceIcon,
-    roles: [ROLES.SECTION_504_COORDINATOR],
-  },
-  {
-    name: 'Pending Approval',
-    path: '/incidents?filter=director_queue',
-    icon: IncidentsIcon,
-    roles: [ROLES.DIRECTOR_STUDENT_AFFAIRS],
-  },
-  {
-    name: 'Daily Scoring',
-    path: '/daep/scoring',
-    icon: ScoringIcon,
-    roles: [ROLES.TEACHER, ROLES.ADMIN, ROLES.PRINCIPAL],
-    feature: 'daep_dashboard',
-  },
-  {
-    name: 'Calendar',
-    path: '/calendar',
-    icon: CalendarIcon,
-    roles: null,
-  },
-  {
-    name: 'Reports',
-    path: '/reports',
-    icon: ReportsIcon,
-    roles: [ROLES.ADMIN, ROLES.PRINCIPAL],
-    feature: 'reports',
-  },
-  {
-    name: 'Settings',
-    path: '/settings',
-    icon: SettingsIcon,
-    roles: [ROLES.ADMIN],
-  },
-  {
-    name: 'Data Import',
-    path: '/settings/import-data',
-    icon: ImportIcon,
-    roles: [ROLES.ADMIN, ROLES.PRINCIPAL],
-    feature: 'data_import',
-  },
-  {
-    name: 'Student Kiosk',
-    path: '/kiosk',
-    icon: KioskIcon,
-    roles: [ROLES.ADMIN],
-    external: true,
-    feature: 'kiosk',
-  },
-  {
-    name: 'Orientation Kiosk',
-    path: '/orientation-kiosk',
-    icon: KioskIcon,
-    roles: [ROLES.ADMIN],
-    external: true,
-    feature: 'orientation_kiosk',
-  },
+  { name: 'Dashboard',        path: '/dashboard',                   icon: DashboardIcon, roles: null,                                              product: 'waypoint' },
+  { name: 'Students',         path: '/students',                    icon: StudentsIcon,  roles: null,                                              product: 'waypoint' },
+  { name: 'Incidents',        path: '/incidents',                   icon: IncidentsIcon, roles: null,                                              product: 'waypoint' },
+  { name: 'Compliance',       path: '/compliance',                  icon: ComplianceIcon, roles: COMPLIANCE_ROLES, feature: 'compliance',          product: 'waypoint' },
+  { name: 'Alerts',           path: '/alerts',                      icon: AlertsIcon,    roles: ALERT_ROLES,        feature: 'alerts',             product: 'waypoint' },
+  { name: 'Transition Plans', path: '/plans',                       icon: PlansIcon,     roles: null,               feature: 'transition_plans',   product: 'waypoint' },
+  { name: 'DAEP Dashboard',   path: '/daep',                        icon: DaepIcon,      roles: DAEP_ROLES,         feature: 'daep_dashboard',     product: 'waypoint' },
+  { name: 'Phone Return',     path: '/daep/phone-return',           icon: PhoneIcon,     roles: DAEP_ROLES,         feature: 'phone_return',       product: 'waypoint' },
+  { name: 'Orientations',     path: '/daep/orientations',           icon: CalendarIcon,  roles: DAEP_ROLES,         feature: 'daep_dashboard',     product: 'waypoint' },
+  { name: 'Discipline Matrix',path: '/matrix',                      icon: MatrixIcon,    roles: null,                                              product: 'waypoint' },
+  { name: 'Submit Referral',  path: '/referral',                    icon: ReferralIcon,  roles: [ROLES.TEACHER],                                   product: 'waypoint' },
+  { name: 'My Referrals',     path: '/incidents?filter=cbc_queue',  icon: IncidentsIcon, roles: [ROLES.CBC],                                       product: 'waypoint' },
+  { name: 'My Cases',         path: '/incidents?filter=sss_queue',  icon: IncidentsIcon, roles: [ROLES.SSS],                                       product: 'waypoint' },
+  { name: '504 Reviews',      path: '/incidents?filter=504_queue',  icon: ComplianceIcon,roles: [ROLES.SECTION_504_COORDINATOR],                   product: 'waypoint' },
+  { name: 'Pending Approval', path: '/incidents?filter=director_queue', icon: IncidentsIcon, roles: [ROLES.DIRECTOR_STUDENT_AFFAIRS],              product: 'waypoint' },
+  { name: 'Daily Scoring',    path: '/daep/scoring',                icon: ScoringIcon,   roles: [ROLES.TEACHER, ROLES.ADMIN, ROLES.PRINCIPAL], feature: 'daep_dashboard', product: 'waypoint' },
+  { name: 'Calendar',         path: '/calendar',                    icon: CalendarIcon,  roles: null,                                              product: 'waypoint' },
+  { name: 'Reports',          path: '/reports',                     icon: ReportsIcon,   roles: [ROLES.ADMIN, ROLES.PRINCIPAL], feature: 'reports', product: 'waypoint' },
+  { name: 'Data Import',      path: '/settings/import-data',        icon: ImportIcon,    roles: [ROLES.ADMIN, ROLES.PRINCIPAL], feature: 'data_import', product: 'waypoint' },
+  { name: 'Student Kiosk',    path: '/kiosk',                       icon: KioskIcon,     roles: [ROLES.ADMIN], external: true, feature: 'kiosk',  product: 'waypoint' },
+  { name: 'Orientation Kiosk',path: '/orientation-kiosk',           icon: KioskIcon,     roles: [ROLES.ADMIN], external: true, feature: 'orientation_kiosk', product: 'waypoint' },
+  // Settings — always accessible regardless of product (admin only)
+  { name: 'Settings',         path: '/settings',                    icon: SettingsIcon,  roles: [ROLES.ADMIN] },
 ]
 
 // Parent-only navigation items
@@ -172,18 +52,59 @@ const parentNavigation = [
   },
 ]
 
+function NavItem({ item, alertCount }) {
+  if (item.external) {
+    return (
+      <a
+        href={item.path}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-300 hover:bg-gray-800 hover:text-white"
+      >
+        <item.icon className="h-5 w-5 flex-shrink-0" />
+        <span className="flex-1">{item.name}</span>
+        <ExternalLinkIcon className="h-3.5 w-3.5 text-gray-500" />
+      </a>
+    )
+  }
+  return (
+    <NavLink
+      to={item.path}
+      className={({ isActive }) =>
+        cn(
+          'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+          isActive
+            ? 'bg-orange-500 text-white'
+            : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+        )
+      }
+    >
+      <item.icon className="h-5 w-5 flex-shrink-0" />
+      <span className="flex-1">{item.name}</span>
+      {item.path === '/alerts' && alertCount > 0 && (
+        <AlertBadge count={alertCount} />
+      )}
+    </NavLink>
+  )
+}
+
 export default function Sidebar() {
   const { profile, hasRole, hasFeature, hasProduct, signOut } = useAuth()
   const { alertCount } = useNotifications()
 
   const isParent = profile?.role === 'parent'
-  const navigation = isParent ? parentNavigation : staffNavigation
-  const filteredNav = navigation.filter(item => {
+  const showWaypoint = !isParent && hasProduct('waypoint')
+  const showNavigator = !isParent && hasProduct('navigator')
+  const showProductHeaders = showWaypoint && showNavigator
+
+  function itemVisible(item) {
     if (item.roles && !hasRole(item.roles)) return false
     if (item.feature && !hasFeature(item.feature)) return false
     return true
-  })
-  const showNavigator = !isParent && hasProduct && hasProduct('navigator')
+  }
+
+  const waypointItems = isParent ? [] : staffNavigation.filter(i => i.product === 'waypoint' && itemVisible(i))
+  const commonItems = (isParent ? parentNavigation : staffNavigation).filter(i => !i.product && itemVisible(i))
 
   return (
     <aside className="flex flex-col w-64 bg-gray-900 text-white min-h-screen">
@@ -200,42 +121,19 @@ export default function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-        {filteredNav.map((item) =>
-          item.external ? (
-            <a
-              key={item.path}
-              href={item.path}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-300 hover:bg-gray-800 hover:text-white"
-            >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              <span className="flex-1">{item.name}</span>
-              <ExternalLinkIcon className="h-3.5 w-3.5 text-gray-500" />
-            </a>
-          ) : (
-            <NavLink
-              key={item.path}
-              to={item.path}
-              className={({ isActive }) =>
-                cn(
-                  'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
-                  isActive
-                    ? 'bg-orange-500 text-white'
-                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                )
-              }
-            >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              <span className="flex-1">{item.name}</span>
-              {item.path === '/alerts' && alertCount > 0 && (
-                <AlertBadge count={alertCount} />
-              )}
-            </NavLink>
-          )
+        {/* Waypoint section */}
+        {showWaypoint && (
+          <>
+            {showProductHeaders && (
+              <div className="pt-1 pb-1 px-3">
+                <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-widest">Waypoint</p>
+              </div>
+            )}
+            {waypointItems.map(item => <NavItem key={item.path} item={item} alertCount={alertCount} />)}
+          </>
         )}
 
-        {/* Navigator section — only if licensed */}
+        {/* Navigator section */}
         {showNavigator && (
           <>
             <div className="pt-3 pb-1 px-3">
@@ -260,6 +158,13 @@ export default function Sidebar() {
               </NavLink>
             ))}
           </>
+        )}
+
+        {/* Common items — always visible (Settings etc.) */}
+        {commonItems.length > 0 && (
+          <div className="pt-2">
+            {commonItems.map(item => <NavItem key={item.path} item={item} alertCount={alertCount} />)}
+          </div>
         )}
       </nav>
 

@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-02-22 (Session H — Business Dashboard + Analytics + Demo Accounts)
+> Last updated: 2026-02-22 (Session I — Pricing Calculator + Compliance Whitepaper)
 
 ---
 
@@ -8,7 +8,8 @@
 - **Development phase:** Pre-pilot — product feature-complete, ready for first district pitch
 - **Waypoint app URL:** `https://waypoint.clearpathedgroup.com` (also `app.clearpathedgroup.com`)
 - **Company website:** `https://clearpathedgroup.com` (marketing site, static HTML in `clearpath-site/`)
-- **Marketing site features:** All 3 products (Waypoint, Navigator, Meridian) + Clear Path Suite bundle callout. Pricing tags visible. Google Slides embed (DAEP deck) in Waypoint card. SEO meta/sitemap/robots.txt. Cloudflare Web Analytics auto-injected via Pages dashboard.
+- **Marketing site features:** All 3 products (Waypoint, Navigator, Meridian) + Clear Path Suite bundle callout. **Interactive pricing calculator** (enrollment slider 0–200k, tier toggle, product checkboxes, live bundle discount badge). **Free Compliance Checklist** lead magnet card linking to `/whitepaper.html`. Pricing tags visible. Google Slides embed (DAEP deck) in Waypoint card. SEO meta/sitemap/robots.txt. Cloudflare Web Analytics auto-injected via Pages dashboard.
+- **whitepaper.html:** 20-point DAEP compliance self-audit checklist, 5 sections with TEC citation callout boxes, scorecard with scoring bands (18–20 compliant / 14–17 at risk / <14 urgent), print-optimized CSS, "Save as PDF" button. Lead magnet for district sales.
 - **Hosting:** Cloudflare Pages — `waypoint` project (app), `clearpath-site` project (marketing site)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
 - **Migrations applied:** 001–043 (production). All migrations applied.
@@ -90,11 +91,12 @@
 1. **Verify Business Dashboard loads on live site** — log in as `admin@waypoint.internal` → Business Dashboard. If red error shows, paste the message. (Deployed end of last session — may just need verification.)
 2. **Enable Meridian for Lone Star ISD** — `/waypoint-admin` → Manage Lone Star ISD → Licensed Products → check Meridian → Save Products
 3. **Seed Meridian demo data** — No test SPED students in `meridian_students` yet
-4. **Build pricing page / district proposal** — Pricing model defined (enrollment bands, 3 tiers per product, bundle discounts). Needs implementation as website component or PDF template.
+4. ~~**Build pricing page**~~ — **DONE.** Interactive calculator live on clearpath-site with 8 bands (Micro → Metro, Enterprise for 200k+), tier toggle, product checkboxes, bundle discounts.
 5. **Resend sender domain** — currently using `onboarding@resend.dev` sandbox. Verify `waypointdaep.com` in Resend → Domains, then update `FROM_EMAIL` in `supabase/functions/send-notification/index.ts` and redeploy.
 6. **Supabase redirect URLs** — add `https://waypoint.clearpathedgroup.com/reset-password` to Supabase Auth → URL Configuration → Redirect URLs.
 8. **Google Search Console** — register clearpathedgroup.com to accelerate search indexing.
 9. **First pilot district** — not yet contracted. Product is sales-ready.
+10. **Cloudflare Pages deploy for marketing site** — Code is pushed to GitHub (`clearpath-site/` commits `22dd4ea`, `bada4eb`, `7f1b8ff`). If site is not updating, the CF Pages project may be set to Direct Upload rather than Git integration. Check Cloudflare dashboard: Pages → clearpathedgroup project → Settings → check if GitHub repo is connected. If Direct Upload, either switch to Git or manually upload `clearpath-site/index.html` and `clearpath-site/whitepaper.html`.
 
 ---
 

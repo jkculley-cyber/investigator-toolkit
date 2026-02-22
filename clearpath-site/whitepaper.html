@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DAEP Compliance Checklist 2026 — Clear Path Education Group</title>
+<meta name="description" content="Free 20-point DAEP compliance self-audit checklist for Texas school districts, covering placement documentation, SPED manifestation, parent notification, and re-entry planning.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://clearpathedgroup.com/whitepaper.html">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ── Variables ── */
+  :root {
+    --amber: #d4780a;
+    --amber-light: #e8962e;
+    --amber-pale: #fef3e2;
+    --purple: #5a2b8c;
+    --purple-light: #7c45b8;
+    --purple-pale: #f3eeff;
+    --text: #1a1a2e;
+    --text-muted: #5a5a7a;
+    --border: #d8d0e8;
+    --bg: #fafaf8;
+    --white: #ffffff;
+    --page-width: 720px;
+  }
+
+  /* ── Base ── */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Screen toolbar ── */
+  .toolbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: #1a0a2e; border-bottom: 1px solid rgba(232,134,42,0.25);
+    padding: 12px 5%; display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .toolbar-left { display: flex; align-items: center; gap: 14px; }
+  .toolbar-logo { height: 36px; width: 36px; object-fit: contain; border-radius: 6px; }
+  .toolbar-title {
+    font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700;
+    color: #f5b050;
+  }
+  .toolbar-sub { font-size: 0.68rem; color: rgba(240,230,211,0.55); margin-top: 1px; }
+  .toolbar-right { display: flex; gap: 12px; align-items: center; }
+  .btn-pdf {
+    background: linear-gradient(135deg, #e8862a, #d4541a);
+    color: white; padding: 9px 20px; border: none; border-radius: 6px;
+    font-family: 'Raleway', sans-serif; font-size: 0.8rem; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.05em; text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 0 20px rgba(232,134,42,0.3);
+  }
+  .btn-pdf:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(232,134,42,0.5); }
+  .btn-back {
+    color: rgba(240,230,211,0.6); font-size: 0.78rem; text-decoration: none;
+    border: 1px solid rgba(240,230,211,0.15); padding: 8px 14px; border-radius: 5px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-back:hover { color: #f5b050; border-color: rgba(232,134,42,0.4); }
+
+  /* ── Page container ── */
+  .page-wrap {
+    max-width: var(--page-width);
+    margin: 0 auto;
+    padding: 90px 40px 60px;
+  }
+
+  /* ── COVER ── */
+  .cover {
+    text-align: center;
+    padding: 60px 0 52px;
+    border-bottom: 3px solid var(--amber);
+    margin-bottom: 52px;
+    page-break-after: always;
+  }
+  .cover-logo { height: 72px; width: 72px; object-fit: contain; border-radius: 10px; margin: 0 auto 20px; display: block; }
+  .cover-org {
+    font-family: 'Cinzel', serif; font-size: 0.8rem; font-weight: 700;
+    color: var(--amber); text-transform: uppercase; letter-spacing: 0.12em;
+    margin-bottom: 32px;
+  }
+  .cover-rule { width: 80px; height: 3px; background: var(--amber); border-radius: 2px; margin: 0 auto 32px; }
+  .cover h1 {
+    font-family: 'Cinzel', serif; font-size: 2rem; font-weight: 900;
+    color: var(--purple); line-height: 1.25; margin-bottom: 16px;
+  }
+  .cover h1 em { font-style: normal; color: var(--amber); }
+  .cover-subtitle {
+    font-size: 1rem; color: var(--text-muted); max-width: 480px;
+    margin: 0 auto 32px; line-height: 1.7;
+  }
+  .cover-edition {
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    padding: 5px 18px; border-radius: 4px; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--purple-pale); border: 1px solid rgba(90,43,140,0.3); color: var(--purple);
+  }
+
+  /* ── Section headings ── */
+  .doc-section { margin-bottom: 48px; }
+  .section-head {
+    background: linear-gradient(135deg, var(--purple), var(--purple-light));
+    color: white; padding: 12px 20px; border-radius: 6px;
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 24px;
+    page-break-after: avoid;
+  }
+  .section-head-num {
+    font-family: 'Cinzel', serif; font-size: 0.75rem; font-weight: 700;
+    background: rgba(255,255,255,0.2); padding: 3px 9px; border-radius: 4px;
+    white-space: nowrap;
+  }
+  .section-head-title { font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700; }
+
+  /* ── Intro text ── */
+  .intro-box {
+    background: var(--white); border: 1px solid var(--border);
+    border-left: 4px solid var(--purple); border-radius: 6px;
+    padding: 20px 22px; margin-bottom: 24px; color: var(--text-muted);
+    font-size: 0.88rem; line-height: 1.75;
+  }
+  .intro-box strong { color: var(--text); }
+
+  /* ── Checklist items ── */
+  .checklist { display: flex; flex-direction: column; gap: 2px; margin-bottom: 20px; }
+  .check-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 11px 14px; border-radius: 6px;
+    border: 1px solid transparent; transition: border-color 0.15s, background 0.15s;
+    background: var(--white);
+  }
+  .check-item:hover { background: #fff9f0; border-color: rgba(212,120,10,0.2); }
+  .check-box-print {
+    width: 18px; height: 18px; border: 2px solid #b0a8c8;
+    border-radius: 3px; flex-shrink: 0; margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    background: white;
+  }
+  .check-item-text { font-size: 0.875rem; color: var(--text); line-height: 1.55; }
+  .check-item-text .note { font-size: 0.77rem; color: var(--text-muted); display: block; margin-top: 3px; }
+
+  /* ── TEC citation box ── */
+  .tec-box {
+    background: #fffbf0; border: 1px solid rgba(212,120,10,0.35);
+    border-left: 3px solid var(--amber); border-radius: 5px;
+    padding: 10px 16px; margin-top: 16px; margin-bottom: 4px;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .tec-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+  .tec-text { font-size: 0.78rem; color: #7a5500; line-height: 1.55; }
+  .tec-text strong { font-size: 0.8rem; display: block; margin-bottom: 2px; color: #5a3d00; }
+
+  /* ── Scorecard ── */
+  .scorecard-intro {
+    font-size: 0.88rem; color: var(--text-muted); line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .score-table {
+    width: 100%; border-collapse: collapse; margin-bottom: 24px; font-size: 0.83rem;
+  }
+  .score-table th {
+    background: var(--purple); color: white; padding: 10px 12px;
+    font-family: 'Cinzel', serif; font-size: 0.72rem; letter-spacing: 0.08em;
+    text-align: left; font-weight: 700;
+  }
+  .score-table th:last-child { text-align: center; width: 80px; }
+  .score-table td {
+    padding: 9px 12px; border-bottom: 1px solid var(--border);
+    vertical-align: middle; color: var(--text);
+  }
+  .score-table tr:nth-child(even) td { background: #f8f6fc; }
+  .score-table td:last-child { text-align: center; }
+  .score-check {
+    width: 20px; height: 20px; border: 2px solid #b0a8c8;
+    border-radius: 3px; display: inline-block;
+    background: white;
+  }
+  .score-num { color: var(--purple); font-weight: 700; font-size: 0.8rem; }
+  .scoring-bands { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 20px; }
+  .scoring-band {
+    border-radius: 8px; padding: 16px; text-align: center; border: 1px solid transparent;
+  }
+  .scoring-band.green { background: #f0faf4; border-color: #86c99e; }
+  .scoring-band.yellow { background: #fffbf0; border-color: #f0c060; }
+  .scoring-band.red { background: #fff5f5; border-color: #f0a0a0; }
+  .scoring-band .range {
+    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: 4px;
+  }
+  .scoring-band.green .range { color: #2d7a4f; }
+  .scoring-band.yellow .range { color: #9a6e00; }
+  .scoring-band.red .range { color: #c03030; }
+  .scoring-band .verdict { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; }
+  .scoring-band.green .verdict { color: #2d7a4f; }
+  .scoring-band.yellow .verdict { color: #9a6e00; }
+  .scoring-band.red .verdict { color: #c03030; }
+  .scoring-band .desc { font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
+
+  /* ── Back page CTA ── */
+  .back-page {
+    margin-top: 56px; padding-top: 48px; border-top: 3px solid var(--purple);
+    text-align: center;
+    page-break-before: always;
+  }
+  .back-page-logo { height: 60px; width: 60px; object-fit: contain; border-radius: 8px; margin: 0 auto 16px; display: block; }
+  .back-page-org {
+    font-family: 'Cinzel', serif; font-size: 0.78rem; font-weight: 700;
+    color: var(--amber); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 28px;
+  }
+  .back-page h2 {
+    font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 700;
+    color: var(--purple); margin-bottom: 12px;
+  }
+  .back-page p { font-size: 0.88rem; color: var(--text-muted); max-width: 480px; margin: 0 auto 28px; line-height: 1.7; }
+  .product-callouts { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 32px; }
+  .prod-callout {
+    border: 1px solid rgba(90,43,140,0.25); border-radius: 8px;
+    padding: 14px 20px; background: var(--purple-pale); min-width: 160px;
+  }
+  .prod-callout .prod-name { font-family: 'Cinzel', serif; font-size: 0.9rem; font-weight: 700; color: var(--purple); margin-bottom: 4px; }
+  .prod-callout .prod-desc { font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; }
+  .cta-link {
+    display: inline-block; background: linear-gradient(135deg, #e8862a, #d4541a);
+    color: white; padding: 13px 32px; border-radius: 6px; text-decoration: none;
+    font-weight: 700; font-size: 0.88rem; letter-spacing: 0.05em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .back-contact { font-size: 0.78rem; color: var(--text-muted); }
+  .back-contact a { color: var(--amber); text-decoration: none; font-weight: 600; }
+  .back-disclaimer {
+    margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border);
+    font-size: 0.7rem; color: #a0a0b8; line-height: 1.55;
+  }
+
+  /* ── Print ── */
+  @media print {
+    .toolbar { display: none !important; }
+    .page-wrap { padding: 0 32px 40px; }
+    body { font-size: 12px; }
+    .cover { padding: 40px 0 40px; }
+    .cover h1 { font-size: 1.65rem; }
+    .doc-section { page-break-inside: avoid; }
+    .score-table { font-size: 0.78rem; }
+    .scoring-bands { grid-template-columns: repeat(3, 1fr); }
+    .back-page { margin-top: 40px; padding-top: 36px; }
+    .cta-link { background: var(--amber) !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section-head { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .score-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    @page { size: letter; margin: 0.75in; }
+  }
+
+  @media (max-width: 600px) {
+    .page-wrap { padding: 80px 20px 40px; }
+    .scoring-bands { grid-template-columns: 1fr; }
+    .product-callouts { flex-direction: column; align-items: center; }
+    .prod-callout { min-width: 0; width: 100%; max-width: 280px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Screen toolbar -->
+<div class="toolbar no-print">
+  <div class="toolbar-left">
+    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path Education Group" class="toolbar-logo" />
+    <div>
+      <div class="toolbar-title">DAEP Compliance Checklist 2026</div>
+      <div class="toolbar-sub">Clear Path Education Group</div>
+    </div>
+  </div>
+  <div class="toolbar-right">
+    <a href="/" class="btn-back">← Back to Site</a>
+    <button class="btn-pdf" onclick="window.print()">Save as PDF</button>
+  </div>
+</div>
+
+<div class="page-wrap">
+
+  <!-- ── COVER ── -->
+  <div class="cover">
+    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path Education Group" class="cover-logo" />
+    <div class="cover-org">Clear Path Education Group</div>
+    <div class="cover-rule"></div>
+    <h1>Texas DAEP <em>Compliance</em><br>Self-Audit Checklist</h1>
+    <p class="cover-subtitle">A 20-point internal review guide for campus administrators and district compliance officers — covering placement documentation, SPED manifestation determination, parent notification, and re-entry planning.</p>
+    <div class="cover-edition">2026 Edition &nbsp;·&nbsp; Texas Education Code Reference</div>
+  </div>
+
+  <!-- ── INTRODUCTION ── -->
+  <div class="doc-section">
+    <div class="section-head">
+      <span class="section-head-num">Intro</span>
+      <span class="section-head-title">How to Use This Checklist</span>
+    </div>
+    <div class="intro-box">
+      <strong>Who this is for:</strong> Principals, assistant principals, DAEP coordinators, SPED liaisons, and district compliance officers conducting internal reviews of their disciplinary alternative education placement process.<br><br>
+      <strong>When to use it:</strong> Conduct this self-audit annually, following a TEA monitoring visit, or any time a placement decision is challenged. It can also be completed record-by-record for a random file sample.<br><br>
+      <strong>About TEC citations:</strong> All Texas Education Code references in this document are marked with a <strong>⚠ Verify TEC Citation</strong> notice. Districts should confirm current statutory language with legal counsel, as TEA may update requirements. Citations are provided for navigation purposes only and do not constitute legal advice.<br><br>
+      <strong>Scoring:</strong> Use the Self-Audit Scorecard on the final page. A score below 18 indicates areas requiring immediate attention.
+    </div>
+  </div>
+
+  <!-- ── SECTION 1: PLACEMENT ELIGIBILITY ── -->
+  <div class="doc-section">
+    <div class="section-head">
+      <span class="section-head-num">Section 1</span>
+      <span class="section-head-title">Placement Eligibility &amp; Documentation</span>
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          Offense code has been documented and verified against the district discipline management plan and campus behavior matrix.
+          <span class="note">The documented offense must align to the applicable TEC mandatory or discretionary placement category.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          Placement order has been signed by an authorized administrator with appropriate authority to impose the placement.
+          <span class="note">Verify that the signing administrator holds a valid administrator certificate and is named in district policy for this authority.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          Written copies of the placement notice have been provided to both the student and parent/guardian prior to or at the time of placement.
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          Student disciplinary record is complete, up-to-date, and contains all documentation required for the placement decision.
+          <span class="note">Includes witness statements, prior discipline history relevant to this decision, and any supporting documentation used to determine placement type and duration.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tec-box">
+      <span class="tec-icon">⚠</span>
+      <div class="tec-text">
+        <strong>Verify TEC Citations</strong>
+        Mandatory DAEP placements: TEC §37.006 | Discretionary placements: TEC §37.007 | Placement order requirements: confirm with legal counsel. Citations are provided for reference and should be verified against current statutory text.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 2: SPED & 504 ── -->
+  <div class="doc-section">
+    <div class="section-head">
+      <span class="section-head-num">Section 2</span>
+      <span class="section-head-title">SPED &amp; 504 Manifestation Determination</span>
+    </div>
+
+    <div class="intro-box">
+      Manifestation determination reviews (MDR) are required when disciplining a student with a disability. Failure to conduct a proper MDR — or conducting one with the wrong team members — is one of the most common OCR audit findings. Complete this section for any student with an active IEP or 504 plan.
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          Manifestation determination review (MDR) was conducted within 10 school days of the disciplinary decision.
+          <span class="note">The 10-day clock begins on the date of the disciplinary removal, not the date the parent was notified.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          All required team members were present at the MDR meeting — ARD committee for students with IEPs, or 504 committee for students with 504 plans.
+          <span class="note">Required participants include the parent/guardian. Document attendance and any substitutions made with parent agreement.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          MDR findings — including the committee's determination of whether the conduct was a manifestation of the student's disability — are documented and filed in the student's record.
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          Parent/guardian received written notification of the MDR outcome, including the committee's determination and any resulting changes to the student's placement or services.
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          If the conduct was determined to be a manifestation of the disability, the district reviewed and, if appropriate, revised the student's IEP or 504 plan and behavior intervention plan.
+          <span class="note">If a BIP did not exist prior to this event, one must be developed following a functional behavioral assessment.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tec-box">
+      <span class="tec-icon">⚠</span>
+      <div class="tec-text">
+        <strong>Verify TEC Citations</strong>
+        SPED discipline protections and MDR requirements: TEC §37.004 | MDR procedures: TEC §37.0041 | Federal overlay: IDEA, 20 U.S.C. §1415(k). All citations require verification against current statutory text and applicable federal regulations.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 3: TRANSITION PLAN ── -->
+  <div class="doc-section">
+    <div class="section-head">
+      <span class="section-head-num">Section 3</span>
+      <span class="section-head-title">Transition Plan &amp; Academic Continuity</span>
+    </div>
+
+    <div class="intro-box">
+      Texas law requires that students in DAEP receive instruction and services sufficient to enable them to continue to participate in the general education curriculum and advance from grade to grade. The transition plan is the primary documentation mechanism for ensuring academic continuity.
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          A transition plan was completed before or at the time of placement start — not added retroactively.
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          The academic coursework and instructional plan is documented in the transition plan, including how the student will continue to access the general curriculum during placement.
+          <span class="note">For students with IEPs, document how DAEP placement services align with IEP goals and required minutes of specialized instruction.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          30-day review has been scheduled and completed (or documented as not yet due if placement began within the last 30 school days).
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          60-day review has been scheduled and completed (or documented as not yet due).
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          90-day / re-entry review has been scheduled and completed, including documentation of re-entry conditions and any behavior supports to be continued.
+        </div>
+      </div>
+    </div>
+
+    <div class="tec-box">
+      <span class="tec-icon">⚠</span>
+      <div class="tec-text">
+        <strong>Verify TEC Citations</strong>
+        DAEP instructional requirements and transition planning: TEC §37.008. Review intervals and academic continuity requirements should be confirmed against current statute and applicable TEA guidance documents.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 4: PARENT NOTIFICATION ── -->
+  <div class="doc-section">
+    <div class="section-head">
+      <span class="section-head-num">Section 4</span>
+      <span class="section-head-title">Parent Notification Requirements</span>
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          Written placement notice was sent to the parent/guardian within the required timeframe following the discipline decision.
+          <span class="note">Consult district policy and applicable TEC provisions for the specific notification deadline for your placement type.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          The written notice includes: (a) the reason for placement, (b) the placement duration and location, and (c) the parent's right to appeal the placement decision.
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          The delivery method for the notice has been documented in the student record — e.g., hand-delivered with signature, certified mail with tracking, or electronic delivery per district policy.
+          <span class="note">Oral notification alone is generally insufficient. Always obtain written documentation of delivery.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tec-box">
+      <span class="tec-icon">⚠</span>
+      <div class="tec-text">
+        <strong>Verify TEC Citations</strong>
+        Parent notification of DAEP placement: TEC §37.009. Notification requirements for SPED students are additionally governed by federal IDEA procedural safeguards. Confirm all citation text with legal counsel.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SECTION 5: RE-ENTRY PLANNING ── -->
+  <div class="doc-section">
+    <div class="section-head">
+      <span class="section-head-num">Section 5</span>
+      <span class="section-head-title">Re-Entry Planning</span>
+    </div>
+
+    <div class="checklist">
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          A re-entry conference has been scheduled prior to the student's return to the home campus, with relevant staff and parent/guardian invited.
+          <span class="note">The re-entry conference should include a review of the student's progress during placement and identification of any lingering risk factors.</span>
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          The student's behavior support plan has been reviewed and updated (if needed) before the re-entry date. Any FBA/BIP revisions required by MDR outcomes have been completed.
+        </div>
+      </div>
+      <div class="check-item">
+        <div class="check-box-print"></div>
+        <div class="check-item-text">
+          The receiving campus (home campus) has been formally notified of the student's return date and any re-entry conditions, supports, or monitoring requirements.
+          <span class="note">This notification should be documented and acknowledged by the receiving campus administrator.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tec-box">
+      <span class="tec-icon">⚠</span>
+      <div class="tec-text">
+        <strong>Verify TEC Citations</strong>
+        Re-entry planning and transition back to home campus: consult district policy and applicable TEA guidance. Specific statutory citations for re-entry procedures should be confirmed with legal counsel.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── SELF-AUDIT SCORECARD ── -->
+  <div class="doc-section">
+    <div class="section-head">
+      <span class="section-head-num">Scorecard</span>
+      <span class="section-head-title">20-Point Self-Audit Scorecard</span>
+    </div>
+
+    <p class="scorecard-intro">
+      For each item, mark <strong>Yes</strong> if the requirement is fully met and documented. At the end, count your Yes responses and use the scoring bands below to assess your district's compliance posture. Conduct this review on a representative sample of student files — at minimum one file per campus per semester.
+    </p>
+
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th style="width:40px;">#</th>
+          <th>Compliance Item</th>
+          <th>Yes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="score-num">1</span></td>
+          <td>Offense code documented and matches district discipline management plan</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">2</span></td>
+          <td>Placement order signed by authorized administrator</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">3</span></td>
+          <td>Written placement notice provided to student and parent/guardian</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">4</span></td>
+          <td>Student disciplinary file is complete and up-to-date prior to placement</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">5</span></td>
+          <td>All applicable TEC timelines verified and documented</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">6</span></td>
+          <td>MDR conducted within 10 school days of discipline decision (SPED/504 students)</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">7</span></td>
+          <td>Required team members present at MDR (ARD or 504 committee + parent)</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">8</span></td>
+          <td>MDR findings documented and filed in student record</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">9</span></td>
+          <td>Parent notified in writing of MDR outcome</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">10</span></td>
+          <td>IEP/504 or BIP reviewed/revised following manifestation finding (if applicable)</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">11</span></td>
+          <td>Transition plan completed before or at placement start</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">12</span></td>
+          <td>Academic coursework and instructional plan documented in transition plan</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">13</span></td>
+          <td>30-day progress review completed (or scheduled if not yet due)</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">14</span></td>
+          <td>60-day review completed (or scheduled if not yet due)</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">15</span></td>
+          <td>90-day / re-entry review completed and documented</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">16</span></td>
+          <td>Parent notification sent within required timeframe with required content</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">17</span></td>
+          <td>Delivery method of parent notice documented (signature, certified mail, etc.)</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">18</span></td>
+          <td>Re-entry conference scheduled prior to student's return</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">19</span></td>
+          <td>Behavior support plan reviewed/updated before re-entry date</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+        <tr>
+          <td><span class="score-num">20</span></td>
+          <td>Receiving campus notified of return date and re-entry conditions</td>
+          <td><div class="score-check"></div></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="scoring-bands">
+      <div class="scoring-band green">
+        <div class="range">18 – 20</div>
+        <div class="verdict">Compliant</div>
+        <div class="desc">Strong compliance posture. Address any gaps and maintain regular review cadence.</div>
+      </div>
+      <div class="scoring-band yellow">
+        <div class="range">14 – 17</div>
+        <div class="verdict">At Risk</div>
+        <div class="desc">Systemic gaps identified. Prioritize process improvement before the next audit cycle.</div>
+      </div>
+      <div class="scoring-band red">
+        <div class="range">&lt; 14</div>
+        <div class="verdict">Urgent Review</div>
+        <div class="desc">Significant compliance exposure. Engage legal counsel and begin remediation immediately.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── BACK PAGE ── -->
+  <div class="back-page">
+    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path Education Group" class="back-page-logo" />
+    <div class="back-page-org">Clear Path Education Group · Compass Pathway</div>
+    <h2>Let Waypoint Handle This Automatically</h2>
+    <p>The Waypoint platform enforces every checklist item in real time — blocking placements that are missing required documentation, alerting staff when MDR deadlines approach, and automatically scheduling transition plan reviews.</p>
+
+    <div class="product-callouts">
+      <div class="prod-callout">
+        <div class="prod-name">📍 Waypoint</div>
+        <div class="prod-desc">DAEP compliance management — placement documentation, SPED blocking, parent portals, and transition plans.</div>
+      </div>
+      <div class="prod-callout">
+        <div class="prod-name">🧭 Navigator</div>
+        <div class="prod-desc">ISS/OSS tracking and proactive supports that catch escalation patterns before they reach DAEP.</div>
+      </div>
+      <div class="prod-callout">
+        <div class="prod-name">⭐ Meridian</div>
+        <div class="prod-desc">SPED compliance engine — FBA/BIP tracking, disciplinary auditing, and PBIS/MTSS alignment.</div>
+      </div>
+    </div>
+
+    <a href="mailto:support@clearpathedgroup.com?subject=Demo%20Request%20from%20Compliance%20Checklist" class="cta-link">
+      Schedule a Free Demo →
+    </a>
+
+    <div class="back-contact">
+      Questions? Email us at <a href="mailto:support@clearpathedgroup.com">support@clearpathedgroup.com</a>
+    </div>
+
+    <div class="back-disclaimer">
+      <strong>Disclaimer:</strong> This checklist is provided for general informational and educational purposes only. It does not constitute legal advice and should not be relied upon as a substitute for consultation with qualified legal counsel regarding your district's specific compliance obligations. Texas Education Code citations are provided for reference navigation only and must be verified against current statutory text. Clear Path Education Group, LLC makes no representations or warranties regarding the completeness, accuracy, or applicability of this material to any particular district's circumstances. Compliance with applicable law is the responsibility of each individual district and its legal counsel.
+      <br><br>
+      © 2026 Clear Path Education Group, LLC. All rights reserved. Texas LLC — Approval Pending.
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+</body>
+</html>

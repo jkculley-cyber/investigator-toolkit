@@ -92,8 +92,7 @@
 3. **Seed Meridian demo data** — No test SPED students in `meridian_students` yet
 4. **Build pricing page / district proposal** — Pricing model defined (enrollment bands, 3 tiers per product, bundle discounts). Needs implementation as website component or PDF template.
 5. **Resend sender domain** — currently using `onboarding@resend.dev` sandbox. Verify `waypointdaep.com` in Resend → Domains, then update `FROM_EMAIL` in `supabase/functions/send-notification/index.ts` and redeploy.
-6. **Supabase auth SMTP** — default has 3/hr rate limit. Configure custom SMTP before pilot go-live.
-7. **Supabase redirect URLs** — add `https://waypoint.clearpathedgroup.com/reset-password` to Supabase Auth → URL Configuration → Redirect URLs.
+6. **Supabase redirect URLs** — add `https://waypoint.clearpathedgroup.com/reset-password` to Supabase Auth → URL Configuration → Redirect URLs.
 8. **Google Search Console** — register clearpathedgroup.com to accelerate search indexing.
 9. **First pilot district** — not yet contracted. Product is sales-ready.
 

@@ -42,7 +42,7 @@ After making a meaningful decision during a session, add it to DECISIONS.md with
 | Charts | Recharts |
 | PDF export | jsPDF + jspdf-autotable |
 | Excel export | SheetJS (xlsx) — also used for data import |
-| Hosting | Netlify (frontend), Supabase cloud (backend) |
+| Hosting | Cloudflare Pages (frontend, via GitHub Actions on push to main), Supabase cloud (backend) |
 
 ---
 

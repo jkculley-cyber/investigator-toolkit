@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-02-23 (Session J — Cloudflare Pages deployment fix)
+> Last updated: 2026-02-23 (Session K — Mobile responsive layout)
 
 ---
 
@@ -10,7 +10,7 @@
 - **Company website:** `https://clearpathedgroup.com` (marketing site, static HTML in `clearpath-site/`)
 - **Marketing site features:** All 3 products (Waypoint, Navigator, Meridian) + Clear Path Suite bundle callout. **Interactive pricing calculator** (enrollment slider 0–200k, tier toggle, product checkboxes, live bundle discount badge). **Free Compliance Checklist** lead magnet card linking to `/whitepaper.html`. Pricing tags visible. Google Slides embed (DAEP deck) in Waypoint card. SEO meta/sitemap/robots.txt. Cloudflare Web Analytics auto-injected via Pages dashboard.
 - **whitepaper.html:** 20-point DAEP compliance self-audit checklist, 5 sections with TEC citation callout boxes, scorecard with scoring bands (18–20 compliant / 14–17 at risk / <14 urgent), print-optimized CSS, "Save as PDF" button. Lead magnet for district sales.
-- **Hosting:** Cloudflare Pages — `waypoint` project (app), `cpeg-site` project (marketing site, previously `clearpath-site` — renamed due to name conflict with another CF user)
+- **Hosting:** Cloudflare Pages — `waypoint` project (app, deployed via GitHub Actions on push to `main`), `cpeg-site` project (marketing site, deployed via `node deploy-clearpath.mjs` Direct Upload)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
 - **Migrations applied:** 001–043 (production). All migrations applied.
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
@@ -56,6 +56,7 @@
 - Password reset flow (`/reset-password`)
 - Error boundary — crash recovery screen
 - **PWA** — `manifest.json` + service worker + Apple meta tags; installable on iOS/Android/Chrome desktop
+- **Mobile responsive layout** — hamburger drawer (mobile), always-visible sidebar (desktop). `SidebarContext` at `src/contexts/SidebarContext.jsx`. No page files changed.
 - Teacher referral page (`/referral`), DAEP scoring page (`/daep/scoring`)
 - Bulk incident export (select checkboxes → Export PDF/Excel)
 - **Navigator module** — referrals, placements, supports, student detail, reports, goals & progress, data import (gated by `hasProduct('navigator')`)

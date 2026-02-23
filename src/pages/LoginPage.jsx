@@ -69,7 +69,7 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo / Header */}
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="Compass Pathway" className="h-44 w-44 mx-auto mb-4 object-contain" />
+          <img src="/logo.png" alt="Compass Pathway" className="h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 mx-auto mb-4 object-contain" />
           <h1 className="text-3xl font-bold mb-1">
             <span className="text-orange-600">Compass</span>
             <span className="text-purple-600"> Pathway</span>
@@ -78,7 +78,7 @@ export default function LoginPage() {
         </div>
 
         {/* Login Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 sm:p-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-6">Sign in to your account</h2>
 
           {error && (

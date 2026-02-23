@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
 import { useNotifications } from '../../contexts/NotificationContext'
+import { useSidebar } from '../../contexts/SidebarContext'
 import { cn } from '../../lib/utils'
 import { COMPLIANCE_ROLES, ALERT_ROLES, ROLES, DAEP_ROLES } from '../../lib/constants'
 import AlertBadge from '../alerts/AlertBadge'
@@ -65,12 +66,15 @@ const parentNavigation = [
 ]
 
 function NavItem({ item, alertCount }) {
+  const { setSidebarOpen } = useSidebar()
+
   if (item.external) {
     return (
       <a
         href={item.path}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => setSidebarOpen(false)}
         className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-gray-300 hover:bg-gray-800 hover:text-white"
       >
         <item.icon className="h-5 w-5 flex-shrink-0" />
@@ -82,6 +86,7 @@ function NavItem({ item, alertCount }) {
   return (
     <NavLink
       to={item.path}
+      onClick={() => setSidebarOpen(false)}
       className={({ isActive }) =>
         cn(
           'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
@@ -103,6 +108,7 @@ function NavItem({ item, alertCount }) {
 export default function Sidebar() {
   const { profile, hasRole, hasFeature, hasProduct, signOut } = useAuth()
   const { alertCount } = useNotifications()
+  const { sidebarOpen, setSidebarOpen } = useSidebar()
 
   const isParent = profile?.role === 'parent'
   const showWaypoint = !isParent && hasProduct('waypoint')
@@ -121,9 +127,17 @@ export default function Sidebar() {
   const commonItems = (isParent ? parentNavigation : staffNavigation).filter(i => !i.product && itemVisible(i))
 
   return (
-    <aside className="flex flex-col w-64 bg-gray-900 text-white min-h-screen">
+    <aside className={cn(
+      'flex flex-col w-64 bg-gray-900 text-white flex-shrink-0',
+      // Mobile: fixed overlay drawer with slide animation
+      'fixed inset-y-0 left-0 z-40 transition-transform duration-300 ease-in-out overflow-y-auto',
+      // Desktop: static sidebar in flex layout, always visible
+      'md:relative md:inset-y-auto md:left-auto md:z-auto md:translate-x-0 md:min-h-screen',
+      // Mobile open/close state
+      sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'
+    )}>
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-gray-800">
+      <div className="relative px-6 py-5 border-b border-gray-800">
         <div className="flex items-center gap-3">
           <img src="/logo.png" alt="Compass Pathway" className="h-9 w-9 object-contain" />
           <div>
@@ -134,6 +148,16 @@ export default function Sidebar() {
             <p className="text-xs text-gray-400">Behavioral Solutions</p>
           </div>
         </div>
+        {/* X close button — mobile only */}
+        <button
+          onClick={() => setSidebarOpen(false)}
+          className="md:hidden absolute top-4 right-3 p-1.5 text-gray-400 hover:text-white rounded"
+          aria-label="Close menu"
+        >
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
       </div>
 
       {/* Navigation */}
@@ -163,6 +187,7 @@ export default function Sidebar() {
                 key={item.path}
                 to={item.path}
                 end={item.path === '/navigator'}
+                onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
@@ -180,6 +205,7 @@ export default function Sidebar() {
             {!showWaypoint && (
               <NavLink
                 to="/matrix"
+                onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
@@ -208,6 +234,7 @@ export default function Sidebar() {
                 key={item.path}
                 to={item.path}
                 end={item.path === '/meridian'}
+                onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',

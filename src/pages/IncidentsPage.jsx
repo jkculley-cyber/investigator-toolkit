@@ -283,7 +283,7 @@ export default function IncidentsPage() {
         }
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Filters */}
         <Card className="mb-6">
           <div className="mb-4">

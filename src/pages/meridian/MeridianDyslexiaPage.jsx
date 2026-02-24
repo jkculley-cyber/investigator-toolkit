@@ -39,7 +39,7 @@ export default function MeridianDyslexiaPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
           { label: '504 Reviews Pending',  value: pending,     desc: 'Not yet reviewed under HB 3928',   color: 'red',    key: 'needs-review' },
           { label: 'Progress Reports Due', value: progressDue, desc: 'Due end of grading period',        color: 'amber',  key: 'progress-due' },

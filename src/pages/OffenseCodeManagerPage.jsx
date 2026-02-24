@@ -167,7 +167,7 @@ export default function OffenseCodeManagerPage() {
         }
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
           <MiniStat label="Total Codes" value={stats.total} />

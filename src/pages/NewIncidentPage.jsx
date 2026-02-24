@@ -418,7 +418,7 @@ export default function NewIncidentPage() {
 
               {['iss', 'oss', 'daep', 'expulsion'].includes(formData.consequence_type) && (
                 <div>
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <FormField
                       label="Days"
                       name="consequence_days"

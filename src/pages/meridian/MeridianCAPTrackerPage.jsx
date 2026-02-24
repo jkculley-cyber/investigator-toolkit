@@ -27,7 +27,7 @@ export default function MeridianCAPTrackerPage() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {[
           { label: 'Active CAPs',          value: caps?.length ?? 0, color: 'text-blue-600   border-t-blue-500'   },
           { label: 'Urgent (< 14 days)',   value: urgentCount,       color: 'text-red-600    border-t-red-500'    },

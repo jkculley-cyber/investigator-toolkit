@@ -95,7 +95,7 @@ export default function PhoneReturnPage() {
         }
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Filters */}
         <Card className="mb-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

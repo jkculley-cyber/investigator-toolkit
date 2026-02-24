@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom'
+import { useEffect } from 'react'
 import Sidebar from './Sidebar'
 import { NotificationProvider } from '../../contexts/NotificationContext'
 import { SidebarProvider, useSidebar } from '../../contexts/SidebarContext'
@@ -7,6 +8,13 @@ import ChatBubble from '../chat/ChatBubble'
 
 function AppShellInner() {
   const { sidebarOpen, setSidebarOpen } = useSidebar()
+
+  // Close drawer when rotating to landscape / resizing to desktop width
+  useEffect(() => {
+    const handleResize = () => { if (window.innerWidth >= 768) setSidebarOpen(false) }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [setSidebarOpen])
 
   return (
     <div className="flex min-h-screen bg-gray-50">

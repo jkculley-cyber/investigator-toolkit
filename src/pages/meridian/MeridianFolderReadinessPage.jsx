@@ -61,7 +61,7 @@ export default function MeridianFolderReadinessPage() {
       </Card>
 
       {/* Campus grid */}
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {campusLoading
           ? Array(6).fill(0).map((_, i) => (
               <Card key={i} className="px-5 py-4">

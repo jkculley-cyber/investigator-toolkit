@@ -76,7 +76,7 @@ export default function MeridianDashboardPage() {
       </div>
 
       {/* Stat cards */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard label="Overdue Timelines"       value={overdueCount}      sub={`+${criticalCount} breach in 7d`}                    color="red"    loading={statsLoading}    onClick={() => navigate('/meridian/timelines')} />
         <StatCard label="HB 3928 Pending Reviews" value={dyslexiaPending}   sub="Dyslexia 504 students"                               color="amber"  loading={statsLoading}    onClick={() => navigate('/meridian/dyslexia')} />
         <StatCard label="Avg Folder Readiness"    value={`${avgReadiness}%`} sub={`${lowCampuses} campus${lowCampuses!==1?'es':''} below 70%`} color="blue" loading={campusesLoading} onClick={() => navigate('/meridian/folders')} />
@@ -182,7 +182,7 @@ export default function MeridianDashboardPage() {
           <h3 className="text-sm font-semibold text-gray-900">Campus Folder Readiness</h3>
           <button onClick={() => navigate('/meridian/folders')} className="text-xs text-purple-600 hover:text-purple-700 font-medium">Full Report →</button>
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {campusesLoading
             ? Array(6).fill(0).map((_, i) => (
                 <Card key={i} className="px-5 py-4">

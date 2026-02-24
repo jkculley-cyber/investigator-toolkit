@@ -268,7 +268,7 @@ export default function MatrixEditorPage() {
         }
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Filters */}
         <Card className="mb-6">
           <div className="flex flex-col sm:flex-row gap-4">
@@ -480,7 +480,7 @@ export default function MatrixEditorPage() {
           />
 
           {/* Consequence Range */}
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <SelectField
               label="Minimum"
               name="min_consequence"

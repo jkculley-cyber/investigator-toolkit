@@ -74,7 +74,7 @@ export default function NavigatorStudentPage() {
         </div>
 
         {/* Stats Row */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
             <p className="text-2xl font-bold text-orange-500">{referrals.length}</p>
             <p className="text-xs text-gray-500 mt-1">Total Referrals</p>

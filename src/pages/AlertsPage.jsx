@@ -92,7 +92,7 @@ export default function AlertsPage() {
         }
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <div className="p-4 rounded-xl border bg-red-50 border-red-200">

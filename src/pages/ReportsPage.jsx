@@ -53,7 +53,7 @@ export default function ReportsPage() {
         subtitle={`${getSchoolYearLabel()} School Year`}
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Tab Navigation */}
         <div className="flex border-b border-gray-200 mb-6">
           {tabs.map((tab) => (

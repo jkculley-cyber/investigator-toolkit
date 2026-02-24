@@ -141,7 +141,7 @@ export default function ParentDashboardPage() {
         subtitle={`Parent Portal | ${getSchoolYearLabel()} School Year`}
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* FERPA Notice */}
         <div className="mb-5 bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 flex items-start gap-3">
           <svg className="w-5 h-5 text-blue-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

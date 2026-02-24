@@ -10,7 +10,7 @@ export default function NavigatorImportPage() {
         title="Navigator — Data Import"
         subtitle="Bulk import referrals, ISS/OSS placements, and student supports"
       />
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         <ImportWizard allowedTypes={NAVIGATOR_TYPES} />
       </div>
     </div>

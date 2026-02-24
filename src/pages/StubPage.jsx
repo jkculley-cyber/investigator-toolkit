@@ -8,7 +8,7 @@ export default function StubPage({ title, subtitle, description }) {
   return (
     <div>
       <Topbar title={title} subtitle={subtitle} />
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <svg className="h-16 w-16 text-gray-200 mb-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M11.42 15.17l-5.1-3.4a1.5 1.5 0 010-2.54l5.1-3.4a1.5 1.5 0 012.08.54l.96 1.92a1.5 1.5 0 01-.54 2.08l-1.92.96a1.5 1.5 0 00-.54 2.08l.96 1.92a1.5 1.5 0 01-.54 2.08l-5.1 3.4" />

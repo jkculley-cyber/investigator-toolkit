@@ -29,7 +29,7 @@ export default function ImportDataPage() {
         subtitle="Bulk upload data via CSV or Excel files"
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Tabs */}
         <div className="border-b border-gray-200 mb-6">
           <nav className="-mb-px flex gap-6">

@@ -109,7 +109,7 @@ export default function DaepScoringPage() {
           </Button>
         }
       />
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {loading ? (
           <div className="flex justify-center py-12"><LoadingSpinner size="lg" /></div>
         ) : records.length === 0 ? (

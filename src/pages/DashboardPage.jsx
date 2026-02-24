@@ -98,7 +98,7 @@ export default function DashboardPage() {
         subtitle={`${ROLE_LABELS[profile?.role] || 'Staff'} \u2022 ${getSchoolYearLabel()} School Year`}
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <StatCard

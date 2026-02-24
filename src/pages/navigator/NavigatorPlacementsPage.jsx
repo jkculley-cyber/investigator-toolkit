@@ -274,7 +274,7 @@ function NewPlacementDrawer({ onClose, onSaved }) {
             </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Start Date *</label>
               <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.start_date} onChange={e => setForm(f => ({ ...f, start_date: e.target.value }))} />

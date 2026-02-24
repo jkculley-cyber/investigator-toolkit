@@ -207,7 +207,7 @@ export default function NewTransitionPlanPage() {
         subtitle={`Step ${step + 1} of ${STEPS.length}: ${STEPS[step]}`}
       />
 
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {/* Step Indicator */}
         <div className="flex items-center mb-8">
           {STEPS.map((label, i) => (

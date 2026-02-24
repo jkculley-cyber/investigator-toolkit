@@ -79,7 +79,7 @@ export default function MeridianIntegrationPage() {
           Frontline eSped does not expose a public API. Meridian uses a three-tier integration strategy so districts can
           start syncing immediately regardless of IT capacity, then automate over time.
         </p>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {[
             { tier: '1', label: 'CSV Upload',      desc: "Export any report from Frontline's report writer → upload here. Available day one, no IT required.", time: 'Available now',  color: 'text-emerald-600 border-emerald-300', icon: '📄' },
             { tier: '2', label: 'sFTP Nightly Sync', desc: "Frontline's integration server pushes a nightly file via sFTP. Requires Frontline agreement + district IT.", time: '2–4 weeks setup', color: 'text-amber-600 border-amber-300', icon: '🔄' },
@@ -102,7 +102,7 @@ export default function MeridianIntegrationPage() {
       {/* Connected sources */}
       <div>
         <h3 className="text-sm font-semibold text-gray-900 mb-4">Connected Sources</h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {SOURCES.map(src => (
             <Card key={src.id} className="p-5">
               <div className="flex items-center justify-between mb-3">
@@ -139,7 +139,7 @@ export default function MeridianIntegrationPage() {
           action={showMap ? 'Hide column map' : 'View column map'}
           onAction={() => setShowMap(!showMap)}
         />
-        <div className="p-6">
+        <div className="p-3 md:p-6">
           <div
             onDragOver={e => { e.preventDefault(); setDragOver(true) }}
             onDragLeave={() => setDragOver(false)}

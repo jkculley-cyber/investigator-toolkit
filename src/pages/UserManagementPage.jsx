@@ -88,7 +88,7 @@ export default function UserManagementPage() {
           </div>
         }
       />
-      <div className="p-6">
+      <div className="p-3 md:p-6">
         {!serviceRoleKey && (
           <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-sm text-yellow-800">
             <strong>Note:</strong> VITE_SUPABASE_SERVICE_ROLE_KEY is not set — user invitations are disabled. Add it to .env.local to enable.

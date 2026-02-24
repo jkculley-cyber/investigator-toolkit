@@ -18,6 +18,16 @@ import NavigatorReportsPage from './pages/navigator/NavigatorReportsPage'
 import NavigatorGoalsPage from './pages/navigator/NavigatorGoalsPage'
 import NavigatorImportPage from './pages/navigator/NavigatorImportPage'
 
+// Origins pages
+import OriginsDashboardPage from './pages/origins/OriginsDashboardPage'
+import OriginsResponseMomentsPage from './pages/origins/OriginsResponseMomentsPage'
+import OriginsReplayToolPage from './pages/origins/OriginsReplayToolPage'
+import OriginsFamilyWorkspacePage from './pages/origins/OriginsFamilyWorkspacePage'
+import OriginsSkillPathwaysPage from './pages/origins/OriginsSkillPathwaysPage'
+import OriginsStudentDetailPage from './pages/origins/OriginsStudentDetailPage'
+import OriginsProgressPage from './pages/origins/OriginsProgressPage'
+import OriginsSettingsPage from './pages/origins/OriginsSettingsPage'
+
 // Meridian pages
 import MeridianDashboardPage from './pages/meridian/MeridianDashboardPage'
 import MeridianTimelinesPage from './pages/meridian/MeridianTimelinesPage'
@@ -138,6 +148,18 @@ function App() {
               <Route path="/meridian/cap" element={<RequireRole roles={STAFF_ROLES}><MeridianCAPTrackerPage /></RequireRole>} />
               <Route path="/meridian/waypoint-sync" element={<RequireRole roles={STAFF_ROLES}><MeridianWaypointSyncPage /></RequireRole>} />
               <Route path="/meridian/integration" element={<RequireRole roles={STAFF_ROLES}><MeridianIntegrationPage /></RequireRole>} />
+            </Route>
+
+            {/* ── Origins product routes ── */}
+            <Route element={<RequireProduct product="origins"><Outlet /></RequireProduct>}>
+              <Route path="/origins" element={<RequireRole roles={STAFF_ROLES}><OriginsDashboardPage /></RequireRole>} />
+              <Route path="/origins/response-moments" element={<RequireRole roles={STAFF_ROLES}><OriginsResponseMomentsPage /></RequireRole>} />
+              <Route path="/origins/replay-tool" element={<RequireRole roles={STAFF_ROLES}><OriginsReplayToolPage /></RequireRole>} />
+              <Route path="/origins/family-workspace" element={<RequireRole roles={STAFF_ROLES}><OriginsFamilyWorkspacePage /></RequireRole>} />
+              <Route path="/origins/pathways" element={<RequireRole roles={STAFF_ROLES}><OriginsSkillPathwaysPage /></RequireRole>} />
+              <Route path="/origins/students/:id" element={<RequireRole roles={STAFF_ROLES}><OriginsStudentDetailPage /></RequireRole>} />
+              <Route path="/origins/progress" element={<RequireRole roles={STAFF_ROLES}><OriginsProgressPage /></RequireRole>} />
+              <Route path="/origins/settings" element={<RequireRole roles={[ROLES.ADMIN]}><OriginsSettingsPage /></RequireRole>} />
             </Route>
 
             {/* ── Discipline Matrix — shared district config, accessible with any product ── */}

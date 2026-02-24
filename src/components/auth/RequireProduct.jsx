@@ -4,6 +4,7 @@ const PRODUCT_LABELS = {
   waypoint: 'Waypoint',
   navigator: 'Navigator',
   meridian: 'Meridian',
+  origins: 'Origins',
 }
 
 export default function RequireProduct({ product, children }) {

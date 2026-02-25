@@ -3,7 +3,7 @@
 **Clear Path Education Group, LLC — Waypoint Platform**
 Last Updated: February 25, 2026
 
-This document provides references to the Data Processing Agreements (DPAs) and privacy terms of the infrastructure subprocessors Clear Path uses to deliver Waypoint. Districts that require these agreements as part of vendor review can access them at the links below.
+This document provides references to the Data Processing Agreements (DPAs) and privacy terms of the infrastructure subprocessors Clear Path Education Group, LLC uses to deliver Waypoint. Districts that require these agreements as part of vendor review can access them at the links below.
 
 ---
 
@@ -15,7 +15,7 @@ This document provides references to the Data Processing Agreements (DPAs) and p
 
 **Infrastructure:** Supabase runs on Amazon Web Services (AWS) us-east-1 (Northern Virginia, USA).
 
-**FERPA Compliance Note:** Supabase can execute a FERPA-compliant DPA under its standard school official agreement. Clear Path's agreement with Supabase designates Supabase as a school official subprocessor.
+**FERPA Compliance Note:** Supabase can execute a FERPA-compliant DPA under its standard school official agreement. Clear Path Education Group, LLC's agreement with Supabase designates Supabase as a school official subprocessor.
 
 | Document | Link |
 |---|---|
@@ -29,7 +29,7 @@ This document provides references to the Data Processing Agreements (DPAs) and p
 
 ## 2. Amazon Web Services, Inc. (AWS)
 
-**Role:** Cloud infrastructure underlying Supabase (compute, storage, networking). AWS is a **sub-processor** — Clear Path does not have a direct AWS account for student data; AWS is accessed only through Supabase.
+**Role:** Cloud infrastructure underlying Supabase (compute, storage, networking). AWS is a **sub-processor** — Clear Path Education Group, LLC does not have a direct AWS account for student data; AWS is accessed only through Supabase.
 
 **Data location:** AWS us-east-1 (Northern Virginia, USA). Student data does not leave this region.
 
@@ -43,7 +43,7 @@ This document provides references to the Data Processing Agreements (DPAs) and p
 | AWS Compliance Programs | https://aws.amazon.com/compliance/programs/ |
 | AWS HIPAA / EDU Eligibility | https://aws.amazon.com/compliance/hipaa-eligible-services-reference/ |
 
-> **Note for districts:** Because Clear Path does not hold a direct AWS account for student data (Supabase does), districts reviewing Waypoint typically need Supabase's DPA rather than a direct AWS DPA. Clear Path is happy to provide Supabase's executed DPA upon request.
+> **Note for districts:** Because Clear Path Education Group, LLC does not hold a direct AWS account for student data (Supabase does), districts reviewing Waypoint typically need Supabase's DPA rather than a direct AWS DPA. Clear Path Education Group, LLC is happy to provide Supabase's executed DPA upon request.
 
 ---
 
@@ -72,12 +72,12 @@ Districts that require an **executed copy** of any of the above third-party DPAs
 Email: privacy@clearpathedgroup.com
 Website: clearpathedgroup.com
 
-Clear Path will coordinate with the relevant subprocessor to provide executed documentation, or will provide its own executed DPA that passes through the relevant obligations.
+Clear Path Education Group, LLC will coordinate with the relevant subprocessor to provide executed documentation, or will provide its own executed DPA that passes through the relevant obligations.
 
 ---
 
-## Relationship to Clear Path's Customer DPA
+## Relationship to Clear Path Education Group, LLC's Customer DPA
 
-The obligations in Clear Path's **District Data Processing Agreement** (provided separately) flow down to all subprocessors listed here. Clear Path is not relieved of its DPA obligations by subprocessor failure — if a subprocessor causes a breach, Clear Path remains responsible to the district under the terms of the customer DPA.
+The obligations in Clear Path Education Group, LLC's **District Data Processing Agreement** (provided separately) flow down to all subprocessors listed here. Clear Path Education Group, LLC is not relieved of its DPA obligations by subprocessor failure — if a subprocessor causes a breach, Clear Path Education Group, LLC remains responsible to the district under the terms of the customer DPA.
 
 See also: [Subprocessor List](./SUBPROCESSOR_LIST.md) for a full table of all third-party subprocessors.

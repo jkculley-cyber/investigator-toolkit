@@ -4,13 +4,13 @@
 Last Updated: February 25, 2026
 Version: 1.0
 
-This page lists the third-party subprocessors used by Clear Path Education Group, LLC ("Clear Path") to deliver the Waypoint platform. Clear Path maintains agreements with each subprocessor that impose data protection requirements at least as protective as those in our Customer Data Processing Agreement.
+This page lists the third-party subprocessors used by Clear Path Education Group, LLC to deliver the Waypoint platform. Clear Path Education Group, LLC maintains agreements with each subprocessor that impose data protection requirements at least as protective as those in our Customer Data Processing Agreement.
 
 ---
 
 ## What Is a Subprocessor?
 
-A subprocessor is a third-party company that Clear Path engages to process Student Education Records or other district-provided personal data in connection with the Waypoint service. This list does not include vendors that process only non-personal data (e.g., analytics with anonymized data) or vendors that provide general business services not specific to Waypoint (e.g., payroll software).
+A subprocessor is a third-party company that Clear Path Education Group, LLC engages to process Student Education Records or other district-provided personal data in connection with the Waypoint service. This list does not include vendors that process only non-personal data (e.g., analytics with anonymized data) or vendors that provide general business services not specific to Waypoint (e.g., payroll software).
 
 ---
 
@@ -51,7 +51,7 @@ All student data processed by Waypoint resides in the United States:
 
 ## Subprocessor Change Notification
 
-Clear Path will provide **30 days advance written notice** to affected customers before adding or replacing any subprocessor that processes Student Education Records. Notice will be sent to the district's designated DPA contact and posted as an update to this page.
+Clear Path Education Group, LLC will provide **30 days advance written notice** to affected customers before adding or replacing any subprocessor that processes Student Education Records. Notice will be sent to the district's designated DPA contact and posted as an update to this page.
 
 To register for subprocessor change notifications, contact: **privacy@clearpathedgroup.com**
 

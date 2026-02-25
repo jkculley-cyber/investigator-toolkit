@@ -8,10 +8,10 @@ Classification: Internal — Share with district partners upon request
 
 ## 1. Purpose and Scope
 
-This Incident Response Plan (IRP) governs how Clear Path Education Group, LLC ("Clear Path") detects, responds to, and recovers from security incidents that affect the Waypoint platform and the Student Education Records processed within it.
+This Incident Response Plan (IRP) governs how Clear Path Education Group, LLC detects, responds to, and recovers from security incidents that affect the Waypoint platform and the Student Education Records processed within it.
 
 This plan applies to:
-- All Clear Path personnel with access to Waypoint production systems
+- All Clear Path Education Group, LLC personnel with access to Waypoint production systems
 - Security incidents affecting customer data (district staff accounts, student records, incident reports, disciplinary data)
 - Infrastructure incidents on Supabase, AWS us-east-1, or Cloudflare Pages
 
@@ -49,13 +49,13 @@ This plan applies to:
 | **Customer Success Lead** | Drafts district notifications; serves as primary contact for affected districts during incident |
 | **Legal/Compliance** | Advises on FERPA notification obligations; coordinates with counsel if law enforcement is required |
 
-For the current company size, the founder/CEO may serve as Incident Commander. Clear Path will designate named individuals to these roles as the team grows.
+For the current company size, the founder/CEO may serve as Incident Commander. Clear Path Education Group, LLC will designate named individuals to these roles as the team grows.
 
 ---
 
 ## 5. Detection Sources
 
-Clear Path monitors for incidents through:
+Clear Path Education Group, LLC monitors for incidents through:
 
 1. **Supabase Dashboard Alerts** — unusual query volume, auth failures, RLS policy violations
 2. **Cloudflare Analytics** — traffic anomalies, DDoS signals, bot patterns
@@ -126,19 +126,19 @@ Within 14 days of incident closure:
 
 ### FERPA Breach Notification Requirements
 
-Under FERPA, the school district is the custodian of student records. Clear Path's obligations:
+Under FERPA, the school district is the custodian of student records. Clear Path Education Group, LLC's obligations:
 
-- **Notify the district as soon as practicable** — Clear Path will notify affected districts within **72 hours** of confirming a breach of Student Education Records
+- **Notify the district as soon as practicable** — Clear Path Education Group, LLC will notify affected districts within **72 hours** of confirming a breach of Student Education Records
 - Notification will be sent to the district's designated DPA contact (or superintendent if no DPA contact is on file)
 - Notification will include: nature of the incident, categories of records affected, approximate number of students affected, actions taken to contain the incident, recommended district actions
 
 ### State Law Notification
 
-Clear Path will comply with applicable state data breach notification laws. For Texas customers, this includes Texas Business and Commerce Code § 521.053 (notification within 60 days of discovery for breaches affecting Texas residents' personal information).
+Clear Path Education Group, LLC will comply with applicable state data breach notification laws. For Texas customers, this includes Texas Business and Commerce Code § 521.053 (notification within 60 days of discovery for breaches affecting Texas residents' personal information).
 
 ### Notification Template — District
 
-> **SECURITY INCIDENT NOTICE — Clear Path Education Group / Waypoint**
+> **SECURITY INCIDENT NOTICE — Clear Path Education Group, LLC / Waypoint**
 >
 > Dear [District Name] Data Privacy Contact,
 >
@@ -209,4 +209,4 @@ To report a security incident or vulnerability:
 - **Email:** privacy@clearpathedgroup.com
 - **Subject line:** "SECURITY INCIDENT — [URGENT]" for P1/P2 issues
 
-Clear Path commits to acknowledging all security reports within 24 hours.
+Clear Path Education Group, LLC commits to acknowledging all security reports within 24 hours.

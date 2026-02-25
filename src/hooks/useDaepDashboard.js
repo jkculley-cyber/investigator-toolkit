@@ -505,7 +505,7 @@ export function useOrientationSchedule(showPast = false) {
         const thirtyDaysAgo = new Date()
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
         const thirtyDaysAgoStr = thirtyDaysAgo.toISOString().split('T')[0]
-        query = query.or(`orientation_status.in.(pending,scheduled),and(orientation_status.eq.completed,orientation_completed_date.gte.${thirtyDaysAgoStr})`)
+        query = query.or(`orientation_status.in.(pending,scheduled,missed),and(orientation_status.eq.completed,orientation_completed_date.gte.${thirtyDaysAgoStr})`)
       }
 
       const { data, error } = await query

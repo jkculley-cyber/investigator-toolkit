@@ -598,9 +598,9 @@ async function run() {
     VALUES ($1, $2, $3, false, 'pending')
     RETURNING id
   `, [DISTRICT_ID, incH.id, marcus.id]);
-  await q(`UPDATE daep_placement_scheduling SET orientation_status='scheduled', orientation_scheduled_date='2025-12-16' WHERE id=$1`, [schedH.id]);
+  await q(`UPDATE daep_placement_scheduling SET orientation_status='scheduled', orientation_scheduled_date='2026-02-18' WHERE id=$1`, [schedH.id]);
   // UPDATE to 'completed' fires trg_placement_not_started_alert → creates placement_not_started alert
-  await q(`UPDATE daep_placement_scheduling SET orientation_status='completed', orientation_completed_date='2025-12-16' WHERE id=$1`, [schedH.id]);
+  await q(`UPDATE daep_placement_scheduling SET orientation_status='completed', orientation_completed_date='2026-02-18' WHERE id=$1`, [schedH.id]);
 
   console.log('  ✓ Scenario H: Marcus Johnson — APPROVED, orientation COMPLETED, awaiting kiosk check-in (alert created)');
 

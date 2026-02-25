@@ -95,77 +95,54 @@ ALTER TABLE origins_family_activities  ENABLE ROW LEVEL SECURITY;
 
 -- origins_scenarios: global scenarios (district_id IS NULL) visible to all staff;
 -- district-scoped scenarios visible to that district + waypoint_admin
+-- Uses user_district_id() and is_waypoint_admin() helpers from migration 002/026
 CREATE POLICY "origins_scenarios_read" ON origins_scenarios
   FOR SELECT TO authenticated
   USING (
     district_id IS NULL
-    OR district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
+    OR district_id = public.user_district_id()
+    OR public.is_waypoint_admin()
   );
 
 CREATE POLICY "origins_scenarios_write" ON origins_scenarios
   FOR ALL TO authenticated
   USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
+    district_id = public.user_district_id()
+    OR public.is_waypoint_admin()
   );
 
 -- origins_enrollments
 CREATE POLICY "origins_enrollments_read" ON origins_enrollments
   FOR SELECT TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());
 
 CREATE POLICY "origins_enrollments_write" ON origins_enrollments
   FOR ALL TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());
 
 -- origins_sessions
 CREATE POLICY "origins_sessions_read" ON origins_sessions
   FOR SELECT TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());
 
 CREATE POLICY "origins_sessions_write" ON origins_sessions
   FOR ALL TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());
 
 -- origins_replay_sessions
 CREATE POLICY "origins_replay_read" ON origins_replay_sessions
   FOR SELECT TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());
 
 CREATE POLICY "origins_replay_write" ON origins_replay_sessions
   FOR ALL TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());
 
 -- origins_family_activities
 CREATE POLICY "origins_family_read" ON origins_family_activities
   FOR SELECT TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());
 
 CREATE POLICY "origins_family_write" ON origins_family_activities
   FOR ALL TO authenticated
-  USING (
-    district_id = (SELECT district_id FROM profiles WHERE id = auth.uid())
-    OR EXISTS (SELECT 1 FROM profiles WHERE id = auth.uid() AND role = 'waypoint_admin')
-  );
+  USING (district_id = public.user_district_id() OR public.is_waypoint_admin());

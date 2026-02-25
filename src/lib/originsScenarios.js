@@ -748,6 +748,78 @@ export const SCENARIOS = [
   },
 ]
 
+// ── Reflection prompts by pathway ────────────────────────────────────────────
+export const REFLECTION_PROMPTS = {
+  emotional_regulation: [
+    'When you feel yourself getting really angry or overwhelmed, what does your body feel like?',
+    'Has a situation like this actually happened to you? What did you do — honestly?',
+    'What makes it hardest for you to pause before reacting?',
+  ],
+  conflict_deescalation: [
+    'What usually stops you from walking away from a conflict?',
+    'Think about the last time you had a real conflict. How did it end — and how did you feel afterward?',
+    'What would it feel like to de-escalate a situation without feeling like you lost?',
+  ],
+  peer_pressure: [
+    'Why can it feel risky to say no to your friends sometimes?',
+    'What\'s the social pressure like in your friend group around situations like this?',
+    'What would help you feel more confident making your own choice next time?',
+  ],
+  rebuilding: [
+    'When you make a mistake, what\'s usually the hardest part of making it right?',
+    'Think of a time you did something you regret. Did you ever go back and address it?',
+    'What does it mean to you to do the right thing even when no one is watching?',
+  ],
+  adult_communication: [
+    'When an adult seems unfair or wrong, what\'s your first instinct?',
+    'Is there an adult at school you could actually talk to if something was hard? Who comes to mind?',
+    'What makes it hard to speak up respectfully instead of shutting down or blowing up?',
+  ],
+}
+
+// ── Conversation starters for parents (based on choice quality) ───────────────
+export function getConversationStarters(scenario, option) {
+  const isStrong = option.score >= 85
+  const isPoor   = option.score < 50
+  const offense  = TEC_OFFENSES.find(o => o.key === scenario.tec_offense)
+
+  const pathwayStarters = {
+    emotional_regulation: {
+      strong: 'I saw you worked through a situation about staying calm under pressure — and you made a strong choice. What helped you think it through that way?',
+      poor:   'I saw you worked through a scenario about managing anger. No judgment at all — I\'m curious: what made that feel like the right call in the moment?',
+      mid:    'I saw you completed a scenario about staying calm in tough moments. Tell me about what was going through your mind.',
+    },
+    conflict_deescalation: {
+      strong: 'You worked through a scenario about walking away from a conflict — and chose to de-escalate. What does "walking away" feel like to you?',
+      poor:   'You worked through a conflict scenario. I want to understand: when something like that happens, what does it feel like inside right before you react?',
+      mid:    'You completed a scenario about handling conflict. What\'s the hardest part of de-escalating for you personally?',
+    },
+    peer_pressure: {
+      strong: 'You worked through a peer pressure scenario and made a confident choice. What made it easier to say no in that situation?',
+      poor:   'You worked through a scenario about peer pressure. Tell me — when your friends are all doing something, what does that pressure actually feel like?',
+      mid:    'You completed a scenario about peer pressure. What goes through your mind when you\'re in a situation like that?',
+    },
+    rebuilding: {
+      strong: 'You worked through a scenario about making things right — and chose accountability. What does it feel like to do the hard thing?',
+      poor:   'You worked through a scenario about rebuilding after a mistake. No lecture — I\'m just curious: what makes it hard to go back and make something right?',
+      mid:    'You completed a scenario about accountability. What\'s the scariest part of admitting a mistake to someone?',
+    },
+    adult_communication: {
+      strong: 'You worked through a scenario about talking to adults — and chose to communicate well. Is there an adult at school you actually feel like you could go to?',
+      poor:   'You worked through a scenario about communicating with adults. What makes that hard sometimes — like, what gets in the way?',
+      mid:    'You completed a scenario about talking to adults. What would make it easier to bring something up to a teacher or counselor?',
+    },
+  }
+
+  const level     = isStrong ? 'strong' : isPoor ? 'poor' : 'mid'
+  const starter1  = pathwayStarters[scenario.skill_pathway]?.[level] || 'Tell me about the scenario you worked through today.'
+  const starter2  = offense
+    ? `We\'ve been talking about ${offense.label.toLowerCase()} — what does that look like in your school right now?`
+    : 'What was the hardest part of working through that scenario?'
+
+  return [starter1, starter2]
+}
+
 // Helper: get scenarios by TEC offense
 export function getScenariosByOffense(offenseKey) {
   return SCENARIOS.filter(s => s.content?.tec_offense === offenseKey || s.tec_offense === offenseKey)

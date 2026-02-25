@@ -22,6 +22,7 @@ import NavigatorImportPage from './pages/navigator/NavigatorImportPage'
 import OriginsFamilyEntryPage from './pages/origins/portal/OriginsFamilyEntryPage'
 import OriginsStudentPortalPage from './pages/origins/portal/OriginsStudentPortalPage'
 import OriginsParentPortalPage from './pages/origins/portal/OriginsParentPortalPage'
+import OriginsScenarioPlayer from './pages/origins/portal/OriginsScenarioPlayer'
 
 // Origins staff pages
 import OriginsDashboardPage from './pages/origins/OriginsDashboardPage'
@@ -196,6 +197,7 @@ function App() {
           {/* Origins Family Portal — standalone, no auth required */}
           <Route path="/family" element={<OriginsFamilyEntryPage />} />
           <Route path="/family/student" element={<OriginsStudentPortalPage />} />
+          <Route path="/family/student/scenario/:id" element={<OriginsScenarioPlayer />} />
           <Route path="/family/parent" element={<OriginsParentPortalPage />} />
 
           {/* 404 */}

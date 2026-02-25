@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import OriginsPortalLayout from './OriginsPortalLayout'
+import { SCENARIOS, getConversationStarters } from '../../../lib/originsScenarios'
 
 const PATHWAYS = [
   { key: 'emotional_regulation',  label: 'Emotional Regulation',        color: 'bg-teal-100 text-teal-700',    ring: 'ring-teal-200'    },
@@ -9,14 +11,14 @@ const PATHWAYS = [
   { key: 'adult_communication',   label: 'Communication with Adults',   color: 'bg-indigo-100 text-indigo-700', ring: 'ring-indigo-200' },
 ]
 
-// Demo activities — will be replaced by real DB data
+// Demo assigned activities — will be replaced by real DB data
 const DEMO_ACTIVITIES = [
   {
     id: '1',
     type: 'scenario',
-    title: 'When Someone Gets in Your Space',
+    scenario_id: 'global-001',
+    title: 'When Someone Gets in Your Face',
     pathway: 'emotional_regulation',
-    status: 'assigned',
     description: 'A scenario about staying calm when someone is pushing your buttons.',
   },
   {
@@ -24,16 +26,15 @@ const DEMO_ACTIVITIES = [
     type: 'replay',
     title: 'Reflect on What Happened',
     pathway: 'rebuilding',
-    status: 'assigned',
     description: 'Walk through a recent situation and think about what you could do differently.',
   },
   {
     id: '3',
     type: 'scenario',
-    title: 'Your Friends Want You to Skip',
+    scenario_id: 'global-004',
+    title: 'The Group Chat',
     pathway: 'peer_pressure',
-    status: 'completed',
-    description: 'Practice what to say when your friends are pressuring you.',
+    description: 'Your friend group is saying mean things about someone online. What do you do?',
   },
 ]
 
@@ -53,8 +54,23 @@ const TYPE_ICONS = {
 
 export default function OriginsStudentPortalPage() {
   const navigate = useNavigate()
-  const pending = DEMO_ACTIVITIES.filter(a => a.status === 'assigned')
-  const done    = DEMO_ACTIVITIES.filter(a => a.status === 'completed')
+  const [completedSessions, setCompletedSessions] = useState([])
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('origins_sessions') || '[]')
+      setCompletedSessions(stored)
+    } catch {}
+  }, [])
+
+  const completedIds = new Set(completedSessions.map(s => s.scenario_id))
+  const pending = DEMO_ACTIVITIES.filter(a => !a.scenario_id || !completedIds.has(a.scenario_id))
+
+  function startActivity(activity) {
+    if (activity.type === 'scenario' && activity.scenario_id) {
+      navigate(`/family/student/scenario/${activity.scenario_id}`)
+    }
+  }
 
   return (
     <OriginsPortalLayout>
@@ -87,26 +103,26 @@ export default function OriginsStudentPortalPage() {
           </h2>
           <div className="space-y-3">
             {pending.map(a => (
-              <ActivityCard key={a.id} activity={a} />
+              <ActivityCard key={a.id} activity={a} onStart={() => startActivity(a)} />
             ))}
           </div>
         </div>
       )}
 
-      {/* Completed */}
-      {done.length > 0 && (
+      {/* Completed sessions from localStorage */}
+      {completedSessions.length > 0 && (
         <div>
           <h2 className="text-sm font-semibold text-gray-700 mb-3">Completed ✓</h2>
-          <div className="space-y-3 opacity-70">
-            {done.map(a => (
-              <ActivityCard key={a.id} activity={a} completed />
+          <div className="space-y-3">
+            {completedSessions.map(s => (
+              <CompletedSessionCard key={s.id} session={s} />
             ))}
           </div>
         </div>
       )}
 
       {/* Empty state */}
-      {DEMO_ACTIVITIES.length === 0 && (
+      {pending.length === 0 && completedSessions.length === 0 && (
         <div className="text-center py-16">
           <div className="w-16 h-16 rounded-full bg-teal-50 flex items-center justify-center mx-auto mb-4">
             <svg className="h-8 w-8 text-teal-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -121,22 +137,17 @@ export default function OriginsStudentPortalPage() {
   )
 }
 
-function ActivityCard({ activity, completed }) {
+function ActivityCard({ activity, onStart }) {
   const pathway = PATHWAYS.find(p => p.key === activity.pathway)
 
   return (
-    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${
-      completed ? 'border-gray-100' : 'border-teal-100 hover:border-teal-300 hover:shadow-md cursor-pointer'
-    }`}>
+    <div className="bg-white rounded-2xl border border-teal-100 hover:border-teal-300 hover:shadow-md shadow-sm overflow-hidden transition-all cursor-pointer"
+      onClick={onStart}
+    >
       <div className="p-5">
         <div className="flex items-start gap-4">
-          <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
-            completed ? 'bg-gray-100 text-gray-400' : 'bg-teal-100 text-teal-600'
-          }`}>
-            {completed
-              ? <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              : TYPE_ICONS[activity.type]
-            }
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-teal-100 text-teal-600">
+            {TYPE_ICONS[activity.type]}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
@@ -153,13 +164,58 @@ function ActivityCard({ activity, completed }) {
             <p className="text-sm text-gray-500 mt-0.5">{activity.description}</p>
           </div>
         </div>
-
-        {!completed && (
-          <button className="mt-4 w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-xl transition-colors">
-            Start →
-          </button>
-        )}
+        <button
+          onClick={e => { e.stopPropagation(); onStart() }}
+          className="mt-4 w-full py-2.5 bg-teal-600 hover:bg-teal-700 text-white text-sm font-medium rounded-xl transition-colors"
+        >
+          Start →
+        </button>
       </div>
+    </div>
+  )
+}
+
+const PATHWAY_LABELS = {
+  emotional_regulation:  'Emotional Regulation',
+  conflict_deescalation: 'Conflict De-escalation',
+  peer_pressure:         'Peer Pressure Resistance',
+  rebuilding:            'Rebuilding After a Mistake',
+  adult_communication:   'Communication with Adults',
+}
+
+function CompletedSessionCard({ session }) {
+  const scenario = SCENARIOS.find(s => s.id === session.scenario_id)
+  const scoreLabel = session.choice_score >= 85 ? '✓ Strong choice' : session.choice_score >= 50 ? '↗ Getting there' : '↻ Room to grow'
+  const scoreColor = session.choice_score >= 85 ? 'text-teal-600' : session.choice_score >= 50 ? 'text-amber-600' : 'text-red-500'
+
+  return (
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5 opacity-80">
+      <div className="flex items-start gap-3 mb-3">
+        <div className="w-10 h-10 rounded-xl bg-gray-100 text-gray-400 flex items-center justify-center shrink-0">
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2 mb-0.5">
+            <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider">Response Moment</span>
+            {session.skill_pathway && (
+              <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-gray-100 text-gray-500">
+                {PATHWAY_LABELS[session.skill_pathway]}
+              </span>
+            )}
+          </div>
+          <h3 className="text-base font-semibold text-gray-700">{session.scenario_title}</h3>
+          <p className={`text-xs font-semibold mt-0.5 ${scoreColor}`}>{scoreLabel}</p>
+        </div>
+      </div>
+      {session.commitment && (
+        <div className="bg-teal-50 border border-teal-100 rounded-xl px-4 py-2.5">
+          <p className="text-xs text-teal-700">
+            <span className="font-semibold">Your commitment: </span>"{session.commitment}"
+          </p>
+        </div>
+      )}
     </div>
   )
 }

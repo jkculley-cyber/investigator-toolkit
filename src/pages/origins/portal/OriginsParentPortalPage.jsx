@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import OriginsPortalLayout from './OriginsPortalLayout'
+import { SCENARIOS, getConversationStarters } from '../../../lib/originsScenarios'
 
 // Demo data — will be replaced by real DB queries
 const DEMO_STUDENT = {
@@ -53,6 +55,15 @@ const RESOURCES = [
 
 export default function OriginsParentPortalPage() {
   const navigate = useNavigate()
+  const [studentSessions, setStudentSessions] = useState([])
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('origins_sessions') || '[]')
+      setStudentSessions(stored)
+    } catch {}
+  }, [])
+
   const pending   = DEMO_FAMILY_ACTIVITIES.filter(a => !a.completed)
   const completed = DEMO_FAMILY_ACTIVITIES.filter(a => a.completed)
 
@@ -98,6 +109,21 @@ export default function OriginsParentPortalPage() {
         </p>
       </div>
 
+      {/* Student session summaries */}
+      {studentSessions.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-sm font-semibold text-gray-700 mb-3">
+            What Your Child Completed
+            <span className="ml-2 text-xs bg-emerald-100 text-emerald-700 font-bold px-2 py-0.5 rounded-full">{studentSessions.length}</span>
+          </h2>
+          <div className="space-y-3">
+            {studentSessions.map(s => (
+              <StudentSessionSummary key={s.id} session={s} />
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Family activities */}
       <div className="mb-6">
         <div className="flex items-center justify-between mb-3">
@@ -137,6 +163,70 @@ export default function OriginsParentPortalPage() {
         </p>
       </div>
     </OriginsPortalLayout>
+  )
+}
+
+const PATHWAY_LABELS = {
+  emotional_regulation:  'Emotional Regulation',
+  conflict_deescalation: 'Conflict De-escalation',
+  peer_pressure:         'Peer Pressure Resistance',
+  rebuilding:            'Rebuilding After a Mistake',
+  adult_communication:   'Communication with Adults',
+}
+
+function StudentSessionSummary({ session }) {
+  const scenario = SCENARIOS.find(s => s.id === session.scenario_id)
+  const chosen   = scenario?.content?.options?.[session.choice_index]
+  const starters = scenario && chosen ? getConversationStarters(scenario, chosen) : []
+  const scoreLabel = session.choice_score >= 85 ? '✓ Strong choice' : session.choice_score >= 50 ? '↗ Getting there' : '↻ Room to grow'
+  const scoreColor = session.choice_score >= 85 ? 'bg-teal-50 border-teal-200 text-teal-800' : session.choice_score >= 50 ? 'bg-amber-50 border-amber-200 text-amber-800' : 'bg-red-50 border-red-200 text-red-800'
+  const completedDate = session.completed_at ? new Date(session.completed_at).toLocaleDateString() : ''
+
+  return (
+    <div className="bg-white rounded-2xl border border-emerald-100 shadow-sm overflow-hidden">
+      <div className="bg-emerald-50 px-5 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <svg className="h-4 w-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <span className="text-xs font-semibold text-emerald-700">Completed: {session.scenario_title}</span>
+        </div>
+        <span className="text-[10px] text-emerald-500">{completedDate}</span>
+      </div>
+      <div className="p-5 space-y-4">
+        <div className="flex items-center gap-2 flex-wrap">
+          {session.skill_pathway && (
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-medium bg-gray-100 text-gray-600">
+              {PATHWAY_LABELS[session.skill_pathway]}
+            </span>
+          )}
+          <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold border ${scoreColor}`}>
+            {scoreLabel}
+          </span>
+        </div>
+
+        {session.commitment && (
+          <div className="bg-teal-50 border border-teal-100 rounded-xl p-3">
+            <p className="text-[10px] font-semibold text-teal-600 uppercase tracking-wider mb-1">Their commitment:</p>
+            <p className="text-sm text-teal-900 italic">"{session.commitment}"</p>
+          </div>
+        )}
+
+        {starters.length > 0 && (
+          <div>
+            <p className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Conversation starters for you:</p>
+            <ul className="space-y-2">
+              {starters.map((s, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-gray-700">
+                  <span className="text-emerald-400 font-bold mt-0.5 shrink-0">›</span>
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
 

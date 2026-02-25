@@ -7,7 +7,7 @@ import { useAccessScope } from '../hooks/useAccessScope'
 import { applyCampusScope } from '../lib/accessControl'
 import Topbar from '../components/layout/Topbar'
 import Card, { CardTitle } from '../components/ui/Card'
-import { ROLE_LABELS, ROLES, APPROVAL_CHAIN_STEPS } from '../lib/constants'
+import { ROLE_LABELS, ROLES, APPROVAL_CHAIN_STEPS, INCIDENT_STATUS_COLORS } from '../lib/constants'
 import { getSchoolYearLabel, formatDate } from '../lib/utils'
 
 const APPROVAL_ROLES = APPROVAL_CHAIN_STEPS.map(s => s.role)
@@ -61,6 +61,31 @@ export default function DashboardPage() {
       })
     }
     fetchStats()
+  }, [districtId, scopeLoading, scope])
+
+  // Fetch denied/returned DAEP referrals — campus needs to take action
+  const [needsAction, setNeedsAction] = useState([])
+  useEffect(() => {
+    if (!districtId || scopeLoading) return
+    const fetchNeedsAction = async () => {
+      let q = supabase
+        .from('incidents')
+        .select(`
+          id, incident_date, status,
+          student:students(id, first_name, last_name),
+          offense:offense_codes(id, title),
+          approval_chain:daep_approval_chains!fk_incidents_approval_chain(id, current_step)
+        `)
+        .eq('district_id', districtId)
+        .eq('consequence_type', 'daep')
+        .in('status', ['denied', 'returned'])
+        .order('incident_date', { ascending: false })
+        .limit(10)
+      q = applyCampusScope(q, scope)
+      const { data } = await q
+      setNeedsAction(data || [])
+    }
+    fetchNeedsAction()
   }, [districtId, scopeLoading, scope])
 
   // Fetch pending approvals for roles in the approval chain
@@ -162,6 +187,68 @@ export default function DashboardPage() {
             }
           />
         </div>
+
+        {/* Referrals Needing Attention — denied or returned for corrections */}
+        {needsAction.length > 0 && (
+          <div className="mb-6">
+            <Card>
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  <CardTitle>DAEP Referrals Needing Attention</CardTitle>
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-500 text-white text-xs font-bold">
+                    {needsAction.length}
+                  </span>
+                </div>
+                <Link to="/incidents" className="text-xs text-orange-600 hover:text-orange-800">
+                  View all incidents →
+                </Link>
+              </div>
+              <div className="space-y-2">
+                {needsAction.map(inc => {
+                  const isDenied = inc.status === 'denied'
+                  return (
+                    <Link
+                      key={inc.id}
+                      to={`/incidents/${inc.id}`}
+                      className={`flex items-center justify-between p-3 rounded-lg border transition-colors group ${
+                        isDenied
+                          ? 'border-red-200 bg-red-50 hover:bg-red-100'
+                          : 'border-orange-200 bg-orange-50 hover:bg-orange-100'
+                      }`}
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-sm font-medium text-gray-900">
+                            {inc.student ? `${inc.student.first_name} ${inc.student.last_name}` : 'Unknown Student'}
+                          </p>
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                            isDenied ? 'bg-red-100 text-red-700' : 'bg-orange-100 text-orange-700'
+                          }`}>
+                            {isDenied ? 'Denied' : 'Returned for Corrections'}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-0.5">
+                          {inc.offense?.title || 'DAEP Referral'} &bull; {formatDate(inc.incident_date)}
+                        </p>
+                        <p className="text-xs mt-1 font-medium" style={{ color: isDenied ? '#dc2626' : '#ea580c' }}>
+                          {isDenied
+                            ? 'This referral was denied. Open to review the decision.'
+                            : 'An approver returned this for corrections. Open to review and resubmit.'}
+                        </p>
+                      </div>
+                      <svg className="h-4 w-4 text-gray-400 group-hover:text-orange-500 flex-shrink-0 ml-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </Link>
+                  )
+                })}
+              </div>
+            </Card>
+          </div>
+        )}
 
         {/* Pending Approvals Widget — only shown for approval-chain roles */}
         {isApprovalRole && (

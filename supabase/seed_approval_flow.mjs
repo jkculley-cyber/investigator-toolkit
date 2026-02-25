@@ -189,7 +189,18 @@ async function run() {
   console.log(`  ✓ ${Object.keys(studentLookup).length} students, ${Object.keys(offenseLookup).length} offense codes\n`);
 
   // =============================================
-  // 3. Clean up previous approval flow seed data
+  // 3. Disable triggers before cleanup (prevents them firing during UPDATE/DELETE)
+  // =============================================
+  console.log('Disabling auto-create triggers...');
+  await q('ALTER TABLE incidents DISABLE TRIGGER trg_create_daep_approval_chain');
+  await q('ALTER TABLE incidents DISABLE TRIGGER trg_check_sped_compliance');
+  await q('ALTER TABLE incidents DISABLE TRIGGER trg_check_repeat_offender');
+  try { await q('ALTER TABLE incidents DISABLE TRIGGER trg_create_daep_scheduling'); } catch (e) {}
+  try { await q('ALTER TABLE incidents DISABLE TRIGGER trg_resolve_placement_started_activation'); } catch (e) {}
+  console.log('  ✓ Triggers disabled\n');
+
+  // =============================================
+  // 4. Clean up previous approval flow seed data
   // =============================================
   console.log('Cleaning up previous approval flow data...');
   // Delete separation orders for seeded incidents
@@ -197,8 +208,10 @@ async function run() {
     AND incident_id IN (SELECT id FROM incidents WHERE notes LIKE '%[APPROVAL_FLOW_SEED]%')`, [DISTRICT_ID]);
   // Delete orientation-type alerts created by previous seed runs
   await q(`DELETE FROM alerts WHERE district_id = $1 AND trigger_type IN ('orientation_missed', 'placement_not_started')`, [DISTRICT_ID]);
-  // Delete scheduling records first (FK to incidents)
+  // Delete scheduling records (FK to incidents)
   await q('DELETE FROM daep_placement_scheduling WHERE district_id = $1', [DISTRICT_ID]);
+  // Null out approval_chain_id FK on incidents before deleting chains
+  await q(`UPDATE incidents SET approval_chain_id = NULL WHERE district_id = $1 AND notes LIKE '%[APPROVAL_FLOW_SEED]%'`, [DISTRICT_ID]);
   // Delete approval steps and chains
   await q(`DELETE FROM daep_approval_steps WHERE chain_id IN (
     SELECT id FROM daep_approval_chains WHERE district_id = $1
@@ -210,16 +223,20 @@ async function run() {
   console.log('  ✓ Previous approval flow seed data cleaned\n');
 
   // =============================================
-  // 4. Disable the auto-create trigger so we can manually create chains with step 6
+  // 4b. Patch orientation_status check constraint to include 'missed'
+  //     (the app auto-marks overdue orientations as 'missed' — needs to be allowed)
   // =============================================
-  console.log('Disabling auto-create triggers...');
-  await q('ALTER TABLE incidents DISABLE TRIGGER trg_create_daep_approval_chain');
-  await q('ALTER TABLE incidents DISABLE TRIGGER trg_check_sped_compliance');
-  await q('ALTER TABLE incidents DISABLE TRIGGER trg_check_repeat_offender');
-  try {
-    await q('ALTER TABLE incidents DISABLE TRIGGER trg_create_daep_scheduling');
-  } catch (e) { /* trigger may not exist yet */ }
-  console.log('  ✓ Triggers disabled\n');
+  console.log('Patching orientation_status check constraint...');
+  await q(`
+    ALTER TABLE daep_placement_scheduling
+      DROP CONSTRAINT IF EXISTS daep_placement_scheduling_orientation_status_check
+  `);
+  await q(`
+    ALTER TABLE daep_placement_scheduling
+      ADD CONSTRAINT daep_placement_scheduling_orientation_status_check
+      CHECK (orientation_status IN ('pending', 'scheduled', 'completed', 'missed'))
+  `);
+  console.log('  ✓ orientation_status check constraint updated (added missed)\n');
 
   // =============================================
   // 5. Create DAEP incidents at different approval stages

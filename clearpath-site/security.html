@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security &amp; Compliance — Clear Path Education Group</title>
+<meta name="description" content="Clear Path Education Group security and compliance documentation: FERPA compliance statement, subprocessor list, and third-party DPA references for district procurement teams.">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep-purple: #1a0a2e;
+    --dark-bg: #0e0618;
+    --mid-purple: #2d1054;
+    --purple: #6b2fa0;
+    --purple-light: #9b5fd4;
+    --amber: #e8862a;
+    --amber-light: #f5b050;
+    --amber-glow: #ffcc66;
+    --orange: #d4541a;
+    --text: #f0e6d3;
+    --text-muted: rgba(240,230,211,0.6);
+    --border: rgba(232,134,42,0.2);
+    --border-purple: rgba(107,47,160,0.35);
+    --card-bg: rgba(26,10,46,0.7);
+    --glow-amber: 0 0 30px rgba(232,134,42,0.3);
+    --glow-purple: 0 0 30px rgba(107,47,160,0.4);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Raleway', sans-serif;
+    background: var(--dark-bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(107,47,160,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(212,84,26,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(26,10,46,1) 0%, #0e0618 100%);
+    pointer-events: none;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 200;
+    background: rgba(14,6,24,0.92);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .nav-logo { display:flex; align-items:center; gap:14px; text-decoration:none; }
+  .nav-logo img { height:44px; width:44px; object-fit:contain; border-radius:8px; }
+  .nav-logo-text .name {
+    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+    background: linear-gradient(90deg, var(--amber-light), var(--amber-glow));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    line-height: 1.2; display: block;
+  }
+  .nav-logo-text .sub {
+    font-size: 0.6rem; font-weight: 600; color: var(--text-muted);
+    letter-spacing: 0.12em; text-transform: uppercase; display: block;
+  }
+  .nav-links { display:flex; gap:30px; list-style:none; }
+  .nav-links a {
+    font-size: 0.82rem; font-weight: 600; color: var(--text-muted);
+    text-decoration: none; letter-spacing: 0.06em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--amber-light); }
+  .nav-cta {
+    background: linear-gradient(135deg, var(--amber), var(--orange));
+    color: white; padding: 10px 22px; border-radius: 6px;
+    font-weight: 700; font-size: 0.78rem; text-decoration: none;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--glow-amber);
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(232,134,42,0.5); }
+
+  /* PAGE HEADER */
+  .page-header {
+    position: relative; z-index: 1;
+    padding: 130px 5% 70px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-purple);
+  }
+  .page-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(232,134,42,0.1); border: 1px solid rgba(232,134,42,0.3);
+    color: var(--amber-light); padding: 6px 16px; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .page-eyebrow span { width:5px; height:5px; background:var(--amber); border-radius:50%; box-shadow: 0 0 8px var(--amber); }
+  .page-header h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 900;
+    line-height: 1.2; margin-bottom: 18px;
+    background: linear-gradient(160deg, var(--amber-glow) 0%, var(--amber-light) 50%, var(--text) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .page-header p {
+    font-size: 1.05rem; line-height: 1.8; color: var(--text-muted);
+    max-width: 620px; margin: 0 auto 36px;
+  }
+
+  /* TAB NAV */
+  .tab-nav {
+    display: flex; gap: 0; justify-content: center;
+    border-bottom: 1px solid var(--border-purple);
+    position: sticky; top: 70px; z-index: 100;
+    background: rgba(14,6,24,0.95);
+    backdrop-filter: blur(16px);
+  }
+  .tab-btn {
+    padding: 14px 28px;
+    font-size: 0.82rem; font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; text-decoration: none;
+    color: var(--text-muted);
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .tab-btn:hover { color: var(--amber-light); }
+  .tab-btn.active { color: var(--amber-light); border-bottom-color: var(--amber); }
+
+  /* CONTENT */
+  .content-area {
+    position: relative; z-index: 1;
+    max-width: 860px; margin: 0 auto;
+    padding: 60px 5% 100px;
+  }
+  .doc-section {
+    margin-bottom: 80px;
+    scroll-margin-top: 140px;
+  }
+  .doc-section-label {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--amber);
+    margin-bottom: 10px;
+  }
+  .doc-section h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.4rem, 2.5vw, 2rem); font-weight: 700;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--amber-glow), var(--amber-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .doc-section .section-meta {
+    font-size: 0.8rem; color: var(--text-muted);
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border-purple);
+  }
+
+  /* Doc card */
+  .doc-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-purple);
+    border-radius: 16px; padding: 36px 40px;
+    backdrop-filter: blur(8px);
+    margin-bottom: 24px;
+  }
+  .doc-card h3 {
+    font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700;
+    color: var(--amber-light); margin-bottom: 12px;
+  }
+  .doc-card p {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.75;
+    margin-bottom: 16px;
+  }
+  .doc-card p:last-child { margin-bottom: 0; }
+
+  /* Table */
+  .compliance-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 0.87rem; margin: 20px 0;
+  }
+  .compliance-table th {
+    text-align: left; padding: 10px 14px;
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--amber);
+    border-bottom: 1px solid var(--border);
+  }
+  .compliance-table td {
+    padding: 12px 14px; color: var(--text-muted);
+    border-bottom: 1px solid rgba(107,47,160,0.15);
+    line-height: 1.6;
+  }
+  .compliance-table tr:last-child td { border-bottom: none; }
+  .compliance-table td:first-child { color: var(--text); font-weight: 600; }
+  .compliance-table a { color: var(--amber-light); text-decoration: none; }
+  .compliance-table a:hover { color: var(--amber-glow); text-decoration: underline; }
+
+  /* Highlight box */
+  .highlight-box {
+    background: rgba(232,134,42,0.06);
+    border: 1px solid rgba(232,134,42,0.2);
+    border-left: 3px solid var(--amber);
+    border-radius: 8px; padding: 18px 22px;
+    font-size: 0.88rem; color: var(--text-muted);
+    line-height: 1.7; margin: 20px 0;
+  }
+  .highlight-box strong { color: var(--amber-light); }
+
+  .note-box {
+    background: rgba(107,47,160,0.08);
+    border: 1px solid rgba(107,47,160,0.25);
+    border-left: 3px solid var(--purple-light);
+    border-radius: 8px; padding: 16px 20px;
+    font-size: 0.85rem; color: var(--text-muted);
+    line-height: 1.7; margin: 16px 0;
+  }
+  .note-box strong { color: var(--purple-light); }
+
+  /* Check list */
+  .check-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin: 16px 0; }
+  .check-list li {
+    display: flex; align-items: flex-start; gap: 12px;
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.6;
+  }
+  .check-list li::before {
+    content: '◆'; color: var(--amber); font-size: 0.5rem;
+    margin-top: 6px; flex-shrink: 0;
+  }
+  .check-list li strong { color: var(--text); }
+
+  /* Divider */
+  .section-divider {
+    width: 60px; height: 3px;
+    background: linear-gradient(90deg, var(--amber), var(--orange));
+    border-radius: 2px; margin: 0 0 40px;
+    box-shadow: 0 0 12px rgba(232,134,42,0.5);
+  }
+
+  /* Contact CTA */
+  .contact-cta {
+    background: linear-gradient(135deg, #140820, #1f0d38);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 40px;
+    text-align: center; margin-top: 60px;
+  }
+  .contact-cta h3 {
+    font-family: 'Cinzel', serif; font-size: 1.3rem; font-weight: 700;
+    color: var(--amber-light); margin-bottom: 12px;
+  }
+  .contact-cta p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--amber), var(--orange));
+    color: white; padding: 12px 28px; border-radius: 6px;
+    font-weight: 700; font-size: 0.85rem; text-decoration: none;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--glow-amber);
+    display: inline-flex; align-items: center; gap: 8px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(232,134,42,0.5); }
+
+  /* FOOTER */
+  footer {
+    background:#060310; border-top:1px solid var(--border-purple);
+    padding:60px 5% 30px; position:relative; z-index:1;
+  }
+  .footer-top {
+    display:flex; justify-content:space-between; gap:40px;
+    margin-bottom:50px; flex-wrap:wrap; align-items:flex-start;
+  }
+  .footer-brand .fname {
+    font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700;
+    background:linear-gradient(90deg,var(--amber-light),var(--amber-glow));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+    margin-bottom:8px; display:block;
+  }
+  .footer-brand p { font-size:0.83rem; color:var(--text-muted); max-width:240px; line-height:1.65; }
+  .footer-logo { height:60px; width:60px; object-fit:contain; margin-bottom:12px; border-radius:8px; display:block; }
+  .footer-links h4 {
+    font-size:0.68rem; font-weight:700; letter-spacing:0.12em;
+    text-transform:uppercase; color:var(--amber); margin-bottom:16px;
+  }
+  .footer-links ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
+  .footer-links a {
+    font-size:0.85rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;
+  }
+  .footer-links a:hover { color:var(--amber-light); }
+  .footer-bottom {
+    border-top:1px solid rgba(255,255,255,0.06); padding-top:24px;
+    display:flex; justify-content:space-between; align-items:center;
+    flex-wrap:wrap; gap:12px;
+  }
+  .footer-bottom p { font-size:0.78rem; color:rgba(240,230,211,0.25); }
+  .footer-note { font-size:0.72rem; color:var(--amber); font-weight:600; letter-spacing:0.06em; }
+
+  @media (max-width: 960px) {
+    .nav-links { display:none; }
+    .tab-btn { padding: 12px 16px; font-size: 0.75rem; }
+    .doc-card { padding: 24px; }
+  }
+  @media (max-width: 600px) {
+    .tab-nav { overflow-x: auto; justify-content: flex-start; }
+    .compliance-table { font-size: 0.8rem; }
+    .compliance-table th, .compliance-table td { padding: 8px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path Education Group" />
+    <div class="nav-logo-text">
+      <span class="name">Clear Path Education Group</span>
+      <span class="sub">Pathways to Student Success</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#pathways">Pathways</a></li>
+    <li><a href="index.html#compass">Compass</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#pricing">Pricing</a></li>
+    <li><a href="security.html" class="active">Security</a></li>
+  </ul>
+  <a href="mailto:support@clearpathedgroup.com" class="nav-cta">Connect With Us</a>
+</nav>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="page-eyebrow"><span></span>Trust &amp; Compliance</div>
+  <h1>Security &amp; Compliance</h1>
+  <p>Documentation for district IT directors and procurement teams. Clear Path Education Group is committed to protecting Student Education Records with enterprise-grade security and full FERPA compliance.</p>
+</div>
+
+<!-- TAB NAV -->
+<div class="tab-nav">
+  <a class="tab-btn active" href="#ferpa">FERPA Compliance</a>
+  <a class="tab-btn" href="#subprocessors">Subprocessors</a>
+  <a class="tab-btn" href="#dpa-references">DPA References</a>
+</div>
+
+<!-- CONTENT -->
+<div class="content-area">
+
+  <!-- ========== FERPA ========== -->
+  <div class="doc-section" id="ferpa">
+    <div class="doc-section-label">Student Data Privacy</div>
+    <h2>FERPA Compliance Statement</h2>
+    <div class="section-meta">Clear Path Education Group, LLC &nbsp;·&nbsp; Last Updated: February 2026 &nbsp;·&nbsp; Version 1.0</div>
+    <div class="section-divider"></div>
+
+    <div class="doc-card">
+      <h3>Our Role Under FERPA</h3>
+      <p>When a school district contracts with Clear Path to use Waypoint, Clear Path operates as a <strong style="color:var(--text)">"school official"</strong> with a <strong style="color:var(--text)">"legitimate educational interest"</strong> as permitted under FERPA (34 C.F.R. § 99.31(a)(1)). This classification allows districts to share Student Education Records with Clear Path without obtaining prior parental consent, provided the district has included Clear Path in its annual FERPA notice as a school official.</p>
+      <p>Clear Path does <strong style="color:var(--text)">not</strong> act as a FERPA "data controller." The district retains full ownership of all student education records. Clear Path processes records solely on the district's behalf, under the district's instructions, and in accordance with the signed Data Processing Agreement.</p>
+    </div>
+
+    <div class="doc-card">
+      <h3>FERPA-Compliant Design Principles</h3>
+      <ul class="check-list">
+        <li><strong>Legitimate educational purpose only.</strong> All access to Student Education Records requires a valid authenticated district staff account, campus assignment, and an active district subscription. Student data is used solely to support district discipline administration and DAEP placement workflows.</li>
+        <li><strong>Role-based access control, enforced at the database layer.</strong> Waypoint enforces 12 distinct roles with campus-scoped access. Non-admin staff see only students at their assigned campuses. This is enforced by PostgreSQL Row-Level Security policies — bypassing the application layer does not bypass data protections.</li>
+        <li><strong>Parent portal isolation.</strong> The Waypoint parent portal displays only records for the authenticated parent's own children. Sensitive staff-only data is excluded from all parent-facing queries by design.</li>
+        <li><strong>No unauthorized disclosure.</strong> Clear Path does not share Student Education Records with any third party except infrastructure subprocessors bound by equivalent data protection agreements, or as required by law.</li>
+        <li><strong>No AI/LLM processing of student data.</strong> Waypoint does not send student records to any artificial intelligence or large language model provider. All alerts are generated by deterministic database logic with no AI involvement.</li>
+        <li><strong>Data deletion on exit.</strong> Upon contract termination, Clear Path will delete or irreversibly anonymize all Student Education Records within 90 days, with written confirmation provided upon request.</li>
+      </ul>
+    </div>
+
+    <div class="doc-card">
+      <h3>Texas State Law Compliance</h3>
+      <ul class="check-list">
+        <li><strong>Texas Education Code §§ 32.151–32.158</strong> (Student Data Privacy): Waypoint's DPA addresses all required elements — security measures, prohibited uses, data return/destruction, and subprocessor requirements.</li>
+        <li><strong>Texas Education Code Chapter 37</strong> (Student Discipline): Waypoint enforces TEC Chapter 37 timelines, SPED manifestation determination triggers, and DAEP placement documentation requirements by design.</li>
+        <li><strong>Texas HB 3834 / SB 820</strong> (Student Privacy): Clear Path agrees not to sell student data, use student data for targeted advertising, or build profiles of students for non-educational purposes.</li>
+      </ul>
+    </div>
+
+    <div class="doc-card">
+      <h3>District Responsibilities Under FERPA</h3>
+      <p>For the school official exception to apply, the district must:</p>
+      <ul class="check-list">
+        <li>Include Clear Path in its annual FERPA notification to parents as a school official with legitimate educational interest.</li>
+        <li>Maintain a signed Data Processing Agreement with Clear Path prior to entering student data.</li>
+        <li>Control user provisioning — districts are responsible for creating, maintaining, and deactivating staff accounts in Waypoint.</li>
+        <li>Respond to parent rights requests — if a parent requests to inspect, amend, or restrict their child's records, the district is responsible for executing that request.</li>
+      </ul>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Breach Notification Commitment:</strong> In the event of a confirmed breach affecting Student Education Records, Clear Path will notify affected districts within <strong>72 hours</strong> of confirmed discovery, and provide a complete written incident report within 5 business days.
+    </div>
+  </div>
+
+  <!-- ========== SUBPROCESSORS ========== -->
+  <div class="doc-section" id="subprocessors">
+    <div class="doc-section-label">Third-Party Vendors</div>
+    <h2>Subprocessor List</h2>
+    <div class="section-meta">Clear Path Education Group, LLC &nbsp;·&nbsp; Last Updated: February 2026 &nbsp;·&nbsp; Version 1.0</div>
+    <div class="section-divider"></div>
+
+    <div class="doc-card">
+      <h3>What Is a Subprocessor?</h3>
+      <p>A subprocessor is a third-party company that Clear Path engages to process Student Education Records or other district-provided personal data in connection with the Waypoint service. Clear Path maintains agreements with each subprocessor that impose data protection requirements at least as protective as those in our Customer Data Processing Agreement.</p>
+      <p>This list does not include vendors that process only non-personal data or vendors that provide general business services not specific to Waypoint.</p>
+    </div>
+
+    <div class="doc-card">
+      <h3>Infrastructure Subprocessors</h3>
+      <table class="compliance-table">
+        <thead>
+          <tr>
+            <th>Subprocessor</th>
+            <th>Purpose</th>
+            <th>Data Location</th>
+            <th>DPA / Terms</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Supabase, Inc.</td>
+            <td>Database hosting, authentication, real-time API, row-level security enforcement</td>
+            <td>United States (AWS us-east-1 — N. Virginia)</td>
+            <td><a href="https://supabase.com/legal/dpa" target="_blank" rel="noopener">Supabase DPA ↗</a></td>
+          </tr>
+          <tr>
+            <td>Amazon Web Services, Inc. (AWS)</td>
+            <td>Cloud infrastructure underlying Supabase (compute, storage, networking). AWS is a sub-processor accessed only through Supabase.</td>
+            <td>United States (us-east-1)</td>
+            <td><a href="https://aws.amazon.com/agreement/data-processing/" target="_blank" rel="noopener">AWS DPA ↗</a></td>
+          </tr>
+          <tr>
+            <td>Cloudflare, Inc.</td>
+            <td>Frontend web application hosting (Cloudflare Pages), CDN, TLS termination, DDoS protection. <em>Does not process or store Student Education Records.</em></td>
+            <td>United States (CDN edge; data at rest in US)</td>
+            <td><a href="https://www.cloudflare.com/cloudflare-customer-dpa/" target="_blank" rel="noopener">Cloudflare DPA ↗</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc-card">
+      <h3>No AI/LLM Processing</h3>
+      <p>Waypoint does <strong style="color:var(--text)">not</strong> send student records, discipline data, or any Student Education Records to any artificial intelligence or large language model (LLM) provider. No student data is used to train machine learning models. All repeat-offender alerts are generated by deterministic PostgreSQL triggers — no AI involvement.</p>
+    </div>
+
+    <div class="doc-card">
+      <h3>Data Residency</h3>
+      <ul class="check-list">
+        <li><strong>Database:</strong> AWS us-east-1 (Northern Virginia) via Supabase. All student data stored and processed within the United States.</li>
+        <li><strong>Web application:</strong> Delivered via Cloudflare Pages CDN. Static application files only — no student data stored at the edge.</li>
+        <li><strong>Backups:</strong> Supabase automated backups remain in AWS us-east-1.</li>
+      </ul>
+    </div>
+
+    <div class="highlight-box">
+      <strong>Subprocessor Change Notification:</strong> Clear Path will provide <strong>30 days advance written notice</strong> to affected customers before adding or replacing any subprocessor that processes Student Education Records. To register for notifications, contact <a href="mailto:privacy@clearpathedgroup.com" style="color:var(--amber-light)">privacy@clearpathedgroup.com</a>.
+    </div>
+  </div>
+
+  <!-- ========== DPA REFERENCES ========== -->
+  <div class="doc-section" id="dpa-references">
+    <div class="doc-section-label">Vendor Agreements</div>
+    <h2>Third-Party DPA References</h2>
+    <div class="section-meta">Clear Path Education Group, LLC &nbsp;·&nbsp; Last Updated: February 2026 &nbsp;·&nbsp; Version 1.0</div>
+    <div class="section-divider"></div>
+
+    <div class="doc-card">
+      <h3>Supabase, Inc.</h3>
+      <p>Supabase is the primary database, authentication, and API provider for Waypoint. All student education records are stored and processed within Supabase's managed PostgreSQL service on AWS us-east-1.</p>
+      <table class="compliance-table">
+        <tbody>
+          <tr><td>Data Processing Agreement</td><td><a href="https://supabase.com/legal/dpa" target="_blank" rel="noopener">supabase.com/legal/dpa ↗</a></td></tr>
+          <tr><td>Privacy Policy</td><td><a href="https://supabase.com/privacy" target="_blank" rel="noopener">supabase.com/privacy ↗</a></td></tr>
+          <tr><td>Security Practices &amp; Trust Center</td><td><a href="https://supabase.com/security" target="_blank" rel="noopener">supabase.com/security ↗</a></td></tr>
+          <tr><td>SOC 2 Type II</td><td>Available under NDA — request via Clear Path</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc-card">
+      <h3>Amazon Web Services, Inc. (AWS)</h3>
+      <p>AWS is the cloud infrastructure underlying Supabase. Clear Path does not hold a direct AWS account for student data — AWS is accessed only through Supabase. Districts reviewing Waypoint typically need Supabase's DPA rather than a direct AWS DPA. Clear Path will coordinate on request.</p>
+      <table class="compliance-table">
+        <tbody>
+          <tr><td>Data Processing Addendum</td><td><a href="https://aws.amazon.com/agreement/data-processing/" target="_blank" rel="noopener">aws.amazon.com/agreement/data-processing ↗</a></td></tr>
+          <tr><td>FERPA Compliance Overview</td><td><a href="https://aws.amazon.com/compliance/ferpa/" target="_blank" rel="noopener">aws.amazon.com/compliance/ferpa ↗</a></td></tr>
+          <tr><td>Compliance Programs</td><td><a href="https://aws.amazon.com/compliance/programs/" target="_blank" rel="noopener">aws.amazon.com/compliance/programs ↗</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="doc-card">
+      <h3>Cloudflare, Inc.</h3>
+      <p>Cloudflare delivers the Waypoint web application to end users (HTML, CSS, JavaScript). Cloudflare does not process or store Student Education Records — all student data flows directly between the user's browser and Supabase via encrypted API calls and is never stored at Cloudflare's edge.</p>
+      <table class="compliance-table">
+        <tbody>
+          <tr><td>Customer Data Processing Agreement</td><td><a href="https://www.cloudflare.com/cloudflare-customer-dpa/" target="_blank" rel="noopener">cloudflare.com/cloudflare-customer-dpa ↗</a></td></tr>
+          <tr><td>Privacy Policy</td><td><a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">cloudflare.com/privacypolicy ↗</a></td></tr>
+          <tr><td>Trust Hub</td><td><a href="https://www.cloudflare.com/trust-hub/" target="_blank" rel="noopener">cloudflare.com/trust-hub ↗</a></td></tr>
+        </tbody>
+      </table>
+      <div class="note-box">
+        <strong>FERPA note:</strong> Because Cloudflare does not process Student Education Records in connection with Waypoint, it is not operating as a FERPA school official for purposes of this service.
+      </div>
+    </div>
+
+    <div class="doc-card">
+      <h3>Requesting Executed DPAs</h3>
+      <p>Districts that require an <strong style="color:var(--text)">executed copy</strong> of any of the above third-party DPAs as part of their vendor procurement process should contact us. Clear Path will coordinate with the relevant subprocessor to provide executed documentation, or will provide its own executed DPA that passes through the relevant obligations.</p>
+    </div>
+  </div>
+
+  <!-- CONTACT CTA -->
+  <div class="contact-cta">
+    <h3>Need Additional Documentation?</h3>
+    <p>For SOC 2 reports (available under NDA), executed DPA copies, security questionnaire responses, or to schedule a technical review call with your IT team, reach out directly.</p>
+    <a href="mailto:privacy@clearpathedgroup.com" class="btn-primary">Contact Our Compliance Team →</a>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Waypoint" class="footer-logo" />
+      <span class="fname">Clear Path Education Group, LLC</span>
+      <p>Purposeful pathways for districts and campuses across Texas.</p>
+    </div>
+    <div class="footer-links">
+      <h4>Pathways</h4>
+      <ul>
+        <li><a href="index.html#compass">🧭 Compass — Behavior &amp; Compliance</a></li>
+        <li><a href="index.html#pathways">🧱 Cornerstone — Instructional Support</a></li>
+        <li><a href="index.html#pathways">🌅 Horizon — PD &amp; Coaching</a></li>
+        <li><a href="index.html#pathways">🏔️ Summit — Leadership</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="index.html#about">About Us</a></li>
+        <li><a href="mailto:support@clearpathedgroup.com">Contact Us</a></li>
+        <li><a href="security.html">Security &amp; Compliance</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 Clear Path Education Group, LLC. All rights reserved.</p>
+    <span class="footer-note">Texas LLC</span>
+  </div>
+</footer>
+
+<script>
+  // Highlight active tab based on scroll position
+  const sections = document.querySelectorAll('.doc-section');
+  const tabBtns = document.querySelectorAll('.tab-btn');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        tabBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('href') === '#' + id);
+        });
+      }
+    });
+  }, { rootMargin: '-140px 0px -60% 0px', threshold: 0 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

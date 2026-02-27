@@ -213,6 +213,11 @@ export default function PlacementScheduler({ incidentId, incident, student }) {
   const showFallbackDatePicker = !orientationConfig &&
     (scheduling.orientation_status === 'pending' || rescheduling)
 
+  // ARD must be completed before orientation can be scheduled (SPED/504 students only)
+  const ardBlocked = Boolean(scheduling.ard_required && scheduling.ard_status !== 'completed')
+
+  const todayStr = new Date().toISOString().split('T')[0]
+
   return (
     <Card>
       <CardTitle>Placement Scheduling</CardTitle>
@@ -296,8 +301,20 @@ export default function PlacementScheduler({ incidentId, incident, student }) {
             ) : null
           })()}
 
+          {/* ARD gate warning */}
+          {ardBlocked && (
+            <div className="flex items-start gap-2 bg-purple-50 border border-purple-200 rounded-lg px-3 py-2">
+              <svg className="w-4 h-4 text-purple-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+              </svg>
+              <p className="text-xs text-purple-800 font-medium">
+                Change of Placement ARD must be completed before orientation can be scheduled.
+              </p>
+            </div>
+          )}
+
           {/* Slot picker (when config exists and status is pending or rescheduling) */}
-          {showSlotPicker && canEdit && (
+          {showSlotPicker && canEdit && !ardBlocked && (
             <div>
               <label className="block text-xs font-medium text-gray-600 mb-1">
                 Select an Orientation Slot
@@ -357,7 +374,7 @@ export default function PlacementScheduler({ incidentId, incident, student }) {
           )}
 
           {/* Fallback free date picker (no orientation config) */}
-          {showFallbackDatePicker && canEdit && (
+          {showFallbackDatePicker && canEdit && !ardBlocked && (
             <div className="space-y-2">
               <div className="grid grid-cols-2 gap-3">
                 <div>
@@ -366,6 +383,7 @@ export default function PlacementScheduler({ incidentId, incident, student }) {
                     <input
                       type="date"
                       value={fallbackDate}
+                      min={todayStr}
                       onChange={(e) => setFallbackDate(e.target.value)}
                       disabled={saving}
                       className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-50 disabled:text-gray-500"
@@ -374,6 +392,7 @@ export default function PlacementScheduler({ incidentId, incident, student }) {
                     <input
                       type="date"
                       value={scheduling.orientation_scheduled_date || ''}
+                      min={todayStr}
                       onChange={(e) => updateField('orientation_scheduled_date', e.target.value || null)}
                       disabled={saving}
                       className="w-full rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:bg-gray-50 disabled:text-gray-500"
@@ -449,7 +468,9 @@ export default function PlacementScheduler({ incidentId, incident, student }) {
                       setFallbackTime(scheduling.orientation_scheduled_time || '')
                       setRescheduling(true)
                     }}
-                    className="text-xs text-orange-600 hover:text-orange-700 font-medium"
+                    disabled={ardBlocked}
+                    title={ardBlocked ? 'Change of Placement ARD must be completed first' : undefined}
+                    className="text-xs text-orange-600 hover:text-orange-700 font-medium disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     Reschedule
                   </button>

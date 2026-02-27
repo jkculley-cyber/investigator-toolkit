@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-02-25 (Session M — Separation orders bugs fixed, compliance docs, security page)
+> Last updated: 2026-02-26 (Session N — Orientation scheduling gates + missed reschedule fix)
 
 ---
 

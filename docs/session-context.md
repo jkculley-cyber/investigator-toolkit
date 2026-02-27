@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-02-26 (Session N — Orientation scheduling gates + missed reschedule fix)
+> Last updated: 2026-02-26 (Session O — NotebookLM marketing script)
 
 ---
 

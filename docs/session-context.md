@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-02-27 (Session Q — Meridian Write Operations + Marketing Video)
+> Last updated: 2026-02-28 (Session R — clearpathedgroup.com redesign + demo request form)
 
 ---
 
@@ -8,7 +8,7 @@
 - **Development phase:** Pre-pilot — product feature-complete, ready for first district pitch
 - **Waypoint app URL:** `https://waypoint.clearpathedgroup.com` (also `app.clearpathedgroup.com`)
 - **Company website:** `https://clearpathedgroup.com` (marketing site, static HTML in `clearpath-site/`)
-- **Marketing site features:** All 3 products (Waypoint, Navigator, Meridian) + Clear Path Suite bundle callout. **Interactive pricing calculator** (enrollment slider 0–200k, tier toggle, product checkboxes, live bundle discount badge). **Free Compliance Checklist** lead magnet card linking to `/whitepaper.html`. Pricing tags visible. Google Slides embed (DAEP deck) + **narrated overview video** (`Waypoint__Safety_and_Growth.mp4`) in Waypoint card. SEO meta/sitemap/robots.txt. Cloudflare Web Analytics auto-injected via Pages dashboard. **Security & Compliance page** at `/security.html` (FERPA statement, subprocessor list, DPA references).
+- **Marketing site features:** All 3 products (Waypoint, Navigator, Meridian) + Clear Path Suite bundle callout. **Interactive pricing calculator** (enrollment slider 0–200k, tier toggle, product checkboxes, live bundle discount badge). **Free Compliance Checklist** lead magnet card linking to `/whitepaper.html`. Pricing tags visible. Google Slides embed (DAEP deck) + **narrated overview video** (`Waypoint__Safety_and_Growth.mp4`) in Waypoint card (tabbed, not stacked). SEO meta/sitemap/robots.txt. Cloudflare Web Analytics auto-injected via Pages dashboard. **Security & Compliance page** at `/security.html` (FERPA statement, subprocessor list, DPA references). **Redesigned layout** (Session R): removed About strip, Pathways section, Who We Serve section — replaced with stats bar, 2-col Waypoint card with tabbed demo, 50/50 product rows; ~1400px less scroll. **Demo request form** at `/#contact`: 3-field inline form (district+enrollment, compliance challenge select, email) → Formspree AJAX submit → success state (no redirect). Formspree ID placeholder `xdkgpjne` must be replaced with real form ID after Formspree account setup.
 - **whitepaper.html:** 20-point DAEP compliance self-audit checklist, 5 sections with TEC citation callout boxes, scorecard with scoring bands (18–20 compliant / 14–17 at risk / <14 urgent), print-optimized CSS, "Save as PDF" button. Lead magnet for district sales.
 - **Hosting:** Cloudflare Pages — `waypoint` project (app, deployed via GitHub Actions on push to `main`), `cpeg-site` project (marketing site, deployed via `node deploy-clearpath.mjs` Direct Upload)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
@@ -113,6 +113,7 @@
 9. **Supabase Pro upgrade** — required to permanently enable HaveIBeenPwned password protection ($25/month).
 10. **Migration 049** — `meridian_escalations` table for persistent escalation logging. Currently Escalate button shows modal but logs to console only.
 11. **First pilot district** — not yet contracted. Product is sales-ready.
+12. **Formspree setup** — Demo request form at clearpathedgroup.com/#contact uses Formspree endpoint `https://formspree.io/f/xdkgpjne`. Create free account at formspree.io, create new form connected to `support@clearpathedgroup.com`, replace that ID in `clearpath-site/index.html`. The form fields are: district + enrollment, compliance challenge (select), work email.
 
 ---
 

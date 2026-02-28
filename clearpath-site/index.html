@@ -614,6 +614,62 @@
     max-width: 480px; margin: 0 auto 32px; position: relative;
   }
 
+  /* ── Demo Request Form ── */
+  .demo-form-wrap {
+    position: relative; max-width: 540px; margin: 0 auto;
+    background: rgba(255,255,255,0.04); border: 1px solid rgba(232,134,42,0.2);
+    border-radius: 16px; padding: 36px 36px 32px; text-align: left;
+    backdrop-filter: blur(8px);
+  }
+  .demo-form-wrap h3 {
+    font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 700;
+    color: var(--amber-light); letter-spacing: 0.06em; text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .demo-form-row { margin-bottom: 14px; }
+  .demo-form-row label {
+    display: block; font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 6px;
+  }
+  .demo-form-row input,
+  .demo-form-row select {
+    width: 100%; box-sizing: border-box;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(232,134,42,0.25);
+    border-radius: 8px; padding: 11px 14px; color: var(--text); font-size: 0.9rem;
+    font-family: 'Raleway', sans-serif;
+    transition: border-color 0.2s;
+    -webkit-appearance: none; appearance: none;
+  }
+  .demo-form-row input::placeholder { color: rgba(240,230,211,0.3); }
+  .demo-form-row input:focus,
+  .demo-form-row select:focus {
+    outline: none; border-color: var(--amber);
+    box-shadow: 0 0 0 3px rgba(232,134,42,0.15);
+  }
+  .demo-form-row select option { background: #1a0535; color: var(--text); }
+  .demo-form-submit {
+    width: 100%; margin-top: 8px;
+    background: linear-gradient(135deg, var(--amber-glow), var(--amber));
+    color: #0a0015; font-family: 'Raleway', sans-serif;
+    font-weight: 800; font-size: 0.82rem; letter-spacing: 0.12em; text-transform: uppercase;
+    border: none; border-radius: 8px; padding: 14px 24px; cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+  .demo-form-submit:hover { opacity: 0.9; transform: translateY(-2px); }
+  .demo-form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+  .demo-form-note {
+    font-size: 0.7rem; color: rgba(240,230,211,0.3); text-align: center;
+    margin-top: 12px; line-height: 1.5;
+  }
+  .demo-form-success {
+    text-align: center; padding: 20px 0;
+  }
+  .demo-form-success .success-icon { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+  .demo-form-success p {
+    font-size: 0.95rem; color: var(--text-muted); line-height: 1.7;
+  }
+  .demo-form-success strong { color: var(--amber-light); }
+
   /* ── FOOTER ── */
   footer {
     background: #060310; border-top: 1px solid var(--border-purple);
@@ -693,6 +749,7 @@
     .cta-banner { padding: 48px 4%; }
     .cta-banner h2 { font-size: 1.6rem; }
     .audience-mini { gap: 20px; }
+    .demo-form-wrap { padding: 26px 20px; }
     footer { padding: 44px 4% 24px; }
     .footer-top { flex-direction: column; gap: 32px; }
     .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -1000,9 +1057,9 @@
   </div>
 </section>
 
-<!-- CTA -->
+<!-- CTA / Demo Request -->
 <div class="cta-banner" id="contact">
-  <h2>Ready to Find Your Clear Path?</h2>
+  <h2>Request a Private Demo</h2>
   <div class="audience-mini">
     <div class="audience-mini-item">
       <span class="audience-mini-icon">🏫</span>
@@ -1014,16 +1071,54 @@
     </div>
     <div class="audience-mini-item">
       <span class="audience-mini-icon">🧑‍🏫</span>
-      <span class="audience-mini-label">Instructional Staff</span>
+      <span class="audience-mini-label">Compliance Staff</span>
     </div>
   </div>
-  <p class="cta-tagline">We'd love to learn about your campus or district and explore which pathways align with your goals. Reach out to start the conversation.</p>
-  <a href="mailto:support@clearpathedgroup.com" class="btn-primary" style="font-size:0.95rem;padding:16px 36px;">
-    &#128236; Get In Touch
-  </a>
-  <p style="margin-top:20px;font-size:0.95rem;color:var(--text-muted);position:relative;">
-    Email us at &nbsp;<a href="mailto:support@clearpathedgroup.com" style="color:var(--amber-light);text-decoration:none;font-weight:700;border-bottom:1px solid rgba(232,134,42,0.5);">support@clearpathedgroup.com</a>
-  </p>
+  <p class="cta-tagline">Tell us about your district and we'll schedule a focused, 30-minute walkthrough tailored to your biggest compliance challenges.</p>
+
+  <div class="demo-form-wrap fade-up">
+    <h3>Get Your Demo</h3>
+    <form id="demo-form" action="https://formspree.io/f/xdkgpjne" method="POST" novalidate>
+      <div class="demo-form-row">
+        <label for="df-district">District Name &amp; Enrollment Size</label>
+        <input
+          type="text" id="df-district" name="district"
+          placeholder="e.g. Lone Star ISD — approx. 3,500 students"
+          required
+        />
+      </div>
+      <div class="demo-form-row">
+        <label for="df-concern">Biggest Compliance Challenge</label>
+        <select id="df-concern" name="concern" required>
+          <option value="" disabled selected>Select your top priority…</option>
+          <option value="DAEP documentation &amp; TEC compliance">DAEP documentation &amp; TEC compliance</option>
+          <option value="SPED / ARD timeline tracking">SPED / ARD timeline tracking</option>
+          <option value="ISS / OSS tracking &amp; reporting">ISS / OSS tracking &amp; reporting</option>
+          <option value="PEIMS discipline data export">PEIMS discipline data export</option>
+          <option value="Repeat offender &amp; early warning alerts">Repeat offender &amp; early warning alerts</option>
+          <option value="Parent notification &amp; engagement">Parent notification &amp; engagement</option>
+          <option value="TEA monitoring / corrective action plans">TEA monitoring / corrective action plans</option>
+          <option value="Multiple of the above">Multiple of the above</option>
+        </select>
+      </div>
+      <div class="demo-form-row">
+        <label for="df-email">Your Work Email</label>
+        <input
+          type="email" id="df-email" name="email"
+          placeholder="you@district.edu"
+          required
+        />
+      </div>
+      <button type="submit" class="demo-form-submit" id="demo-submit-btn">
+        Request My 30-Min Demo →
+      </button>
+      <p class="demo-form-note">No sales pitch. No commitment. We respond within one business day.</p>
+    </form>
+    <div id="demo-success" class="demo-form-success" style="display:none;">
+      <span class="success-icon">✅</span>
+      <p><strong>You're on our calendar.</strong><br/>We'll reach out within one business day to confirm a time. Check your inbox at the email you provided.</p>
+    </div>
+  </div>
 </div>
 
 <!-- FOOTER -->
@@ -1090,6 +1185,39 @@
       if (panel) panel.hidden = false;
     });
   });
+
+  // Demo Request Form — AJAX submit to Formspree
+  (function() {
+    const form = document.getElementById('demo-form');
+    const btn  = document.getElementById('demo-submit-btn');
+    const success = document.getElementById('demo-success');
+    if (!form) return;
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      try {
+        const data = new FormData(form);
+        const res = await fetch(form.action, {
+          method: 'POST', body: data,
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          form.style.display = 'none';
+          success.style.display = 'block';
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Request My 30-Min Demo →';
+          alert('Something went wrong. Please email us directly at support@clearpathedgroup.com');
+        }
+      } catch (_) {
+        btn.disabled = false;
+        btn.textContent = 'Request My 30-Min Demo →';
+        alert('Network error. Please email us at support@clearpathedgroup.com');
+      }
+    });
+  })();
 
   // Pricing Calculator
   (function() {

@@ -9,20 +9,17 @@
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://clearpathedgroup.com/">
 
-<!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://clearpathedgroup.com/">
 <meta property="og:title" content="Clear Path Education Group | Texas K-12 Education Consulting">
 <meta property="og:description" content="Purposeful, research-aligned pathways for Texas school districts — behavior solutions, instructional support, professional development, and leadership coaching.">
 <meta property="og:image" content="https://clearpathedgroup.com/Waypoint_Behavioral_Solutions_logo_design.jpeg">
 
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Clear Path Education Group | Texas K-12 Education Consulting">
 <meta name="twitter:description" content="Purposeful, research-aligned pathways for Texas school districts — behavior solutions, instructional support, professional development, and leadership coaching.">
 <meta name="twitter:image" content="https://clearpathedgroup.com/Waypoint_Behavioral_Solutions_logo_design.jpeg">
 
-<!-- Structured Data -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -76,7 +73,7 @@
     pointer-events: none;
   }
 
-  /* NAV */
+  /* ── NAV ── */
   nav {
     position: fixed; top: 0; width: 100%; z-index: 200;
     background: rgba(14,6,24,0.92);
@@ -115,10 +112,10 @@
   }
   .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 0 40px rgba(232,134,42,0.5); }
 
-  /* HERO */
+  /* ── HERO ── */
   .hero {
     position: relative; z-index: 1;
-    min-height: 100vh;
+    min-height: 88vh;
     padding: 70px 5% 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -136,13 +133,11 @@
   }
   .hero-bg-ring::before {
     content:''; position:absolute; inset:40px;
-    border: 1px solid rgba(107,47,160,0.08);
-    border-radius: 50%;
+    border: 1px solid rgba(107,47,160,0.08); border-radius: 50%;
   }
   .hero-bg-ring::after {
     content:''; position:absolute; inset:80px;
-    border: 1px solid rgba(232,134,42,0.05);
-    border-radius: 50%;
+    border: 1px solid rgba(232,134,42,0.05); border-radius: 50%;
   }
   @keyframes slowSpin { to { transform: translateY(-50%) rotate(360deg); } }
 
@@ -182,16 +177,15 @@
     font-weight: 600; font-size: 0.88rem; text-decoration: none;
     text-transform: uppercase; letter-spacing: 0.05em;
     border: 1px solid var(--border-purple);
-    transition: border-color 0.2s, transform 0.2s;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
     display: inline-flex; align-items: center; gap: 8px;
   }
   .btn-ghost:hover { border-color: var(--amber); color: var(--amber-light); transform: translateY(-3px); }
 
-  /* Hero path card */
+  /* Hero pathway card */
   .hero-visual { display:flex; justify-content:center; }
   .path-card {
-    background: rgba(26,10,46,0.85);
-    border: 1px solid var(--border);
+    background: rgba(26,10,46,0.85); border: 1px solid var(--border);
     border-radius: 16px; padding: 36px 32px;
     width: 100%; max-width: 420px;
     box-shadow: var(--glow-purple), 0 40px 80px rgba(0,0,0,0.5);
@@ -238,8 +232,34 @@
   .badge-active { background:rgba(232,134,42,0.15); border:1px solid rgba(232,134,42,0.4); color:var(--amber-light); }
   .badge-soon { background:rgba(107,47,160,0.2); border:1px solid rgba(107,47,160,0.4); color:var(--purple-light); }
 
-  /* SHARED SECTION */
-  section { padding: 100px 5%; position: relative; z-index: 1; }
+  /* ── STATS BAR ── */
+  .stats-bar {
+    background: linear-gradient(135deg, #140820, #1a0a2e);
+    border-top: 1px solid var(--border-purple);
+    border-bottom: 1px solid var(--border-purple);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    position: relative; z-index: 1;
+  }
+  .stats-bar-item {
+    text-align: center;
+    padding: 28px 20px;
+    border-right: 1px solid rgba(107,47,160,0.2);
+  }
+  .stats-bar-item:last-child { border-right: none; }
+  .stats-bar-item .snum {
+    font-family: 'Cinzel', serif; font-size: 1.9rem; font-weight: 700;
+    background: linear-gradient(135deg, var(--amber-glow), var(--amber));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    display: block; line-height: 1;
+  }
+  .stats-bar-item .slabel {
+    font-size: 0.68rem; font-weight: 700; color: var(--text-muted);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-top: 6px; display: block;
+  }
+
+  /* ── SHARED SECTION ── */
+  section { padding: 64px 5%; position: relative; z-index: 1; }
   .section-label {
     text-align:center; font-size:0.7rem; font-weight:700;
     letter-spacing:0.14em; text-transform:uppercase;
@@ -253,317 +273,192 @@
   }
   .section-subtitle {
     text-align:center; color:var(--text-muted); font-size:1rem;
-    line-height:1.75; max-width:580px; margin:0 auto 60px;
+    line-height:1.75; max-width:580px; margin:0 auto 48px;
   }
   .divider {
     width:60px; height:3px;
     background: linear-gradient(90deg, var(--amber), var(--orange));
-    border-radius:2px; margin:0 auto 48px;
+    border-radius:2px; margin:0 auto 32px;
     box-shadow: 0 0 12px rgba(232,134,42,0.5);
   }
 
-  /* ABOUT */
-  .about-strip {
-    background: linear-gradient(135deg, #140820, #1f0d38);
-    border-top: 1px solid var(--border-purple);
-    border-bottom: 1px solid var(--border-purple);
-    padding: 80px 5%;
-    display: grid; grid-template-columns: 1.3fr 1fr;
-    gap: 70px; align-items: center;
-    position: relative; z-index:1; overflow:hidden;
-  }
-  .about-strip::after {
-    content:''; position:absolute; right:-100px; top:50%;
-    transform:translateY(-50%); width:400px; height:400px;
-    background:radial-gradient(circle, rgba(107,47,160,0.12) 0%, transparent 70%);
-    border-radius:50%; pointer-events:none;
-  }
-  .about-strip h2 {
-    font-family:'Cinzel',serif; font-size:clamp(1.6rem,2.5vw,2.2rem);
-    font-weight:700; color:var(--text); margin-bottom:20px;
-  }
-  .about-strip h2 em {
-    font-style:normal;
-    background:linear-gradient(90deg,var(--amber),var(--amber-light));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  }
-  .about-strip p { color:var(--text-muted); line-height:1.8; font-size:0.95rem; margin-bottom:14px; }
-  .about-stats { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
-  .stat-card {
-    background:rgba(26,10,46,0.6); border:1px solid var(--border);
-    border-radius:12px; padding:24px; text-align:center;
-    transition: border-color 0.3s, box-shadow 0.3s;
-  }
-  .stat-card:hover { border-color:var(--amber); box-shadow:var(--glow-amber); }
-  .stat-num {
-    font-family:'Cinzel',serif; font-size:2rem; font-weight:700;
-    background:linear-gradient(135deg,var(--amber-glow),var(--amber));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  }
-  .stat-label { font-size:0.78rem; color:var(--text-muted); margin-top:6px; letter-spacing:0.04em; }
-
-  /* PATHWAYS */
-  .pathways { background: transparent; }
-  .pathways-grid {
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(270px, 1fr)); gap:24px;
-  }
-  .pathway-card {
-    background:var(--card-bg); border:1px solid var(--border-purple);
-    border-radius:16px; padding:36px 28px;
-    position:relative; overflow:hidden;
-    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-    backdrop-filter:blur(8px); cursor:pointer;
-  }
-  .pathway-card::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:3px;
-  }
-  .pathway-card:hover { transform: translateY(-8px); }
-  .pathway-card.compass::before { background:linear-gradient(90deg,var(--amber),var(--amber-light)); }
-  .pathway-card.compass:hover { border-color:var(--amber); box-shadow:var(--glow-amber); }
-  .pathway-card.cornerstone::before { background:linear-gradient(90deg,var(--purple),var(--purple-light)); }
-  .pathway-card.cornerstone:hover { border-color:var(--purple-light); box-shadow:var(--glow-purple); }
-  .pathway-card.horizon::before { background:linear-gradient(90deg,var(--orange),var(--amber)); }
-  .pathway-card.horizon:hover { border-color:var(--orange); box-shadow:0 0 30px rgba(212,84,26,0.3); }
-  .pathway-card.summit::before { background:linear-gradient(90deg,var(--purple-light),var(--amber)); }
-  .pathway-card.summit:hover { border-color:var(--purple-light); box-shadow:var(--glow-purple); }
-
-  .pathway-icon-wrap {
-    width:58px; height:58px; border-radius:12px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.6rem; margin-bottom:20px;
-  }
-  .compass .pathway-icon-wrap { background:rgba(232,134,42,0.12); border:1px solid rgba(232,134,42,0.25); }
-  .cornerstone .pathway-icon-wrap { background:rgba(107,47,160,0.15); border:1px solid rgba(107,47,160,0.3); }
-  .horizon .pathway-icon-wrap { background:rgba(212,84,26,0.12); border:1px solid rgba(212,84,26,0.25); }
-  .summit .pathway-icon-wrap { background:rgba(155,95,212,0.12); border:1px solid rgba(155,95,212,0.3); }
-
-  .pathway-tag {
-    font-size:0.68rem; font-weight:700; letter-spacing:0.1em;
-    text-transform:uppercase; margin-bottom:10px; display:block;
-  }
-  .compass .pathway-tag { color:var(--amber); }
-  .cornerstone .pathway-tag { color:var(--purple-light); }
-  .horizon .pathway-tag { color:var(--orange); }
-  .summit .pathway-tag { color:var(--purple-light); }
-
-  .pathway-card h3 {
-    font-family:'Cinzel',serif; font-size:1.2rem; font-weight:700;
-    color:var(--text); margin-bottom:12px;
-  }
-  .pathway-card p {
-    font-size:0.88rem; color:var(--text-muted); line-height:1.7; margin-bottom:22px;
-  }
-  .pathway-products { display:flex; flex-wrap:wrap; gap:8px; }
-  .product-chip {
-    font-size:0.75rem; font-weight:600; padding:4px 12px; border-radius:4px;
-    border:1px solid rgba(232,134,42,0.3); color:var(--amber-light);
-    background:rgba(232,134,42,0.08);
-  }
-  .coming-soon-chip {
-    font-size:0.72rem; font-weight:600; padding:4px 12px; border-radius:4px;
-    border:1px dashed rgba(107,47,160,0.4); color:var(--purple-light);
-    background:rgba(107,47,160,0.08);
+  /* ── PRODUCTS SECTION ── */
+  #products {
+    background: linear-gradient(135deg, #140820, #1a0a2e);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
   }
 
-  /* COMPASS SPOTLIGHT */
-  .compass-spotlight {
-    background:linear-gradient(135deg, #140820, #1a0a2e);
-    border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+  /* Waypoint flagship card */
+  .product-main {
+    background: rgba(14,6,24,0.75);
+    border: 1px solid var(--border);
+    border-radius: 16px; padding: 40px;
+    margin-bottom: 24px;
+    position: relative; overflow: hidden;
+    backdrop-filter: blur(10px);
   }
-  .spotlight-container {
-    background:rgba(26,10,46,0.6); border:1px solid var(--border);
-    border-radius:20px; padding:56px; backdrop-filter:blur(10px);
-    position:relative; overflow:hidden;
+  .product-main::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--amber), var(--orange));
   }
-  .spotlight-container::after {
-    content:''; position:absolute; right:-80px; top:50%;
-    transform:translateY(-50%); width:350px; height:350px;
-    background:radial-gradient(circle, rgba(232,134,42,0.06) 0%, transparent 70%);
-    border-radius:50%;
+  .product-main-inner {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 44px;
+    align-items: start;
   }
-  .spotlight-header { display:flex; align-items:center; gap:28px; margin-bottom:20px; }
-  .spotlight-logo {
-    width:90px; height:90px; object-fit:contain; border-radius:12px;
-    box-shadow:0 0 40px rgba(232,134,42,0.3); flex-shrink:0;
+  .product-main-header {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 18px;
   }
-  .spotlight-header-text h2 {
-    font-family:'Cinzel',serif; font-size:1.9rem; font-weight:700;
-    background:linear-gradient(135deg,var(--amber-glow),var(--amber));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    margin-bottom:4px;
+  .product-card-icon {
+    width: 46px; height: 46px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; flex-shrink: 0;
+    background: rgba(232,134,42,0.1); border: 1px solid rgba(232,134,42,0.2);
   }
-  .spotlight-header-text p {
-    font-size:0.78rem; font-weight:600; color:var(--amber);
-    text-transform:uppercase; letter-spacing:0.1em;
+  .product-name {
+    font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
+    color: var(--amber-light); display: block;
   }
-  .spotlight-desc {
-    color:var(--text-muted); font-size:1rem; line-height:1.8;
-    max-width:640px; margin-bottom:44px;
+  .product-price-tag {
+    font-size: 0.75rem; font-weight: 700; color: var(--amber);
+    letter-spacing: 0.04em; margin-top: 2px; display: block;
   }
-  .products-grid { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
-  .product-card.full-width { grid-column: 1 / -1; }
+  .product-main-info > p {
+    font-size: 0.9rem; color: var(--text-muted); line-height: 1.75; margin-bottom: 20px;
+  }
+  .feature-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .feature-list li {
+    font-size: 0.82rem; color: var(--text-muted);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .feature-list li::before {
+    content: '◆'; color: var(--amber); font-size: 0.5rem; margin-top: 4px; flex-shrink: 0;
+  }
+  .product-main-actions {
+    display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px;
+  }
 
-  /* SUITE CALLOUT */
+  /* Demo tabs */
+  .demo-tabs-nav { display: flex; gap: 8px; margin-bottom: 14px; }
+  .demo-tab {
+    padding: 8px 20px;
+    border: 1px solid var(--border-purple);
+    background: transparent; color: var(--text-muted);
+    border-radius: 6px;
+    font-family: 'Raleway', sans-serif; font-size: 0.8rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s; letter-spacing: 0.03em;
+  }
+  .demo-tab:hover { border-color: var(--amber); color: var(--amber-light); }
+  .demo-tab.active {
+    background: linear-gradient(135deg, var(--amber), var(--orange));
+    border-color: transparent; color: white;
+    box-shadow: var(--glow-amber);
+  }
+  .slides-embed {
+    position: relative; width: 100%;
+    padding-top: 56.25%;
+    border-radius: 8px; overflow: hidden;
+    border: 1px solid rgba(232,134,42,0.15);
+  }
+  .slides-embed iframe {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+  }
+  .demo-video {
+    width: 100%; border-radius: 8px;
+    border: 1px solid var(--border); background: #000;
+    display: block;
+  }
+
+  /* Navigator + Meridian row */
+  .products-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .product-card {
+    background: rgba(14,6,24,0.7); border: 1px solid var(--border-purple);
+    border-radius: 14px; padding: 30px;
+    transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    position: relative; overflow: hidden;
+  }
+  .product-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--amber), var(--orange));
+  }
+  .product-card:hover { transform: translateY(-5px); border-color: var(--amber); box-shadow: var(--glow-amber); }
+  .product-card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .product-card h3 {
+    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700;
+    color: var(--amber-light);
+  }
+  .product-card > p {
+    font-size: 0.87rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 16px;
+  }
+
+  /* Suite + Guide 2-col row */
+  .bottom-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
   .suite-callout {
     background: linear-gradient(135deg, rgba(107,47,160,0.15), rgba(232,134,42,0.08));
     border: 1px solid rgba(232,134,42,0.25);
-    border-radius: 16px; padding: 40px;
-    text-align: center; margin-top: 40px;
+    border-radius: 16px; padding: 32px 30px;
     position: relative; overflow: hidden;
   }
   .suite-callout::before {
     content: 'CLEAR PATH SUITE';
-    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    position: absolute; top: -12px; left: 28px;
     background: linear-gradient(90deg, var(--amber), var(--orange));
     color: white; font-size: 0.6rem; font-weight: 700;
     padding: 3px 16px; border-radius: 3px; letter-spacing: 0.12em;
     white-space: nowrap;
   }
   .suite-callout h3 {
-    font-family: 'Cinzel', serif; font-size: 1.4rem; font-weight: 700;
-    color: var(--text); margin-bottom: 12px;
+    font-family: 'Cinzel', serif; font-size: 1.2rem; font-weight: 700;
+    color: var(--text); margin-bottom: 10px;
   }
-  .suite-callout p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.7; margin-bottom: 24px; max-width: 520px; margin-left: auto; margin-right: auto; }
-  .suite-products { display: flex; justify: center; gap: 12px; flex-wrap: wrap; justify-content: center; margin-bottom: 24px; }
+  .suite-callout > p { color: var(--text-muted); font-size: 0.87rem; line-height: 1.7; margin-bottom: 18px; }
+  .suite-products { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
   .suite-badge {
-    font-size: 0.8rem; font-weight: 700; padding: 6px 18px; border-radius: 6px;
+    font-size: 0.78rem; font-weight: 700; padding: 5px 14px; border-radius: 6px;
     border: 1px solid rgba(232,134,42,0.4); color: var(--amber-light);
     background: rgba(232,134,42,0.1);
   }
-  .pricing-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 28px; }
-  .pricing-tag {
-    text-align: center; padding: 14px 20px;
-    background: rgba(14,6,24,0.6); border: 1px solid var(--border-purple);
-    border-radius: 12px; min-width: 140px;
+  .compliance-guide-card {
+    background: linear-gradient(135deg, rgba(107,47,160,0.12), rgba(26,10,46,0.6));
+    border: 1px solid rgba(232,134,42,0.28); border-radius: 14px;
+    padding: 32px 30px;
+    display: flex; flex-direction: column; justify-content: space-between;
   }
-  .pricing-tag .price { font-family: 'Cinzel', serif; font-size: 1rem; font-weight: 700; color: var(--amber-light); }
-  .pricing-tag .price-label { font-size: 0.68rem; color: var(--text-muted); margin-top: 3px; letter-spacing: 0.04em; }
-  .product-card.full-width .slides-embed {
-    position: relative; width: 100%;
-    height: min(56vw, 520px);
-    border-radius: 8px; overflow: hidden;
-    margin-top: 16px;
-    border: 1px solid rgba(232,134,42,0.15);
+  .compliance-guide-top { display: flex; align-items: flex-start; gap: 16px; margin-bottom: 20px; }
+  .compliance-guide-icon {
+    width: 50px; height: 50px; flex-shrink: 0; border-radius: 10px;
+    background: rgba(232,134,42,0.1); border: 1px solid rgba(232,134,42,0.25);
+    display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
   }
-  .product-card.full-width .slides-embed iframe {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;
+  .compliance-guide-text h4 {
+    font-family: 'Cinzel', serif; font-size: 0.95rem; font-weight: 700;
+    color: var(--amber-light); margin-bottom: 8px;
   }
-  .product-card {
-    background:rgba(14,6,24,0.7); border:1px solid var(--border-purple);
-    border-radius:14px; padding:30px;
-    transition:transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-    position:relative; overflow:hidden;
-  }
-  .product-card::before {
-    content:''; position:absolute; top:0; left:0; right:0; height:2px;
-    background:linear-gradient(90deg,var(--amber),var(--orange));
-  }
-  .product-card:hover { transform:translateY(-5px); border-color:var(--amber); box-shadow:var(--glow-amber); }
-  .product-card-icon {
-    width:46px; height:46px; border-radius:10px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.2rem; margin-bottom:16px;
-    background:rgba(232,134,42,0.1); border:1px solid rgba(232,134,42,0.2);
-  }
-  .product-card h3 {
-    font-family:'Cinzel',serif; font-size:1.15rem; font-weight:700;
-    color:var(--amber-light); margin-bottom:8px;
-  }
-  .product-card p {
-    font-size:0.87rem; color:var(--text-muted); line-height:1.7; margin-bottom:18px;
-  }
-  .feature-list { list-style:none; display:flex; flex-direction:column; gap:8px; }
-  .feature-list li {
-    font-size:0.82rem; color:var(--text-muted);
-    display:flex; align-items:flex-start; gap:10px;
-  }
-  .feature-list li::before {
-    content:'◆'; color:var(--amber); font-size:0.5rem; margin-top:4px; flex-shrink:0;
-  }
+  .compliance-guide-text p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.65; }
 
-  /* AUDIENCE */
-  .audience-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
-  .audience-card {
-    background:var(--card-bg); border:1px solid var(--border-purple);
-    border-radius:14px; padding:32px; text-align:center;
-    transition:transform 0.25s, border-color 0.25s, box-shadow 0.25s;
-    backdrop-filter:blur(8px);
+  /* Coming pathways strip */
+  .coming-pathways {
+    background: rgba(107,47,160,0.06);
+    border: 1px dashed rgba(107,47,160,0.25);
+    border-radius: 10px; padding: 16px 24px;
+    text-align: center; font-size: 0.78rem;
+    color: var(--text-muted); letter-spacing: 0.03em; line-height: 1.7;
   }
-  .audience-card:hover { transform:translateY(-6px); border-color:var(--amber); box-shadow:var(--glow-amber); }
-  .audience-icon {
-    width:64px; height:64px; border-radius:50%;
-    background:linear-gradient(135deg,var(--amber),var(--orange));
-    display:flex; align-items:center; justify-content:center;
-    font-size:1.6rem; margin:0 auto 18px;
-    box-shadow:0 0 24px rgba(232,134,42,0.35);
-  }
-  .audience-card h3 {
-    font-family:'Cinzel',serif; font-size:0.95rem; font-weight:700;
-    color:var(--text); margin-bottom:10px;
-  }
-  .audience-card p { font-size:0.85rem; color:var(--text-muted); line-height:1.7; }
+  .coming-pathways strong { color: var(--purple-light); }
 
-  /* CTA */
-  .cta-banner {
-    background:linear-gradient(135deg, #1a0535, #0e0618);
-    border-top:1px solid var(--border);
-    padding:100px 5%; text-align:center;
-    position:relative; overflow:hidden; z-index:1;
-  }
-  .cta-banner::before {
-    content:''; position:absolute; top:50%; left:50%;
-    transform:translate(-50%,-50%);
-    width:600px; height:600px;
-    background:radial-gradient(circle, rgba(107,47,160,0.15) 0%, transparent 65%);
-    border-radius:50%; pointer-events:none;
-  }
-  .cta-banner h2 {
-    font-family:'Cinzel',serif;
-    font-size:clamp(1.8rem,3.5vw,2.8rem); font-weight:700;
-    margin-bottom:16px;
-    background:linear-gradient(135deg,var(--amber-glow),var(--amber-light));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  }
-  .cta-banner p {
-    color:var(--text-muted); font-size:1.05rem; line-height:1.75;
-    max-width:520px; margin:0 auto 40px;
-  }
-
-  /* FOOTER */
-  footer {
-    background:#060310; border-top:1px solid var(--border-purple);
-    padding:60px 5% 30px; position:relative; z-index:1;
-  }
-  .footer-top {
-    display:flex; justify-content:space-between; gap:40px;
-    margin-bottom:50px; flex-wrap:wrap; align-items:flex-start;
-  }
-  .footer-brand .fname {
-    font-family:'Cinzel',serif; font-size:1.05rem; font-weight:700;
-    background:linear-gradient(90deg,var(--amber-light),var(--amber-glow));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-    margin-bottom:8px; display:block;
-  }
-  .footer-brand p { font-size:0.83rem; color:var(--text-muted); max-width:240px; line-height:1.65; }
-  .footer-logo { height:60px; width:60px; object-fit:contain; margin-bottom:12px; border-radius:8px; display:block; }
-  .footer-links h4 {
-    font-size:0.68rem; font-weight:700; letter-spacing:0.12em;
-    text-transform:uppercase; color:var(--amber); margin-bottom:16px;
-  }
-  .footer-links ul { list-style:none; display:flex; flex-direction:column; gap:10px; }
-  .footer-links a {
-    font-size:0.85rem; color:var(--text-muted); text-decoration:none; transition:color 0.2s;
-  }
-  .footer-links a:hover { color:var(--amber-light); }
-  .footer-bottom {
-    border-top:1px solid rgba(255,255,255,0.06); padding-top:24px;
-    display:flex; justify-content:space-between; align-items:center;
-    flex-wrap:wrap; gap:12px;
-  }
-  .footer-bottom p { font-size:0.78rem; color:rgba(240,230,211,0.25); }
-  .footer-note { font-size:0.72rem; color:var(--amber); font-weight:600; letter-spacing:0.06em; }
-
-  /* Waypoint app links */
+  /* Waypoint app link style */
   a.waypoint-link {
     color: inherit; text-decoration: none;
     border-bottom: 1px solid rgba(232,134,42,0.5);
@@ -571,33 +466,6 @@
   }
   a.waypoint-link:hover { color: var(--amber-light); border-color: var(--amber-light); }
 
-  /* ANIMATIONS */
-  .fade-up {
-    opacity:0; transform:translateY(32px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-  }
-  .fade-up.visible { opacity:1; transform:translateY(0); }
-
-  /* RESPONSIVE */
-  @media (max-width: 960px) {
-    .hero { grid-template-columns:1fr; padding-top:100px; gap:30px; }
-    .hero-visual { display:none; }
-    .hero h1 { font-size: clamp(1.9rem, 5.5vw, 2.8rem); }
-    .hero p { font-size: 0.95rem; }
-    .hero-buttons { flex-direction: column; gap: 12px; }
-    .hero-buttons a { text-align: center; justify-content: center; }
-    .about-strip { grid-template-columns:1fr; gap:40px; padding:60px 5%; }
-    .products-grid { grid-template-columns:1fr; }
-    .audience-grid { grid-template-columns:1fr 1fr; }
-    .nav-links { display:none; }
-    .nav-logo-text .sub { display:none; }
-    .nav-cta { padding: 8px 16px; font-size: 0.72rem; }
-    .spotlight-container { padding:32px 24px; }
-    .spotlight-header { flex-direction:column; align-items:flex-start; gap:16px; }
-    section { padding: 70px 5%; }
-    .cta-banner { padding: 70px 5%; }
-    .footer-top { flex-direction: column; gap: 32px; }
-  }
   /* ── PRICING CALCULATOR ── */
   #pricing { background: transparent; }
   .calc-box {
@@ -708,51 +576,128 @@
   .enterprise-notice strong { color:var(--amber-light); display:block; margin-bottom:8px; font-size:1rem; }
   .empty-notice { padding:20px; text-align:center; color:var(--text-muted); font-size:0.88rem; }
   .calc-disclaimer { font-size:0.7rem; color:var(--text-muted); text-align:center; margin-top:18px; opacity:0.65; line-height:1.5; }
-  /* ── COMPLIANCE GUIDE CARD ── */
-  .compliance-guide-card {
-    margin-top: 28px;
-    background: linear-gradient(135deg, rgba(107,47,160,0.12), rgba(26,10,46,0.6));
-    border: 1px solid rgba(232,134,42,0.28); border-radius: 14px;
-    padding: 26px 30px; display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
-  }
-  .compliance-guide-icon {
-    width: 58px; height: 58px; flex-shrink: 0; border-radius: 12px;
-    background: rgba(232,134,42,0.1); border: 1px solid rgba(232,134,42,0.25);
-    display: flex; align-items: center; justify-content: center; font-size: 1.6rem;
-  }
-  .compliance-guide-text { flex: 1; min-width: 200px; }
-  .compliance-guide-text h4 {
-    font-family:'Cinzel',serif; font-size:1rem; font-weight:700;
-    color:var(--amber-light); margin-bottom:6px;
-  }
-  .compliance-guide-text p { font-size:0.83rem; color:var(--text-muted); line-height:1.65; }
 
+  /* ── CTA ── */
+  .cta-banner {
+    background: linear-gradient(135deg, #1a0535, #0e0618);
+    border-top: 1px solid var(--border);
+    padding: 64px 5%; text-align: center;
+    position: relative; overflow: hidden; z-index: 1;
+  }
+  .cta-banner::before {
+    content: ''; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(107,47,160,0.15) 0%, transparent 65%);
+    border-radius: 50%; pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700;
+    margin-bottom: 24px;
+    background: linear-gradient(135deg, var(--amber-glow), var(--amber-light));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .audience-mini {
+    display: flex; justify-content: center; gap: 48px;
+    margin-bottom: 28px; flex-wrap: wrap;
+    position: relative;
+  }
+  .audience-mini-item { text-align: center; }
+  .audience-mini-icon { font-size: 2rem; display: block; margin-bottom: 6px; }
+  .audience-mini-label {
+    font-size: 0.7rem; font-weight: 700; color: var(--text-muted);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .cta-tagline {
+    color: var(--text-muted); font-size: 1rem; line-height: 1.75;
+    max-width: 480px; margin: 0 auto 32px; position: relative;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #060310; border-top: 1px solid var(--border-purple);
+    padding: 60px 5% 30px; position: relative; z-index: 1;
+  }
+  .footer-top {
+    display: flex; justify-content: space-between; gap: 40px;
+    margin-bottom: 50px; flex-wrap: wrap; align-items: flex-start;
+  }
+  .footer-brand .fname {
+    font-family: 'Cinzel', serif; font-size: 1.05rem; font-weight: 700;
+    background: linear-gradient(90deg, var(--amber-light), var(--amber-glow));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    margin-bottom: 8px; display: block;
+  }
+  .footer-brand p { font-size: 0.83rem; color: var(--text-muted); max-width: 240px; line-height: 1.65; }
+  .footer-logo { height: 60px; width: 60px; object-fit: contain; margin-bottom: 12px; border-radius: 8px; display: block; }
+  .footer-links h4 {
+    font-size: 0.68rem; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--amber); margin-bottom: 16px;
+  }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a {
+    font-size: 0.85rem; color: var(--text-muted); text-decoration: none; transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--amber-light); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06); padding-top: 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p { font-size: 0.78rem; color: rgba(240,230,211,0.25); }
+  .footer-note { font-size: 0.72rem; color: var(--amber); font-weight: 600; letter-spacing: 0.06em; }
+
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 960px) {
+    .hero { grid-template-columns: 1fr; padding-top: 100px; min-height: auto; padding-bottom: 60px; gap: 30px; }
+    .hero-visual { display: none; }
+    .hero h1 { font-size: clamp(1.9rem, 5.5vw, 2.8rem); }
+    .hero p { font-size: 0.95rem; }
+    .hero-buttons { flex-direction: column; gap: 12px; }
+    .hero-buttons a { text-align: center; justify-content: center; }
+    .stats-bar { grid-template-columns: 1fr 1fr; }
+    .stats-bar-item:nth-child(2) { border-right: none; }
+    .stats-bar-item:nth-child(3) { border-top: 1px solid rgba(107,47,160,0.2); }
+    .stats-bar-item:nth-child(4) { border-top: 1px solid rgba(107,47,160,0.2); border-right: none; }
+    .product-main-inner { grid-template-columns: 1fr; }
+    .products-row { grid-template-columns: 1fr; }
+    .bottom-cards { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .nav-logo-text .sub { display: none; }
+    .nav-cta { padding: 8px 16px; font-size: 0.72rem; }
+    section { padding: 50px 5%; }
+    .audience-mini { gap: 28px; }
+    .calc-box { padding: 32px 24px; }
+  }
   @media (max-width: 600px) {
     nav { height: 60px; padding: 0 4%; }
     .nav-logo img { height: 36px; width: 36px; }
     .nav-logo-text .name { font-size: 0.78rem; }
-    .audience-grid { grid-template-columns:1fr; }
-    .about-stats { grid-template-columns:1fr 1fr; }
-    .pathways-grid { grid-template-columns:1fr; }
-    .pathway-card { padding: 26px 20px; }
-    section { padding: 60px 4%; }
-    .about-strip { padding: 50px 4%; }
+    .stats-bar-item { padding: 20px 12px; }
+    .stats-bar-item .snum { font-size: 1.5rem; }
+    section { padding: 44px 4%; }
     .section-title { font-size: 1.4rem; }
-    .section-subtitle { font-size: 0.88rem; margin-bottom: 40px; }
-    .spotlight-container { padding: 24px 16px; }
-    .spotlight-header-text h2 { font-size: 1.4rem; }
-    .spotlight-logo { width: 64px; height: 64px; }
-    .spotlight-desc { font-size: 0.9rem; margin-bottom: 28px; }
+    .section-subtitle { font-size: 0.88rem; margin-bottom: 32px; }
+    .product-main { padding: 24px 18px; }
     .product-card { padding: 22px 18px; }
-    .product-card.full-width .slides-embed { height: min(72vw, 300px); }
-    .cta-banner { padding: 60px 4%; }
+    .suite-callout { padding: 28px 20px; }
+    .compliance-guide-card { padding: 24px 18px; }
+    .cta-banner { padding: 48px 4%; }
     .cta-banner h2 { font-size: 1.6rem; }
-    .cta-banner p { font-size: 0.9rem; }
+    .audience-mini { gap: 20px; }
+    footer { padding: 44px 4% 24px; }
+    .footer-top { flex-direction: column; gap: 32px; }
+    .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
     .btn-primary { padding: 13px 24px; font-size: 0.84rem; }
     .btn-ghost { padding: 13px 24px; font-size: 0.84rem; }
-    footer { padding: 44px 4% 24px; }
-    .footer-bottom { flex-direction: column; align-items: flex-start; gap: 6px; }
-    .stat-num { font-size: 1.6rem; }
   }
 </style>
 </head>
@@ -761,16 +706,14 @@
 <!-- NAV -->
 <nav>
   <a class="nav-logo" href="#">
-    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Waypoint" />
+    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path Education Group" />
     <div class="nav-logo-text">
       <span class="name">Clear Path Education Group</span>
       <span class="sub">Pathways to Student Success</span>
     </div>
   </a>
   <ul class="nav-links">
-    <li><a href="#pathways">Pathways</a></li>
-    <li><a href="#compass">Compass</a></li>
-    <li><a href="#about">About</a></li>
+    <li><a href="#products">Products</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="mailto:support@clearpathedgroup.com">Contact</a></li>
     <li><a href="security.html">Security</a></li>
@@ -787,7 +730,7 @@
     <h1>Every District Deserves a Clear Path Forward</h1>
     <p>We partner with school districts and campuses across Texas to provide purposeful, research-aligned pathways — from behavior solutions to instructional excellence and beyond.</p>
     <div class="hero-buttons">
-      <a href="#pathways" class="btn-primary">Explore Our Pathways &#8594;</a>
+      <a href="#products" class="btn-primary">Explore Our Solutions &#8594;</a>
       <a href="mailto:support@clearpathedgroup.com" class="btn-ghost">Talk to Our Team</a>
     </div>
   </div>
@@ -844,153 +787,158 @@
   </div>
 </section>
 
-<!-- ABOUT -->
-<div class="about-strip" id="about">
-  <div>
-    <h2>Built by Educators,<br><em>For Educators</em></h2>
-    <p>Clear Path Education Group was founded with a single belief: that every campus — regardless of size or zip code — deserves access to expert guidance, practical tools, and compassionate support.</p>
-    <p>Our team brings decades of on-the-ground experience in Texas schools to every partnership — showing up not as consultants from a distance, but as guides who walk the path alongside you.</p>
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-bar-item">
+    <span class="snum">100%</span>
+    <span class="slabel">Texas-Focused</span>
   </div>
-  <div class="about-stats">
-    <div class="stat-card fade-up"><div class="stat-num">100%</div><div class="stat-label">Texas-Focused</div></div>
-    <div class="stat-card fade-up"><div class="stat-num">4+</div><div class="stat-label">Support Pathways</div></div>
-    <div class="stat-card fade-up"><div class="stat-num">K–12</div><div class="stat-label">All Grade Levels</div></div>
-    <div class="stat-card fade-up"><div class="stat-num">∞</div><div class="stat-label">Dedicated to Students</div></div>
+  <div class="stats-bar-item">
+    <span class="snum">3</span>
+    <span class="slabel">Live Products</span>
+  </div>
+  <div class="stats-bar-item">
+    <span class="snum">K–12</span>
+    <span class="slabel">All Grade Levels</span>
+  </div>
+  <div class="stats-bar-item">
+    <span class="snum">TEC</span>
+    <span class="slabel">Code Aligned</span>
   </div>
 </div>
 
-<!-- PATHWAYS -->
-<section class="pathways" id="pathways">
-  <p class="section-label">Our Pathways</p>
-  <h2 class="section-title">Solutions Designed Around Your Campus</h2>
+<!-- PRODUCTS -->
+<section id="products">
+  <p class="section-label">The Compass Pathway</p>
+  <h2 class="section-title">Behavior &amp; Compliance Solutions</h2>
   <div class="divider"></div>
-  <p class="section-subtitle">Each Pathway is a complete suite of solutions — purposefully named, intentionally designed, and rooted in what actually works in Texas schools.</p>
-  <div class="pathways-grid">
-    <div class="pathway-card compass fade-up">
-      <div class="pathway-icon-wrap">🧭</div>
-      <span class="pathway-tag">Behavior &amp; Compliance</span>
-      <h3>Compass Pathway</h3>
-      <p>Helping campuses navigate student behavior, discipline compliance, and intervention frameworks — so every student can find their direction.</p>
-      <div class="pathway-products">
-        <a href="https://waypoint.clearpathedgroup.com" target="_blank" rel="noopener noreferrer" style="text-decoration:none;"><span class="product-chip">Waypoint</span></a>
-        <span class="product-chip">Navigator</span>
-        <span class="product-chip">Meridian</span>
-      </div>
-    </div>
-    <div class="pathway-card cornerstone fade-up">
-      <div class="pathway-icon-wrap">🧱</div>
-      <span class="pathway-tag">Instructional Support</span>
-      <h3>Cornerstone Pathway</h3>
-      <p>Strengthening the foundation of classroom instruction through targeted support, curriculum alignment, and campus-specific coaching.</p>
-      <div class="pathway-products"><span class="coming-soon-chip">Products Coming Soon</span></div>
-    </div>
-    <div class="pathway-card horizon fade-up">
-      <div class="pathway-icon-wrap">🌅</div>
-      <span class="pathway-tag">Professional Development</span>
-      <h3>Horizon Pathway</h3>
-      <p>Expanding what's possible through meaningful professional development, instructional coaching, and learning experiences that inspire growth.</p>
-      <div class="pathway-products"><span class="coming-soon-chip">Products Coming Soon</span></div>
-    </div>
-    <div class="pathway-card summit fade-up">
-      <div class="pathway-icon-wrap">🏔️</div>
-      <span class="pathway-tag">Leadership Development</span>
-      <h3>Summit Pathway</h3>
-      <p>Elevating campus and district leaders through executive coaching, strategic planning, and leadership academies for Texas educators.</p>
-      <div class="pathway-products"><span class="coming-soon-chip">Products Coming Soon</span></div>
-    </div>
-  </div>
-</section>
+  <p class="section-subtitle">Three integrated products — purpose-built for Texas districts to manage discipline, track behavior, and maintain full SPED compliance.</p>
 
-<!-- COMPASS SPOTLIGHT -->
-<section class="compass-spotlight" id="compass">
-  <div class="spotlight-container">
-    <div class="spotlight-header">
-      <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Waypoint Logo" class="spotlight-logo" />
-      <div class="spotlight-header-text">
-        <h2>The Compass Pathway</h2>
-        <p>Behavior &amp; Compliance Solutions</p>
-      </div>
-    </div>
-    <p class="spotlight-desc">Our flagship pathway provides campuses and districts with proven tools to manage, document, and improve student behavior outcomes — while maintaining full compliance with state and federal requirements. Three powerful products. One clear direction.</p>
-    <div class="products-grid">
-      <div class="product-card full-width">
-        <div class="product-card-icon">📍</div>
-        <h3><a href="https://waypoint.clearpathedgroup.com" class="waypoint-link" target="_blank" rel="noopener noreferrer">Waypoint</a></h3>
-        <p>Texas DAEP compliance management — from incident documentation and approval chains to SPED compliance blocking, parent portals, and transition plans. See it in action below.</p>
-        <div style="font-size:0.8rem;color:var(--amber);font-weight:700;margin-bottom:8px;">Starting at $4,500/yr</div>
-        <div class="slides-embed">
-          <iframe src="https://docs.google.com/presentation/d/1nQHIEbh-nBX7SUVkxiCV8HHO0rOzaQEm/embed?start=false&loop=false&delayms=5000"
-            allowfullscreen
-            title="Waypoint — Texas DAEP Compliance Presentation">
-          </iframe>
+  <!-- Waypoint — flagship product -->
+  <div class="product-main fade-up">
+    <div class="product-main-inner">
+      <div class="product-main-info">
+        <div class="product-main-header">
+          <div class="product-card-icon">📍</div>
+          <div>
+            <span class="product-name">Waypoint</span>
+            <span class="product-price-tag">Starting at $4,500/yr</span>
+          </div>
         </div>
-        <div style="margin-top:20px;">
-          <p style="font-size:0.72rem;color:var(--text-muted);margin-bottom:8px;letter-spacing:0.08em;font-weight:700;text-transform:uppercase;">▶ Narrated Overview</p>
-          <video controls preload="metadata" style="width:100%;border-radius:8px;border:1px solid var(--border);background:#000;">
+        <p>Texas DAEP compliance management — from incident documentation and approval chains to SPED compliance blocking, parent portals, and transition plans. Built specifically for Texas TEC requirements.</p>
+        <ul class="feature-list">
+          <li>Full discipline lifecycle management</li>
+          <li>SPED &amp; 504 compliance blocking</li>
+          <li>Parent portal with acknowledgment tracking</li>
+          <li>PEIMS discipline data export</li>
+          <li>Daily behavior kiosk &amp; orientation kiosk</li>
+          <li>Transition plans with 30/60/90-day reviews</li>
+        </ul>
+        <div class="product-main-actions">
+          <a href="https://waypoint.clearpathedgroup.com" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:0.82rem;padding:11px 22px;">
+            Launch App &#8594;
+          </a>
+          <a href="/whitepaper.html" class="btn-ghost" style="font-size:0.82rem;padding:11px 22px;">
+            Free Compliance Guide
+          </a>
+        </div>
+      </div>
+
+      <div class="product-main-demo">
+        <div class="demo-tabs-nav">
+          <button class="demo-tab active" data-panel="panel-slides">📊 Slide Deck</button>
+          <button class="demo-tab" data-panel="panel-video">▶ Narrated Overview</button>
+        </div>
+        <div id="panel-slides" class="demo-panel">
+          <div class="slides-embed">
+            <iframe
+              src="https://docs.google.com/presentation/d/1nQHIEbh-nBX7SUVkxiCV8HHO0rOzaQEm/embed?start=false&loop=false&delayms=5000"
+              allowfullscreen
+              title="Waypoint — Texas DAEP Compliance Presentation">
+            </iframe>
+          </div>
+        </div>
+        <div id="panel-video" class="demo-panel" hidden>
+          <video controls preload="metadata" class="demo-video">
             <source src="Waypoint__Safety_and_Growth.mp4" type="video/mp4">
           </video>
         </div>
       </div>
-      <div class="product-card">
-        <div class="product-card-icon">🧭</div>
-        <h3>Navigator</h3>
-        <p>ISS and OSS management built for campus administrators — track referrals, document placements, assign proactive supports, and catch escalation patterns before they reach DAEP.</p>
-        <div style="font-size:0.8rem;color:var(--amber);font-weight:700;margin-bottom:12px;">Starting at $2,500/yr</div>
-        <ul class="feature-list">
-          <li>Referral intake and admin review workflow</li>
-          <li>ISS / OSS placement tracking with re-entry plans</li>
-          <li>Proactive supports: CICO, behavior contracts, counseling</li>
-          <li>Escalation alerts (3+ OSS in 90 days → DAEP review)</li>
-          <li>Student behavior risk scoring</li>
-          <li>Referral trend reports &amp; offense code analytics</li>
-        </ul>
-      </div>
-      <div class="product-card">
-        <div class="product-card-icon">⭐</div>
-        <h3>Meridian</h3>
-        <p>A comprehensive SPED compliance engine to help campuses reach peak performance — ensuring every policy, plan, and practice aligns with state and federal requirements.</p>
-        <div style="font-size:0.8rem;color:var(--amber);font-weight:700;margin-bottom:12px;">Starting at $3,500/yr</div>
-        <ul class="feature-list">
-          <li>PBIS &amp; MTSS framework alignment</li>
-          <li>FBA/BIP development &amp; review support</li>
-          <li>Disciplinary compliance auditing</li>
-          <li>Campus systems coaching</li>
-        </ul>
-      </div>
     </div>
+  </div>
 
-    <!-- Suite Callout -->
+  <!-- Navigator + Meridian -->
+  <div class="products-row">
+    <div class="product-card fade-up">
+      <div class="product-card-header">
+        <div class="product-card-icon">🧭</div>
+        <div>
+          <h3>Navigator</h3>
+          <span class="product-price-tag">Starting at $2,500/yr</span>
+        </div>
+      </div>
+      <p>ISS and OSS management for campus administrators — track referrals, document placements, assign proactive supports, and catch escalation patterns before they reach DAEP.</p>
+      <ul class="feature-list">
+        <li>Referral intake &amp; admin review workflow</li>
+        <li>ISS / OSS placement tracking with re-entry plans</li>
+        <li>Proactive supports: CICO, contracts, counseling</li>
+        <li>Escalation alerts — 3+ OSS in 90 days triggers DAEP review</li>
+        <li>Student risk scoring &amp; referral trend reports</li>
+      </ul>
+    </div>
+    <div class="product-card fade-up">
+      <div class="product-card-header">
+        <div class="product-card-icon">⭐</div>
+        <div>
+          <h3>Meridian</h3>
+          <span class="product-price-tag">Starting at $3,500/yr</span>
+        </div>
+      </div>
+      <p>A comprehensive SPED compliance engine ensuring every policy, plan, and practice aligns with state and federal requirements — from ARD timelines to HB&nbsp;3928 dyslexia compliance.</p>
+      <ul class="feature-list">
+        <li>ARD timeline tracking &amp; compliance alerts</li>
+        <li>HB 3928 dyslexia compliance (Section 504)</li>
+        <li>Corrective Action Plan (CAP) tracker</li>
+        <li>Folder readiness &amp; compliance doc generation</li>
+        <li>TEA monitoring &amp; finding management</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Suite Callout + Compliance Guide -->
+  <div class="bottom-cards">
     <div class="suite-callout fade-up">
       <h3>Bundle All Three — Clear Path Suite</h3>
-      <p>Get Waypoint, Navigator, and Meridian in a single district subscription. One platform. Complete coverage from ISS referral to DAEP placement to SPED compliance.</p>
+      <p>Waypoint, Navigator, and Meridian in one district subscription. Complete coverage from ISS referral to DAEP placement to SPED compliance — with a multi-product discount applied automatically.</p>
       <div class="suite-products">
         <span class="suite-badge">📍 Waypoint</span>
         <span class="suite-badge">🧭 Navigator</span>
         <span class="suite-badge">⭐ Meridian</span>
       </div>
-      <div class="pricing-row">
-        <div class="pricing-tag"><div class="price">Waypoint</div><div class="price-label">from $4,500/yr</div></div>
-        <div class="pricing-tag" style="border-color:rgba(232,134,42,0.5);"><div class="price" style="color:var(--amber-glow);">+ Navigator</div><div class="price-label">from $2,500/yr</div></div>
-        <div class="pricing-tag"><div class="price">+ Meridian</div><div class="price-label">from $3,500/yr</div></div>
-      </div>
-      <a href="mailto:support@clearpathedgroup.com?subject=Clear Path Suite Inquiry" class="btn-primary" style="font-size:0.85rem;padding:12px 28px;display:inline-flex;">
-        Contact Us for Suite Pricing →
+      <a href="mailto:support@clearpathedgroup.com?subject=Clear Path Suite Inquiry" class="btn-primary" style="font-size:0.82rem;padding:11px 22px;">
+        Contact Us for Suite Pricing &#8594;
       </a>
     </div>
-
-    <!-- Free Compliance Guide Card -->
     <div class="compliance-guide-card fade-up">
-      <div class="compliance-guide-icon">📋</div>
-      <div class="compliance-guide-text">
-        <h4>Free DAEP Compliance Checklist</h4>
-        <p>Our 20-point self-audit guide covers placement documentation, SPED manifestation determination, parent notification, and re-entry planning — all aligned to Texas Education Code. Download free, no account required.</p>
+      <div class="compliance-guide-top">
+        <div class="compliance-guide-icon">📋</div>
+        <div class="compliance-guide-text">
+          <h4>Free DAEP Compliance Checklist</h4>
+          <p>Our 20-point self-audit guide covers placement documentation, SPED manifestation determination, parent notification, and re-entry planning — all aligned to Texas Education Code. Download free, no account required.</p>
+        </div>
       </div>
-      <div style="flex-shrink:0;">
-        <a href="/whitepaper.html" class="btn-primary" style="font-size:0.82rem;padding:11px 22px;white-space:nowrap;display:inline-flex;">
-          Download Free Checklist →
-        </a>
-      </div>
+      <a href="/whitepaper.html" class="btn-primary" style="font-size:0.82rem;padding:11px 22px;display:inline-flex;">
+        Download Free Checklist &#8594;
+      </a>
     </div>
+  </div>
+
+  <!-- Additional Pathways Coming Soon -->
+  <div class="coming-pathways">
+    <strong>More pathways coming in 2026:</strong> &nbsp;
+    🧱 Cornerstone (Instructional Support) &nbsp;·&nbsp;
+    🌅 Horizon (Professional Development) &nbsp;·&nbsp;
+    🏔️ Summit (Leadership Development)
   </div>
 </section>
 
@@ -1002,8 +950,6 @@
   <p class="section-subtitle">Annual subscription pricing scales with your enrollment. Adjust below to see your estimated investment — all prices shown in USD per year.</p>
 
   <div class="calc-box fade-up">
-
-    <!-- Enrollment -->
     <div class="calc-row">
       <label class="calc-label">District Enrollment</label>
       <div class="enroll-row">
@@ -1013,7 +959,6 @@
       <div id="bandPill" class="band-pill">Small Band · 501–2,500</div>
     </div>
 
-    <!-- Tier -->
     <div class="calc-row">
       <label class="calc-label">Subscription Tier</label>
       <div class="tier-toggle">
@@ -1023,7 +968,6 @@
       </div>
     </div>
 
-    <!-- Products -->
     <div class="calc-row" style="margin-bottom:0;">
       <label class="calc-label">Products</label>
       <div class="product-checks">
@@ -1045,52 +989,40 @@
       </div>
     </div>
 
-    <!-- Results -->
     <div class="calc-results" id="calcResults"></div>
 
     <div style="text-align:center;">
       <a href="mailto:support@clearpathedgroup.com?subject=Pricing%20Quote%20Request" class="btn-primary" style="font-size:0.88rem;padding:14px 32px;display:inline-flex;">
-        Get Your Custom Quote →
+        Get Your Custom Quote &#8594;
       </a>
     </div>
     <p class="calc-disclaimer">Estimates based on published base rates. Bundle discounts applied at 2 products (15% off) and 3 products (25% off). Final pricing confirmed by your account manager.</p>
   </div>
 </section>
 
-<!-- WHO WE SERVE -->
-<section class="fade-up">
-  <p class="section-label">Who We Serve</p>
-  <h2 class="section-title">Partnerships at Every Level</h2>
-  <div class="divider"></div>
-  <p class="section-subtitle">Whether you're a classroom teacher, campus administrator, or district leader, Clear Path has a pathway built for your role and your goals.</p>
-  <div class="audience-grid">
-    <div class="audience-card fade-up">
-      <div class="audience-icon">🏫</div>
-      <h3>Campus Administrators</h3>
-      <p>Principals and assistant principals gain tools, frameworks, and coaching to lead with confidence and manage campus culture proactively.</p>
-    </div>
-    <div class="audience-card fade-up">
-      <div class="audience-icon">🏢</div>
-      <h3>District Leaders</h3>
-      <p>Superintendents and central office leaders receive strategic partnership to align systems, support campuses, and drive district-wide outcomes.</p>
-    </div>
-    <div class="audience-card fade-up">
-      <div class="audience-icon">🧑‍🏫</div>
-      <h3>Teachers &amp; Instructional Staff</h3>
-      <p>Educators access research-backed professional development and classroom strategies that translate directly into better student experiences.</p>
-    </div>
-  </div>
-</section>
-
 <!-- CTA -->
 <div class="cta-banner" id="contact">
   <h2>Ready to Find Your Clear Path?</h2>
-  <p>We'd love to learn about your campus or district and explore which pathways align with your goals. Reach out to start the conversation.</p>
+  <div class="audience-mini">
+    <div class="audience-mini-item">
+      <span class="audience-mini-icon">🏫</span>
+      <span class="audience-mini-label">Campus Admins</span>
+    </div>
+    <div class="audience-mini-item">
+      <span class="audience-mini-icon">🏢</span>
+      <span class="audience-mini-label">District Leaders</span>
+    </div>
+    <div class="audience-mini-item">
+      <span class="audience-mini-icon">🧑‍🏫</span>
+      <span class="audience-mini-label">Instructional Staff</span>
+    </div>
+  </div>
+  <p class="cta-tagline">We'd love to learn about your campus or district and explore which pathways align with your goals. Reach out to start the conversation.</p>
   <a href="mailto:support@clearpathedgroup.com" class="btn-primary" style="font-size:0.95rem;padding:16px 36px;">
     &#128236; Get In Touch
   </a>
-  <p style="margin-top:24px;font-size:1rem;color:var(--text-muted);">
-    Email us at &nbsp;<a href="mailto:support@clearpathedgroup.com" style="color:var(--amber-light);text-decoration:none;font-weight:700;font-size:1.05rem;border-bottom:1px solid rgba(232,134,42,0.5);">support@clearpathedgroup.com</a>
+  <p style="margin-top:20px;font-size:0.95rem;color:var(--text-muted);position:relative;">
+    Email us at &nbsp;<a href="mailto:support@clearpathedgroup.com" style="color:var(--amber-light);text-decoration:none;font-weight:700;border-bottom:1px solid rgba(232,134,42,0.5);">support@clearpathedgroup.com</a>
   </p>
 </div>
 
@@ -1098,29 +1030,29 @@
 <footer>
   <div class="footer-top">
     <div class="footer-brand">
-      <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Waypoint" class="footer-logo" />
+      <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path Education Group" class="footer-logo" />
       <span class="fname">Clear Path Education Group, LLC</span>
       <p>Purposeful pathways for districts and campuses across Texas. Pending state approval.</p>
     </div>
     <div class="footer-links">
       <h4>Pathways &amp; Products</h4>
       <ul>
-        <li><a href="#compass">🧭 Compass — Behavior &amp; Compliance</a></li>
-        <li><a href="#compass">📍 Waypoint — DAEP Management</a></li>
-        <li><a href="#compass">🧭 Navigator — ISS/OSS Tracker</a></li>
-        <li><a href="#compass">⭐ Meridian — SPED Compliance</a></li>
-        <li><a href="#pathways">🧱 Cornerstone — Instructional Support</a></li>
-        <li><a href="#pathways">🌅 Horizon — PD &amp; Coaching</a></li>
-        <li><a href="#pathways">🏔️ Summit — Leadership</a></li>
+        <li><a href="#products">🧭 Compass — Behavior &amp; Compliance</a></li>
+        <li><a href="#products">📍 Waypoint — DAEP Management</a></li>
+        <li><a href="#products">🧭 Navigator — ISS/OSS Tracker</a></li>
+        <li><a href="#products">⭐ Meridian — SPED Compliance</a></li>
+        <li><a href="#products">🧱 Cornerstone — Instructional Support</a></li>
+        <li><a href="#products">🌅 Horizon — PD &amp; Coaching</a></li>
+        <li><a href="#products">🏔️ Summit — Leadership</a></li>
       </ul>
     </div>
     <div class="footer-links">
       <h4>Company</h4>
       <ul>
-        <li><a href="#about">About Us</a></li>
         <li><a href="mailto:support@clearpathedgroup.com">Contact Us</a></li>
         <li><a href="mailto:support@clearpathedgroup.com">support@clearpathedgroup.com</a></li>
         <li><a href="security.html">Security &amp; Compliance</a></li>
+        <li><a href="/whitepaper.html">Free DAEP Compliance Checklist</a></li>
       </ul>
     </div>
   </div>
@@ -1131,6 +1063,7 @@
 </footer>
 
 <script>
+  // Fade-up on scroll
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(el => {
       if (el.isIntersecting) { el.target.classList.add('visible'); observer.unobserve(el.target); }
@@ -1138,28 +1071,39 @@
   }, { threshold: 0.08 });
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
+  // Smooth scroll for anchor links
   document.querySelectorAll('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
       e.preventDefault();
       const t = document.querySelector(a.getAttribute('href'));
-      if (t) t.scrollIntoView({ behavior:'smooth', block:'start' });
+      if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 
-  // ── Pricing Calculator ──
+  // Demo tab switcher
+  document.querySelectorAll('.demo-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.demo-tab').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.demo-panel').forEach(p => { p.hidden = true; });
+      btn.classList.add('active');
+      const panel = document.getElementById(btn.dataset.panel);
+      if (panel) panel.hidden = false;
+    });
+  });
+
+  // Pricing Calculator
   (function() {
     const BANDS = [
-      { label: 'Micro',      range: '≤ 500',            max: 500,      w: 4500,  n: 2500,  m: 3500  },
-      { label: 'Small',      range: '501–2,500',         max: 2500,     w: 6750,  n: 3750,  m: 5250  },
-      { label: 'Medium',     range: '2,501–10,000',      max: 10000,    w: 11250, n: 6250,  m: 8750  },
-      { label: 'Large',      range: '10,001–25,000',     max: 25000,    w: 18000, n: 10000, m: 14000 },
-      { label: 'Regional',   range: '25,001–50,000',     max: 50000,    w: 27000, n: 15000, m: 21000 },
-      { label: 'Major',      range: '50,001–100,000',    max: 100000,   w: 38500, n: 21500, m: 29500 },
-      { label: 'Metro',      range: '100,001–200,000',   max: 200000,   w: 54000, n: 30000, m: 42000 },
-      { label: 'Enterprise', range: '200,001+',          max: Infinity, w: null,  n: null,  m: null  },
+      { label: 'Micro',      range: '≤ 500',          max: 500,      w: 4500,  n: 2500,  m: 3500  },
+      { label: 'Small',      range: '501–2,500',       max: 2500,     w: 6750,  n: 3750,  m: 5250  },
+      { label: 'Medium',     range: '2,501–10,000',    max: 10000,    w: 11250, n: 6250,  m: 8750  },
+      { label: 'Large',      range: '10,001–25,000',   max: 25000,    w: 18000, n: 10000, m: 14000 },
+      { label: 'Regional',   range: '25,001–50,000',   max: 50000,    w: 27000, n: 15000, m: 21000 },
+      { label: 'Major',      range: '50,001–100,000',  max: 100000,   w: 38500, n: 21500, m: 29500 },
+      { label: 'Metro',      range: '100,001–200,000', max: 200000,   w: 54000, n: 30000, m: 42000 },
+      { label: 'Enterprise', range: '200,001+',        max: Infinity, w: null,  n: null,  m: null  },
     ];
     const TIER_MULT = { essential: 0.55, professional: 1.0, enterprise_tier: 1.55 };
-
     let selectedTier = 'professional';
 
     function getBand(n) { return BANDS.find(b => n <= b.max); }
@@ -1169,13 +1113,11 @@
     function update() {
       const enrollment = parseInt(document.getElementById('enrollInput').value) || 0;
       const band = getBand(enrollment);
-      const pill = document.getElementById('bandPill');
-      pill.textContent = band.label + ' Band · ' + band.range;
-
+      document.getElementById('bandPill').textContent = band.label + ' Band · ' + band.range;
       const results = document.getElementById('calcResults');
 
       if (band.label === 'Enterprise') {
-        results.innerHTML = '<div class="enterprise-notice"><strong>Enterprise Enrollment (25,001+ students)</strong>Pricing for large districts is custom-structured based on enrollment, product mix, and multi-year commitment. Contact us for a tailored proposal.</div>';
+        results.innerHTML = '<div class="enterprise-notice"><strong>Enterprise Enrollment (200,001+ students)</strong>Pricing for large districts is custom-structured based on enrollment, product mix, and multi-year commitment. Contact us for a tailored proposal.</div>';
         return;
       }
 
@@ -1183,7 +1125,6 @@
       const chkN = document.getElementById('chkNavigator').checked;
       const chkM = document.getElementById('chkMeridian').checked;
       const mult = TIER_MULT[selectedTier];
-
       const selected = [];
       if (chkW) selected.push({ name: '📍 Waypoint',  base: band.w });
       if (chkN) selected.push({ name: '🧭 Navigator', base: band.n });
@@ -1197,7 +1138,6 @@
       const discPct = selected.length >= 3 ? 0.25 : (selected.length === 2 ? 0.15 : 0);
       let subtotal = 0;
       let html = '';
-
       selected.forEach(p => {
         const price = round50(p.base * mult);
         subtotal += price;
@@ -1213,11 +1153,9 @@
       } else {
         html += '<div class="total-row"><span class="total-label-text">Total / Year</span><span class="total-amt">' + fmt(subtotal) + '</span></div>';
       }
-
       results.innerHTML = html;
     }
 
-    // Sync slider ↔ input
     const slider = document.getElementById('enrollSlider');
     const input  = document.getElementById('enrollInput');
     if (slider && input) {
@@ -1227,8 +1165,6 @@
         slider.value = Math.min(200000, v);
         update();
       });
-
-      // Tier buttons
       document.querySelectorAll('.tier-btn').forEach(btn => {
         btn.addEventListener('click', () => {
           document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
@@ -1237,12 +1173,9 @@
           update();
         });
       });
-
-      // Product checkboxes
       ['chkWaypoint','chkNavigator','chkMeridian'].forEach(id => {
         document.getElementById(id).addEventListener('change', update);
       });
-
       update();
     }
   })();

@@ -43,6 +43,8 @@ import MeridianFolderReadinessPage from './pages/meridian/MeridianFolderReadines
 import MeridianCAPTrackerPage from './pages/meridian/MeridianCAPTrackerPage'
 import MeridianWaypointSyncPage from './pages/meridian/MeridianWaypointSyncPage'
 import MeridianIntegrationPage from './pages/meridian/MeridianIntegrationPage'
+import MeridianSPPI13Page from './pages/meridian/MeridianSPPI13Page'
+import MeridianRDAPage from './pages/meridian/MeridianRDAPage'
 
 // Public pages
 import LandingPage from './pages/LandingPage'
@@ -154,6 +156,8 @@ function App() {
               <Route path="/meridian/cap" element={<RequireRole roles={STAFF_ROLES}><MeridianCAPTrackerPage /></RequireRole>} />
               <Route path="/meridian/waypoint-sync" element={<RequireRole roles={STAFF_ROLES}><MeridianWaypointSyncPage /></RequireRole>} />
               <Route path="/meridian/integration" element={<RequireRole roles={STAFF_ROLES}><MeridianIntegrationPage /></RequireRole>} />
+              <Route path="/meridian/transition" element={<RequireRole roles={STAFF_ROLES}><MeridianSPPI13Page /></RequireRole>} />
+              <Route path="/meridian/rda" element={<RequireRole roles={STAFF_ROLES}><MeridianRDAPage /></RequireRole>} />
             </Route>
 
             {/* ── Origins product routes ── */}

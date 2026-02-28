@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-02-28 (Session R — clearpathedgroup.com redesign + demo request form)
+> Last updated: 2026-02-28 (Session S — Meridian SPPI-13 Secondary Transition Tracker + RDA Dashboard)
 
 ---
 
@@ -12,7 +12,7 @@
 - **whitepaper.html:** 20-point DAEP compliance self-audit checklist, 5 sections with TEC citation callout boxes, scorecard with scoring bands (18–20 compliant / 14–17 at risk / <14 urgent), print-optimized CSS, "Save as PDF" button. Lead magnet for district sales.
 - **Hosting:** Cloudflare Pages — `waypoint` project (app, deployed via GitHub Actions on push to `main`), `cpeg-site` project (marketing site, deployed via GitHub Actions `deploy-clearpath-site.yml` on push to `main` — **do NOT use `node deploy-clearpath.mjs` Direct Upload**, it creates broken deployments)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
-- **Migrations applied:** 001–048 (production). Migration 044 (Origins schema) NOT YET applied.
+- **Migrations applied:** 001–048 (production). Migration 044 (Origins schema) NOT YET applied. Migration 049 (SPPI-13 + RDA tables) written but NOT YET applied — paste SQL Editor.
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
 - **Waypoint admin:** `admin@waypoint.internal` / `Waypoint2025!` → `/waypoint-admin`
 - **Email notifications:** Live via Resend — sandbox sender `onboarding@resend.dev` still active. Code updated to default `noreply@waypointdaep.com` but Supabase secret + function redeploy still needed.
@@ -61,7 +61,7 @@
 - Teacher referral page (`/referral`), DAEP scoring page (`/daep/scoring`)
 - Bulk incident export (select checkboxes → Export PDF/Excel)
 - **Navigator module** — referrals, placements, supports, student detail, reports, goals & progress, data import (gated by `hasProduct('navigator')`)
-- **Meridian module (operationally complete)** — Dashboard, Timelines, Student Detail (Schedule ARD modal, Escalate modal, Link Waypoint modal, Generate Compliance PDF), Dyslexia/HB3928 (Mark Reviewed modal), CAP Tracker (task toggle, Log New Finding modal, Generate TEA Docs PDF), Folder Readiness, Waypoint Sync, Integration. All hooks have `refetch()`. Mutations in `useMeridian.js`.
+- **Meridian module (operationally complete)** — Dashboard, Timelines, Student Detail (Schedule ARD modal, Escalate modal, Link Waypoint modal, Generate Compliance PDF), Dyslexia/HB3928 (Mark Reviewed modal), CAP Tracker (task toggle, Log New Finding modal, Generate TEA Docs PDF), Folder Readiness, Waypoint Sync, Integration, **Transition SPPI-13** (compliance table + TransitionPlanModal 5 accordion elements + jsPDF report), **RDA Dashboard** (DL banner, 3 domain sections, indicator cards Live/Manual, RDADataModal 3-step, IndicatorEditModal). All hooks have `refetch()`. Mutations in `useMeridian.js`.
 - **DAEP Analytics** — Analytics tab on DAEP Dashboard: CapacityTrackerWidget (occupied/reserved/remaining), EnrollmentByGradeTable (sub-pop breakdown). Reports → Enrollment tab. IncidentDetailPage capacity banner. `set_daep_capacity` RPC applied to DB (migration 048).
 - **Origins module (code complete)** — 8 staff pages + full family portal: student 7-step scenario player (choose → outcome → reflect → commit → complete), parent view with conversation starters, 18 TEC-aligned global scenarios. Migration 044 NOT yet applied — runs off localStorage until then.
 - **Cloudflare Web Analytics** — auto-injected via Cloudflare Pages dashboard (no code token needed)
@@ -111,8 +111,9 @@
 7. **Supabase redirect URLs** — add `https://waypoint.clearpathedgroup.com/reset-password` to Supabase Auth → URL Configuration → Redirect URLs.
 8. **Google Search Console** — register clearpathedgroup.com to accelerate search indexing.
 9. **Supabase Pro upgrade** — required to permanently enable HaveIBeenPwned password protection ($25/month).
-10. **Migration 049** — `meridian_escalations` table for persistent escalation logging. Currently Escalate button shows modal but logs to console only.
-11. **First pilot district** — not yet contracted. Product is sales-ready.
+10. **Apply migration 049** — `supabase/migrations/049_meridian_transition_rda.sql` creates `meridian_secondary_transitions`, `meridian_rda_determination`, `meridian_rda_indicators`. Paste SQL into SQL Editor. Pages exist and build clean; empty-state safe until migration applied.
+11. **Meridian escalations table** — Escalate button shows modal but logs to console only. Needs a future migration for `meridian_escalations` — separate from 049.
+12. **First pilot district** — not yet contracted. Product is sales-ready.
 12. **clearpathedgroup.com custom domain** — `www.clearpathedgroup.com` CNAME record needs to be added manually in Cloudflare DNS: Type=CNAME, Name=`www`, Target=`cpeg-site.pages.dev`, Proxied=ON. Root domain (`clearpathedgroup.com`) DNS is verified; TLS cert may still be provisioning. Check Cloudflare Pages → cpeg-site → Custom Domains if either domain shows errors.
 
 ---
@@ -139,6 +140,6 @@
 
 ## Don't Touch Right Now
 
-- `supabase/migrations/` — migrations 001–048 applied to production; 044 NOT applied yet; don't re-run earlier ones
+- `supabase/migrations/` — migrations 001–048 applied to production; 044 and 049 NOT applied yet; don't re-run earlier ones
 - `.env.local` — credentials live here; do not commit
 - Demo seed data (Lone Star ISD) — keep intact for demos

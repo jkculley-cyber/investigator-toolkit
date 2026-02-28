@@ -268,6 +268,93 @@ export async function toggleCAPTask({ taskId, currentStatus }) {
   return { error }
 }
 
+// ── Secondary Transition (SPPI-13) + RDA ─────────────────────────────────────
+
+function currentSchoolYear() {
+  const now = new Date()
+  const y = now.getFullYear()
+  return now.getMonth() >= 7 ? `${y}-${String(y + 1).slice(2)}` : `${y - 1}-${String(y).slice(2)}`
+}
+
+export function useSPPI13Students() {
+  const { districtId } = useAuth()
+  return useQuery(() =>
+    supabase
+      .from('meridian_students')
+      .select(`
+        id, first_name, last_name, grade, campus_id,
+        sped_status,
+        campus:campuses(id, name),
+        meridian_ieps(id, status),
+        meridian_secondary_transitions(
+          id, school_year,
+          has_postsecondary_goals, postsecondary_goals_date,
+          education_goal, employment_goal, independent_living_goal,
+          has_transition_assessments, transition_assessments_date, assessment_types,
+          has_transition_services, transition_services_date,
+          student_participated, student_participation_date,
+          agency_invited, agency_participated, agency_name, agency_invitation_date,
+          notes, updated_by, updated_at
+        )
+      `)
+      .eq('district_id', districtId)
+      .eq('sped_status', 'eligible')
+      .gte('grade', 10)
+      .order('last_name')
+  , [districtId])
+}
+
+export function useRDADetermination() {
+  const { districtId } = useAuth()
+  const sy = currentSchoolYear()
+  return useQuery(() =>
+    supabase
+      .from('meridian_rda_determination')
+      .select('*')
+      .eq('district_id', districtId)
+      .eq('school_year', sy)
+      .maybeSingle()
+  , [districtId])
+}
+
+export function useRDAIndicators() {
+  const { districtId } = useAuth()
+  const sy = currentSchoolYear()
+  return useQuery(() =>
+    supabase
+      .from('meridian_rda_indicators')
+      .select('*')
+      .eq('district_id', districtId)
+      .eq('school_year', sy)
+  , [districtId])
+}
+
+export async function upsertTransitionPlan(data) {
+  const { error } = await supabase
+    .from('meridian_secondary_transitions')
+    .upsert(data, { onConflict: 'district_id,student_id,school_year' })
+  return { error }
+}
+
+export async function upsertRDADetermination(data) {
+  const cadenceMap = { dl2: 90, dl3: 60, dl4: 30 }
+  const payload = {
+    ...data,
+    checkin_cadence_days: cadenceMap[data.determination_level] ?? null,
+  }
+  const { error } = await supabase
+    .from('meridian_rda_determination')
+    .upsert(payload, { onConflict: 'district_id,school_year' })
+  return { error }
+}
+
+export async function upsertRDAIndicator(data) {
+  const { error } = await supabase
+    .from('meridian_rda_indicators')
+    .upsert(data, { onConflict: 'district_id,school_year,sppi_number' })
+  return { error }
+}
+
 export async function createCAPFinding({ districtId, campusId, findingNumber, description, legalCitation, systemicDue, childDue, tasks }) {
   const { data, error } = await supabase.from('meridian_cap_findings').insert({
     district_id: districtId,

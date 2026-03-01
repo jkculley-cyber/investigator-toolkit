@@ -2,16 +2,19 @@ import { useState, useEffect, useCallback, useMemo } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 import { format, addDays, differenceInDays, parseISO } from 'date-fns'
+import { SCENARIOS as ORIGINS_SCENARIOS } from '../lib/originsScenarios'
 import {
   BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, Tooltip, ResponsiveContainer, Legend,
 } from 'recharts'
 
+const APP_BASE = 'https://waypoint.clearpathedgroup.com'
+
 const TIERS = ['essential', 'professional', 'enterprise']
 const CAMPUS_TYPES = ['elementary', 'middle', 'high', 'daep', 'jjaep', 'other']
-const ALL_PRODUCTS = ['waypoint', 'navigator', 'meridian']
-const PRODUCT_LABELS = { waypoint: 'Waypoint', navigator: 'Navigator', meridian: 'Meridian' }
-const PRODUCT_COLORS = { waypoint: '#f97316', navigator: '#3b82f6', meridian: '#a855f7' }
+const ALL_PRODUCTS = ['waypoint', 'navigator', 'meridian', 'origins']
+const PRODUCT_LABELS = { waypoint: 'Waypoint', navigator: 'Navigator', meridian: 'Meridian', origins: 'Origins' }
+const PRODUCT_COLORS = { waypoint: '#f97316', navigator: '#3b82f6', meridian: '#a855f7', origins: '#0d9488' }
 
 const TIER_COLORS = {
   essential:    'bg-gray-100 text-gray-700',
@@ -82,7 +85,7 @@ export default function WaypointAdminPage() {
         </div>
         <div className="flex items-center gap-4">
           {/* Command Center URL pill */}
-          <div className="hidden sm:flex items-center gap-1.5 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5">
+          <div className="flex items-center gap-1.5 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5">
             <span className="text-xs text-gray-400 font-mono select-all">{COMMAND_CENTER_URL}</span>
             <button
               onClick={copyCommandCenterUrl}
@@ -239,7 +242,7 @@ export default function WaypointAdminPage() {
         {activeTab === 'dashboard' && <OwnerDashboard />}
 
         {/* Product Hub tab */}
-        {activeTab === 'hub' && <ProductHub />}
+        {activeTab === 'hub' && <ProductHub districts={districts} loadingDistricts={loadingDistricts} />}
       </main>
 
       {showProvisionModal && (
@@ -1253,13 +1256,13 @@ const HUB_PRODUCTS = [
     status: 'Live',
     description: 'Full DAEP lifecycle — incident creation, approval chain, SPED compliance blocking, transition plans, orientation kiosk, parent portal.',
     links: [
-      { label: 'Dashboard',       href: '/dashboard' },
-      { label: 'Incidents',       href: '/incidents' },
-      { label: 'DAEP Dashboard',  href: '/daep' },
-      { label: 'Compliance',      href: '/compliance' },
-      { label: 'Transition Plans',href: '/plans' },
-      { label: 'Reports',         href: '/reports' },
-      { label: 'Calendar',        href: '/calendar' },
+      { label: 'Dashboard',       href: `${APP_BASE}/dashboard` },
+      { label: 'Incidents',       href: `${APP_BASE}/incidents` },
+      { label: 'DAEP Dashboard',  href: `${APP_BASE}/daep` },
+      { label: 'Compliance',      href: `${APP_BASE}/compliance` },
+      { label: 'Transition Plans',href: `${APP_BASE}/plans` },
+      { label: 'Reports',         href: `${APP_BASE}/reports` },
+      { label: 'Calendar',        href: `${APP_BASE}/calendar` },
     ],
   },
   {
@@ -1267,12 +1270,12 @@ const HUB_PRODUCTS = [
     status: 'Live',
     description: 'Referrals, ISS/OSS placements, proactive supports, escalation risk scoring, skill gap mapping, effectiveness tracking, disproportionality radar.',
     links: [
-      { label: 'Nav Dashboard',      href: '/navigator' },
-      { label: 'Escalation Engine',  href: '/navigator/escalation' },
-      { label: 'Skill Gap Map',      href: '/navigator/skill-map' },
-      { label: 'Effectiveness',      href: '/navigator/effectiveness' },
-      { label: 'Disproportionality', href: '/navigator/disproportionality' },
-      { label: 'Pilot Summary',      href: '/navigator/pilot' },
+      { label: 'Nav Dashboard',      href: `${APP_BASE}/navigator` },
+      { label: 'Escalation Engine',  href: `${APP_BASE}/navigator/escalation` },
+      { label: 'Skill Gap Map',      href: `${APP_BASE}/navigator/skill-map` },
+      { label: 'Effectiveness',      href: `${APP_BASE}/navigator/effectiveness` },
+      { label: 'Disproportionality', href: `${APP_BASE}/navigator/disproportionality` },
+      { label: 'Pilot Summary',      href: `${APP_BASE}/navigator/pilot` },
     ],
   },
   {
@@ -1280,39 +1283,41 @@ const HUB_PRODUCTS = [
     status: 'Live',
     description: 'ARD timelines, dyslexia/HB 3928, folder readiness, CAP tracker, SPPI-13 secondary transition, RDA indicators dashboard.',
     links: [
-      { label: 'SPED Overview',       href: '/meridian' },
-      { label: 'ARD Timelines',       href: '/meridian/timelines' },
-      { label: 'Dyslexia / HB 3928',  href: '/meridian/dyslexia' },
-      { label: 'Folder Readiness',    href: '/meridian/folders' },
-      { label: 'CAP Tracker',         href: '/meridian/cap' },
-      { label: 'Transition SPPI-13',  href: '/meridian/transition' },
-      { label: 'RDA Dashboard',       href: '/meridian/rda' },
+      { label: 'SPED Overview',       href: `${APP_BASE}/meridian` },
+      { label: 'ARD Timelines',       href: `${APP_BASE}/meridian/timelines` },
+      { label: 'Dyslexia / HB 3928',  href: `${APP_BASE}/meridian/dyslexia` },
+      { label: 'Folder Readiness',    href: `${APP_BASE}/meridian/folders` },
+      { label: 'CAP Tracker',         href: `${APP_BASE}/meridian/cap` },
+      { label: 'Transition SPPI-13',  href: `${APP_BASE}/meridian/transition` },
+      { label: 'RDA Dashboard',       href: `${APP_BASE}/meridian/rda` },
     ],
   },
   {
     name: 'Origins', tagline: 'Family Portal', color: '#0d9488',
-    status: 'Live (migration 044 needed for DB)',
+    status: 'Live',
     description: 'Restorative family engagement — student scenario player (7-step), parent conversation starters, 18 TEC-aligned scenarios, skill pathways.',
     links: [
-      { label: 'Origins Dashboard',  href: '/origins' },
-      { label: 'Response Moments',   href: '/origins/response-moments' },
-      { label: 'Family Workspace',   href: '/origins/family-workspace' },
-      { label: 'Skill Pathways',     href: '/origins/pathways' },
-      { label: 'Student Portal',     href: '/family/student' },
-      { label: 'Parent Portal',      href: '/family/parent' },
+      { label: 'Origins Dashboard',  href: `${APP_BASE}/origins` },
+      { label: 'Response Moments',   href: `${APP_BASE}/origins/response-moments` },
+      { label: 'Family Workspace',   href: `${APP_BASE}/origins/family-workspace` },
+      { label: 'Skill Pathways',     href: `${APP_BASE}/origins/pathways` },
+      { label: 'Student Portal',     href: `${APP_BASE}/family/student` },
+      { label: 'Parent Portal',      href: `${APP_BASE}/family/parent` },
     ],
   },
 ]
 
 const DEMO_SITES = [
-  { label: 'App — Staff Login',   url: 'https://waypoint.clearpathedgroup.com' },
-  { label: 'App — Parent Portal', url: 'https://waypoint.clearpathedgroup.com/parent' },
-  { label: 'DAEP Kiosk',          url: 'https://waypoint.clearpathedgroup.com/kiosk' },
-  { label: 'Orientation Kiosk',   url: 'https://waypoint.clearpathedgroup.com/orientation' },
-  { label: 'Family Portal',       url: 'https://waypoint.clearpathedgroup.com/family' },
+  { label: 'App — Staff Login',   url: APP_BASE },
+  { label: 'App — Parent Portal', url: `${APP_BASE}/parent` },
+  { label: 'Navigator',           url: `${APP_BASE}/navigator` },
+  { label: 'Meridian (SPED)',     url: `${APP_BASE}/meridian` },
+  { label: 'Origins (Family)',    url: `${APP_BASE}/family` },
+  { label: 'DAEP Kiosk',          url: `${APP_BASE}/kiosk` },
+  { label: 'Orientation Kiosk',   url: `${APP_BASE}/orientation` },
   { label: 'Marketing Site',      url: 'https://clearpathedgroup.com' },
   { label: 'Whitepaper',          url: 'https://clearpathedgroup.com/whitepaper.html' },
-  { label: 'Waypoint Admin',      url: 'https://waypoint.clearpathedgroup.com/waypoint-admin' },
+  { label: 'Waypoint Admin',      url: `${APP_BASE}/waypoint-admin` },
 ]
 
 const DEMO_ACCOUNTS_HUB = [
@@ -1343,9 +1348,42 @@ const DEMO_ACCOUNTS_HUB = [
   },
 ]
 
-function ProductHub() {
+function ProductHub({ districts = [], loadingDistricts = false }) {
   const [showPasswords, setShowPasswords] = useState(false)
   const [copied, setCopied] = useState(null)
+  const [scenarioCount, setScenarioCount] = useState(null)  // null = loading, number = count
+  const [seeding, setSeeding] = useState(false)
+  const [seedMsg, setSeedMsg] = useState(null)
+
+  useEffect(() => {
+    supabase
+      .from('origins_scenarios')
+      .select('*', { count: 'exact', head: true })
+      .is('district_id', null)
+      .then(({ count }) => setScenarioCount(count ?? 0))
+  }, [])
+
+  async function seedOrigins() {
+    setSeeding(true)
+    setSeedMsg(null)
+    const rows = ORIGINS_SCENARIOS.map(s => ({
+      district_id:   null,
+      title:         s.title,
+      description:   s.description,
+      skill_pathway: s.skill_pathway,
+      grade_band:    s.grade_band,
+      content:       { ...s.content, tec_offense: s.tec_offense },
+      is_active:     s.is_active ?? true,
+    }))
+    const { error } = await supabase.from('origins_scenarios').insert(rows)
+    if (error) {
+      setSeedMsg({ ok: false, text: error.message })
+    } else {
+      setScenarioCount(rows.length)
+      setSeedMsg({ ok: true, text: `${rows.length} scenarios seeded successfully.` })
+    }
+    setSeeding(false)
+  }
 
   function copy(text, key) {
     navigator.clipboard.writeText(text).then(() => {
@@ -1356,6 +1394,58 @@ function ProductHub() {
 
   return (
     <div className="space-y-8">
+
+      {/* Live District Roster */}
+      <section>
+        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Live District Roster</h2>
+        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+          {loadingDistricts ? (
+            <p className="text-sm text-gray-500 p-5">Loading…</p>
+          ) : districts.length === 0 ? (
+            <p className="text-sm text-gray-500 p-5">No districts provisioned yet.</p>
+          ) : (
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-800 text-left">
+                  <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">District</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Tier</th>
+                  <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Active Products</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                {districts.map(d => {
+                  const prods = d.settings?.products || ['waypoint']
+                  return (
+                    <tr key={d.id} className="hover:bg-gray-800/40 transition-colors">
+                      <td className="px-4 py-3 font-medium text-white">{d.name}</td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium capitalize ${TIER_COLORS[d.tier] || TIER_COLORS.essential}`}>
+                          {d.tier}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3">
+                        <div className="flex flex-wrap gap-1.5">
+                          {prods.map(p => (
+                            <span
+                              key={p}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium text-white"
+                              style={{ backgroundColor: (PRODUCT_COLORS[p] || '#6b7280') + '33', border: `1px solid ${PRODUCT_COLORS[p] || '#6b7280'}66` }}
+                            >
+                              <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: PRODUCT_COLORS[p] || '#6b7280' }} />
+                              {PRODUCT_LABELS[p] || p}
+                            </span>
+                          ))}
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
       {/* Product Cards */}
       <section>
         <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Compass Pathway — All Products</h2>
@@ -1414,6 +1504,37 @@ function ProductHub() {
               </svg>
             </a>
           ))}
+        </div>
+      </section>
+
+      {/* Admin Actions */}
+      <section>
+        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Admin Actions</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Origins — Seed Global Scenarios */}
+          <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+            <div className="flex items-start justify-between gap-2 mb-1">
+              <h3 className="text-sm font-semibold text-white">Origins — Global Scenarios</h3>
+              {scenarioCount === null ? (
+                <span className="text-xs text-gray-500">Checking…</span>
+              ) : scenarioCount > 0 ? (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-teal-900/60 text-teal-300 font-medium">{scenarioCount} seeded</span>
+              ) : (
+                <span className="text-xs px-2 py-0.5 rounded-full bg-yellow-900/60 text-yellow-300 font-medium">Not seeded</span>
+              )}
+            </div>
+            <p className="text-xs text-gray-500 mb-4">Insert the 18 TEC-aligned global scenarios into <code className="text-gray-400">origins_scenarios</code>. Safe to run once — check count before clicking.</p>
+            {seedMsg && (
+              <p className={`text-xs mb-3 font-medium ${seedMsg.ok ? 'text-teal-400' : 'text-red-400'}`}>{seedMsg.text}</p>
+            )}
+            <button
+              onClick={seedOrigins}
+              disabled={seeding || scenarioCount > 0}
+              className="px-3 py-2 bg-teal-700 hover:bg-teal-600 disabled:bg-gray-700 disabled:cursor-not-allowed text-white text-xs font-medium rounded-lg transition-colors"
+            >
+              {seeding ? 'Seeding…' : scenarioCount > 0 ? `Already Seeded (${scenarioCount})` : 'Seed 18 Global Scenarios'}
+            </button>
+          </div>
         </div>
       </section>
 

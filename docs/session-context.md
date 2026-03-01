@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-01 (Session V — Demo seed data + Product Hub + Command Center URL)
+> Last updated: 2026-03-01 (Session X — Navigator 050 wiring + Partner Chat + ops site overhaul)
 
 ---
 
@@ -55,7 +55,7 @@
 - Audit log table (migration 035) + `src/lib/audit.js` helper
 - Data import wizard (campuses, students, staff, incidents)
 - Laserfiche DAEP report import — daily Excel sync, upserts by Instance ID
-- Waypoint internal admin panel (`/waypoint-admin`) — provision districts; Manage drawer; **Business Dashboard** (ARR/MRR/pipeline metrics, charts, contracts CRUD); **Product Hub** tab (product cards, 8 demo site links, demo credentials with copy/show-password toggle); **header URL pill** (live URL `https://waypoint.clearpathedgroup.com/waypoint-admin` with copy + open buttons)
+- Waypoint internal admin panel (`/waypoint-admin`) — provision districts; Manage drawer; **Business Dashboard** (ARR/MRR/pipeline metrics, charts, contracts CRUD); **Product Hub** tab (product cards, 8 demo site links, demo credentials with copy/show-password toggle); **header URL pill** (live URL `https://waypoint.clearpathedgroup.com/waypoint-admin` with copy + open buttons); **Partner Chat** floating bubble (bottom-right, polls ops Supabase `xbpuqaqpcbixxodblaes` messages table every 5s, sender=Kim)
 - Password reset flow (`/reset-password`)
 - Error boundary — crash recovery screen
 - **PWA** — `manifest.json` + service worker + Apple meta tags; installable on iOS/Android/Chrome desktop
@@ -115,8 +115,9 @@
 9. **Supabase Pro upgrade** — required to permanently enable HaveIBeenPwned password protection ($25/month).
 10. ~~**Apply migration 049**~~ — ✅ Applied 2026-03-01 via SQL Editor. `meridian_secondary_transitions`, `meridian_rda_determination`, `meridian_rda_indicators` tables now live.
 13. ~~**Apply migration 050**~~ — ✅ Applied 2026-03-01 via SQL Editor. `skill_gap`, `skill_gap_notes` on `navigator_referrals`; `outcome_notes`, `incidents_before`, `incidents_after` on `navigator_supports` now live.
-14. **Wire skill_gap field into Referral form** — Migration 050 applied; the navigator referral create/edit form still needs a `<select>` for `skill_gap`. Required for Skill Gap Map to populate.
-15. **Wire effectiveness fields into Support form** — `incidents_before`, `incidents_after`, `outcome_notes` need inputs in the Navigator Supports edit modal for Effectiveness page to show data.
+14. ~~**Wire skill_gap field into Referral form**~~ — ✅ Done. `skill_gap` select + `skill_gap_notes` textarea in review form. Skill Gap Map now populates.
+15. ~~**Wire effectiveness fields into Support form**~~ — ✅ Done. `EditSupportDrawer` in NavigatorSupportsPage with `incidents_before`, `incidents_after`, `outcome_notes` (shown when status=completed).
+16. **Create `messages` table in ops Supabase** — Run SQL in https://supabase.com/dashboard/project/xbpuqaqpcbixxodblaes/sql/new to activate Partner Chat (see handover). Table: `id BIGSERIAL, sender TEXT, message TEXT, created_at TIMESTAMPTZ DEFAULT now()` + anon RLS policy.
 11. **Meridian escalations table** — Escalate button shows modal but logs to console only. Needs a future migration for `meridian_escalations` — separate from 049.
 12. **First pilot district** — not yet contracted. Product is sales-ready.
 12. **clearpathedgroup.com custom domain** — `www.clearpathedgroup.com` CNAME record needs to be added manually in Cloudflare DNS: Type=CNAME, Name=`www`, Target=`cpeg-site.pages.dev`, Proxied=ON. Root domain (`clearpathedgroup.com`) DNS is verified; TLS cert may still be provisioning. Check Cloudflare Pages → cpeg-site → Custom Domains if either domain shows errors.

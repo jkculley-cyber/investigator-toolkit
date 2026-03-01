@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Clear Path Education Group | Texas K-12 Education Consulting</title>
-<meta name="description" content="Clear Path Education Group partners with Texas school districts and campuses to provide purposeful, research-aligned solutions — from behavior and compliance to instructional excellence and leadership development.">
+<title>Clear Path Education Group | Texas DAEP &amp; SPED Compliance Software</title>
+<meta name="description" content="Waypoint automates Texas DAEP compliance — TEC Chapter 37 checklists, SPED hard blocks, parent portals, and one-click PEIMS export. Built for Texas school districts. Request a free demo.">
 <meta name="keywords" content="Texas education consulting, DAEP, school discipline management, K-12 consulting Texas, PBIS, MTSS, student behavior, education technology Texas">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://clearpathedgroup.com/">
@@ -704,6 +704,75 @@
   .footer-bottom p { font-size: 0.78rem; color: rgba(240,230,211,0.25); }
   .footer-note { font-size: 0.72rem; color: var(--amber); font-weight: 600; letter-spacing: 0.06em; }
 
+  /* ── WITHOUT/WITH COMPARISON STRIP ── */
+  .compare-strip {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 0;
+    background: linear-gradient(135deg, rgba(239,68,68,0.05) 0%, rgba(26,10,46,0.6) 50%, rgba(34,197,94,0.05) 100%);
+    border-top: 1px solid rgba(107,47,160,0.2);
+    border-bottom: 1px solid rgba(107,47,160,0.2);
+    position: relative; z-index: 1;
+  }
+  .compare-col {
+    padding: 36px 5%;
+  }
+  .compare-without { border-right: 1px solid rgba(107,47,160,0.2); }
+  .compare-divider {
+    padding: 0 20px;
+    font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700;
+    color: var(--text-muted); letter-spacing: 0.08em;
+    text-align: center; flex-shrink: 0;
+  }
+  .compare-header {
+    font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; margin-bottom: 16px;
+  }
+  .compare-without .compare-header { color: #fca5a5; }
+  .compare-with .compare-header { color: #86efac; }
+  .compare-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .compare-col ul li {
+    font-size: 0.84rem; color: var(--text-muted); line-height: 1.5;
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .compare-without ul li::before { content: '✕'; color: #fca5a5; font-size: 0.7rem; margin-top: 2px; flex-shrink: 0; }
+  .compare-with ul li::before { content: '✓'; color: #86efac; font-size: 0.8rem; margin-top: 1px; flex-shrink: 0; }
+  @media (max-width: 960px) {
+    .compare-strip { grid-template-columns: 1fr; }
+    .compare-without { border-right: none; border-bottom: 1px solid rgba(107,47,160,0.2); }
+    .compare-divider { padding: 12px 0; }
+  }
+
+  /* ── VIDEO PLAY OVERLAY ── */
+  .video-wrapper { position: relative; }
+  .video-play-overlay {
+    position: absolute; inset: 0;
+    background: rgba(10,0,21,0.82);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 14px; cursor: pointer;
+    border-radius: 8px;
+    transition: opacity 0.25s;
+    z-index: 2;
+  }
+  .video-play-overlay:hover { background: rgba(10,0,21,0.7); }
+  .video-play-overlay.hidden { opacity: 0; pointer-events: none; }
+  .video-play-btn {
+    width: 68px; height: 68px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--amber), var(--orange));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem; color: white;
+    box-shadow: 0 0 40px rgba(232,134,42,0.5);
+    padding-left: 5px;
+    transition: transform 0.2s;
+  }
+  .video-play-overlay:hover .video-play-btn { transform: scale(1.08); }
+  .video-play-meta {
+    font-size: 0.82rem; font-weight: 600; color: var(--text-muted);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+
   /* ── ANIMATIONS ── */
   .fade-up {
     opacity: 0; transform: translateY(28px);
@@ -775,7 +844,7 @@
     <li><a href="mailto:support@clearpathedgroup.com">Contact</a></li>
     <li><a href="security.html">Security</a></li>
   </ul>
-  <a href="mailto:support@clearpathedgroup.com" class="nav-cta">Connect With Us</a>
+  <a href="#contact" class="nav-cta">Request a Demo →</a>
 </nav>
 
 <!-- HERO -->
@@ -783,60 +852,60 @@
   <div class="hero-bg-ring"></div>
 
   <div class="hero-content">
-    <div class="hero-eyebrow"><span></span> Texas-Based Education Consulting</div>
-    <h1>Every District Deserves a Clear Path Forward</h1>
-    <p>We partner with school districts and campuses across Texas to provide purposeful, research-aligned pathways — from behavior solutions to instructional excellence and beyond.</p>
+    <div class="hero-eyebrow"><span></span> Built for Texas TEC Chapter 37 Compliance</div>
+    <h1>DAEP Compliance — Automated, Auditable, Done Right.</h1>
+    <p>One missed step in DAEP documentation becomes a TEA compliance finding. One missed manifestation determination for a student with an IEP becomes a federal violation. Waypoint automates every required step — so your staff can focus on the students in front of them.</p>
     <div class="hero-buttons">
-      <a href="#products" class="btn-primary">Explore Our Solutions &#8594;</a>
-      <a href="mailto:support@clearpathedgroup.com" class="btn-ghost">Talk to Our Team</a>
+      <a href="#products" class="btn-primary">See Waypoint in Action &#8594;</a>
+      <a href="#contact" class="btn-ghost">Request a Free Demo</a>
     </div>
   </div>
 
   <div class="hero-visual">
     <div class="path-card">
-      <div class="path-card-title">Navigate Your Journey</div>
+      <div class="path-card-title">Live Compliance Tracker</div>
       <div class="path-nodes">
         <div class="path-node">
           <div class="node-track">
-            <div class="node-dot active">🧭</div>
+            <div class="node-dot active">✅</div>
             <div class="node-line"></div>
           </div>
           <div class="node-info">
-            <h4>Compass Pathway</h4>
-            <p>Behavior &amp; Compliance Support</p>
-            <span class="node-badge badge-active"><a href="https://waypoint.clearpathedgroup.com" class="waypoint-link" target="_blank" rel="noopener noreferrer">Waypoint</a> · Navigator · Meridian</span>
+            <h4>Incident Documented</h4>
+            <p>Offense code, campus, approval chain auto-started</p>
+            <span class="node-badge badge-active">Checklist Generated</span>
           </div>
         </div>
         <div class="path-node">
           <div class="node-track">
-            <div class="node-dot">🧱</div>
+            <div class="node-dot active">✅</div>
             <div class="node-line"></div>
           </div>
           <div class="node-info">
-            <h4>Cornerstone Pathway</h4>
-            <p>Instructional Support</p>
-            <span class="node-badge badge-soon">Coming Soon</span>
+            <h4>Parent Notified</h4>
+            <p>Automatic notification + portal access granted</p>
+            <span class="node-badge badge-active">Acknowledged</span>
           </div>
         </div>
         <div class="path-node">
           <div class="node-track">
-            <div class="node-dot">🌅</div>
+            <div class="node-dot" style="background:rgba(239,68,68,0.2);border-color:rgba(239,68,68,0.5);">🔒</div>
             <div class="node-line"></div>
           </div>
           <div class="node-info">
-            <h4>Horizon Pathway</h4>
-            <p>Professional Development &amp; Coaching</p>
-            <span class="node-badge badge-soon">Coming Soon</span>
+            <h4>SPED Flag Detected</h4>
+            <p>Student has active IEP — placement blocked</p>
+            <span class="node-badge" style="background:rgba(239,68,68,0.12);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;">Hard Stop · MD Required</span>
           </div>
         </div>
         <div class="path-node">
           <div class="node-track">
-            <div class="node-dot">🏔️</div>
+            <div class="node-dot">📋</div>
           </div>
           <div class="node-info" style="padding-bottom:0">
-            <h4>Summit Pathway</h4>
-            <p>Leadership Development</p>
-            <span class="node-badge badge-soon">Coming Soon</span>
+            <h4>Manifestation Determination</h4>
+            <p>Placement locked until ARD meeting complete</p>
+            <span class="node-badge badge-soon">Awaiting Completion</span>
           </div>
         </div>
       </div>
@@ -847,20 +916,45 @@
 <!-- STATS BAR -->
 <div class="stats-bar">
   <div class="stats-bar-item">
+    <span class="snum">TEC</span>
+    <span class="slabel">Chapter 37 Built-In</span>
+  </div>
+  <div class="stats-bar-item">
+    <span class="snum">0</span>
+    <span class="slabel">Missed SPED Blocks</span>
+  </div>
+  <div class="stats-bar-item">
+    <span class="snum">1-Click</span>
+    <span class="slabel">PEIMS Data Export</span>
+  </div>
+  <div class="stats-bar-item">
     <span class="snum">100%</span>
     <span class="slabel">Texas-Focused</span>
   </div>
-  <div class="stats-bar-item">
-    <span class="snum">3</span>
-    <span class="slabel">Live Products</span>
+</div>
+
+<!-- WITHOUT / WITH COMPARISON -->
+<div class="compare-strip">
+  <div class="compare-col compare-without">
+    <div class="compare-header">❌ Without Waypoint</div>
+    <ul>
+      <li>Spreadsheets &amp; shared drives per campus</li>
+      <li>Staff manually checks every TEC requirement</li>
+      <li>SPED placement without automatic IEP verification</li>
+      <li>TEA audit prep takes days of digging</li>
+      <li>Parent notifications tracked in email threads</li>
+    </ul>
   </div>
-  <div class="stats-bar-item">
-    <span class="snum">K–12</span>
-    <span class="slabel">All Grade Levels</span>
-  </div>
-  <div class="stats-bar-item">
-    <span class="snum">TEC</span>
-    <span class="slabel">Code Aligned</span>
+  <div class="compare-divider">vs</div>
+  <div class="compare-col compare-with">
+    <div class="compare-header">✅ With Waypoint</div>
+    <ul>
+      <li>Single dashboard — every active DAEP placement</li>
+      <li>Compliance checklist auto-generated at incident creation</li>
+      <li>Hard stop — placement blocked until manifestation determination is complete</li>
+      <li>PEIMS discipline export in one click, audit-ready</li>
+      <li>Parent portal with documented acknowledgment on record</li>
+    </ul>
   </div>
 </div>
 
@@ -904,7 +998,7 @@
       <div class="product-main-demo">
         <div class="demo-tabs-nav">
           <button class="demo-tab active" data-panel="panel-slides">📊 Slide Deck</button>
-          <button class="demo-tab" data-panel="panel-video">▶ Narrated Overview</button>
+          <button class="demo-tab" data-panel="panel-video">▶ Watch Demo · 3 min</button>
         </div>
         <div id="panel-slides" class="demo-panel">
           <div class="slides-embed">
@@ -916,9 +1010,15 @@
           </div>
         </div>
         <div id="panel-video" class="demo-panel" hidden>
-          <video controls preload="metadata" class="demo-video">
-            <source src="Waypoint__Safety_and_Growth.mp4" type="video/mp4">
-          </video>
+          <div class="video-wrapper" id="videoWrapper">
+            <div class="video-play-overlay" id="videoPlayOverlay">
+              <div class="video-play-btn">▶</div>
+              <div class="video-play-meta">Narrated Product Overview · 3 min</div>
+            </div>
+            <video controls preload="none" class="demo-video" id="demoVideo">
+              <source src="Waypoint__Safety_and_Growth.mp4" type="video/mp4">
+            </video>
+          </div>
         </div>
       </div>
     </div>
@@ -1004,7 +1104,7 @@
   <p class="section-label">Investment</p>
   <h2 class="section-title">Transparent Pricing for Your District</h2>
   <div class="divider"></div>
-  <p class="section-subtitle">Annual subscription pricing scales with your enrollment. Adjust below to see your estimated investment — all prices shown in USD per year.</p>
+  <p class="section-subtitle">Annual subscription pricing scales with your enrollment. For context: a single TEA compliance finding typically costs $15,000–$50,000+ in legal fees, remediation, and staff time. Adjust below to see your estimated investment.</p>
 
   <div class="calc-box fade-up">
     <div class="calc-row">
@@ -1090,13 +1190,14 @@
       <div class="demo-form-row">
         <label for="df-concern">Biggest Compliance Challenge</label>
         <select id="df-concern" name="concern" required>
-          <option value="" disabled selected>Select your top priority…</option>
-          <option value="DAEP documentation &amp; TEC compliance">DAEP documentation &amp; TEC compliance</option>
-          <option value="SPED / ARD timeline tracking">SPED / ARD timeline tracking</option>
-          <option value="ISS / OSS tracking &amp; reporting">ISS / OSS tracking &amp; reporting</option>
-          <option value="PEIMS discipline data export">PEIMS discipline data export</option>
-          <option value="Repeat offender &amp; early warning alerts">Repeat offender &amp; early warning alerts</option>
-          <option value="Parent notification &amp; engagement">Parent notification &amp; engagement</option>
+          <option value="" disabled selected>Select your biggest challenge…</option>
+          <option value="DAEP documentation &amp; TEC Ch. 37 compliance">DAEP documentation &amp; TEC Ch. 37 compliance</option>
+          <option value="Avoiding a TEA compliance finding or federal violation">Avoiding a TEA compliance finding or federal violation</option>
+          <option value="SPED / IEP manifestation determination tracking">SPED / IEP manifestation determination tracking</option>
+          <option value="ARD timeline tracking &amp; IDEA compliance">ARD timeline tracking &amp; IDEA compliance</option>
+          <option value="ISS / OSS tracking &amp; escalation management">ISS / OSS tracking &amp; escalation management</option>
+          <option value="PEIMS discipline data export &amp; audit prep">PEIMS discipline data export &amp; audit prep</option>
+          <option value="Parent notification documentation">Parent notification documentation</option>
           <option value="TEA monitoring / corrective action plans">TEA monitoring / corrective action plans</option>
           <option value="Multiple of the above">Multiple of the above</option>
         </select>
@@ -1216,6 +1317,23 @@
         btn.textContent = 'Request My 30-Min Demo →';
         alert('Network error. Please email us at support@clearpathedgroup.com');
       }
+    });
+  })();
+
+  // Video play overlay
+  (function() {
+    const overlay = document.getElementById('videoPlayOverlay');
+    const video   = document.getElementById('demoVideo');
+    if (!overlay || !video) return;
+    overlay.addEventListener('click', function() {
+      overlay.classList.add('hidden');
+      video.play();
+    });
+    video.addEventListener('play', function() {
+      overlay.classList.add('hidden');
+    });
+    video.addEventListener('pause', function() {
+      if (video.currentTime === 0) overlay.classList.remove('hidden');
     });
   })();
 

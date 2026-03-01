@@ -37,6 +37,8 @@ const STATUS_CHART_COLORS = {
 
 // ─── Top-level page ───────────────────────────────────────────────────────────
 
+const COMMAND_CENTER_URL = 'https://waypoint.clearpathedgroup.com/waypoint-admin'
+
 export default function WaypointAdminPage() {
   const { user, signOut } = useAuth()
   const [districts, setDistricts] = useState([])
@@ -44,7 +46,15 @@ export default function WaypointAdminPage() {
   const [showProvisionModal, setShowProvisionModal] = useState(false)
   const [managingDistrict, setManagingDistrict] = useState(null)
   const [activeTab, setActiveTab] = useState('districts')
+  const [urlCopied, setUrlCopied] = useState(false)
   const serviceRoleKeyMissing = !import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
+
+  function copyCommandCenterUrl() {
+    navigator.clipboard.writeText(COMMAND_CENTER_URL).then(() => {
+      setUrlCopied(true)
+      setTimeout(() => setUrlCopied(false), 1600)
+    })
+  }
 
   const fetchDistricts = useCallback(async () => {
     setLoadingDistricts(true)
@@ -71,6 +81,31 @@ export default function WaypointAdminPage() {
           </div>
         </div>
         <div className="flex items-center gap-4">
+          {/* Command Center URL pill */}
+          <div className="hidden sm:flex items-center gap-1.5 bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5">
+            <span className="text-xs text-gray-400 font-mono select-all">{COMMAND_CENTER_URL}</span>
+            <button
+              onClick={copyCommandCenterUrl}
+              title="Copy URL"
+              className="shrink-0 text-gray-600 hover:text-orange-400 transition-colors ml-1"
+            >
+              {urlCopied
+                ? <svg className="h-3.5 w-3.5 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                : <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 01-.75.75H9a.75.75 0 01-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 01-2.25 2.25H6.75A2.25 2.25 0 014.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 011.927-.184" /></svg>
+              }
+            </button>
+            <a
+              href={COMMAND_CENTER_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Open in new tab"
+              className="shrink-0 text-gray-600 hover:text-orange-400 transition-colors"
+            >
+              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+            </a>
+          </div>
           <span className="text-sm text-gray-400">{user?.email}</span>
           <button
             onClick={signOut}

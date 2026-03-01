@@ -55,11 +55,11 @@ export default function NavigatorEffectivenessPage() {
                 <MetricCard label="Improvement Rate" value={`${metrics.improvedPct}%`} color="text-emerald-600" />
               </div>
             ) : (
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800">
                 <p className="font-medium">No effectiveness data yet</p>
-                <p className="mt-1 text-amber-700">
-                  To track effectiveness, complete a support and fill in the "Incidents Before" and "Incidents After" fields.
-                  Migration 050 adds these fields — apply via SQL Editor.
+                <p className="mt-1 text-blue-700">
+                  To track effectiveness: open a support, set its status to <strong>Completed</strong>, and fill in the
+                  <strong> Incidents Before</strong> and <strong>Incidents After</strong> fields. Data will appear here once saved.
                 </p>
               </div>
             )}
@@ -142,10 +142,7 @@ export default function NavigatorEffectivenessPage() {
 
             {/* Note */}
             <p className="text-xs text-gray-400">
-              Effectiveness data is recorded on individual support records (status = completed). Requires migration 050 columns:
-              <code className="mx-1 px-1 bg-gray-100 rounded">incidents_before</code>,
-              <code className="mx-1 px-1 bg-gray-100 rounded">incidents_after</code>,
-              <code className="mx-1 px-1 bg-gray-100 rounded">outcome_notes</code>.
+              Effectiveness data is recorded on individual support records. Open the <strong>Supports</strong> tab, click <strong>Edit</strong> on a support, set status to <strong>Completed</strong>, and fill in the before/after incident counts.
             </p>
           </>
         )}

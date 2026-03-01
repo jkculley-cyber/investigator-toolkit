@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-01 (Session U — Navigator Intelligence 5 features + Command Center fix)
+> Last updated: 2026-03-01 (Session V — Demo seed data + Product Hub + Command Center URL)
 
 ---
 
@@ -13,7 +13,7 @@
 - **Hosting:** Cloudflare Pages — `waypoint` project (app, deployed via GitHub Actions on push to `main`), `cpeg-site` project (marketing site, deployed via GitHub Actions `deploy-clearpath-site.yml` on push to `main` — **do NOT use `node deploy-clearpath.mjs` Direct Upload**, it creates broken deployments)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
 - **Migrations applied:** 001–048 (production). Migration 044 (Origins schema) NOT YET applied. Migration 049 (SPPI-13 + RDA tables) written but NOT YET applied — paste SQL Editor. Migration 050 (Navigator skill_gap + effectiveness columns) written but NOT YET applied — paste SQL Editor.
-- **Demo seed data:** `supabase/seed_demo_video.mjs` created and ran successfully — 12 active incidents, 6 transition plans, 57 days behavior tracking (Marcus/David/DeShawn), parent auth user `parent.marcus@gmail.com` / `Password123!` (Sandra Johnson, guardian of Marcus).
+- **Demo seed data:** `supabase/seed_demo_video.mjs` — 12 active incidents, 6 transition plans, 57 days behavior tracking (Marcus/David/DeShawn), parent auth user `parent.marcus@gmail.com` / `Password123!` (Sandra Johnson, guardian of Marcus). `supabase/seed_navigator.mjs` — 13 referrals, 6 placements, 6 supports seeded for Lone Star ISD (8 student risk scenarios: 3 HIGH, 3 MEDIUM, 2 LOW). `supabase/seed_meridian.mjs` — 9 SPED students, 4 IEPs, 2 504 plans, 3 ARD referrals, 1 CAP finding seeded for Lone Star ISD. Both Navigator and Meridian **enabled** for Lone Star ISD. Both seeders use Supabase REST API (no DB password needed).
 - **Demo video script:** `docs/brand/demo-video-script.md` — full production package rewritten Session T. 10 HeyGen blocks (≤840 chars each), student-first framing, T.E.A./I.E.P./P.E.I.M.S. abbreviations with periods. B-roll shot guide (7 clips) at bottom of script.
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
 - **Waypoint admin:** `admin@waypoint.internal` / `Waypoint2025!` → `/waypoint-admin`
@@ -55,7 +55,7 @@
 - Audit log table (migration 035) + `src/lib/audit.js` helper
 - Data import wizard (campuses, students, staff, incidents)
 - Laserfiche DAEP report import — daily Excel sync, upserts by Instance ID
-- Waypoint internal admin panel (`/waypoint-admin`) — provision districts; Manage drawer; **Business Dashboard** (ARR/MRR/pipeline metrics, charts, contracts CRUD)
+- Waypoint internal admin panel (`/waypoint-admin`) — provision districts; Manage drawer; **Business Dashboard** (ARR/MRR/pipeline metrics, charts, contracts CRUD); **Product Hub** tab (product cards, 8 demo site links, demo credentials with copy/show-password toggle); **header URL pill** (live URL `https://waypoint.clearpathedgroup.com/waypoint-admin` with copy + open buttons)
 - Password reset flow (`/reset-password`)
 - Error boundary — crash recovery screen
 - **PWA** — `manifest.json` + service worker + Apple meta tags; installable on iOS/Android/Chrome desktop
@@ -107,8 +107,8 @@
 1. **Apply migration 044** — Origins DB schema. Run via SQL Editor when ready to go live with DB-backed sessions. Then run `node supabase/seed_origins_scenarios.mjs` to seed global scenarios.
 2. **Set up `privacy@clearpathedgroup.com`** — referenced in all compliance docs; must exist before sharing docs with districts.
 3. **Verify Business Dashboard loads on live site** — log in as `admin@waypoint.internal` → Business Dashboard. Confirm no errors.
-4. **Enable Meridian + Origins for Lone Star ISD** — `/waypoint-admin` → Manage Lone Star ISD → Licensed Products.
-5. **Seed Meridian demo data** — No test SPED students in `meridian_students` yet. Required before any Meridian demo.
+4. ~~**Enable Meridian + Origins for Lone Star ISD**~~ — ✅ Done (Session V). Meridian + Navigator enabled via seed scripts. Origins still pending migration 044.
+5. ~~**Seed Meridian demo data**~~ — ✅ Done (Session V). 9 students, 4 IEPs, 2 504 plans seeded via `seed_meridian.mjs`.
 6. **Resend sender domain** — verify `waypointdaep.com` in Resend → Domains. Then set Supabase secret `FROM_EMAIL="Waypoint <noreply@waypointdaep.com>"` and redeploy Edge Function. Code fallback already updated.
 7. **Supabase redirect URLs** — add `https://waypoint.clearpathedgroup.com/reset-password` to Supabase Auth → URL Configuration → Redirect URLs.
 8. **Google Search Console** — register clearpathedgroup.com to accelerate search indexing.

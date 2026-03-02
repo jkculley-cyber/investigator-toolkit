@@ -17,7 +17,7 @@
 - **Demo video script:** `docs/brand/demo-video-script.md` — full production package rewritten Session T. 10 HeyGen blocks (≤840 chars each), student-first framing, T.E.A./I.E.P./P.E.I.M.S. abbreviations with periods. B-roll shot guide (7 clips) at bottom of script.
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
 - **Waypoint admin:** `admin@waypoint.internal` / `Waypoint2025!` → `/waypoint-admin`
-- **Email notifications:** Live via Resend — sandbox sender `onboarding@resend.dev` still active. Code updated to default `noreply@waypointdaep.com` but Supabase secret + function redeploy still needed.
+- **Email notifications:** Live via Resend — sandbox sender `onboarding@resend.dev` still active. Sender domain is `clearpathedgroup.com` (not waypointdaep.com). DKIM record (`resend._domainkey.clearpathedgroup.com`) already set in Cloudflare. SPF needs `include:spf.resend.com` added. Edge Function default updated to `noreply@clearpathedgroup.com`. Still needed: set `FROM_EMAIL` + `RESEND_API_KEY` Supabase secrets → redeploy `send-notification` Edge Function.
 - **All demo accounts:** See `docs/demo-accounts.md`
 
 ---

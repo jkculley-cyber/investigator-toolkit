@@ -1395,6 +1395,136 @@
     }
   })();
 </script>
+<!-- LEAD CAPTURE WIDGET -->
+<div id="lc-widget" style="position:fixed;bottom:24px;right:24px;z-index:9000;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+
+  <!-- Trigger button -->
+  <button id="lc-trigger" onclick="lcToggle()" style="
+    display:flex;align-items:center;gap:10px;
+    background:linear-gradient(135deg,#f97316,#f4a84a);
+    color:#fff;border:none;border-radius:999px;
+    padding:13px 22px;font-size:0.88rem;font-weight:700;
+    cursor:pointer;box-shadow:0 4px 24px rgba(249,115,22,0.45);
+    transition:transform 0.15s,box-shadow 0.15s;
+    white-space:nowrap;
+  " onmouseover="this.style.transform='scale(1.04)';this.style.boxShadow='0 6px 30px rgba(249,115,22,0.6)'"
+     onmouseout="this.style.transform='scale(1)';this.style.boxShadow='0 4px 24px rgba(249,115,22,0.45)'">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    Talk to Our Team
+  </button>
+
+  <!-- Panel -->
+  <div id="lc-panel" style="
+    display:none;position:absolute;bottom:62px;right:0;
+    width:320px;
+    background:linear-gradient(145deg,#1a0a2e,#2a0f4a);
+    border:1px solid rgba(244,168,74,0.25);
+    border-radius:16px;
+    box-shadow:0 16px 48px rgba(0,0,0,0.6),0 0 0 1px rgba(244,168,74,0.08);
+    overflow:hidden;
+  ">
+    <!-- Header -->
+    <div style="padding:18px 20px 14px;border-bottom:1px solid rgba(244,168,74,0.12);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:0.92rem;font-weight:700;color:#f4a84a;">Clear Path Education Group</div>
+        <div style="font-size:0.72rem;color:rgba(240,230,211,0.45);margin-top:2px;">We typically respond within a few hours</div>
+      </div>
+      <button onclick="lcToggle()" style="background:none;border:none;cursor:pointer;color:rgba(240,230,211,0.4);padding:4px;line-height:1;" onmouseover="this.style.color='#f4a84a'" onmouseout="this.style.color='rgba(240,230,211,0.4)'">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Form -->
+    <div id="lc-form-wrap" style="padding:20px;">
+      <form id="lc-form" action="https://formspree.io/f/xpqjngpp" method="POST">
+        <input type="hidden" name="_subject" value="New Lead — Clear Path Website Widget">
+        <input type="hidden" name="source" value="chat_widget">
+
+        <label style="display:block;font-size:0.72rem;font-weight:700;color:rgba(240,230,211,0.55);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">What's your biggest compliance challenge right now?</label>
+        <select name="compliance_challenge" required style="
+          width:100%;padding:10px 12px;margin-bottom:14px;
+          background:rgba(255,255,255,0.06);border:1px solid rgba(244,168,74,0.2);
+          border-radius:8px;color:#f0e6d3;font-size:0.83rem;
+          outline:none;cursor:pointer;
+          -webkit-appearance:none;appearance:none;
+          background-image:url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23f4a84a%22 stroke-width=%222.5%22><polyline points=%226 9 12 15 18 9%22/></svg>');
+          background-repeat:no-repeat;background-position:right 12px center;
+          padding-right:32px;
+        ">
+          <option value="" disabled selected style="background:#1a0a2e;">Select one...</option>
+          <option value="daep_sped" style="background:#1a0a2e;">DAEP + SPED/Manifestation compliance</option>
+          <option value="peims" style="background:#1a0a2e;">PEIMS reporting &amp; data accuracy</option>
+          <option value="transition_plans" style="background:#1a0a2e;">Transition plans &amp; placement tracking</option>
+          <option value="ocr_complaint" style="background:#1a0a2e;">Active or pending OCR complaint</option>
+          <option value="parent_notifications" style="background:#1a0a2e;">Parent notifications &amp; documentation</option>
+          <option value="general" style="background:#1a0a2e;">General DAEP process &amp; TEC Chapter 37</option>
+          <option value="exploring" style="background:#1a0a2e;">Just exploring options</option>
+        </select>
+
+        <label style="display:block;font-size:0.72rem;font-weight:700;color:rgba(240,230,211,0.55);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px;">Your work email</label>
+        <input type="email" name="email" placeholder="you@district.edu" required style="
+          width:100%;padding:10px 12px;margin-bottom:16px;
+          background:rgba(255,255,255,0.06);border:1px solid rgba(244,168,74,0.2);
+          border-radius:8px;color:#f0e6d3;font-size:0.83rem;
+          outline:none;box-sizing:border-box;
+        " onfocus="this.style.borderColor='rgba(244,168,74,0.6)'" onblur="this.style.borderColor='rgba(244,168,74,0.2)'">
+
+        <button type="submit" id="lc-submit" style="
+          width:100%;padding:11px;
+          background:linear-gradient(135deg,#f97316,#f4a84a);
+          color:#fff;border:none;border-radius:8px;
+          font-size:0.85rem;font-weight:700;cursor:pointer;
+          transition:opacity 0.15s;
+        " onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+          Send →
+        </button>
+
+        <p style="font-size:0.68rem;color:rgba(240,230,211,0.3);text-align:center;margin:10px 0 0;">No spam. We'll reach out within one business day.</p>
+      </form>
+    </div>
+
+    <!-- Success state (hidden) -->
+    <div id="lc-success" style="display:none;padding:32px 20px;text-align:center;">
+      <div style="font-size:1.8rem;margin-bottom:12px;">✓</div>
+      <div style="font-size:0.95rem;font-weight:700;color:#f4a84a;margin-bottom:8px;">Got it — thanks.</div>
+      <div style="font-size:0.8rem;color:rgba(240,230,211,0.55);line-height:1.6;">We'll be in touch within one business day. In the meantime, <a href="#contact" onclick="lcToggle()" style="color:#f4a84a;">request a full demo</a> to skip the queue.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function lcToggle() {
+    var panel = document.getElementById('lc-panel');
+    panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  }
+
+  document.getElementById('lc-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = document.getElementById('lc-submit');
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+
+    fetch(this.action, {
+      method: 'POST',
+      body: new FormData(this),
+      headers: { 'Accept': 'application/json' }
+    })
+    .then(function(r) {
+      if (r.ok) {
+        document.getElementById('lc-form-wrap').style.display = 'none';
+        document.getElementById('lc-success').style.display = 'block';
+      } else {
+        btn.disabled = false;
+        btn.textContent = 'Try again';
+      }
+    })
+    .catch(function() {
+      btn.disabled = false;
+      btn.textContent = 'Try again';
+    });
+  });
+</script>
+
 <!-- Cloudflare Web Analytics injected automatically by Cloudflare Pages -->
 </body>
 </html>

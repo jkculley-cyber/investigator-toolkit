@@ -62,10 +62,10 @@ const staffNavigation = [
 ]
 
 const WAYPOINT_GROUPS = [
-  { key: 'overview',    label: 'Overview'        },
-  { key: 'discipline',  label: 'Discipline'      },
-  { key: 'daep',        label: 'DAEP Program'    },
-  { key: 'tools',       label: 'Reports & Tools' },
+  { key: 'overview',    label: 'Overview',        labelClass: 'text-sky-400'    },
+  { key: 'discipline',  label: 'Discipline',      labelClass: 'text-red-400'    },
+  { key: 'daep',        label: 'DAEP Program',    labelClass: 'text-orange-400' },
+  { key: 'tools',       label: 'Reports & Tools', labelClass: 'text-emerald-400' },
 ]
 
 const parentNavigation = [
@@ -171,10 +171,10 @@ function AlertNavItem({ item, alertCount, navActiveClass }) {
   )
 }
 
-function GroupLabel({ label }) {
+function GroupLabel({ label, labelClass }) {
   return (
     <div className="px-3 pt-4 pb-1">
-      <span className="text-[10px] font-bold text-gray-600 uppercase tracking-widest">{label}</span>
+      <span className={`text-[10px] font-bold uppercase tracking-widest ${labelClass || 'text-gray-500'}`}>{label}</span>
     </div>
   )
 }
@@ -187,7 +187,7 @@ function WaypointNav({ items, alertCount, navActiveClass }) {
         if (groupItems.length === 0) return null
         return (
           <div key={group.key}>
-            <GroupLabel label={group.label} />
+            <GroupLabel label={group.label} labelClass={group.labelClass} />
             {groupItems.map(item =>
               item.path === '/alerts'
                 ? <AlertNavItem key={item.path} item={item} alertCount={alertCount} navActiveClass={navActiveClass} />

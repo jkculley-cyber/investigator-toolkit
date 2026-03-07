@@ -205,14 +205,10 @@ function WaypointNav({ items, alertCount, navActiveClass }) {
 function ProductRail({ activeProducts, activeProduct, onSwitch, profile, onSignOut }) {
   return (
     <div className="flex flex-col w-14 bg-gray-950 border-r border-white/5 flex-shrink-0">
-      {/* Logo mark — orange container ensures visibility on any background */}
+      {/* Logo mark */}
       <div className="flex items-center justify-center h-[57px] border-b border-white/5">
-        <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30">
-          <img
-            src="/logo.png"
-            alt="Waypoint"
-            className="h-7 w-7 object-contain brightness-0 invert"
-          />
+        <div className="w-10 h-10 rounded-xl overflow-hidden ring-1 ring-white/10">
+          <img src="/logo.png" alt="Waypoint" className="w-full h-full object-cover" />
         </div>
       </div>
 
@@ -330,8 +326,8 @@ export default function Sidebar() {
           {/* Logo row — only when no rail */}
           {!showRail && (
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-9 h-9 rounded-xl bg-orange-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-orange-500/30">
-                <img src="/logo.png" alt="Waypoint" className="h-6 w-6 object-contain brightness-0 invert" />
+              <div className="w-9 h-9 rounded-xl overflow-hidden flex-shrink-0 ring-1 ring-white/10">
+                <img src="/logo.png" alt="Waypoint" className="w-full h-full object-cover" />
               </div>
               <div>
                 <p className="text-sm font-bold text-white leading-tight">Waypoint</p>

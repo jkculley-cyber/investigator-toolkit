@@ -22,7 +22,8 @@ import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { CONSEQUENCE_TYPE_LABELS, INTERVENTION_CATEGORY_LABELS } from '../lib/constants'
-import { getSchoolYearLabel } from '../lib/utils'
+import { getSchoolYearLabel, getSchoolYearStart } from '../lib/utils'
+import { supabase } from '../lib/supabase'
 import {
   exportToPdf,
   exportToExcel,
@@ -612,6 +613,109 @@ function InterventionsTab() {
   )
 }
 
+// =================== PEIMS PRE-FLIGHT CHECK ===================
+
+function PeimsPreFlightCheck() {
+  const { districtId } = useAuth()
+  const [checking, setChecking] = useState(false)
+  const [issues, setIssues] = useState(null)
+
+  const runCheck = async () => {
+    setChecking(true)
+    try {
+      const schoolYearStart = getSchoolYearStart().toISOString()
+      const base = supabase
+        .from('incidents')
+        .select('*', { count: 'exact', head: true })
+        .eq('district_id', districtId)
+        .in('status', ['approved', 'active', 'completed'])
+        .gte('incident_date', schoolYearStart)
+
+      const [noOffense, noDate, noConsequence] = await Promise.all([
+        base.is('offense_code_id', null),
+        base.is('incident_date', null),
+        base.is('consequence_type', null),
+      ])
+
+      setIssues({
+        noOffense: noOffense.count || 0,
+        noDate: noDate.count || 0,
+        noConsequence: noConsequence.count || 0,
+      })
+    } catch (err) {
+      console.error('Pre-flight check failed:', err)
+    } finally {
+      setChecking(false)
+    }
+  }
+
+  const total = issues ? issues.noOffense + issues.noDate + issues.noConsequence : 0
+  const isClean = issues && total === 0
+
+  return (
+    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
+      <div className="flex items-center justify-between mb-2">
+        <h4 className="text-sm font-semibold text-gray-700">Data Quality Pre-Flight Check</h4>
+        <button
+          onClick={runCheck}
+          disabled={checking}
+          className="text-xs px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50 font-medium disabled:opacity-50"
+        >
+          {checking ? 'Checking...' : 'Run Check'}
+        </button>
+      </div>
+      <p className="text-xs text-gray-500 mb-3">
+        Validates exported records for missing fields that TEA will reject. Run before downloading.
+      </p>
+      {issues ? (
+        isClean ? (
+          <div className="flex items-center gap-2 text-green-700 bg-green-50 border border-green-200 rounded-lg px-3 py-2">
+            <svg className="w-4 h-4 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+            </svg>
+            <span className="text-sm font-medium">All records pass — no data quality issues found.</span>
+          </div>
+        ) : (
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
+              <svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+              <span className="text-sm font-semibold">{total} record{total !== 1 ? 's' : ''} with data quality issues</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2 mt-2">
+              {[
+                { count: issues.noOffense, label: 'Missing offense code', icon: '⚠' },
+                { count: issues.noDate, label: 'Missing incident date', icon: '⚠' },
+                { count: issues.noConsequence, label: 'Missing consequence', icon: '⚠' },
+              ].map((item) => (
+                <div
+                  key={item.label}
+                  className={`rounded-lg p-2 text-center border ${
+                    item.count > 0 ? 'bg-red-50 border-red-200' : 'bg-green-50 border-green-200'
+                  }`}
+                >
+                  <p className={`text-lg font-bold ${item.count > 0 ? 'text-red-700' : 'text-green-700'}`}>
+                    {item.count}
+                  </p>
+                  <p className={`text-xs ${item.count > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                    {item.label}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="text-xs text-amber-700 mt-1">
+              Fix these in Incidents before exporting. TEA will reject rows with missing required fields.
+            </p>
+          </div>
+        )
+      ) : (
+        <p className="text-xs text-gray-400 italic">Click "Run Check" to validate your data before exporting.</p>
+      )}
+    </div>
+  )
+}
+
 // =================== PEIMS EXPORT TAB ===================
 
 function ExportTab() {
@@ -709,6 +813,8 @@ function ExportTab() {
         </p>
 
         <div className="mt-6 space-y-4">
+          <PeimsPreFlightCheck />
+
           <div className="bg-gray-50 rounded-lg p-4">
             <h4 className="text-sm font-medium text-gray-700 mb-2">Export Includes:</h4>
             <ul className="text-sm text-gray-600 space-y-1">

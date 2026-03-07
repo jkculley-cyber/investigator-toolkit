@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-03 (Session AA — Apex scaffold, build, deployed to clearpath-apex.pages.dev)
+> Last updated: 2026-03-07 (Session AB — Website market-ready push, lead capture, pilot form, SVG logo)
 
 ---
 
@@ -8,11 +8,11 @@
 - **Development phase:** Pre-pilot — product feature-complete, ready for first district pitch
 - **Waypoint app URL:** `https://waypoint.clearpathedgroup.com` (also `app.clearpathedgroup.com`)
 - **Company website:** `https://clearpathedgroup.com` (marketing site, static HTML in `clearpath-site/`)
-- **Marketing site features:** Company-level site for Clear Path Education Group — all 4 pathways (Compass active, 3 coming soon). All 3 Compass products (Waypoint, Navigator, Meridian) + Clear Path Suite bundle callout. **Interactive pricing calculator**. **Free Compliance Checklist** lead magnet. Google Slides embed + **narrated overview video** (`Waypoint__Safety_and_Growth.mp4`) tabbed in Waypoint card. SEO/sitemap/robots.txt. Cloudflare Web Analytics. **Security page** at `/security.html`. **Demo request form** at `/#contact` → Formspree `xpqjngpp`. Session T minor changes: nav CTA → "Request a Demo →" (#contact); Waypoint video tab label → "Watch Demo · 3 min". ⚠️ Site must remain company-level — not a Waypoint product page (see DECISIONS.md 2026-02-28).
+- **Marketing site features:** Company-level site for Clear Path Education Group. Technology Suite (Waypoint live, Navigator + Meridian coming 2026) + Clear Path Suite bundle. **Interactive pricing calculator**. **Free Compliance Checklist** lead magnet. Google Slides embed + narrated video. SEO/sitemap/robots.txt. Cloudflare Web Analytics. Security page `/security.html`. Research page `/research.html`. **4 lead capture channels** all → Formspree `xpqjngpp`: demo form (`source=demo_request`), pilot application form at `#pilot` (`source=pilot_application`), floating widget (`source=chat_widget`), whitepaper email gate (`source=whitepaper_gate`). **Floating "Talk to Our Team" widget** with 7 personalised auto-replies by compliance challenge. **Dedicated pilot application form** at `#pilot` (district name, role, size, DAEP volume, urgency). **Nav has "Apply for Pilot Spot" button**. **clearpath-logo.svg** — SVG compass logo, transparent bg, sharp at all sizes. Page order: Hero → Tech Suite → Stats → Founding Banner → Pilot Form → Credibility → Pricing → Demo Request → Who We Are → Footer. ⚠️ Site must remain company-level — not a Waypoint product page (see DECISIONS.md 2026-02-28).
 - **whitepaper.html:** 20-point DAEP compliance self-audit checklist, 5 sections with TEC citation callout boxes, scorecard with scoring bands (18–20 compliant / 14–17 at risk / <14 urgent), print-optimized CSS, "Save as PDF" button. Lead magnet for district sales.
 - **Hosting:** Cloudflare Pages — `waypoint` project (app, deployed via GitHub Actions on push to `main`), `cpeg-site` project (marketing site, deployed via GitHub Actions `deploy-clearpath-site.yml` on push to `main` — **do NOT use `node deploy-clearpath.mjs` Direct Upload**, it creates broken deployments)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
-- **Migrations applied:** 001–050 (production). All migrations applied. 044 (Origins schema), 049 (Meridian SPPI-13 + RDA tables), 050 (Navigator skill_gap + effectiveness) applied via SQL Editor 2026-03-01.
+- **Migrations applied:** 001–052 (production). All migrations applied. 044 (Origins schema), 049 (Meridian SPPI-13 + RDA tables), 050 (Navigator skill_gap + effectiveness) applied via SQL Editor 2026-03-01.
 - **Demo seed data:** `supabase/seed_demo_video.mjs` — 12 active incidents, 6 transition plans, 57 days behavior tracking (Marcus/David/DeShawn), parent auth user `parent.marcus@gmail.com` / `Password123!` (Sandra Johnson, guardian of Marcus). `supabase/seed_navigator.mjs` — 13 referrals, 28 placements (6 completed + 2 active + 20 prior year), 6 supports, 3 campus goals seeded for Lone Star ISD (8 student risk scenarios: 3 HIGH, 3 MEDIUM, 2 LOW). 2 active placements (Marcus OSS, DeShawn ISS — no end_date) power the Active ISS/Active OSS tabs. `supabase/seed_meridian.mjs` — 9 SPED students, 4 IEPs, 2 504 plans, 3 ARD referrals, 1 CAP finding seeded for Lone Star ISD. Both Navigator and Meridian **enabled** for Lone Star ISD. Both seeders use Supabase REST API (no DB password needed).
 - **Demo video script:** `docs/brand/demo-video-script.md` — full production package rewritten Session T. 10 HeyGen blocks (≤840 chars each), student-first framing, T.E.A./I.E.P./P.E.I.M.S. abbreviations with periods. B-roll shot guide (7 clips) at bottom of script.
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
@@ -160,6 +160,6 @@
 
 ## Don't Touch Right Now
 
-- `supabase/migrations/` — migrations 001–050 all applied to production; don't re-run earlier ones
+- `supabase/migrations/` — migrations 001–052 all applied to production; don't re-run earlier ones
 - `.env.local` — credentials live here; do not commit
 - Demo seed data (Lone Star ISD) — keep intact for demos

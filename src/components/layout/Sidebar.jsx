@@ -75,9 +75,30 @@ const parentNavigation = [
 // ─── Product config ───────────────────────────────────────────────────────────
 
 const PRODUCTS = {
-  waypoint:  { label: 'Waypoint',  color: 'orange', activeClass: 'bg-orange-500 text-white', hoverClass: 'hover:text-orange-400 hover:bg-gray-800', textClass: 'text-orange-400', borderClass: 'border-orange-500', Icon: WaypointProductIcon },
-  navigator: { label: 'Navigator', color: 'blue',   activeClass: 'bg-blue-600 text-white',   hoverClass: 'hover:text-blue-400 hover:bg-gray-800',   textClass: 'text-blue-400',   borderClass: 'border-blue-500',   Icon: NavigatorProductIcon },
-  meridian:  { label: 'Meridian',  color: 'purple', activeClass: 'bg-purple-600 text-white', hoverClass: 'hover:text-purple-400 hover:bg-gray-800', textClass: 'text-purple-400', borderClass: 'border-purple-500', Icon: MeridianProductIcon  },
+  waypoint:  {
+    label: 'Waypoint',
+    railActiveClass: 'bg-orange-500 text-white shadow-md shadow-orange-500/40',
+    railHoverClass:  'text-gray-500 hover:text-orange-400 hover:bg-white/5',
+    navActiveClass:  'text-orange-300 bg-orange-500/15 border-orange-400',
+    textClass:       'text-orange-400',
+    Icon: WaypointProductIcon,
+  },
+  navigator: {
+    label: 'Navigator',
+    railActiveClass: 'bg-blue-600 text-white shadow-md shadow-blue-500/30',
+    railHoverClass:  'text-gray-500 hover:text-blue-400 hover:bg-white/5',
+    navActiveClass:  'text-blue-300 bg-blue-500/15 border-blue-400',
+    textClass:       'text-blue-400',
+    Icon: NavigatorProductIcon,
+  },
+  meridian:  {
+    label: 'Meridian',
+    railActiveClass: 'bg-purple-600 text-white shadow-md shadow-purple-500/30',
+    railHoverClass:  'text-gray-500 hover:text-purple-400 hover:bg-white/5',
+    navActiveClass:  'text-purple-300 bg-purple-500/15 border-purple-400',
+    textClass:       'text-purple-400',
+    Icon: MeridianProductIcon,
+  },
 }
 
 // Derive active product from the current URL path
@@ -89,7 +110,7 @@ function productFromPath(pathname) {
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function NavItem({ item, accentClass, borderClass }) {
+function NavItem({ item, navActiveClass }) {
   const { setSidebarOpen } = useSidebar()
 
   if (item.external) {
@@ -99,7 +120,7 @@ function NavItem({ item, accentClass, borderClass }) {
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => setSidebarOpen(false)}
-        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-400 hover:bg-gray-800 hover:text-white"
+        className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors text-gray-500 hover:bg-white/5 hover:text-gray-200"
       >
         <item.icon className="h-4 w-4 flex-shrink-0" />
         <span className="flex-1">{item.name}</span>
@@ -117,8 +138,8 @@ function NavItem({ item, accentClass, borderClass }) {
         cn(
           'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all border-l-2',
           isActive
-            ? `border-current ${accentClass} bg-white/5 text-white`
-            : `border-transparent text-gray-400 hover:bg-gray-800/60 hover:text-gray-100`
+            ? navActiveClass
+            : 'border-transparent text-gray-500 hover:bg-white/5 hover:text-gray-200'
         )
       }
     >
@@ -128,7 +149,7 @@ function NavItem({ item, accentClass, borderClass }) {
   )
 }
 
-function AlertNavItem({ item, alertCount, accentClass }) {
+function AlertNavItem({ item, alertCount, navActiveClass }) {
   const { setSidebarOpen } = useSidebar()
   return (
     <NavLink
@@ -138,8 +159,8 @@ function AlertNavItem({ item, alertCount, accentClass }) {
         cn(
           'flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-all border-l-2',
           isActive
-            ? `border-current ${accentClass} bg-white/5 text-white`
-            : `border-transparent text-gray-400 hover:bg-gray-800/60 hover:text-gray-100`
+            ? navActiveClass
+            : 'border-transparent text-gray-500 hover:bg-white/5 hover:text-gray-200'
         )
       }
     >
@@ -158,7 +179,7 @@ function GroupLabel({ label }) {
   )
 }
 
-function WaypointNav({ items, alertCount, accentClass, borderClass }) {
+function WaypointNav({ items, alertCount, navActiveClass }) {
   return (
     <>
       {WAYPOINT_GROUPS.map(group => {
@@ -169,8 +190,8 @@ function WaypointNav({ items, alertCount, accentClass, borderClass }) {
             <GroupLabel label={group.label} />
             {groupItems.map(item =>
               item.path === '/alerts'
-                ? <AlertNavItem key={item.path} item={item} alertCount={alertCount} accentClass={accentClass} />
-                : <NavItem key={item.path} item={item} accentClass={accentClass} borderClass={borderClass} />
+                ? <AlertNavItem key={item.path} item={item} alertCount={alertCount} navActiveClass={navActiveClass} />
+                : <NavItem key={item.path} item={item} navActiveClass={navActiveClass} />
             )}
           </div>
         )
@@ -183,14 +204,20 @@ function WaypointNav({ items, alertCount, accentClass, borderClass }) {
 
 function ProductRail({ activeProducts, activeProduct, onSwitch, profile, onSignOut }) {
   return (
-    <div className="flex flex-col w-12 bg-gray-950 border-r border-gray-800/60 flex-shrink-0">
-      {/* Logo mark */}
-      <div className="flex items-center justify-center h-14 border-b border-gray-800/60">
-        <img src="/logo.png" alt="Waypoint" className="h-7 w-7 object-contain opacity-90" />
+    <div className="flex flex-col w-14 bg-gray-950 border-r border-white/5 flex-shrink-0">
+      {/* Logo mark — orange container ensures visibility on any background */}
+      <div className="flex items-center justify-center h-[57px] border-b border-white/5">
+        <div className="w-10 h-10 rounded-xl bg-orange-500 flex items-center justify-center shadow-lg shadow-orange-500/30">
+          <img
+            src="/logo.png"
+            alt="Waypoint"
+            className="h-7 w-7 object-contain brightness-0 invert"
+          />
+        </div>
       </div>
 
       {/* Product switcher buttons */}
-      <div className="flex-1 flex flex-col items-center gap-1.5 py-3">
+      <div className="flex-1 flex flex-col items-center gap-2 py-4">
         {activeProducts.map(productKey => {
           const p = PRODUCTS[productKey]
           const isActive = activeProduct === productKey
@@ -200,22 +227,20 @@ function ProductRail({ activeProducts, activeProduct, onSwitch, profile, onSignO
               onClick={() => onSwitch(productKey)}
               title={p.label}
               className={cn(
-                'w-9 h-9 rounded-xl flex items-center justify-center transition-all duration-150',
-                isActive
-                  ? p.activeClass
-                  : `text-gray-600 ${p.hoverClass}`
+                'w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-150',
+                isActive ? p.railActiveClass : p.railHoverClass
               )}
             >
-              <p.Icon className="h-4.5 w-4.5" style={{ width: '18px', height: '18px' }} />
+              <p.Icon style={{ width: '20px', height: '20px' }} />
             </button>
           )
         })}
       </div>
 
       {/* User + sign out at bottom */}
-      <div className="flex flex-col items-center gap-1.5 py-3 border-t border-gray-800/60">
+      <div className="flex flex-col items-center gap-2 py-3 border-t border-white/5">
         <div
-          className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-xs font-semibold text-white cursor-default"
+          className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-xs font-bold text-white cursor-default ring-2 ring-orange-400/30"
           title={profile?.full_name}
         >
           {profile?.full_name?.charAt(0) || '?'}
@@ -223,7 +248,7 @@ function ProductRail({ activeProducts, activeProduct, onSwitch, profile, onSignO
         <button
           onClick={onSignOut}
           title="Sign out"
-          className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-600 hover:text-white hover:bg-gray-800 transition-colors"
+          className="w-8 h-8 rounded-lg flex items-center justify-center text-gray-600 hover:text-red-400 hover:bg-red-500/10 transition-colors"
         >
           <LogoutIcon className="h-4 w-4" />
         </button>
@@ -283,7 +308,7 @@ export default function Sidebar() {
       'fixed inset-y-0 left-0 z-40 transition-transform duration-300 ease-in-out',
       'md:relative md:inset-y-auto md:left-auto md:z-auto md:translate-x-0 md:min-h-screen',
       sidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0',
-      showRail ? 'w-64' : 'w-64'
+      'w-64'
     )}>
 
       {/* ── Product Rail (multi-product) ── */}
@@ -301,25 +326,24 @@ export default function Sidebar() {
       <div className="flex flex-col flex-1 bg-gray-900 overflow-hidden min-h-0">
 
         {/* Header */}
-        <div className={cn(
-          'relative px-4 border-b border-gray-800/60',
-          showRail ? 'py-3' : 'py-4'
-        )}>
+        <div className="relative px-4 py-3.5 border-b border-white/5">
           {/* Logo row — only when no rail */}
           {!showRail && (
-            <div className="flex items-center gap-2.5 mb-3">
-              <img src="/logo.png" alt="Waypoint" className="h-8 w-8 object-contain" />
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-9 h-9 rounded-xl bg-orange-500 flex items-center justify-center flex-shrink-0 shadow-lg shadow-orange-500/30">
+                <img src="/logo.png" alt="Waypoint" className="h-6 w-6 object-contain brightness-0 invert" />
+              </div>
               <div>
-                <p className="text-[13px] font-bold text-gray-100 leading-tight">Compass Pathway</p>
-                <p className="text-[10px] text-gray-500">Behavioral Solutions</p>
+                <p className="text-sm font-bold text-white leading-tight">Waypoint</p>
+                <p className="text-[10px] text-gray-500">Clear Path Education Group</p>
               </div>
             </div>
           )}
 
           {/* Active product label */}
           <div className="flex items-center gap-2">
-            <product.Icon className={cn('h-4 w-4 flex-shrink-0', product.textClass)} />
-            <span className={cn('text-sm font-bold tracking-wide', product.textClass)}>
+            <product.Icon className={cn('flex-shrink-0', product.textClass)} style={{ width: '15px', height: '15px' }} />
+            <span className={cn('text-xs font-semibold tracking-widest uppercase', product.textClass)}>
               {product.label}
             </span>
           </div>
@@ -339,21 +363,19 @@ export default function Sidebar() {
         <nav className="flex-1 px-2 py-2 overflow-y-auto">
           {isParent ? (
             parentNavigation.map(item => (
-              <NavItem key={item.path} item={item} accentClass={product.activeClass} borderClass={product.borderClass} />
+              <NavItem key={item.path} item={item} navActiveClass={product.navActiveClass} />
             ))
           ) : activeProduct === 'waypoint' && showWaypoint ? (
             <>
               <WaypointNav
                 items={waypointItems}
                 alertCount={alertCount}
-                accentClass={product.activeClass}
-                borderClass={product.borderClass}
+                navActiveClass={product.navActiveClass}
               />
-              {/* Settings — always at bottom of Waypoint */}
               {commonItems.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-gray-800/60">
+                <div className="mt-2 pt-2 border-t border-white/5">
                   {commonItems.map(item => (
-                    <NavItem key={item.path} item={item} accentClass={product.activeClass} borderClass={product.borderClass} />
+                    <NavItem key={item.path} item={item} navActiveClass={product.navActiveClass} />
                   ))}
                 </div>
               )}
@@ -361,15 +383,15 @@ export default function Sidebar() {
           ) : activeProduct === 'navigator' && showNavigator ? (
             <>
               {navigatorNavigation.map(item => (
-                <NavItem key={item.path} item={item} accentClass={product.activeClass} borderClass={product.borderClass} />
+                <NavItem key={item.path} item={item} navActiveClass={product.navActiveClass} />
               ))}
               {!showWaypoint && (
-                <NavItem item={{ name: 'Discipline Matrix', path: '/matrix', icon: MatrixIcon }} accentClass={product.activeClass} borderClass={product.borderClass} />
+                <NavItem item={{ name: 'Discipline Matrix', path: '/matrix', icon: MatrixIcon }} navActiveClass={product.navActiveClass} />
               )}
               {commonItems.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-gray-800/60">
+                <div className="mt-2 pt-2 border-t border-white/5">
                   {commonItems.map(item => (
-                    <NavItem key={item.path} item={item} accentClass={product.activeClass} borderClass={product.borderClass} />
+                    <NavItem key={item.path} item={item} navActiveClass={product.navActiveClass} />
                   ))}
                 </div>
               )}
@@ -377,12 +399,12 @@ export default function Sidebar() {
           ) : activeProduct === 'meridian' && showMeridian ? (
             <>
               {meridianNavigation.map(item => (
-                <NavItem key={item.path} item={item} accentClass={product.activeClass} borderClass={product.borderClass} />
+                <NavItem key={item.path} item={item} navActiveClass={product.navActiveClass} />
               ))}
               {commonItems.length > 0 && (
-                <div className="mt-2 pt-2 border-t border-gray-800/60">
+                <div className="mt-2 pt-2 border-t border-white/5">
                   {commonItems.map(item => (
-                    <NavItem key={item.path} item={item} accentClass={product.activeClass} borderClass={product.borderClass} />
+                    <NavItem key={item.path} item={item} navActiveClass={product.navActiveClass} />
                   ))}
                 </div>
               )}
@@ -392,9 +414,9 @@ export default function Sidebar() {
 
         {/* User section — only when no rail */}
         {!showRail && (
-          <div className="px-3 py-3 border-t border-gray-800/60">
+          <div className="px-3 py-3 border-t border-white/5">
             <div className="flex items-center gap-3 px-2 py-2 rounded-lg">
-              <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-sm font-semibold text-white flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-sm font-bold text-white flex-shrink-0 ring-2 ring-orange-400/30">
                 {profile?.full_name?.charAt(0) || '?'}
               </div>
               <div className="flex-1 min-w-0">
@@ -404,7 +426,7 @@ export default function Sidebar() {
             </div>
             <button
               onClick={signOut}
-              className="w-full flex items-center gap-3 px-2 py-2 mt-0.5 text-sm text-gray-500 hover:text-gray-100 hover:bg-gray-800/60 rounded-lg transition-colors"
+              className="w-full flex items-center gap-3 px-2 py-2 mt-0.5 text-sm text-gray-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
             >
               <LogoutIcon className="h-4 w-4" />
               Sign Out

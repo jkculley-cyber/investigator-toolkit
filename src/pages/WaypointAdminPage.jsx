@@ -292,12 +292,17 @@ const LEAD_STATUS_STYLES = {
   contacted:        'bg-blue-900 text-blue-200',
   demo_scheduled:   'bg-purple-900 text-purple-200',
   closed:           'bg-green-900 text-green-200',
+  not_interested:   'bg-gray-700 text-gray-400',
 }
 
 function LeadsPanel() {
   const [leads, setLeads] = useState([])
   const [loading, setLoading] = useState(true)
   const [updatingId, setUpdatingId] = useState(null)
+  const [showHidden, setShowHidden] = useState(false)
+  const [niModal, setNiModal] = useState(null) // { id, currentReason }
+  const [niReason, setNiReason] = useState('')
+  const [deletingId, setDeletingId] = useState(null)
 
   const fetchLeads = useCallback(async () => {
     setLoading(true)
@@ -312,10 +317,33 @@ function LeadsPanel() {
   useEffect(() => { fetchLeads() }, [fetchLeads])
 
   async function updateStatus(id, status) {
+    if (status === 'not_interested') {
+      const lead = leads.find(l => l.id === id)
+      setNiReason(lead?.notes || '')
+      setNiModal({ id, currentReason: lead?.notes || '' })
+      return
+    }
     setUpdatingId(id)
     await supabase.from('leads').update({ status }).eq('id', id)
     setLeads(prev => prev.map(l => l.id === id ? { ...l, status } : l))
     setUpdatingId(null)
+  }
+
+  async function confirmNotInterested() {
+    setUpdatingId(niModal.id)
+    await supabase.from('leads').update({ status: 'not_interested', notes: niReason }).eq('id', niModal.id)
+    setLeads(prev => prev.map(l => l.id === niModal.id ? { ...l, status: 'not_interested', notes: niReason } : l))
+    setUpdatingId(null)
+    setNiModal(null)
+    setNiReason('')
+  }
+
+  async function deleteLead(id) {
+    if (!window.confirm('Delete this lead permanently?')) return
+    setDeletingId(id)
+    await supabase.from('leads').delete().eq('id', id)
+    setLeads(prev => prev.filter(l => l.id !== id))
+    setDeletingId(null)
   }
 
   const bySource = leads.reduce((acc, l) => {
@@ -323,16 +351,54 @@ function LeadsPanel() {
     return acc
   }, {})
 
+  const visibleLeads = showHidden ? leads : leads.filter(l => l.status !== 'not_interested')
+  const hiddenCount = leads.filter(l => l.status === 'not_interested').length
+
   return (
     <div>
+      {/* Not Interested reason modal */}
+      {niModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="bg-gray-900 border border-gray-700 rounded-xl shadow-2xl p-6 w-full max-w-md mx-4">
+            <h3 className="text-white font-semibold mb-1">Mark as Not Interested</h3>
+            <p className="text-gray-400 text-sm mb-4">Optionally capture why this lead isn't moving forward. This will hide them from the default view.</p>
+            <textarea
+              value={niReason}
+              onChange={e => setNiReason(e.target.value)}
+              placeholder="e.g. Already using another solution, budget constraints, wrong timing…"
+              rows={3}
+              className="w-full bg-gray-800 border border-gray-700 rounded-lg text-sm text-white placeholder-gray-500 px-3 py-2 resize-none focus:outline-none focus:border-gray-500"
+            />
+            <div className="flex gap-3 mt-4">
+              <button onClick={() => setNiModal(null)} className="flex-1 px-4 py-2 text-sm text-gray-400 border border-gray-700 rounded-lg hover:bg-gray-800">
+                Cancel
+              </button>
+              <button onClick={confirmNotInterested} className="flex-1 px-4 py-2 text-sm font-medium text-white bg-gray-600 rounded-lg hover:bg-gray-500">
+                Mark Not Interested
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-between mb-6">
         <div>
           <h2 className="text-lg font-semibold text-white">Leads</h2>
           <p className="text-sm text-gray-400">{leads.length} total · {leads.filter(l => l.status === 'new').length} new</p>
         </div>
-        <button onClick={fetchLeads} className="text-sm text-gray-400 hover:text-white transition-colors">
-          ↻ Refresh
-        </button>
+        <div className="flex items-center gap-3">
+          {hiddenCount > 0 && (
+            <button
+              onClick={() => setShowHidden(v => !v)}
+              className="text-xs text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {showHidden ? `Hide not interested (${hiddenCount})` : `Show not interested (${hiddenCount})`}
+            </button>
+          )}
+          <button onClick={fetchLeads} className="text-sm text-gray-400 hover:text-white transition-colors">
+            ↻ Refresh
+          </button>
+        </div>
       </div>
 
       {/* Source breakdown */}
@@ -350,8 +416,10 @@ function LeadsPanel() {
       <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
         {loading ? (
           <p className="text-center text-gray-500 py-12 text-sm">Loading leads…</p>
-        ) : leads.length === 0 ? (
-          <p className="text-center text-gray-500 py-12 text-sm">No leads yet. Leads appear here when someone submits a form on clearpathedgroup.com.</p>
+        ) : visibleLeads.length === 0 ? (
+          <p className="text-center text-gray-500 py-12 text-sm">
+            {leads.length === 0 ? 'No leads yet. Leads appear here when someone submits a form on clearpathedgroup.com.' : 'No active leads.'}
+          </p>
         ) : (
           <table className="w-full text-sm">
             <thead>
@@ -361,11 +429,12 @@ function LeadsPanel() {
                 <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">District</th>
                 <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">Date</th>
                 <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">Status</th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody>
-              {leads.map(lead => (
-                <tr key={lead.id} className="border-b border-gray-800 hover:bg-gray-800/40 transition-colors">
+              {visibleLeads.map(lead => (
+                <tr key={lead.id} className={`border-b border-gray-800 hover:bg-gray-800/40 transition-colors ${lead.status === 'not_interested' ? 'opacity-50' : ''}`}>
                   <td className="px-4 py-3">
                     <p className="text-white font-medium">{lead.name || '—'}</p>
                     <p className="text-gray-400 text-xs">{lead.email}</p>
@@ -375,9 +444,12 @@ function LeadsPanel() {
                       {LEAD_SOURCE_LABELS[lead.source] || lead.source}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-gray-400 text-xs max-w-[180px] truncate">
+                  <td className="px-4 py-3 text-gray-400 text-xs max-w-[180px]">
                     {lead.district || '—'}
                     {lead.concern && <span className="block text-gray-600 truncate">{lead.concern}</span>}
+                    {lead.status === 'not_interested' && lead.notes && (
+                      <span className="block text-gray-600 italic truncate" title={lead.notes}>"{lead.notes}"</span>
+                    )}
                   </td>
                   <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
                     {format(parseISO(lead.created_at), 'MMM d, yyyy')}
@@ -394,7 +466,20 @@ function LeadsPanel() {
                       <option value="contacted">Contacted</option>
                       <option value="demo_scheduled">Demo Scheduled</option>
                       <option value="closed">Closed</option>
+                      <option value="not_interested">Not Interested</option>
                     </select>
+                  </td>
+                  <td className="px-4 py-3">
+                    <button
+                      onClick={() => deleteLead(lead.id)}
+                      disabled={deletingId === lead.id}
+                      title="Delete lead"
+                      className="text-gray-600 hover:text-red-400 transition-colors disabled:opacity-40"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                      </svg>
+                    </button>
                   </td>
                 </tr>
               ))}

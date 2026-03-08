@@ -17,6 +17,7 @@ export function AuthProvider({ children }) {
 
   const timeoutRef = useRef(null)
   const warningRef = useRef(null)
+  const warningActiveRef = useRef(false) // true while modal is showing — avoids stale closure
 
   useEffect(() => {
     // Get initial session
@@ -46,45 +47,50 @@ export function AuthProvider({ children }) {
   }, [])
 
   // Inactivity timeout - FERPA compliance
-  const resetInactivityTimer = useCallback(() => {
-    if (!session) return
-
-    setSessionWarning(false)
-
+  // Starts/restarts the countdown. Never touches sessionWarning state —
+  // that way activity events cannot accidentally dismiss the warning modal.
+  const startTimers = useCallback(() => {
     if (warningRef.current) clearTimeout(warningRef.current)
     if (timeoutRef.current) clearTimeout(timeoutRef.current)
 
-    // Show warning before timeout
     warningRef.current = setTimeout(() => {
       setSessionWarning(true)
+      warningActiveRef.current = true
     }, INACTIVITY_TIMEOUT_MS - WARNING_BEFORE_MS)
 
-    // Auto-logout on full timeout
     timeoutRef.current = setTimeout(() => {
       signOut()
       setSessionWarning(false)
+      warningActiveRef.current = false
     }, INACTIVITY_TIMEOUT_MS)
-  }, [session])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Explicit "Stay Logged In" — the ONLY way to dismiss the warning
+  const extendSession = useCallback(() => {
+    setSessionWarning(false)
+    warningActiveRef.current = false
+    startTimers()
+  }, [startTimers])
 
   useEffect(() => {
     if (!session) {
-      if (warningRef.current) clearTimeout(warningRef.current)
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
+      clearTimeout(warningRef.current)
+      clearTimeout(timeoutRef.current)
+      setSessionWarning(false)
+      warningActiveRef.current = false
       return
     }
 
     const events = ['mousedown', 'keydown', 'scroll', 'touchstart']
-    const handler = () => resetInactivityTimer()
+    // Activity only resets the timer when the warning modal is NOT showing.
+    // If the modal IS showing, the user must explicitly click "Stay Logged In".
+    const handler = () => { if (!warningActiveRef.current) startTimers() }
 
     events.forEach(e => window.addEventListener(e, handler, { passive: true }))
-    resetInactivityTimer()
+    startTimers()
 
-    return () => {
-      events.forEach(e => window.removeEventListener(e, handler))
-      if (warningRef.current) clearTimeout(warningRef.current)
-      if (timeoutRef.current) clearTimeout(timeoutRef.current)
-    }
-  }, [session, resetInactivityTimer])
+    return () => events.forEach(e => window.removeEventListener(e, handler))
+  }, [session, startTimers])
 
   async function fetchProfile(userId) {
     setLoading(true)
@@ -214,7 +220,7 @@ export function AuthProvider({ children }) {
     isStaff,
     districtId: profile?.district_id || null,
     sessionWarning,
-    extendSession: resetInactivityTimer,
+    extendSession,
     refreshDistrict,
   }
 
@@ -223,7 +229,7 @@ export function AuthProvider({ children }) {
       {children}
       {sessionWarning && (
         <SessionWarningModal
-          onExtend={resetInactivityTimer}
+          onExtend={extendSession}
           onLogout={signOut}
         />
       )}
@@ -233,7 +239,7 @@ export function AuthProvider({ children }) {
 
 function SessionWarningModal({ onExtend, onLogout }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50">
       <div className="bg-white rounded-xl shadow-2xl p-6 max-w-sm mx-4" onMouseDown={e => e.stopPropagation()}>
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">

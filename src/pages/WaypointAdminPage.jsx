@@ -165,6 +165,16 @@ export default function WaypointAdminPage() {
           >
             Product Hub
           </button>
+          <button
+            onClick={() => setActiveTab('leads')}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              activeTab === 'leads'
+                ? 'bg-orange-600 text-white'
+                : 'text-gray-400 hover:text-gray-200'
+            }`}
+          >
+            Leads
+          </button>
         </div>
 
         {/* Districts tab */}
@@ -243,6 +253,9 @@ export default function WaypointAdminPage() {
 
         {/* Product Hub tab */}
         {activeTab === 'hub' && <ProductHub districts={districts} loadingDistricts={loadingDistricts} />}
+
+        {/* Leads tab */}
+        {activeTab === 'leads' && <LeadsPanel />}
       </main>
 
       {showProvisionModal && (
@@ -261,6 +274,134 @@ export default function WaypointAdminPage() {
       )}
 
       <PartnerChat />
+    </div>
+  )
+}
+
+// ─── Leads Panel ──────────────────────────────────────────────────────────────
+
+const LEAD_SOURCE_LABELS = {
+  sandbox_explore:   'Sandbox Explore',
+  demo_request:      'Demo Request',
+  pilot_application: 'Pilot Application',
+  chat_widget:       'Chat Widget',
+}
+
+const LEAD_STATUS_STYLES = {
+  new:              'bg-orange-900 text-orange-200',
+  contacted:        'bg-blue-900 text-blue-200',
+  demo_scheduled:   'bg-purple-900 text-purple-200',
+  closed:           'bg-green-900 text-green-200',
+}
+
+function LeadsPanel() {
+  const [leads, setLeads] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [updatingId, setUpdatingId] = useState(null)
+
+  const fetchLeads = useCallback(async () => {
+    setLoading(true)
+    const { data } = await supabase
+      .from('leads')
+      .select('*')
+      .order('created_at', { ascending: false })
+    setLeads(data || [])
+    setLoading(false)
+  }, [])
+
+  useEffect(() => { fetchLeads() }, [fetchLeads])
+
+  async function updateStatus(id, status) {
+    setUpdatingId(id)
+    await supabase.from('leads').update({ status }).eq('id', id)
+    setLeads(prev => prev.map(l => l.id === id ? { ...l, status } : l))
+    setUpdatingId(null)
+  }
+
+  const bySource = leads.reduce((acc, l) => {
+    acc[l.source] = (acc[l.source] || 0) + 1
+    return acc
+  }, {})
+
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-6">
+        <div>
+          <h2 className="text-lg font-semibold text-white">Leads</h2>
+          <p className="text-sm text-gray-400">{leads.length} total · {leads.filter(l => l.status === 'new').length} new</p>
+        </div>
+        <button onClick={fetchLeads} className="text-sm text-gray-400 hover:text-white transition-colors">
+          ↻ Refresh
+        </button>
+      </div>
+
+      {/* Source breakdown */}
+      {leads.length > 0 && (
+        <div className="grid grid-cols-4 gap-3 mb-6">
+          {Object.entries(LEAD_SOURCE_LABELS).map(([src, label]) => (
+            <div key={src} className="bg-gray-900 border border-gray-800 rounded-lg p-4">
+              <p className="text-2xl font-bold text-white">{bySource[src] || 0}</p>
+              <p className="text-xs text-gray-400 mt-1">{label}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="bg-gray-900 border border-gray-800 rounded-lg overflow-hidden">
+        {loading ? (
+          <p className="text-center text-gray-500 py-12 text-sm">Loading leads…</p>
+        ) : leads.length === 0 ? (
+          <p className="text-center text-gray-500 py-12 text-sm">No leads yet. Leads appear here when someone submits a form on clearpathedgroup.com.</p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-gray-800">
+                <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">Name / Email</th>
+                <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">Source</th>
+                <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">District</th>
+                <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">Date</th>
+                <th className="text-left text-xs text-gray-500 font-medium px-4 py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {leads.map(lead => (
+                <tr key={lead.id} className="border-b border-gray-800 hover:bg-gray-800/40 transition-colors">
+                  <td className="px-4 py-3">
+                    <p className="text-white font-medium">{lead.name || '—'}</p>
+                    <p className="text-gray-400 text-xs">{lead.email}</p>
+                  </td>
+                  <td className="px-4 py-3">
+                    <span className="text-xs bg-gray-800 text-gray-300 px-2 py-1 rounded">
+                      {LEAD_SOURCE_LABELS[lead.source] || lead.source}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3 text-gray-400 text-xs max-w-[180px] truncate">
+                    {lead.district || '—'}
+                    {lead.concern && <span className="block text-gray-600 truncate">{lead.concern}</span>}
+                  </td>
+                  <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
+                    {format(parseISO(lead.created_at), 'MMM d, yyyy')}
+                    <span className="block text-gray-600">{format(parseISO(lead.created_at), 'h:mm a')}</span>
+                  </td>
+                  <td className="px-4 py-3">
+                    <select
+                      value={lead.status}
+                      disabled={updatingId === lead.id}
+                      onChange={e => updateStatus(lead.id, e.target.value)}
+                      className={`text-xs font-medium px-2 py-1 rounded border-0 cursor-pointer ${LEAD_STATUS_STYLES[lead.status] || 'bg-gray-700 text-gray-200'}`}
+                    >
+                      <option value="new">New</option>
+                      <option value="contacted">Contacted</option>
+                      <option value="demo_scheduled">Demo Scheduled</option>
+                      <option value="closed">Closed</option>
+                    </select>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   )
 }

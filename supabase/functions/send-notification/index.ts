@@ -79,12 +79,27 @@ const TEMPLATES: Record<string, (data: Record<string, unknown>) => string> = {
     </div>
 
     <p>We hope Waypoint is a fit for your district. When you're ready, there are a few ways to move forward:</p>
-    <ul style="color:#374151;line-height:2;">
-      <li><strong>Request a live demo</strong> — we'll walk through it with your team and your specific compliance challenges</li>
-      <li><strong>Apply for a pilot</strong> — get Waypoint running in your district and see it with real data</li>
-      <li><strong>Go straight to a contract</strong> — if you've seen enough and are ready, we can move quickly</li>
-    </ul>
-    <p>Reply to this email or reach us at <a href="mailto:support@clearpathedgroup.com" style="color:#d97706;">support@clearpathedgroup.com</a>.</p>
+    <table style="border-collapse:collapse;width:100%;margin:20px 0;">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
+          <a href="https://clearpathedgroup.com/#contact" style="font-size:0.95rem;font-weight:700;color:#d97706;text-decoration:none;">Request a live demo &rarr;</a>
+          <p style="margin:3px 0 0;font-size:0.82rem;color:#6b7280;">We'll walk through it with your team and your specific compliance challenges.</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #f3f4f6;">
+          <a href="https://clearpathedgroup.com/#pilot" style="font-size:0.95rem;font-weight:700;color:#d97706;text-decoration:none;">Apply for a founding district pilot &rarr;</a>
+          <p style="margin:3px 0 0;font-size:0.82rem;color:#6b7280;">Get Waypoint running in your district and see it with real data. Founding districts receive preferred pricing.</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;">
+          <a href="mailto:support@clearpathedgroup.com?subject=Ready%20to%20sign%20up%20for%20Waypoint" style="font-size:0.95rem;font-weight:700;color:#d97706;text-decoration:none;">Ready to sign up? Email us directly &rarr;</a>
+          <p style="margin:3px 0 0;font-size:0.82rem;color:#6b7280;">If you've seen enough, we can move quickly. No pressure.</p>
+        </td>
+      </tr>
+    </table>
+    <p>Questions? Reply to this email anytime.</p>
     <p style="margin:0;"><strong>The Waypoint Team</strong><br/><span style="color:#9ca3af;font-size:0.85rem;">Clear Path Education Group, LLC</span></p>
   `,
 

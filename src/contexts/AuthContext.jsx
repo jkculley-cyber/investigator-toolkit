@@ -234,7 +234,7 @@ export function AuthProvider({ children }) {
 function SessionWarningModal({ onExtend, onLogout }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-xl shadow-2xl p-6 max-w-sm mx-4">
+      <div className="bg-white rounded-xl shadow-2xl p-6 max-w-sm mx-4" onMouseDown={e => e.stopPropagation()}>
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
             <svg className="h-5 w-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>

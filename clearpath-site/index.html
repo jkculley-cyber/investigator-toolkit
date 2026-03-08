@@ -774,7 +774,7 @@
   </ul>
   <div style="display:flex;align-items:center;gap:10px;">
     <a href="#pilot" style="font-size:0.78rem;font-weight:700;color:#f4a84a;border:1px solid rgba(244,168,74,0.4);border-radius:999px;padding:8px 18px;text-decoration:none;white-space:nowrap;transition:all 0.2s;" onmouseover="this.style.background='rgba(244,168,74,0.1)';this.style.borderColor='rgba(244,168,74,0.8)'" onmouseout="this.style.background='transparent';this.style.borderColor='rgba(244,168,74,0.4)'">Apply for Pilot Spot</a>
-    <a href="#contact" class="nav-cta">Request a Demo →</a>
+    <a href="#explore" class="nav-cta" onclick="setTimeout(function(){document.getElementById('wp-main')&&wpNav('dashboard')},400)">Explore the App &#9655;</a>
   </div>
 </nav>
 
@@ -838,8 +838,8 @@
           <li>Transition plans with 30/60/90-day reviews</li>
         </ul>
         <div class="product-main-actions">
-          <a href="https://waypoint.clearpathedgroup.com" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:0.82rem;padding:11px 22px;">
-            Launch App &#8594;
+          <a href="#explore" class="btn-primary" style="font-size:0.82rem;padding:11px 22px;" onclick="setTimeout(function(){document.getElementById('wp-main')&&wpNav('dashboard')},400)">
+            Explore the App &#9655;
           </a>
           <a href="/whitepaper.html" class="btn-ghost" style="font-size:0.82rem;padding:11px 22px;">
             Free Compliance Guide
@@ -1278,9 +1278,10 @@
   .wp-atitle.xred{color:#f87171}
   .wp-atitle.xyel{color:#fbbf24}
   .wp-adesc{font-size:0.68rem;color:#9ca3af;margin:0;line-height:1.5}
-  .wp-backbtn{display:inline-flex;align-items:center;gap:5px;font-size:0.7rem;color:#9ca3af;background:none;border:none;cursor:pointer;padding:0;font-family:inherit;transition:color 0.15s}
-  .wp-backbtn:hover{color:#f97316}
-  .wp-dtopbar{padding:14px 20px 4px}
+  .wp-backbtn{display:inline-flex;align-items:center;gap:6px;font-size:0.72rem;font-weight:600;color:#f97316;background:rgba(249,115,22,0.08);border:1px solid rgba(249,115,22,0.25);border-radius:6px;cursor:pointer;padding:6px 12px;font-family:inherit;transition:all 0.15s}
+  .wp-backbtn:hover{background:rgba(249,115,22,0.15);border-color:rgba(249,115,22,0.5)}
+  .wp-dtopbar{padding:10px 16px 6px;border-bottom:1px solid rgba(255,255,255,0.06);background:rgba(10,4,20,0.5);display:flex;align-items:center;gap:12px}
+  .wp-dtopbar-title{font-size:0.72rem;color:rgba(255,255,255,0.35);margin:0}
   .wp-shead{padding:0 20px 10px;display:flex;align-items:flex-start;justify-content:space-between}
   .wp-sname{font-size:0.95rem;font-weight:700;color:#f9fafb;margin:0}
   .wp-smeta{font-size:0.68rem;color:#9ca3af;margin:3px 0 0}
@@ -1334,7 +1335,7 @@
 
   <div style="text-align:center;margin-top:28px;">
     <p style="font-size:0.78rem;color:rgba(240,230,211,0.35);margin:0 0 14px;">Read-only simulation — Explorer ISD is pre-loaded with 15 students, real compliance workflows, and active SPED alerts.</p>
-    <a href="#pilot" style="display:inline-block;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.4);color:#f97316;font-size:0.82rem;font-weight:700;padding:10px 26px;border-radius:999px;text-decoration:none;letter-spacing:0.04em;transition:all 0.2s;" onmouseover="this.style.background='rgba(249,115,22,0.22)'" onmouseout="this.style.background='rgba(249,115,22,0.12)'">Get your own sandbox access &rarr;</a>
+    <a href="#contact" style="display:inline-block;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.4);color:#f97316;font-size:0.82rem;font-weight:700;padding:10px 26px;border-radius:999px;text-decoration:none;letter-spacing:0.04em;transition:all 0.2s;" onmouseover="this.style.background='rgba(249,115,22,0.22)'" onmouseout="this.style.background='rgba(249,115,22,0.12)'">See it with your district's data &rarr;</a>
   </div>
 
 <script>
@@ -1471,7 +1472,8 @@
         +'</div>';
     }
     return '<div class="wp-dtopbar"><button class="wp-backbtn" onclick="wpNav(\'dashboard\')">'
-      +'<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg> Dashboard</button></div>'
+      +'<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg> Back to Dashboard</button>'
+      +'<p class="wp-dtopbar-title">Student Detail &rsaquo; Incident &amp; Compliance</p></div>'
       +'<div class="wp-shead"><div><p class="wp-sname">'+s.name+'</p><p class="wp-smeta">Grade '+s.grade+' &middot; '+s.campus+'</p>'
       +'<div class="wp-stags">'+tbadge(s)+'&nbsp;&nbsp;'+sbadge(s.status)+'</div></div></div>'
       +block+incInfo+cl;

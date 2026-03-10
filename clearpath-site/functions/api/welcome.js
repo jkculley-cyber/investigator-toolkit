@@ -1,10 +1,11 @@
 // Cloudflare Pages Function: /api/welcome
-// Fires a welcome email via the Waypoint send-notification Edge Function.
+// Fires a welcome email via the Waypoint send-notification Edge Function
+// and logs the lead to the Supabase `leads` table.
 //
-// POST { email, name?, source }
+// POST { email, name?, source, district?, concern? }
 // source: 'demo_request' | 'pilot_application' | 'chat_widget' | 'sandbox_explore'
 //
-// Always returns HTTP 200 — email failures must not break form UX.
+// Always returns HTTP 200 — email/logging failures must not break form UX.
 // Set in CF Pages dashboard:
 //   SUPABASE_URL            = https://kvxecksvkimcgwhxxyhw.supabase.co
 //   SUPABASE_SERVICE_ROLE_KEY = <service role key>
@@ -24,12 +25,14 @@ const SOURCE_TO_SUBJECT = {
 }
 
 export async function onRequestPost({ request, env }) {
-  let email, name, source
+  let email, name, source, district, concern
   try {
     const body = await request.json()
-    email  = (body.email  || '').trim()
-    name   = (body.name   || '').trim()
-    source = (body.source || '').trim()
+    email    = (body.email    || '').trim()
+    name     = (body.name     || '').trim()
+    source   = (body.source   || '').trim()
+    district = (body.district || '').trim() || null
+    concern  = (body.concern  || '').trim() || null
   } catch (_) {
     return new Response(JSON.stringify({ ok: true }), { status: 200 })
   }
@@ -64,6 +67,19 @@ export async function onRequestPost({ request, env }) {
       const text = await res.text()
       console.error(`[welcome] send-notification failed (${res.status}): ${text}`)
     }
+
+    // Log lead to Supabase — non-blocking, never throws
+    fetch(`${supabaseUrl}/rest/v1/leads`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${serviceRoleKey}`,
+        'apikey': serviceRoleKey,
+        'Prefer': 'return=minimal',
+      },
+      body: JSON.stringify({ email, name: name || null, source, district, concern }),
+    }).catch(err => console.error('[welcome] lead insert failed:', err))
+
   } catch (err) {
     console.error('[welcome] Unexpected error:', err)
   }

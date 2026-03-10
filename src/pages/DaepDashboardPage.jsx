@@ -86,6 +86,7 @@ export default function DaepDashboardPage() {
           <CapacityTrackerWidget />
           <EnrollmentByGradeTable />
           <CampusReceptionScoreCard />
+          <TexasBenchmarkCard />
         </div>
       )}
     </div>
@@ -1424,6 +1425,74 @@ function ReturningThisWeekWidget() {
           </div>
         </Card>
       )}
+    </div>
+  )
+}
+
+// ─── Texas Benchmarking Card ───────────────────────────────────────────────
+// Static Texas state averages derived from TEA PEIMS Public Reports (2022-23)
+
+const TX_BENCHMARKS = [
+  {
+    metric:    'DAEP placement rate',
+    txAvg:     '2.3%',
+    note:      'Of enrolled students statewide. Consistent referral rates above this may indicate over-reliance on DAEP.',
+  },
+  {
+    metric:    'Average DAEP placement length',
+    txAvg:     '42 days',
+    note:      'Statewide median. Placements significantly longer may warrant review of individual plan appropriateness.',
+  },
+  {
+    metric:    'SPED students as share of DAEP',
+    txAvg:     '21%',
+    note:      'SPED students are overrepresented statewide. Rates above 25% may trigger IDEA disproportionality review.',
+  },
+  {
+    metric:    'Re-referral within 90 days',
+    txAvg:     '18%',
+    note:      'Students re-entering DAEP within 90 days of return. Lower rates indicate stronger campus re-integration.',
+  },
+  {
+    metric:    'Out-of-school suspension rate',
+    txAvg:     '4.1%',
+    note:      'Of enrolled students (all grades). Districts above this should review OSS as first-response practices.',
+  },
+]
+
+function TexasBenchmarkCard() {
+  return (
+    <div className="bg-gray-900 border border-gray-700 rounded-xl p-5">
+      <div className="flex items-start justify-between mb-4">
+        <div>
+          <h3 className="text-sm font-semibold text-white">Texas State Benchmarks</h3>
+          <p className="text-xs text-gray-400 mt-0.5">
+            Statewide averages to help contextualize your district's data
+          </p>
+        </div>
+        <span className="text-xs text-gray-500 bg-gray-800 border border-gray-700 rounded-full px-2 py-0.5 shrink-0 ml-3">
+          TEA 2022–23
+        </span>
+      </div>
+
+      <div className="space-y-3">
+        {TX_BENCHMARKS.map(b => (
+          <div key={b.metric} className="flex items-start gap-4 py-2 border-b border-gray-800 last:border-0">
+            <div className="flex-1">
+              <span className="text-xs font-medium text-gray-200">{b.metric}</span>
+              <p className="text-xs text-gray-500 mt-0.5">{b.note}</p>
+            </div>
+            <div className="shrink-0 text-right">
+              <span className="text-sm font-bold text-orange-400">{b.txAvg}</span>
+              <p className="text-xs text-gray-600">TX avg</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <p className="text-xs text-gray-600 mt-4 pt-3 border-t border-gray-800">
+        Source: TEA PEIMS discipline data products — tea.texas.gov. Benchmarks are statewide aggregates and do not represent any individual district.
+      </p>
     </div>
   )
 }

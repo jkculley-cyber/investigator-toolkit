@@ -163,6 +163,16 @@ const TEMPLATES: Record<string, (data: Record<string, unknown>) => string> = {
     </div>
 
     <p>We look forward to connecting with you.</p>
+
+    <table style="border-collapse:collapse;width:100%;margin:20px 0;">
+      <tr>
+        <td style="padding:10px 0;">
+          <a href="https://calendly.com/clearpathedgroup/30min" style="display:inline-block;background:#f97316;color:white;font-size:0.95rem;font-weight:700;padding:12px 24px;border-radius:6px;text-decoration:none;">Schedule a 30-minute demo &rarr;</a>
+          <p style="margin:6px 0 0;font-size:0.82rem;color:#6b7280;">Pick a time that works for you. No prep needed.</p>
+        </td>
+      </tr>
+    </table>
+
     <p style="margin:0;"><strong>The Waypoint Team</strong><br/><span style="color:#9ca3af;font-size:0.85rem;">Clear Path Education Group, LLC</span></p>
   `,
 
@@ -197,6 +207,59 @@ const TEMPLATES: Record<string, (data: Record<string, unknown>) => string> = {
       <li>We align on a pilot timeline and scope</li>
     </ol>
     <p>Founding Districts receive preferred pricing and direct access to our product team throughout the pilot.</p>
+
+    <table style="border-collapse:collapse;width:100%;margin:20px 0;">
+      <tr>
+        <td style="padding:10px 0;">
+          <a href="https://calendly.com/clearpathedgroup/30min" style="display:inline-block;background:#f97316;color:white;font-size:0.95rem;font-weight:700;padding:12px 24px;border-radius:6px;text-decoration:none;">Schedule your discovery call &rarr;</a>
+          <p style="margin:6px 0 0;font-size:0.82rem;color:#6b7280;">Or reply to this email — we'll work around your schedule.</p>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0;"><strong>The Waypoint Team</strong><br/><span style="color:#9ca3af;font-size:0.85rem;">Clear Path Education Group, LLC</span></p>
+  `,
+
+  nurture_day3: (d) => `
+    <h2 style="color:#1f2937;margin-top:0;">Still thinking about Waypoint?</h2>
+    <p>Hi${d.name ? ` ${d.name}` : ''} — we wanted to check in. A few days have passed since you reached out, and we want to make sure you have everything you need to make a decision.</p>
+    <p>If you haven't already, the sandbox is a great way to see how Waypoint handles the workflows your district deals with every day — SPED compliance blocking, approval chains, DAEP orientation tracking, and more.</p>
+
+    <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:16px 20px;margin:20px 0;">
+      <p style="font-size:0.8rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:#92400e;margin:0 0 8px;">Quick reminder — sandbox credentials</p>
+      <p style="margin:4px 0;font-size:0.85rem;"><strong style="color:#78350f;width:80px;display:inline-block;">URL</strong> <a href="https://waypoint.clearpathedgroup.com" style="color:#d97706;">waypoint.clearpathedgroup.com</a></p>
+      <p style="margin:4px 0;font-size:0.85rem;"><strong style="color:#78350f;width:80px;display:inline-block;">Email</strong> explore@clearpathedgroup.com</p>
+      <p style="margin:4px 0;font-size:0.85rem;"><strong style="color:#78350f;width:80px;display:inline-block;">Password</strong> Explore2026!</p>
+    </div>
+
+    <p>When you're ready to see it with your district's actual data and workflows, we're here.</p>
+
+    <table style="border-collapse:collapse;width:100%;margin:20px 0;">
+      <tr>
+        <td style="padding:10px 0;">
+          <a href="https://calendly.com/clearpathedgroup/30min" style="display:inline-block;background:#f97316;color:white;font-size:0.95rem;font-weight:700;padding:12px 24px;border-radius:6px;text-decoration:none;">Book a 30-minute walkthrough &rarr;</a>
+        </td>
+      </tr>
+    </table>
+
+    <p style="margin:0;"><strong>The Waypoint Team</strong><br/><span style="color:#9ca3af;font-size:0.85rem;">Clear Path Education Group, LLC</span></p>
+  `,
+
+  nurture_day7: (d) => `
+    <h2 style="color:#1f2937;margin-top:0;">Last check-in from Waypoint</h2>
+    <p>Hi${d.name ? ` ${d.name}` : ''} — we don't want to crowd your inbox, so this is our last follow-up.</p>
+    <p>If the timing isn't right or you went another direction, that's completely fine. If you'd like to revisit Waypoint in the future, we'll be here — and the sandbox will always be available.</p>
+    <p>If you <em>are</em> still interested but just haven't had time, a 15-minute call is all it takes to see if we're a fit for your district.</p>
+
+    <table style="border-collapse:collapse;width:100%;margin:20px 0;">
+      <tr>
+        <td style="padding:10px 0;">
+          <a href="https://calendly.com/clearpathedgroup/30min" style="display:inline-block;background:#f97316;color:white;font-size:0.95rem;font-weight:700;padding:12px 24px;border-radius:6px;text-decoration:none;">Book a quick call &rarr;</a>
+          <p style="margin:6px 0 0;font-size:0.82rem;color:#6b7280;">Or just reply to this email.</p>
+        </td>
+      </tr>
+    </table>
+
     <p style="margin:0;"><strong>The Waypoint Team</strong><br/><span style="color:#9ca3af;font-size:0.85rem;">Clear Path Education Group, LLC</span></p>
   `,
 }

@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react'
 import { IMPORT_TYPES, DUPLICATE_STRATEGIES } from '../../lib/constants'
 import TemplateDownloadButton from './TemplateDownloadButton'
+import { downloadTemplate } from '../../lib/importTemplates'
 
 export default function ImportStepUpload({ onNext, onCancel, allowedTypes }) {
   const [importType, setImportType] = useState('')
@@ -38,8 +39,45 @@ export default function ImportStepUpload({ onNext, onCancel, allowedTypes }) {
 
   const canProceed = importType && file
 
+  const coreTypes = ['students', 'profiles', 'campuses', 'incidents']
+  const visibleTemplateTypes = (allowedTypes || coreTypes).filter(t =>
+    IMPORT_TYPES.some(it => it.value === t)
+  ).slice(0, 4)
+
   return (
     <div className="space-y-6">
+      {/* Step 0: Download templates first */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <svg className="h-5 w-5 text-blue-500 flex-shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div className="flex-1">
+            <p className="text-sm font-medium text-blue-900">Download a template first</p>
+            <p className="text-xs text-blue-700 mt-0.5">Use these Excel templates to format your data correctly. Each includes column headers, sample rows, and an instructions sheet.</p>
+            <div className="flex flex-wrap gap-2 mt-3">
+              {visibleTemplateTypes.map(type => {
+                const found = IMPORT_TYPES.find(it => it.value === type)
+                if (!found) return null
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => downloadTemplate(type)}
+                    className="inline-flex items-center gap-1.5 text-xs text-blue-700 hover:text-blue-900 bg-white border border-blue-300 hover:border-blue-400 rounded-md px-2.5 py-1.5 font-medium transition-colors"
+                  >
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    {found.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Import Type */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-2">Data Type</label>

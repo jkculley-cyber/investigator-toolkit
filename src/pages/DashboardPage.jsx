@@ -192,6 +192,9 @@ export default function DashboardPage() {
         {/* Setup Checklist — admin only, hides when all steps done or dismissed */}
         {isAdmin && <SetupChecklist />}
 
+        {/* Role-specific quick-start guidance — non-admin staff only */}
+        {!isAdmin && profile?.role && <StaffQuickStart role={profile.role} name={profile.full_name?.split(' ')[0]} />}
+
         {/* Referrals Needing Attention — denied or returned for corrections */}
         {needsAction.length > 0 && (
           <div className="mb-6">
@@ -405,5 +408,120 @@ function QuickAction({ label, description, href, external }) {
         <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
       </svg>
     </Link>
+  )
+}
+
+const STAFF_GUIDANCE = {
+  counselor: {
+    color: 'blue',
+    intro: 'As counselor, your focus is student support and reentry.',
+    actions: [
+      { label: 'Log a reentry check-in', desc: 'Record how a returned student is adjusting', href: '/plans' },
+      { label: 'Review active alerts', desc: 'Check for students flagged for follow-up', href: '/alerts' },
+      { label: 'View transition plans', desc: 'See students returning from DAEP this week', href: '/plans' },
+    ],
+  },
+  teacher: {
+    color: 'green',
+    intro: 'As a teacher, you play a key role in welcoming students back and referring concerns.',
+    actions: [
+      { label: 'Submit a referral', desc: 'Log a behavioral concern for a student', href: '/incidents/new' },
+      { label: 'View your students', desc: 'See students at your campus', href: '/students' },
+      { label: 'Behavior kiosk', desc: 'Open the student daily check-in kiosk', href: '/kiosk' },
+    ],
+  },
+  principal: {
+    color: 'orange',
+    intro: 'As principal, you approve DAEP referrals and oversee campus compliance.',
+    actions: [
+      { label: 'Pending your approval', desc: 'DAEP referrals awaiting your sign-off', href: '/incidents?status=pending_approval' },
+      { label: 'Compliance holds', desc: 'Incidents blocked by SPED or 504 requirements', href: '/compliance' },
+      { label: 'DAEP dashboard', desc: 'Active enrollments and orientation status', href: '/daep' },
+    ],
+  },
+  ap: {
+    color: 'orange',
+    intro: 'As AP, you handle referrals and campus discipline.',
+    actions: [
+      { label: 'Submit an incident', desc: 'Start a new DAEP or OSS referral', href: '/incidents/new' },
+      { label: 'Pending approvals', desc: 'Referrals waiting on your review', href: '/incidents?status=pending_approval' },
+      { label: 'Active incidents', desc: 'All open referrals at your campus', href: '/incidents' },
+    ],
+  },
+  sped_coordinator: {
+    color: 'purple',
+    intro: 'As SPED coordinator, you manage manifestation determinations and compliance timelines.',
+    actions: [
+      { label: 'Compliance holds', desc: 'SPED incidents blocked pending your action', href: '/compliance' },
+      { label: 'Active alerts', desc: 'SPED-related flags requiring attention', href: '/alerts' },
+      { label: 'Transition plans', desc: 'SPED students with active DAEP placements', href: '/plans' },
+    ],
+  },
+  cbc: {
+    color: 'teal',
+    intro: 'As campus behavior coordinator, you facilitate referrals and student support.',
+    actions: [
+      { label: 'Submit an incident', desc: 'Log a new behavioral referral', href: '/incidents/new' },
+      { label: 'Active incidents', desc: 'Open referrals at your campus', href: '/incidents' },
+      { label: 'Student roster', desc: 'View and search all students', href: '/students' },
+    ],
+  },
+  director_student_affairs: {
+    color: 'orange',
+    intro: 'As Director of Student Affairs, you oversee district-wide discipline and compliance.',
+    actions: [
+      { label: 'DAEP dashboard', desc: 'District-wide enrollment and operations', href: '/daep' },
+      { label: 'Reports', desc: 'Disproportionality and recidivism analytics', href: '/reports' },
+      { label: 'Compliance holds', desc: 'All open SPED/504 compliance items', href: '/compliance' },
+    ],
+  },
+}
+
+function StaffQuickStart({ role, name }) {
+  const [dismissed, setDismissed] = useState(() =>
+    localStorage.getItem(`quickstart_dismissed_${role}`) === '1'
+  )
+  const config = STAFF_GUIDANCE[role]
+  if (!config || dismissed) return null
+
+  const colorMap = {
+    blue:   { border: 'border-blue-700/30',   bg: 'bg-blue-900/20',   dot: 'bg-blue-500',   text: 'text-blue-400'   },
+    green:  { border: 'border-green-700/30',  bg: 'bg-green-900/20',  dot: 'bg-green-500',  text: 'text-green-400'  },
+    orange: { border: 'border-orange-700/30', bg: 'bg-orange-900/20', dot: 'bg-orange-500', text: 'text-orange-400' },
+    purple: { border: 'border-purple-700/30', bg: 'bg-purple-900/20', dot: 'bg-purple-500', text: 'text-purple-400' },
+    teal:   { border: 'border-teal-700/30',   bg: 'bg-teal-900/20',   dot: 'bg-teal-500',   text: 'text-teal-400'   },
+  }
+  const c = colorMap[config.color] || colorMap.orange
+
+  return (
+    <div className={`mb-6 rounded-xl border ${c.border} ${c.bg} p-4`}>
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <p className={`text-xs font-semibold uppercase tracking-widest ${c.text} mb-0.5`}>Getting Started</p>
+          <p className="text-sm text-gray-300">{name ? `${name}, ` : ''}{config.intro}</p>
+        </div>
+        <button
+          onClick={() => { localStorage.setItem(`quickstart_dismissed_${role}`, '1'); setDismissed(true) }}
+          className="text-gray-600 hover:text-gray-400 transition-colors ml-4 flex-shrink-0 text-xs"
+        >
+          Dismiss
+        </button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        {config.actions.map(action => (
+          <Link
+            key={action.href}
+            to={action.href}
+            className="flex items-start gap-2 bg-gray-900/50 hover:bg-gray-900/80 border border-gray-800 rounded-lg p-3 transition-colors group"
+          >
+            <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5 ${c.dot}`} />
+            <div>
+              <p className="text-xs font-medium text-gray-200 group-hover:text-white">{action.label}</p>
+              <p className="text-xs text-gray-500 mt-0.5">{action.desc}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
   )
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import {
@@ -14,6 +14,7 @@ import {
   useInterventionEffectiveness,
   usePeimsExport,
 } from '../hooks/useReports'
+import { supabase } from '../lib/supabase'
 import { useDaepEnrollmentStats } from '../hooks/useDaepDashboard'
 import { useAuth } from '../contexts/AuthContext'
 import Topbar from '../components/layout/Topbar'
@@ -23,7 +24,6 @@ import Button from '../components/ui/Button'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 import { CONSEQUENCE_TYPE_LABELS, INTERVENTION_CATEGORY_LABELS } from '../lib/constants'
 import { getSchoolYearLabel, getSchoolYearStart } from '../lib/utils'
-import { supabase } from '../lib/supabase'
 import {
   exportToPdf,
   exportToExcel,
@@ -293,7 +293,109 @@ function DisproportionalityTab() {
         description="Compares discipline rates between English Language Learners and non-ELL students."
         drilldownBase="/students"
       />
+
+      {/* Campus-level breakdown */}
+      <CampusDisproportionalityTable />
     </div>
+  )
+}
+
+function CampusDisproportionalityTable() {
+  const { districtId } = useAuth()
+  const [rows, setRows] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!districtId) return
+    async function load() {
+      setLoading(true)
+      const schoolYearStart = getSchoolYearStart().toISOString()
+      // Fetch DAEP/OSS incidents with campus + student demographics
+      const { data: incidents } = await supabase
+        .from('incidents')
+        .select('consequence_type, campus_id, students(is_sped, is_ell, is_504, race_ethnicity)')
+        .eq('district_id', districtId)
+        .in('consequence_type', ['daep', 'oss'])
+        .gte('incident_date', schoolYearStart)
+
+      const { data: campuses } = await supabase
+        .from('campuses')
+        .select('id, name')
+        .eq('district_id', districtId)
+        .neq('campus_type', 'daep')
+
+      if (!incidents || !campuses) { setLoading(false); return }
+
+      const campusMap = {}
+      for (const c of campuses) {
+        campusMap[c.id] = { id: c.id, name: c.name, total: 0, sped: 0, ell: 0, hispanic: 0, african_american: 0 }
+      }
+      for (const inc of incidents) {
+        const entry = campusMap[inc.campus_id]
+        if (!entry) continue
+        entry.total++
+        if (inc.students?.is_sped) entry.sped++
+        if (inc.students?.is_ell)  entry.ell++
+        const race = (inc.students?.race_ethnicity || '').toLowerCase()
+        if (race.includes('hispanic') || race.includes('latino')) entry.hispanic++
+        if (race.includes('black') || race.includes('african')) entry.african_american++
+      }
+
+      const result = Object.values(campusMap)
+        .filter(c => c.total > 0)
+        .map(c => ({
+          ...c,
+          spedPct:  c.total > 0 ? Math.round((c.sped / c.total) * 100) : 0,
+          ellPct:   c.total > 0 ? Math.round((c.ell  / c.total) * 100) : 0,
+          hispPct:  c.total > 0 ? Math.round((c.hispanic / c.total) * 100) : 0,
+          aaPct:    c.total > 0 ? Math.round((c.african_american / c.total) * 100) : 0,
+        }))
+        .sort((a, b) => b.total - a.total)
+
+      setRows(result)
+      setLoading(false)
+    }
+    load()
+  }, [districtId])
+
+  if (loading) return null
+  if (rows.length === 0) return null
+
+  const flag = (pct) => pct >= 60 ? 'text-red-600 font-semibold' : pct >= 40 ? 'text-yellow-600' : 'text-gray-700'
+
+  return (
+    <Card>
+      <CardTitle>Campus-Level DAEP/OSS Concentration</CardTitle>
+      <p className="text-xs text-gray-500 mt-1 mb-4">
+        Percentage of DAEP/OSS incidents at each campus by student group. Red ≥60% · Yellow ≥40% — may indicate disproportionate impact.
+      </p>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="text-xs text-gray-500 border-b border-gray-200">
+              <th className="text-left pb-2 font-medium">Campus</th>
+              <th className="text-center pb-2 font-medium">Total</th>
+              <th className="text-center pb-2 font-medium">SPED %</th>
+              <th className="text-center pb-2 font-medium">ELL %</th>
+              <th className="text-center pb-2 font-medium">Hispanic %</th>
+              <th className="text-center pb-2 font-medium">African American %</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-100">
+            {rows.map(r => (
+              <tr key={r.id} className="hover:bg-gray-50">
+                <td className="py-2 pr-4 font-medium text-gray-800 text-xs">{r.name}</td>
+                <td className="py-2 text-center text-xs text-gray-600">{r.total}</td>
+                <td className={`py-2 text-center text-xs ${flag(r.spedPct)}`}>{r.spedPct}%</td>
+                <td className={`py-2 text-center text-xs ${flag(r.ellPct)}`}>{r.ellPct}%</td>
+                <td className={`py-2 text-center text-xs ${flag(r.hispPct)}`}>{r.hispPct}%</td>
+                <td className={`py-2 text-center text-xs ${flag(r.aaPct)}`}>{r.aaPct}%</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </Card>
   )
 }
 

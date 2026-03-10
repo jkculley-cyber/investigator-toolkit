@@ -132,6 +132,9 @@ export default function ComplianceChecklist({ checklist, student, onUpdate }) {
   const [expandedGuidance, setExpandedGuidance] = useState({})
   const [placementJustification, setPlacementJustification] = useState(checklist?.placement_justification || '')
   const [savingJustification, setSavingJustification] = useState(false)
+  const [fbaNotes, setFbaNotes] = useState(checklist?.fba_notes || '')
+  const [bipNotes, setBipNotes] = useState(checklist?.bip_notes || '')
+  const [savingFbaBip, setSavingFbaBip] = useState(false)
 
   if (!checklist) return null
 
@@ -203,6 +206,21 @@ export default function ComplianceChecklist({ checklist, student, onUpdate }) {
       onUpdate?.()
     }
     setSavingJustification(false)
+  }
+
+  const handleSaveFbaBipNotes = async () => {
+    setSavingFbaBip(true)
+    const { error } = await updateChecklist(checklist.id, {
+      fba_notes: fbaNotes || null,
+      bip_notes: bipNotes || null,
+    })
+    if (error) {
+      toast.error('Failed to save notes')
+    } else {
+      toast.success('FBA/BIP notes saved')
+      onUpdate?.()
+    }
+    setSavingFbaBip(false)
   }
 
   const handleOverride = async () => {
@@ -426,6 +444,79 @@ export default function ComplianceChecklist({ checklist, student, onUpdate }) {
             )
           })}
         </div>
+
+        {/* FBA/BIP Documentation Notes — shown when either item is checked */}
+        {(checklist.fba_conducted || checklist.bip_reviewed) && !isCompleted && (
+          <div className="mt-4 p-4 bg-purple-50 border border-purple-200 rounded-lg space-y-4">
+            <p className="text-xs font-semibold text-purple-800 uppercase tracking-widest">FBA / BIP Documentation</p>
+            <p className="text-xs text-purple-700">
+              Document key findings from the FBA and BIP review. These notes are stored with the compliance record and may be referenced during due process.
+            </p>
+
+            {checklist.fba_conducted && (
+              <div>
+                <label className="block text-xs font-medium text-purple-800 mb-1">
+                  FBA Summary — key antecedents, behaviors, and consequences identified
+                </label>
+                <textarea
+                  value={fbaNotes}
+                  onChange={e => setFbaNotes(e.target.value)}
+                  rows={3}
+                  placeholder="e.g. FBA conducted on [date] by [assessor]. Primary behavior: [describe]. Antecedents: [describe]. Function: [attention-seeking / task avoidance / sensory / other]. Completed within last 12 months — date: [MM/DD/YYYY]."
+                  className="w-full text-xs border border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+                />
+              </div>
+            )}
+
+            {checklist.bip_reviewed && (
+              <div>
+                <label className="block text-xs font-medium text-purple-800 mb-1">
+                  BIP Review Notes — implementation fidelity and any modifications made
+                </label>
+                <textarea
+                  value={bipNotes}
+                  onChange={e => setBipNotes(e.target.value)}
+                  rows={3}
+                  placeholder="e.g. BIP reviewed on [date] with [who]. Current BIP strategies: [describe]. Fidelity concerns: [none / describe]. Modifications recommended: [none / describe]. DAEP campus will implement: [which strategies]."
+                  className="w-full text-xs border border-purple-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-purple-400 resize-none"
+                />
+              </div>
+            )}
+
+            <div className="flex items-center justify-between pt-1">
+              <p className="text-xs text-purple-600 italic">
+                Per IDEA 34 CFR §300.530(d) — BIP must be reviewed and modified as necessary when a student is removed to DAEP.
+              </p>
+              <button
+                type="button"
+                onClick={handleSaveFbaBipNotes}
+                disabled={savingFbaBip}
+                className="text-xs font-medium bg-purple-600 hover:bg-purple-700 text-white px-3 py-1.5 rounded-lg transition-colors disabled:opacity-50 ml-3 shrink-0"
+              >
+                {savingFbaBip ? 'Saving…' : 'Save Notes'}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Show saved notes in read-only mode when completed */}
+        {isCompleted && (checklist.fba_notes || checklist.bip_notes) && (
+          <div className="mt-4 p-3 bg-purple-50 border border-purple-200 rounded-lg space-y-2">
+            <p className="text-xs font-semibold text-purple-800">FBA/BIP Documentation</p>
+            {checklist.fba_notes && (
+              <div>
+                <p className="text-xs font-medium text-purple-700">FBA Summary</p>
+                <p className="text-xs text-purple-600 mt-0.5 whitespace-pre-wrap">{checklist.fba_notes}</p>
+              </div>
+            )}
+            {checklist.bip_notes && (
+              <div>
+                <p className="text-xs font-medium text-purple-700">BIP Review Notes</p>
+                <p className="text-xs text-purple-600 mt-0.5 whitespace-pre-wrap">{checklist.bip_notes}</p>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Override completed info */}
         {checklist.block_overridden && (

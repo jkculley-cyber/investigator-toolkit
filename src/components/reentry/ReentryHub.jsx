@@ -56,6 +56,13 @@ export default function ReentryHub({ plan, student }) {
         planId={plan.id}
         onAdd={addCheckin}
       />
+
+      {/* Teacher Observations */}
+      <TeacherObservationsCard
+        planId={plan.id}
+        checklist={checklist}
+        onSaved={updateField}
+      />
     </div>
   )
 }
@@ -512,5 +519,70 @@ function CheckinHeatMap({ checkins }) {
         </div>
       </div>
     </div>
+  )
+}
+
+// ─── Teacher Observations ─────────────────────────────────────────────────────
+// Counselors log teacher feedback after return. Stored in reentry_checklists.teacher_observations.
+
+function TeacherObservationsCard({ planId, checklist, onSaved }) {
+  const { districtId } = useAuth()
+  const [text, setText] = useState(checklist?.teacher_observations || '')
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+
+  const handleSave = async () => {
+    if (!planId || !districtId) return
+    setSaving(true)
+    const { error } = await supabase
+      .from('reentry_checklists')
+      .upsert({
+        plan_id: planId,
+        district_id: districtId,
+        teacher_observations: text || null,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'plan_id' })
+    setSaving(false)
+    if (!error) {
+      setSaved(true)
+      setTimeout(() => setSaved(false), 2000)
+    }
+  }
+
+  return (
+    <Card>
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <CardTitle>Teacher Observations</CardTitle>
+          <p className="text-xs text-gray-500 mt-0.5">
+            Record feedback from teachers after this student's return. Visible to counselors and admins.
+          </p>
+        </div>
+        <span className="text-xs text-gray-500 bg-gray-100 border border-gray-200 rounded-full px-2 py-0.5 ml-3 shrink-0">
+          Counselor-logged
+        </span>
+      </div>
+
+      <textarea
+        value={text}
+        onChange={e => setText(e.target.value)}
+        rows={4}
+        placeholder="e.g. Ms. Garcia reports strong engagement in 1st period. Concern noted by Mr. Torres about peer conflict at lunch — monitoring. No escalation events this week."
+        className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:border-transparent resize-none placeholder-gray-400 text-gray-800"
+      />
+
+      <div className="flex items-center justify-between mt-3">
+        <p className="text-xs text-gray-400">
+          {text.length > 0 ? `${text.length} characters` : 'No observations recorded yet'}
+        </p>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          className="text-sm font-medium bg-orange-500 hover:bg-orange-600 text-white px-4 py-1.5 rounded-lg transition-colors disabled:opacity-50"
+        >
+          {saving ? 'Saving…' : saved ? 'Saved ✓' : 'Save Observations'}
+        </button>
+      </div>
+    </Card>
   )
 }

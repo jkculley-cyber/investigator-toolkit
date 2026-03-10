@@ -454,6 +454,15 @@ function LeadsPanel() {
                   <td className="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">
                     {format(parseISO(lead.created_at), 'MMM d, yyyy')}
                     <span className="block text-gray-600">{format(parseISO(lead.created_at), 'h:mm a')}</span>
+                    {lead.status === 'new' && (() => {
+                      const stage = lead.nurture_stage || 0
+                      const daysSince = Math.floor((Date.now() - new Date(lead.created_at)) / 86400000)
+                      if (stage === 0 && daysSince >= 3) return <span className="block text-yellow-500 font-medium mt-0.5">Day 3 nurture pending</span>
+                      if (stage === 1 && daysSince >= 7) return <span className="block text-yellow-500 font-medium mt-0.5">Day 7 nurture pending</span>
+                      if (stage === 1) return <span className="block text-blue-400 mt-0.5">Day 3 sent</span>
+                      if (stage >= 2) return <span className="block text-gray-500 mt-0.5">Sequence complete</span>
+                      return null
+                    })()}
                   </td>
                   <td className="px-4 py-3">
                     <select

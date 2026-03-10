@@ -293,3 +293,133 @@ export function useReturningThisWeek() {
 
   return { plans, loading }
 }
+
+/**
+ * Campus Reception Score — per-campus analytics on returned students.
+ * Measures re-referral rate within 90 days and check-in trajectory.
+ * No new tables — derived from transition_plans, reentry_checklists,
+ * reentry_checkins, incidents, and campuses.
+ */
+export function useCampusReceptionScore() {
+  const { districtId } = useAuth()
+  const [scores, setScores] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    if (!districtId) return
+    async function analyze() {
+      setLoading(true)
+
+      const cutoff = new Date(Date.now() - 180 * 86400000).toISOString().split('T')[0]
+      const today  = new Date().toISOString().split('T')[0]
+
+      // 1. All daep_exit / iss_reentry plans past their end_date (returned students)
+      const { data: plans } = await supabase
+        .from('transition_plans')
+        .select(`
+          id, end_date, student_id,
+          student:students(id, first_name, last_name, campus_id,
+            campus:campuses(id, name)),
+          checklist:reentry_checklists(return_date),
+          checkins:reentry_checkins(status, checkin_date)
+        `)
+        .eq('district_id', districtId)
+        .in('plan_type', ['daep_exit', 'iss_reentry'])
+        .in('status', ['active', 'completed'])
+        .lt('end_date', today)
+        .gte('end_date', cutoff)
+
+      if (!plans || plans.length === 0) {
+        setScores([])
+        setLoading(false)
+        return
+      }
+
+      // 2. Fetch subsequent incidents for all returned students
+      const studentIds = [...new Set(plans.map(p => p.student_id))]
+      const { data: incidents } = await supabase
+        .from('incidents')
+        .select('id, student_id, incident_date, consequence_type')
+        .eq('district_id', districtId)
+        .in('student_id', studentIds)
+        .in('consequence_type', ['daep', 'oss'])
+        .gte('incident_date', cutoff)
+
+      // 3. Group plans by campus and compute scores
+      const campusMap = {}
+
+      for (const plan of plans) {
+        const campus = plan.student?.campus
+        if (!campus) continue
+        const campusId = campus.id
+
+        if (!campusMap[campusId]) {
+          campusMap[campusId] = {
+            campusId,
+            campusName: campus.name,
+            total: 0,
+            reReferred: 0,
+            checkinsPositive: 0,
+            checkinsTotal: 0,
+          }
+        }
+
+        const entry = campusMap[campusId]
+        entry.total++
+
+        // Return date = checklist.return_date if set, else plan.end_date
+        const returnDate = plan.checklist?.[0]?.return_date || plan.end_date
+        const returnTs   = new Date(returnDate).getTime()
+        const window90   = returnTs + 90 * 86400000
+
+        // Re-referred if a new qualifying incident occurred after return, within 90 days
+        const wasReReferred = (incidents || []).some(inc =>
+          inc.student_id === plan.student_id &&
+          new Date(inc.incident_date).getTime() > returnTs &&
+          new Date(inc.incident_date).getTime() <= window90
+        )
+        if (wasReReferred) entry.reReferred++
+
+        // Check-in trajectory
+        for (const ci of (plan.checkins || [])) {
+          entry.checkinsTotal++
+          if (ci.status === 'positive') entry.checkinsPositive++
+        }
+      }
+
+      // 4. Compute final score per campus
+      const results = Object.values(campusMap)
+        .filter(c => c.total > 0)
+        .map(c => {
+          const retentionRate = c.total > 0 ? ((c.total - c.reReferred) / c.total) * 100 : 100
+          const checkinRate   = c.checkinsTotal > 0 ? (c.checkinsPositive / c.checkinsTotal) * 100 : null
+          // Weighted score: 70% retention, 30% check-in positivity (if data exists)
+          const score = checkinRate !== null
+            ? retentionRate * 0.7 + checkinRate * 0.3
+            : retentionRate
+          const grade = score >= 90 ? 'A' : score >= 75 ? 'B' : score >= 60 ? 'C' : 'D'
+          const gradeColor = score >= 90 ? 'green' : score >= 75 ? 'blue' : score >= 60 ? 'yellow' : 'red'
+
+          return {
+            campusId:       c.campusId,
+            campusName:     c.campusName,
+            total:          c.total,
+            reReferred:     c.reReferred,
+            retentionRate:  Math.round(retentionRate),
+            checkinRate:    checkinRate !== null ? Math.round(checkinRate) : null,
+            checkinsTotal:  c.checkinsTotal,
+            score:          Math.round(score),
+            grade,
+            gradeColor,
+          }
+        })
+        .sort((a, b) => b.score - a.score)
+
+      setScores(results)
+      setLoading(false)
+    }
+    analyze()
+  }, [districtId])
+
+  return { scores, loading }
+}

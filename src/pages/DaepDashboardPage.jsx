@@ -20,6 +20,7 @@ import {
 } from '../hooks/useDaepDashboard'
 import { useAuth } from '../contexts/AuthContext'
 import { useReturningThisWeek } from '../hooks/useReentry'
+import CampusReceptionScoreCard from '../components/reentry/CampusReceptionScoreCard'
 import Topbar from '../components/layout/Topbar'
 import Card, { CardTitle } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
@@ -84,6 +85,7 @@ export default function DaepDashboardPage() {
         <div className="p-6 space-y-6">
           <CapacityTrackerWidget />
           <EnrollmentByGradeTable />
+          <CampusReceptionScoreCard />
         </div>
       )}
     </div>

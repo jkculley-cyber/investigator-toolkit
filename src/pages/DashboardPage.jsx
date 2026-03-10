@@ -7,6 +7,7 @@ import { useAccessScope } from '../hooks/useAccessScope'
 import { applyCampusScope } from '../lib/accessControl'
 import Topbar from '../components/layout/Topbar'
 import Card, { CardTitle } from '../components/ui/Card'
+import SetupChecklist from '../components/ui/SetupChecklist'
 import { ROLE_LABELS, ROLES, APPROVAL_CHAIN_STEPS, INCIDENT_STATUS_COLORS } from '../lib/constants'
 import { getSchoolYearLabel, formatDate } from '../lib/utils'
 
@@ -187,6 +188,9 @@ export default function DashboardPage() {
             }
           />
         </div>
+
+        {/* Setup Checklist — admin only, hides when all steps done or dismissed */}
+        {isAdmin && <SetupChecklist />}
 
         {/* Referrals Needing Attention — denied or returned for corrections */}
         {needsAction.length > 0 && (

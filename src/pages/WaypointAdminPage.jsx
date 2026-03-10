@@ -994,15 +994,29 @@ function ManageDistrictDrawer({ district, onClose, onRefresh }) {
   const [newCampusType, setNewCampusType] = useState('daep')
   const [addingCampus, setAddingCampus] = useState(false)
 
+  const [setupHealth, setSetupHealth] = useState(null)
+
   useEffect(() => {
     const load = async () => {
       setLoading(true)
-      const [campusRes, userRes] = await Promise.all([
+      const [campusRes, userRes, offenseRes, studentRes] = await Promise.all([
         supabase.from('campuses').select('id, name, campus_type, tea_campus_id').eq('district_id', district.id).order('name'),
         supabase.from('profiles').select('id, full_name, email, role, is_active').eq('district_id', district.id).order('full_name'),
+        supabase.from('offense_codes').select('id', { count: 'exact', head: true }).eq('district_id', district.id),
+        supabase.from('students').select('id', { count: 'exact', head: true }).eq('district_id', district.id),
       ])
-      setCampuses(campusRes.data || [])
-      setUsers(userRes.data || [])
+      const campusData = campusRes.data || []
+      const userData = userRes.data || []
+      setCampuses(campusData)
+      setUsers(userData)
+      const staffCount = userData.filter(u => u.role !== 'parent' && u.role !== 'student').length
+      setSetupHealth({
+        campuses:     campusData.length > 0,
+        offenseCodes: (offenseRes.count || 0) > 0,
+        staff:        staffCount > 1,
+        students:     (studentRes.count || 0) > 0,
+        capacity:     !!(district.settings?.daep_capacity || district.settings?.capacity),
+      })
       setLoading(false)
     }
     load()
@@ -1118,6 +1132,37 @@ function ManageDistrictDrawer({ district, onClose, onRefresh }) {
           <div className="p-8 text-center text-gray-500 text-sm">Loading...</div>
         ) : (
           <div className="p-5 space-y-6">
+            {/* Onboarding Health */}
+            {setupHealth && (() => {
+              const steps = [
+                { key: 'campuses',     label: 'Campuses' },
+                { key: 'offenseCodes', label: 'Offense codes' },
+                { key: 'staff',        label: 'Staff' },
+                { key: 'students',     label: 'Students' },
+                { key: 'capacity',     label: 'DAEP capacity' },
+              ]
+              const done = steps.filter(s => setupHealth[s.key]).length
+              const color = done === steps.length ? 'green' : done >= 3 ? 'yellow' : 'red'
+              const dotClass = color === 'green' ? 'bg-green-500' : color === 'yellow' ? 'bg-yellow-500' : 'bg-red-500'
+              const textClass = color === 'green' ? 'text-green-400' : color === 'yellow' ? 'text-yellow-400' : 'text-red-400'
+              return (
+                <div className="rounded-lg border border-gray-700 bg-gray-800/50 p-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">Onboarding</p>
+                    <span className={`text-xs font-bold ${textClass}`}>{done}/{steps.length} complete</span>
+                  </div>
+                  <div className="flex flex-wrap gap-x-4 gap-y-1.5">
+                    {steps.map(s => (
+                      <div key={s.key} className="flex items-center gap-1.5">
+                        <div className={`w-2 h-2 rounded-full flex-shrink-0 ${setupHealth[s.key] ? 'bg-green-500' : dotClass === 'bg-green-500' ? 'bg-gray-700' : dotClass}`} />
+                        <span className={`text-xs ${setupHealth[s.key] ? 'text-gray-500' : 'text-gray-300'}`}>{s.label}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
+            })()}
+
             {/* Sandbox Credentials (only for sandbox districts) */}
             {district.settings?.is_sandbox && (
               <>

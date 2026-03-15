@@ -39,7 +39,7 @@ import {
 export default function IncidentDetailPage() {
   const { id } = useParams()
   const { incident, loading, refetch } = useIncident(id)
-  const { approveIncident, activateIncident, completeIncident, denyIncident } = useIncidentActions()
+  const { approveIncident, activateIncident, completeIncident, denyIncident, returnIncident } = useIncidentActions()
   const { log: auditLog, refetch: refetchLog } = useIncidentAuditLog(id)
   const { hasRole, profile, districtId } = useAuth()
 
@@ -68,6 +68,9 @@ export default function IncidentDetailPage() {
   const [showDenyModal, setShowDenyModal] = useState(false)
   const [denyReason, setDenyReason] = useState('')
   const [denySubmitting, setDenySubmitting] = useState(false)
+  const [showReturnModal, setShowReturnModal] = useState(false)
+  const [returnReason, setReturnReason] = useState('')
+  const [returnSubmitting, setReturnSubmitting] = useState(false)
   const [showCompleteModal, setShowCompleteModal] = useState(false)
   const [earlyJustification, setEarlyJustification] = useState('')
   const [completing, setCompleting] = useState(false)
@@ -99,6 +102,7 @@ export default function IncidentDetailPage() {
   // For DAEP incidents with approval chain, don't show the single approve button — the chain handles it
   const canApprove = hasRole(['admin', 'principal', 'ap']) && incident.status === 'submitted' && !hasDaepChain
   const canDeny = hasRole(['admin', 'principal', 'ap']) && incident.status === 'submitted' && !hasDaepChain
+  const canReturn = hasRole(['admin', 'principal', 'ap']) && incident.status === 'submitted' && !hasDaepChain
   const canActivate = hasRole(['admin', 'principal', 'ap']) && incident.status === 'approved' && !mdrBlocked
   const canComplete = hasRole(['admin', 'principal', 'ap']) && incident.status === 'active'
   const daysAssigned = incident.consequence_days || 0
@@ -171,6 +175,22 @@ export default function IncidentDetailPage() {
     }
   }
 
+  const handleReturnSubmit = async () => {
+    if (!returnReason.trim()) return
+    setReturnSubmitting(true)
+    const { error } = await returnIncident(incident.id, returnReason.trim())
+    setReturnSubmitting(false)
+    setShowReturnModal(false)
+    if (error) {
+      toast.error('Failed to return incident')
+    } else {
+      toast.success('Incident returned for revision')
+      setReturnReason('')
+      refetch()
+      refetchLog()
+    }
+  }
+
   return (
     <div>
       <Topbar
@@ -178,6 +198,11 @@ export default function IncidentDetailPage() {
         subtitle={`${offense?.title || 'Unknown Offense'} | ${formatDate(incident.incident_date)}`}
         actions={
           <div className="flex items-center gap-2">
+            {canReturn && (
+              <Button size="sm" variant="secondary" onClick={() => { setReturnReason(''); setShowReturnModal(true) }}>
+                Return for Revision
+              </Button>
+            )}
             {canDeny && (
               <Button size="sm" variant="danger" onClick={() => { setDenyReason(''); setShowDenyModal(true) }}>
                 Deny
@@ -475,6 +500,49 @@ export default function IncidentDetailPage() {
       {auditLog.length > 0 && (
         <div className="px-6 pb-6">
           <ActivityLog entries={auditLog} />
+        </div>
+      )}
+
+      {/* ── Return for Revision Modal ───────────────────────────────────── */}
+      {showReturnModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setShowReturnModal(false)} />
+          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-1">Return for Revision</h2>
+            <p className="text-sm text-gray-500 mb-4">
+              The incident will be sent back to the submitter as <strong>Returned</strong>. They can edit and resubmit.
+              Tell them what needs to be corrected.
+            </p>
+            <div className="mb-4">
+              <label className="block text-xs font-medium text-gray-600 mb-1">What needs to be corrected? *</label>
+              <textarea
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                rows={4}
+                placeholder="e.g. Wrong offense code selected — please change to TEC §37.006(a)(2). Also verify the incident date."
+                value={returnReason}
+                onChange={e => setReturnReason(e.target.value)}
+                autoFocus
+              />
+              {!returnReason.trim() && (
+                <p className="text-xs text-red-500 mt-1">A correction note is required.</p>
+              )}
+            </div>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setShowReturnModal(false)}
+                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleReturnSubmit}
+                disabled={!returnReason.trim() || returnSubmitting}
+                className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg transition-colors"
+              >
+                {returnSubmitting ? 'Returning…' : 'Return Incident'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

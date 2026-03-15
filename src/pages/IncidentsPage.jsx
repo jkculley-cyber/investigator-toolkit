@@ -28,6 +28,8 @@ export default function IncidentsPage() {
   const [statusFilter, setStatusFilter] = useState('')
   const [campusFilter, setCampusFilter] = useState('')
   const [consequenceFilter, setConsequenceFilter] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
   const [myApprovalsOnly, setMyApprovalsOnly] = useState(false)
   const [selectedIds, setSelectedIds] = useState(new Set())
   const { scope } = useAccessScope()
@@ -42,8 +44,10 @@ export default function IncidentsPage() {
     if (statusFilter) f.status = statusFilter
     if (campusFilter) f.campus_id = campusFilter
     if (consequenceFilter) f.consequence_type = consequenceFilter
+    if (dateFrom) f.dateFrom = dateFrom
+    if (dateTo)   f.dateTo   = dateTo
     return f
-  }, [statusFilter, campusFilter, consequenceFilter, scope])
+  }, [statusFilter, campusFilter, consequenceFilter, dateFrom, dateTo, scope])
 
   const { incidents: rawIncidents, loading } = useIncidents(filters)
   const { campuses } = useCampuses()
@@ -297,7 +301,7 @@ export default function IncidentsPage() {
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <div className="flex items-center gap-1.5 mb-1">
                 <label className="block text-sm font-medium text-gray-700">Status</label>
@@ -350,6 +354,28 @@ export default function IncidentsPage() {
               placeholder="All Consequences"
             />
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">From Date</label>
+              <input
+                type="date"
+                value={dateFrom}
+                onChange={e => setDateFrom(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">To Date</label>
+              <input
+                type="date"
+                value={dateTo}
+                onChange={e => setDateTo(e.target.value)}
+                min={dateFrom || undefined}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+              />
+            </div>
+          </div>
+
           {/* Quick filter for approval-chain roles */}
           {['cbc', 'counselor', 'sped_coordinator', 'section_504_coordinator', 'sss'].includes(profile?.role) && (
             <div className="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
@@ -366,9 +392,9 @@ export default function IncidentsPage() {
                 </svg>
                 My Pending Approvals
               </button>
-              {(search || statusFilter || campusFilter || consequenceFilter || myApprovalsOnly) && (
+              {(search || statusFilter || campusFilter || consequenceFilter || dateFrom || dateTo || myApprovalsOnly) && (
                 <button
-                  onClick={() => { setSearch(''); setStatusFilter(''); setCampusFilter(''); setConsequenceFilter(''); setMyApprovalsOnly(false) }}
+                  onClick={() => { setSearch(''); setStatusFilter(''); setCampusFilter(''); setConsequenceFilter(''); setDateFrom(''); setDateTo(''); setMyApprovalsOnly(false) }}
                   className="text-sm text-gray-500 hover:text-gray-700 font-medium"
                 >
                   Clear Filters
@@ -376,10 +402,10 @@ export default function IncidentsPage() {
               )}
             </div>
           )}
-          {!['cbc', 'counselor', 'sped_coordinator', 'section_504_coordinator', 'sss'].includes(profile?.role) && (search || statusFilter || campusFilter || consequenceFilter) && (
+          {!['cbc', 'counselor', 'sped_coordinator', 'section_504_coordinator', 'sss'].includes(profile?.role) && (search || statusFilter || campusFilter || consequenceFilter || dateFrom || dateTo) && (
             <div className="mt-3 pt-3 border-t border-gray-100 flex justify-end">
               <button
-                onClick={() => { setSearch(''); setStatusFilter(''); setCampusFilter(''); setConsequenceFilter('') }}
+                onClick={() => { setSearch(''); setStatusFilter(''); setCampusFilter(''); setConsequenceFilter(''); setDateFrom(''); setDateTo('') }}
                 className="text-sm text-gray-500 hover:text-gray-700 font-medium"
               >
                 Clear Filters

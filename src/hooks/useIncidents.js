@@ -44,6 +44,8 @@ export function useIncidents(filters = {}) {
       if (filters.sped_compliance_required !== undefined) {
         query = query.eq('sped_compliance_required', filters.sped_compliance_required)
       }
+      if (filters.dateFrom) query = query.gte('incident_date', filters.dateFrom)
+      if (filters.dateTo)   query = query.lte('incident_date', filters.dateTo)
 
       const { data, error: fetchError } = await query
 
@@ -55,7 +57,7 @@ export function useIncidents(filters = {}) {
     } finally {
       setLoading(false)
     }
-  }, [districtId, filters._campusScope, filters._spedOnly, filters.campus_id, filters.status, filters.student_id, filters.consequence_type, filters.sped_compliance_required])
+  }, [districtId, filters._campusScope, filters._spedOnly, filters.campus_id, filters.status, filters.student_id, filters.consequence_type, filters.sped_compliance_required, filters.dateFrom, filters.dateTo])
 
   useEffect(() => {
     fetchIncidents()
@@ -318,6 +320,23 @@ export function useIncidentActions() {
     return { data, error }
   }
 
+  const returnIncident = async (id, reason) => {
+    const { data, error } = await supabase
+      .from('incidents')
+      .update({
+        status: 'returned',
+        reviewed_by: user.id,
+        reviewed_at: new Date().toISOString(),
+        notes: reason ? `[RETURNED] ${reason}` : null,
+      })
+      .eq('id', id)
+      .select()
+      .single()
+
+    if (!error && data) logAudit(data.id, 'returned', reason || null)
+    return { data, error }
+  }
+
   const denyIncident = async (id, reason) => {
     const { data, error } = await supabase
       .from('incidents')
@@ -335,5 +354,5 @@ export function useIncidentActions() {
     return { data, error }
   }
 
-  return { createIncident, updateIncident, approveIncident, activateIncident, completeIncident, denyIncident }
+  return { createIncident, updateIncident, approveIncident, activateIncident, completeIncident, denyIncident, returnIncident }
 }

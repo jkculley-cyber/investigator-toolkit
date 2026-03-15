@@ -16,6 +16,7 @@ const TABS = [
 export default function NavigatorPlacementsPage() {
   const [activeTab, setActiveTab] = useState('active_iss')
   const [showDrawer, setShowDrawer] = useState(false)
+  const [editingPlacement, setEditingPlacement] = useState(null)
 
   const filters = {
     placement_type: activeTab === 'history' ? '' : activeTab === 'active_iss' ? 'iss' : 'oss',
@@ -97,6 +98,7 @@ export default function NavigatorPlacementsPage() {
                     <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Assigned By</th>
                     <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Parent Notified</th>
                     <th className="px-4 py-3 text-xs font-medium text-gray-400 uppercase tracking-wider">Re-entry Plan</th>
+                    <th className="px-4 py-3"></th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -132,6 +134,14 @@ export default function NavigatorPlacementsPage() {
                       <td className="px-4 py-3 text-gray-500 text-xs max-w-xs truncate" title={p.reentry_plan || ''}>
                         {p.reentry_plan || '—'}
                       </td>
+                      <td className="px-4 py-3">
+                        <button
+                          onClick={() => setEditingPlacement(p)}
+                          className="text-xs text-orange-500 hover:text-orange-700 font-medium transition-colors"
+                        >
+                          Edit
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -145,6 +155,14 @@ export default function NavigatorPlacementsPage() {
         <NewPlacementDrawer
           onClose={() => setShowDrawer(false)}
           onSaved={() => { setShowDrawer(false); refetch() }}
+        />
+      )}
+
+      {editingPlacement && (
+        <EditPlacementDrawer
+          placement={editingPlacement}
+          onClose={() => setEditingPlacement(null)}
+          onSaved={() => { setEditingPlacement(null); refetch() }}
         />
       )}
     </div>
@@ -316,6 +334,168 @@ function NewPlacementDrawer({ onClose, onSaved }) {
           <button onClick={onClose} className="px-4 py-2 text-sm text-gray-600">Cancel</button>
           <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg">
             {saving ? 'Saving…' : 'Save Placement'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Edit Placement Drawer ────────────────────────────────────────────────────
+
+function EditPlacementDrawer({ placement, onClose, onSaved }) {
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState(null)
+  const [form, setForm] = useState({
+    end_date: placement.end_date || '',
+    days: placement.days ?? '',
+    location: placement.location || '',
+    reason: placement.reason || '',
+    reentry_plan: placement.reentry_plan || '',
+    parent_notified: placement.parent_notified || false,
+  })
+
+  const studentName = placement.students
+    ? `${placement.students.first_name} ${placement.students.last_name}`
+    : '—'
+
+  const endToday = () => {
+    const today = format(new Date(), 'yyyy-MM-dd')
+    setForm(f => ({ ...f, end_date: today }))
+  }
+
+  const handleSave = async () => {
+    setSaving(true); setError(null)
+    const updates = {
+      end_date: form.end_date || null,
+      days: form.days !== '' ? parseInt(form.days) : null,
+      location: form.location || null,
+      reason: form.reason || null,
+      reentry_plan: form.reentry_plan || null,
+      parent_notified: form.parent_notified,
+    }
+    if (form.parent_notified && !placement.parent_notified) {
+      updates.parent_notified_at = new Date().toISOString()
+    }
+    const { error: err } = await supabase
+      .from('navigator_placements')
+      .update(updates)
+      .eq('id', placement.id)
+    setSaving(false)
+    if (err) { setError(err.message); return }
+    onSaved()
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex">
+      <div className="flex-1 bg-black/30" onClick={onClose} />
+      <div className="w-full max-w-lg bg-white shadow-2xl overflow-y-auto flex flex-col">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200">
+          <div>
+            <h2 className="text-base font-semibold text-gray-900">Edit Placement</h2>
+            <p className="text-xs text-gray-400 mt-0.5">
+              {studentName} &mdash; <span className={`font-semibold uppercase ${placement.placement_type === 'iss' ? 'text-blue-600' : 'text-red-600'}`}>{placement.placement_type}</span>
+            </p>
+          </div>
+          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4 flex-1">
+          {/* Start date (read-only context) */}
+          <div className="p-3 bg-gray-50 rounded-lg text-sm text-gray-500">
+            Started: <span className="font-medium text-gray-700">
+              {placement.start_date ? format(parseISO(placement.start_date), 'MMM d, yyyy') : '—'}
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="sm:col-span-2">
+              <label className="block text-xs font-medium text-gray-500 mb-1">End Date</label>
+              <input
+                type="date"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                value={form.end_date}
+                onChange={e => setForm(f => ({ ...f, end_date: e.target.value }))}
+              />
+            </div>
+            <div className="flex flex-col justify-end">
+              <button
+                onClick={endToday}
+                className="px-3 py-2 text-xs font-medium text-orange-600 border border-orange-300 rounded-lg hover:bg-orange-50 transition-colors"
+              >
+                End Today
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Days Assigned</label>
+            <input
+              type="number"
+              min="1"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+              value={form.days}
+              onChange={e => setForm(f => ({ ...f, days: e.target.value }))}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Location</label>
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+              value={form.location}
+              onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Reason</label>
+            <textarea
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+              rows={2}
+              value={form.reason}
+              onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-medium text-gray-500 mb-1">Re-entry Plan</label>
+            <textarea
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+              rows={3}
+              value={form.reentry_plan}
+              onChange={e => setForm(f => ({ ...f, reentry_plan: e.target.value }))}
+            />
+          </div>
+
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={form.parent_notified}
+              onChange={e => setForm(f => ({ ...f, parent_notified: e.target.checked }))}
+              className="w-4 h-4 accent-orange-500"
+            />
+            <span className="text-sm text-gray-700">Parent/Guardian Notified</span>
+            {placement.parent_notified_at && (
+              <span className="text-xs text-gray-400 ml-1">
+                (logged {format(parseISO(placement.parent_notified_at), 'MMM d')})
+              </span>
+            )}
+          </label>
+
+          {error && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>}
+        </div>
+
+        <div className="px-5 py-4 border-t border-gray-200 flex justify-end gap-3">
+          <button onClick={onClose} className="px-4 py-2 text-sm text-gray-600">Cancel</button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg"
+          >
+            {saving ? 'Saving…' : 'Save Changes'}
           </button>
         </div>
       </div>

@@ -119,10 +119,45 @@ export function useIncident(incidentId) {
 }
 
 /**
+ * Fetch audit log for a single incident
+ */
+export function useIncidentAuditLog(incidentId) {
+  const [log, setLog] = useState([])
+  const [loading, setLoading] = useState(true)
+  const { districtId } = useAuth()
+
+  const fetch = useCallback(async () => {
+    if (!incidentId || !districtId) { setLoading(false); return }
+    setLoading(true)
+    const { data } = await supabase
+      .from('incident_audit_log')
+      .select('*, actor:profiles!incident_audit_log_user_id_fkey(id, full_name, role)')
+      .eq('incident_id', incidentId)
+      .order('created_at', { ascending: true })
+    setLog(data || [])
+    setLoading(false)
+  }, [incidentId, districtId])
+
+  useEffect(() => { fetch() }, [fetch])
+  return { log, loading, refetch: fetch }
+}
+
+/**
  * Incident CRUD operations
  */
 export function useIncidentActions() {
   const { districtId, user } = useAuth()
+
+  const logAudit = async (incidentId, action, notes = null) => {
+    if (!districtId || !user?.id) return
+    await supabase.from('incident_audit_log').insert({
+      district_id: districtId,
+      incident_id: incidentId,
+      user_id: user.id,
+      action,
+      notes,
+    })
+  }
 
   const createIncident = async (incidentData) => {
     const { data, error } = await supabase
@@ -139,6 +174,8 @@ export function useIncidentActions() {
         offense:offense_codes(id, code, title, category)
       `)
       .single()
+
+    if (!error && data) logAudit(data.id, 'created')
 
     // Notify approvers (admin, principal, AP, CBC, counselor) — non-blocking
     if (!error && data) {
@@ -197,6 +234,8 @@ export function useIncidentActions() {
       .select(`*, student:students(id, first_name, last_name)`)
       .single()
 
+    if (!error && data) logAudit(data.id, 'approved')
+
     // Auto-notify guardians (non-blocking)
     if (!error && data?.student_id) {
       supabase
@@ -234,6 +273,8 @@ export function useIncidentActions() {
       .select(`*, student:students(id, first_name, last_name)`)
       .single()
 
+    if (!error && data) logAudit(data.id, 'activated')
+
     // Auto-notify guardians when placement is activated (non-blocking)
     if (!error && data?.student_id) {
       supabase
@@ -265,7 +306,7 @@ export function useIncidentActions() {
     return { data, error }
   }
 
-  const completeIncident = async (id) => {
+  const completeIncident = async (id, notes = null) => {
     const { data, error } = await supabase
       .from('incidents')
       .update({ status: 'completed' })
@@ -273,6 +314,7 @@ export function useIncidentActions() {
       .select()
       .single()
 
+    if (!error && data) logAudit(data.id, 'completed', notes)
     return { data, error }
   }
 
@@ -289,6 +331,7 @@ export function useIncidentActions() {
       .select()
       .single()
 
+    if (!error && data) logAudit(data.id, 'denied', reason || null)
     return { data, error }
   }
 

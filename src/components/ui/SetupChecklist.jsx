@@ -39,6 +39,21 @@ const STEPS = [
     href: '/daep',
     table: null, // checked via districts.settings
   },
+  {
+    key: 'notifications',
+    label: 'Email notifications enabled',
+    detail: 'Set your RESEND_API_KEY secret in Supabase so emails reach staff and guardians.',
+    href: null, // manual confirm — admin sets Supabase secret externally
+    table: null,
+    manual: true,
+  },
+  {
+    key: 'firstIncident',
+    label: 'First incident logged',
+    detail: 'Your team is ready. Log your first incident to go live.',
+    href: '/incidents/new',
+    table: 'incidents',
+  },
 ]
 
 export default function SetupChecklist({ onDismiss }) {
@@ -53,19 +68,23 @@ export default function SetupChecklist({ onDismiss }) {
     if (!districtId) return
     async function run() {
       setLoading(true)
-      const [campusRes, offenseRes, profileRes, studentRes] = await Promise.all([
+      const [campusRes, offenseRes, profileRes, studentRes, incidentRes] = await Promise.all([
         supabase.from('campuses').select('id', { count: 'exact', head: true }).eq('district_id', districtId),
         supabase.from('offense_codes').select('id', { count: 'exact', head: true }).eq('district_id', districtId),
-        supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('district_id', districtId).neq('role', 'student').neq('role', 'parent').gt('id', '00000000-0000-0000-0000-000000000000'), // any staff
+        supabase.from('profiles').select('id', { count: 'exact', head: true }).eq('district_id', districtId).neq('role', 'student').neq('role', 'parent'),
         supabase.from('students').select('id', { count: 'exact', head: true }).eq('district_id', districtId),
+        supabase.from('incidents').select('id', { count: 'exact', head: true }).eq('district_id', districtId),
       ])
       const capacitySet = !!(district?.settings?.daep_capacity || district?.settings?.capacity)
+      const notificationsConfirmed = localStorage.getItem(`notifications_confirmed_${districtId}`) === '1'
       setChecks({
-        campuses:     (campusRes.count  || 0) > 0,
-        offenseCodes: (offenseRes.count || 0) > 0,
-        staff:        (profileRes.count || 0) > 1, // > 1 because admin themselves counts
-        students:     (studentRes.count || 0) > 0,
-        capacity:     capacitySet,
+        campuses:      (campusRes.count   || 0) > 0,
+        offenseCodes:  (offenseRes.count  || 0) > 0,
+        staff:         (profileRes.count  || 0) > 1, // > 1 because admin themselves counts
+        students:      (studentRes.count  || 0) > 0,
+        capacity:      capacitySet,
+        notifications: notificationsConfirmed,
+        firstIncident: (incidentRes.count || 0) > 0,
       })
       setLoading(false)
     }
@@ -144,7 +163,18 @@ export default function SetupChecklist({ onDismiss }) {
                   <span className={`text-xs font-medium ${done ? 'text-gray-500 line-through' : 'text-gray-200'}`}>
                     {step.label}
                   </span>
-                  {!done && (
+                  {!done && step.manual && (
+                    <button
+                      onClick={() => {
+                        localStorage.setItem(`notifications_confirmed_${districtId}`, '1')
+                        setChecks(c => ({ ...c, notifications: true }))
+                      }}
+                      className="text-xs text-orange-400 hover:text-orange-300 transition-colors"
+                    >
+                      Mark done →
+                    </button>
+                  )}
+                  {!done && !step.manual && step.href && (
                     <Link
                       to={step.href}
                       className="text-xs text-orange-400 hover:text-orange-300 transition-colors"

@@ -14,7 +14,7 @@ import ComplianceChecklist from '../components/compliance/ComplianceChecklist'
 import PolicyMismatchBanner from '../components/incidents/PolicyMismatchBanner'
 import ApprovalChainTracker from '../components/approvals/ApprovalChainTracker'
 import PlacementScheduler from '../components/daep/PlacementScheduler'
-import { useIncident, useIncidentActions } from '../hooks/useIncidents'
+import { useIncident, useIncidentActions, useIncidentAuditLog } from '../hooks/useIncidents'
 import { useSeparations, useStudentSearch } from '../hooks/useSeparations'
 import { useCapacityCount } from '../hooks/useDaepDashboard'
 import { useAuth } from '../contexts/AuthContext'
@@ -40,6 +40,7 @@ export default function IncidentDetailPage() {
   const { id } = useParams()
   const { incident, loading, refetch } = useIncident(id)
   const { approveIncident, activateIncident, completeIncident, denyIncident } = useIncidentActions()
+  const { log: auditLog, refetch: refetchLog } = useIncidentAuditLog(id)
   const { hasRole, profile, districtId } = useAuth()
 
   // Fetch check-in count for this placement — hooks must be before any early return
@@ -110,6 +111,7 @@ export default function IncidentDetailPage() {
     } else {
       toast.success('Incident approved')
       refetch()
+      refetchLog()
     }
   }
 
@@ -128,6 +130,7 @@ export default function IncidentDetailPage() {
     } else {
       toast.success('Consequence is now active')
       refetch()
+      refetchLog()
     }
   }
 
@@ -139,7 +142,8 @@ export default function IncidentDetailPage() {
   const handleCompleteConfirm = async () => {
     if (isEarlyComplete && !earlyJustification.trim()) return
     setCompleting(true)
-    const { error } = await completeIncident(incident.id)
+    const notes = isEarlyComplete ? `Early completion (${daysServed}/${daysAssigned} days): ${earlyJustification.trim()}` : null
+    const { error } = await completeIncident(incident.id, notes)
     setCompleting(false)
     setShowCompleteModal(false)
     if (error) {
@@ -147,6 +151,7 @@ export default function IncidentDetailPage() {
     } else {
       toast.success('Incident completed')
       refetch()
+      refetchLog()
     }
   }
 
@@ -162,6 +167,7 @@ export default function IncidentDetailPage() {
       toast.success('Incident denied')
       setDenyReason('')
       refetch()
+      refetchLog()
     }
   }
 
@@ -464,6 +470,13 @@ export default function IncidentDetailPage() {
           </div>
         </div>
       </div>
+
+      {/* ── Activity Log ────────────────────────────────────────────────── */}
+      {auditLog.length > 0 && (
+        <div className="px-6 pb-6">
+          <ActivityLog entries={auditLog} />
+        </div>
+      )}
 
       {/* ── Deny Incident Modal ─────────────────────────────────────────── */}
       {showDenyModal && (
@@ -839,6 +852,66 @@ function TimelineItem({ label, value, active, variant = 'default' }) {
         <p className="text-xs text-gray-500">{value}</p>
       </div>
     </div>
+  )
+}
+
+const ACTION_LABELS = {
+  created:   { label: 'Incident submitted',      color: 'bg-blue-500' },
+  approved:  { label: 'Approved',                color: 'bg-green-500' },
+  denied:    { label: 'Denied',                  color: 'bg-red-500' },
+  activated: { label: 'Placement activated',     color: 'bg-orange-500' },
+  completed: { label: 'Marked complete',         color: 'bg-gray-500' },
+  returned:  { label: 'Returned for revision',   color: 'bg-yellow-500' },
+  compliance_cleared: { label: 'Compliance cleared', color: 'bg-teal-500' },
+  updated:   { label: 'Record updated',          color: 'bg-gray-400' },
+}
+
+function ActivityLog({ entries }) {
+  const [open, setOpen] = useState(true)
+  return (
+    <Card>
+      <button
+        onClick={() => setOpen(o => !o)}
+        className="w-full flex items-center justify-between text-left"
+      >
+        <CardTitle>Activity</CardTitle>
+        <svg
+          className={`w-4 h-4 text-gray-400 transition-transform ${open ? '' : '-rotate-90'}`}
+          fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && (
+        <div className="mt-4 space-y-3">
+          {entries.map((entry, i) => {
+            const meta = ACTION_LABELS[entry.action] || { label: entry.action, color: 'bg-gray-400' }
+            return (
+              <div key={entry.id} className="flex gap-3">
+                <div className="flex flex-col items-center">
+                  <div className={`w-2.5 h-2.5 rounded-full mt-1.5 flex-shrink-0 ${meta.color}`} />
+                  {i < entries.length - 1 && <div className="w-0.5 flex-1 bg-gray-200 mt-1" />}
+                </div>
+                <div className="pb-3 last:pb-0 flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    <span className="text-sm font-medium text-gray-800">{meta.label}</span>
+                    {entry.actor?.full_name && (
+                      <span className="text-xs text-gray-500">by {entry.actor.full_name}</span>
+                    )}
+                    <span className="text-xs text-gray-400 ml-auto">
+                      {formatDateTime(entry.created_at)}
+                    </span>
+                  </div>
+                  {entry.notes && (
+                    <p className="text-xs text-gray-500 mt-0.5 italic">{entry.notes}</p>
+                  )}
+                </div>
+              </div>
+            )
+          })}
+        </div>
+      )}
+    </Card>
   )
 }
 

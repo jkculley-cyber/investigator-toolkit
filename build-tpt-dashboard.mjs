@@ -194,7 +194,7 @@ function buildCommandDashboard() {
   r += 30
   r++
 
-  setStr(ws, r, 0, 'Waypoint automates all of this with real-time alerts, role-based access, and Laserfiche sync → clearpatheg.com/waypoint  |  Clear Path Education Group, LLC')
+  setStr(ws, r, 0, 'Waypoint automates all of this with real-time alerts, role-based access, and Laserfiche sync → clearpathedgroup.com/waypoint  |  Clear Path Education Group, LLC')
   merge(ws, `A${r+1}:K${r+1}`)
 
   setRange(ws, r + 2, 11)
@@ -614,7 +614,7 @@ function buildTrends() {
   })
   r++
 
-  setStr(ws, r, 0, '─── All data auto-populated from Case Log | Clear Path Education Group, LLC | clearpatheg.com ───')
+  setStr(ws, r, 0, '─── All data auto-populated from Case Log | Clear Path Education Group, LLC | clearpathedgroup.com ───')
   merge(ws, `A${r+1}:F${r+1}`)
 
   setRange(ws, r + 2, 6)

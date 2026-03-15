@@ -199,7 +199,7 @@ function docHeader(title, offenseLabel) {
     new Paragraph({
       spacing: { before: 60, after: 0 },
       children: [
-        new TextRun({ text: 'Clear Path Education Group, LLC  |  CONFIDENTIAL — FERPA Education Record  |  clearpatheg.com', size: 16, color: '888888', font: 'Calibri', italics: true }),
+        new TextRun({ text: 'Clear Path Education Group, LLC  |  CONFIDENTIAL — FERPA Education Record  |  clearpathedgroup.com', size: 16, color: '888888', font: 'Calibri', italics: true }),
       ],
     }),
     new Paragraph({
@@ -244,14 +244,14 @@ function certificationBlock() {
       spacing: { before: 60, after: 60 },
       alignment: AlignmentType.CENTER,
       children: [
-        new TextRun({ text: '© 2025 Clear Path Education Group, LLC  |  clearpatheg.com  |  For organizational use only — not legal advice.', size: 16, font: 'Calibri', color: '888888', italics: true }),
+        new TextRun({ text: '© 2025 Clear Path Education Group, LLC  |  clearpathedgroup.com  |  For organizational use only — not legal advice.', size: 16, font: 'Calibri', color: '888888', italics: true }),
       ],
     }),
     new Paragraph({
       spacing: { before: 20, after: 60 },
       alignment: AlignmentType.CENTER,
       children: [
-        new TextRun({ text: 'Upgrade to Waypoint for automated investigation workflows, alerts, and district-wide visibility → clearpatheg.com/waypoint', size: 16, font: 'Calibri', color: ORANGE, bold: true }),
+        new TextRun({ text: 'Upgrade to Waypoint for automated investigation workflows, alerts, and district-wide visibility → clearpathedgroup.com/waypoint', size: 16, font: 'Calibri', color: ORANGE, bold: true }),
       ],
     }),
   ]

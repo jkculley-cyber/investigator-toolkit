@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-15 (Session AH — A+ gap sprint: audit trail, RESEND live, Return for Revision, date range filter, teacher restriction, draft save, bundle 2957→607 kB)
+> Last updated: 2026-03-17 (Session AJ — Apex A+ sprint: walkthrough PDF fix, morning brief fix, reply-to on coaching emails, 14-day trial, drip email sequence, summer path edge function, simplify fixes)
 
 ---
 
@@ -104,7 +104,7 @@
 
 ## Next Session Priority
 
-**Apex Review + Build** — review `clearpath-apex.pages.dev`, assess current state vs. what needs to be built. Apex is the principal coaching/observation tool (no FERPA data = faster procurement). Could be the wedge product that generates early revenue and warm leads for Waypoint. Start by reading the Apex repo and running a simulation.
+**Apex Navigator polish** — TeacherDetailPage (observation history, growth arc chart, coaching focus editor), CommunicatePage (view sent emails, re-send, compose standalone note), SettingsPage (school info, account, email preferences). Also: verify pg_cron morning brief is firing in Supabase Dashboard → Database → pg_cron, verify drip email schedule is registered.
 
 ---
 
@@ -143,6 +143,18 @@
 - **Supabase PAT:** `sbp_34e3b7ef1d4e7b49995850e9e51d2550e8a78f05`
 
 **Built this session:** Dashboard command center · Observation Loop (voice→Whisper→Claude→email) · Teachers Page (recency/growth arc) · Observation Review Page · Morning Brief (daily/weekly/monthly/long-range, pg_cron auto-delivers 5:50 AM CST)
+
+**Built Session AJ:**
+- Sent observation PDF fix — removed `setSent(true)` page-load bug, navigate to dashboard after send
+- Morning brief root cause fix — `run_morning_briefs()` helper function (key embedded), cron calls that
+- `reply_to` added to coaching emails — teachers can reply directly to principal
+- 14-day trial — `trial_started_at` + `trial_path` columns on principals; migration 007 applied
+- Trial banner in AppShell — last 4 days warning + expiry state with two paths
+- Drip email sequence — `send-drip-email` edge function (day 3/7/14), `drip_emails_sent` dedup table
+- Summer path automation — `handle-trial-extension` edge function (no JWT), records choice, schedules July 15 Resend email, notifies Kim, confirms principal
+- clearpathedgroup.com updated — "Start Free 14-Day Trial" CTA, tagline copy
+- `/try` route added to App.jsx
+- Simplify fixes: removed `sent` state (derived from `obs.status`), parallelized Resend calls in both edge functions
 
 **Apex Pending:** TeacherDetailPage · CommunicatePage · SettingsPage · CSV roster import · Mobile optimization · Quick capture
 

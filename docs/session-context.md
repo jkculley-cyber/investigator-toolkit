@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-17 (Session AJ — Apex A+ sprint: walkthrough PDF fix, morning brief fix, reply-to on coaching emails, 14-day trial, drip email sequence, summer path edge function, simplify fixes)
+> Last updated: 2026-03-17 (Session AK — Apex: pg_cron verified, sent walkthrough access fixed, recent observations on dashboard, trial banner suppressed for demo accounts, simplify fixes)
 
 ---
 
@@ -104,7 +104,7 @@
 
 ## Next Session Priority
 
-**Apex Navigator polish** — TeacherDetailPage (observation history, growth arc chart, coaching focus editor), CommunicatePage (view sent emails, re-send, compose standalone note), SettingsPage (school info, account, email preferences). Also: verify pg_cron morning brief is firing in Supabase Dashboard → Database → pg_cron, verify drip email schedule is registered.
+**Apex Navigator polish** — TeacherDetailPage (observation history, growth arc chart, coaching focus editor), CommunicatePage (view sent emails, re-send, compose standalone note), SettingsPage (school info, account, email preferences).
 
 ---
 
@@ -155,6 +155,13 @@
 - clearpathedgroup.com updated — "Start Free 14-Day Trial" CTA, tagline copy
 - `/try` route added to App.jsx
 - Simplify fixes: removed `sent` state (derived from `obs.status`), parallelized Resend calls in both edge functions
+
+**Built Session AK:**
+- pg_cron verified: morning brief firing daily (last run 2026-03-17, 3 principals, succeeded). Duplicate cron (jobid 2) removed. Drip email cron (jobid 3 → 4) confirmed active, fires 6 AM CST daily.
+- Sent walkthrough access: pushed ObservationReviewPage fix (removed `sent` state, navigate on send, no success screen). Previously-sent obs now load in read-only mode.
+- Recent Observations panel added to dashboard — last 5 obs (all statuses) as clickable rows. Was fetched but never rendered.
+- Trial banner suppressed for demo accounts — removed `created_at` fallback; only shows when `trial_started_at` explicitly set.
+- Simplify: eliminated redundant 6th DB query on dashboard (derive `recentActivity` from `allObs.slice(0,5)`), extracted `OBS_TYPE_LABEL` const.
 
 **Apex Pending:** TeacherDetailPage · CommunicatePage · SettingsPage · CSV roster import · Mobile optimization · Quick capture
 

@@ -175,6 +175,16 @@ export default function WaypointAdminPage() {
           >
             Leads
           </button>
+          <button
+            onClick={() => setActiveTab('apex')}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              activeTab === 'apex'
+                ? 'bg-violet-600 text-white'
+                : 'text-gray-400 hover:text-gray-200'
+            }`}
+          >
+            Apex
+          </button>
         </div>
 
         {/* Districts tab */}
@@ -256,6 +266,9 @@ export default function WaypointAdminPage() {
 
         {/* Leads tab */}
         {activeTab === 'leads' && <LeadsPanel />}
+
+        {/* Apex tab */}
+        {activeTab === 'apex' && <ApexPanel />}
       </main>
 
       {showProvisionModal && (
@@ -294,6 +307,202 @@ const LEAD_STATUS_STYLES = {
   closed:           'bg-green-900 text-green-200',
   not_interested:   'bg-gray-700 text-gray-400',
 }
+
+// ─── Apex Panel ───────────────────────────────────────────────────────────────
+
+const APEX_URL = 'https://jvjsotlyvrzhsbgcsdfw.supabase.co'
+const APEX_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp2anNvdGx5dnJ6aHNiZ2NzZGZ3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MjU3NjgwOSwiZXhwIjoyMDg4MTUyODA5fQ._3kv_O4D45-L2DNEfXXna6uIDVHq1jsZnZH6cSrsbgY'
+const APEX_HEADERS = { apikey: APEX_KEY, Authorization: `Bearer ${APEX_KEY}`, 'Content-Type': 'application/json' }
+
+async function apexFetch(path) {
+  const r = await fetch(`${APEX_URL}/rest/v1/${path}`, { headers: APEX_HEADERS })
+  return r.ok ? r.json() : []
+}
+
+function ApexPanel() {
+  const [principals, setPrincipals] = useState([])
+  const [requests, setRequests] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [actionMsg, setActionMsg] = useState('')
+
+  async function load() {
+    setLoading(true)
+    const [p, r] = await Promise.all([
+      apexFetch('principals?select=id,name,email,school_name,district_name,created_at,onboarding_complete&order=created_at.desc&limit=50'),
+      apexFetch('access_requests?select=id,name,email,school_name,district,title,status,created_at&order=created_at.desc'),
+    ])
+    setPrincipals(p || [])
+    setRequests(r || [])
+    setLoading(false)
+  }
+
+  useEffect(() => { load() }, [])
+
+  async function updateRequest(id, status) {
+    await fetch(`${APEX_URL}/rest/v1/access_requests?id=eq.${id}`, {
+      method: 'PATCH',
+      headers: APEX_HEADERS,
+      body: JSON.stringify({ status }),
+    })
+    setActionMsg(status === 'approved' ? 'Approved — principal can now sign in.' : 'Rejected.')
+    setTimeout(() => setActionMsg(''), 3000)
+    load()
+  }
+
+  const pending = requests.filter(r => r.status === 'pending')
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+  const newThisWeek = principals.filter(p => new Date(p.created_at) > weekAgo).length
+
+  if (loading) return <div className="p-12 text-center text-gray-500 text-sm">Loading Apex data…</div>
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-semibold text-white flex items-center gap-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-violet-500 inline-block"></span>
+            Apex — Principal Management
+          </h2>
+          <p className="text-sm text-gray-400 mt-0.5">clearpath-apex.pages.dev</p>
+        </div>
+        <div className="flex items-center gap-3">
+          {actionMsg && <span className="text-sm text-green-400">{actionMsg}</span>}
+          <a
+            href="https://clearpath-apex.pages.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 text-xs font-medium bg-gray-800 border border-gray-700 rounded-lg text-gray-300 hover:text-white hover:border-violet-500 transition-colors"
+          >
+            Open Apex ↗
+          </a>
+          <button
+            onClick={load}
+            className="px-3 py-1.5 text-xs font-medium bg-gray-800 border border-gray-700 rounded-lg text-gray-300 hover:text-white transition-colors"
+          >
+            Refresh
+          </button>
+        </div>
+      </div>
+
+      {/* Metric cards */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: 'Total Principals', value: principals.length, color: 'text-violet-400' },
+          { label: 'New This Week', value: newThisWeek, color: 'text-blue-400' },
+          { label: 'Pending Approval', value: pending.length, color: pending.length > 0 ? 'text-orange-400' : 'text-gray-400' },
+        ].map(m => (
+          <div key={m.label} className="bg-gray-900 border border-gray-800 rounded-xl p-5">
+            <p className="text-xs text-gray-500 uppercase tracking-wider mb-1">{m.label}</p>
+            <p className={`text-3xl font-bold ${m.color}`}>{m.value}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Pending access requests */}
+      {pending.length > 0 && (
+        <div className="bg-gray-900 border border-orange-800/40 rounded-xl overflow-hidden">
+          <div className="px-5 py-3 border-b border-gray-800 flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
+            <h3 className="text-sm font-semibold text-white">Pending Access Requests ({pending.length})</h3>
+          </div>
+          <div className="divide-y divide-gray-800">
+            {pending.map(req => (
+              <div key={req.id} className="px-5 py-4 flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-white truncate">{req.name}</p>
+                  <p className="text-xs text-gray-400 truncate">{req.email}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{[req.title, req.school_name, req.district].filter(Boolean).join(' · ')}</p>
+                </div>
+                <div className="flex items-center gap-2 shrink-0">
+                  <span className="text-xs text-gray-500">{new Date(req.created_at).toLocaleDateString()}</span>
+                  <button
+                    onClick={() => updateRequest(req.id, 'approved')}
+                    className="px-3 py-1 text-xs font-semibold bg-green-900/50 border border-green-700 text-green-300 rounded-lg hover:bg-green-800 transition-colors"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={() => updateRequest(req.id, 'rejected')}
+                    className="px-3 py-1 text-xs font-semibold bg-red-900/30 border border-red-800 text-red-400 rounded-lg hover:bg-red-900/50 transition-colors"
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* All requests (collapsed view) */}
+      {requests.filter(r => r.status !== 'pending').length > 0 && (
+        <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+          <div className="px-5 py-3 border-b border-gray-800">
+            <h3 className="text-sm font-semibold text-white">All Requests</h3>
+          </div>
+          <div className="divide-y divide-gray-800">
+            {requests.filter(r => r.status !== 'pending').map(req => (
+              <div key={req.id} className="px-5 py-3 flex items-center justify-between gap-4">
+                <div className="min-w-0">
+                  <p className="text-sm text-gray-300 truncate">{req.name} <span className="text-gray-500">·</span> <span className="text-xs text-gray-400">{req.email}</span></p>
+                  <p className="text-xs text-gray-500 truncate">{[req.school_name, req.district].filter(Boolean).join(', ')}</p>
+                </div>
+                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full shrink-0 ${req.status === 'approved' ? 'bg-green-900/40 text-green-400' : 'bg-red-900/30 text-red-400'}`}>
+                  {req.status}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Principals table */}
+      <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
+        <div className="px-5 py-3 border-b border-gray-800">
+          <h3 className="text-sm font-semibold text-white">Active Principals ({principals.length})</h3>
+        </div>
+        {principals.length === 0 ? (
+          <div className="p-8 text-center text-gray-500 text-sm">No principals yet.</div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-800">
+                  <th className="px-5 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">School</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">District</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Joined</th>
+                  <th className="px-5 py-2.5 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Onboarded</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-800">
+                {principals.map(p => (
+                  <tr key={p.id} className="hover:bg-gray-800/40 transition-colors">
+                    <td className="px-5 py-3">
+                      <p className="font-medium text-white">{p.name}</p>
+                      <p className="text-xs text-gray-400">{p.email}</p>
+                    </td>
+                    <td className="px-5 py-3 text-gray-300">{p.school_name || '—'}</td>
+                    <td className="px-5 py-3 text-gray-300">{p.district_name || '—'}</td>
+                    <td className="px-5 py-3 text-gray-400 text-xs">{new Date(p.created_at).toLocaleDateString()}</td>
+                    <td className="px-5 py-3">
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${p.onboarding_complete ? 'bg-green-900/40 text-green-400' : 'bg-yellow-900/30 text-yellow-500'}`}>
+                        {p.onboarding_complete ? 'Yes' : 'Pending'}
+                      </span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// ─── Leads Panel ──────────────────────────────────────────────────────────────
 
 function LeadsPanel() {
   const [leads, setLeads] = useState([])

@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-18 (Session AM — Apex: dashboard walkthroughs filter fix, SettingsPage district_name fix, all pages verified functional)
+> Last updated: 2026-03-18 PM (Session AN — Marketing blast system, welcome email, Apex admin tab, magic link speed fix, social ad copy)
 
 ---
 
@@ -104,7 +104,9 @@
 
 ## Next Session Priority
 
-**Apex Navigator polish** — TeacherDetailPage (observation history, growth arc chart, coaching focus editor), CommunicatePage (view sent emails, re-send, compose standalone note), SettingsPage (school info, account, email preferences).
+1. **SPF record** — add `include:spf.resend.com` to clearpathedgroup.com DNS so marketing blast emails land in inboxes (not just Resend dashboard).
+2. **Resources table** — create `resources` table in ops Supabase so clearpath website resources feature works.
+3. **Apex Navigator polish** — TeacherDetailPage, CommunicatePage, SettingsPage enhancements.
 
 ---
 
@@ -137,8 +139,8 @@
 - **Supabase ref:** `jvjsotlyvrzhsbgcsdfw` (separate project — different auth pool from Waypoint)
 - **DB password:** `ApexClearPath2025!`
 - **Auth:** Magic link only, Resend SMTP configured
-- **Migrations applied:** 001 (core schema), 002 (pg_cron morning brief scheduler)
-- **Edge Functions deployed:** `transcribe-observation`, `generate-coaching-draft`, `send-observation-feedback`, `generate-morning-brief`
+- **Migrations applied:** 001 (core schema), 002 (pg_cron morning brief scheduler) + `marketing_sends` table (SQL Editor)
+- **Edge Functions deployed:** `transcribe-observation`, `generate-coaching-draft`, `send-observation-feedback`, `generate-morning-brief`, `send-marketing-blast`, `send-welcome-email`
 - **Secrets set:** `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`
 - **Supabase PAT:** `sbp_34e3b7ef1d4e7b49995850e9e51d2550e8a78f05`
 
@@ -173,6 +175,15 @@
 - Recent Observations panel added to dashboard — last 5 obs (all statuses) as clickable rows. Was fetched but never rendered.
 - Trial banner suppressed for demo accounts — removed `created_at` fallback; only shows when `trial_started_at` explicitly set.
 - Simplify: eliminated redundant 6th DB query on dashboard (derive `recentActivity` from `allObs.slice(0,5)`), extracted `OBS_TYPE_LABEL` const.
+
+**Built Session AN:**
+- Marketing blast system — `send-marketing-blast` edge function + `marketing_sends` dedup table. 3-email visually captivating sequence. Tested live.
+- Welcome email on approval — `send-welcome-email` edge function: 5-step getting started guide auto-sent when principal approved.
+- Apex tab in WaypointAdminPage — violet tab with metrics, approval queue, principals table.
+- Magic link speed fix — `getSession()` on mount + parallel `loadPrincipal` queries.
+- Social ad copy — `docs/apex-social-ads.md`: 3 LinkedIn + 3 Facebook/Instagram ads.
+- Partner briefing doc — `docs/partner-briefing-03182026.md` for Melissa.
+- Clearpath website resources feature — dropdown nav + `resources.html` page.
 
 **Apex Pending:** CSV roster import · Mobile optimization · Quick capture · SPF record (manual, needs DNS:Edit CF token)
 

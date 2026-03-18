@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-17 (Session AL — Apex: trial lead capture, notify-new-trial edge function, saveProfile returns ID, simplify fixes)
+> Last updated: 2026-03-18 (Session AM — Apex: dashboard walkthroughs filter fix, SettingsPage district_name fix, all pages verified functional)
 
 ---
 
@@ -156,6 +156,11 @@
 - `/try` route added to App.jsx
 - Simplify fixes: removed `sent` state (derived from `obs.status`), parallelized Resend calls in both edge functions
 
+**Built Session AM:**
+- Dashboard walkthroughs fix — filter was `=== 'walkthrough'` but type is stored as `'informal'`; now correctly counts walkthroughs this week
+- SettingsPage district fix — `principal.district` → `principal.district_name`; update payload `district` → `district_name`
+- All Apex pages verified functional: TeacherDetailPage, CommunicatePage, ObservationReviewPage, SettingsPage
+
 **Built Session AL:**
 - Trial lead capture — `notify-new-trial` edge function deployed: sets `trial_started_at`, notifies Kim instantly (name/school/district/city/trial dates), sends principal a welcome email from Kim with first-obs CTA
 - `saveProfile()` now returns inserted ID via `.select('id').single()` — eliminates separate SELECT query
@@ -169,7 +174,7 @@
 - Trial banner suppressed for demo accounts — removed `created_at` fallback; only shows when `trial_started_at` explicitly set.
 - Simplify: eliminated redundant 6th DB query on dashboard (derive `recentActivity` from `allObs.slice(0,5)`), extracted `OBS_TYPE_LABEL` const.
 
-**Apex Pending:** TeacherDetailPage · CommunicatePage · SettingsPage · CSV roster import · Mobile optimization · Quick capture
+**Apex Pending:** CSV roster import · Mobile optimization · Quick capture · SPF record (manual, needs DNS:Edit CF token)
 
 ---
 

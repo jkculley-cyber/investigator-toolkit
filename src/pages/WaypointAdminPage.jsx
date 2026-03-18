@@ -323,7 +323,12 @@ function ApexPanel() {
   const [principals, setPrincipals] = useState([])
   const [requests, setRequests] = useState([])
   const [loading, setLoading] = useState(true)
-  const [actionMsg, setActionMsg] = useState('')
+  const [toast, setToast] = useState(null) // { msg, type: 'success'|'error' }
+
+  function showToast(msg, type = 'success') {
+    setToast({ msg, type })
+    setTimeout(() => setToast(null), 4000)
+  }
 
   async function load() {
     setLoading(true)
@@ -338,14 +343,34 @@ function ApexPanel() {
 
   useEffect(() => { load() }, [])
 
-  async function updateRequest(id, status) {
+  async function updateRequest(id, status, req) {
     await fetch(`${APEX_URL}/rest/v1/access_requests?id=eq.${id}`, {
       method: 'PATCH',
       headers: APEX_HEADERS,
       body: JSON.stringify({ status }),
     })
-    setActionMsg(status === 'approved' ? 'Approved — principal can now sign in.' : 'Rejected.')
-    setTimeout(() => setActionMsg(''), 3000)
+
+    if (status === 'approved' && req?.email) {
+      // Send welcome guide email
+      const welcomeRes = await fetch(`${APEX_URL}/functions/v1/send-welcome-email`, {
+        method: 'POST',
+        headers: { ...APEX_HEADERS, Authorization: `Bearer ${APEX_KEY}` },
+        body: JSON.stringify({
+          email: req.email,
+          name: req.name || '',
+          school_name: req.school_name || '',
+        }),
+      })
+      const welcomeData = await welcomeRes.json()
+      if (welcomeData.ok) {
+        showToast(`Approved! Welcome guide sent to ${req.email}.`, 'success')
+      } else {
+        showToast(`Approved, but welcome email failed: ${welcomeData.error || 'unknown error'}`, 'error')
+      }
+    } else {
+      showToast('Request rejected.', 'success')
+    }
+
     load()
   }
 
@@ -367,7 +392,13 @@ function ApexPanel() {
           <p className="text-sm text-gray-400 mt-0.5">clearpath-apex.pages.dev</p>
         </div>
         <div className="flex items-center gap-3">
-          {actionMsg && <span className="text-sm text-green-400">{actionMsg}</span>}
+          {toast && (
+            <div className={`px-4 py-2 rounded-lg text-sm font-medium ${
+              toast.type === 'success' ? 'bg-green-900/60 border border-green-700 text-green-300' : 'bg-red-900/60 border border-red-700 text-red-300'
+            }`}>
+              {toast.msg}
+            </div>
+          )}
           <a
             href="https://clearpath-apex.pages.dev"
             target="_blank"
@@ -417,13 +448,13 @@ function ApexPanel() {
                 <div className="flex items-center gap-2 shrink-0">
                   <span className="text-xs text-gray-500">{new Date(req.created_at).toLocaleDateString()}</span>
                   <button
-                    onClick={() => updateRequest(req.id, 'approved')}
+                    onClick={() => updateRequest(req.id, 'approved', req)}
                     className="px-3 py-1 text-xs font-semibold bg-green-900/50 border border-green-700 text-green-300 rounded-lg hover:bg-green-800 transition-colors"
                   >
                     Approve
                   </button>
                   <button
-                    onClick={() => updateRequest(req.id, 'rejected')}
+                    onClick={() => updateRequest(req.id, 'rejected', req)}
                     className="px-3 py-1 text-xs font-semibold bg-red-900/30 border border-red-800 text-red-400 rounded-lg hover:bg-red-900/50 transition-colors"
                   >
                     Reject

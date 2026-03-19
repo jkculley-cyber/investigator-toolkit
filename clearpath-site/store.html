@@ -24,7 +24,6 @@
     radial-gradient(ellipse at 50% 50%,rgba(26,10,46,1) 0%,#0e0618 100%);
     pointer-events:none}
 
-  /* NAV */
   nav{position:fixed;top:0;width:100%;z-index:200;background:rgba(14,6,24,.92);
     backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
     padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:70px}
@@ -37,82 +36,85 @@
   .nav-back{font-size:.8rem;font-weight:600;color:var(--text-muted);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:color .2s}
   .nav-back:hover{color:var(--amber-light)}
 
-  /* HERO */
   .store-hero{position:relative;z-index:1;padding:110px 5% 50px;max-width:1100px;margin:0 auto;text-align:center}
-  .store-eyebrow{display:inline-flex;align-items:center;gap:8px;
-    background:rgba(232,134,42,.1);border:1px solid rgba(232,134,42,.3);
-    color:var(--amber-light);padding:6px 16px;border-radius:4px;
-    font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+  .store-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(232,134,42,.1);border:1px solid rgba(232,134,42,.3);color:var(--amber-light);padding:6px 16px;border-radius:4px;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
   .store-eyebrow span{width:5px;height:5px;background:var(--amber);border-radius:50%;box-shadow:0 0 8px var(--amber)}
-  .store-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:900;line-height:1.15;margin-bottom:16px;
-    background:linear-gradient(160deg,var(--amber-glow) 0%,var(--amber-light) 50%,var(--text) 100%);
-    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .store-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:900;line-height:1.15;margin-bottom:16px;background:linear-gradient(160deg,var(--amber-glow) 0%,var(--amber-light) 50%,var(--text) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
   .store-sub{font-size:1rem;color:var(--text-muted);line-height:1.75;max-width:620px;margin:0 auto 16px}
   .store-trust{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:24px}
   .trust-item{font-size:.78rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
   .trust-icon{color:var(--amber)}
 
-  /* SECTION */
   .store-section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 5% 60px}
   .section-label{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;color:var(--amber-light);margin-bottom:8px}
   .section-desc{font-size:.88rem;color:var(--text-muted);margin-bottom:28px}
 
-  /* PRODUCT GRID */
-  .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;margin-bottom:48px}
-
-  /* PRODUCT CARD */
-  .product-card{background:var(--card-bg);border:1px solid var(--border-purple);border-radius:14px;
-    overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;backdrop-filter:blur(8px);display:flex;flex-direction:column}
+  /* PRODUCT CARD — full detail visible */
+  .product-card{background:var(--card-bg);border:1px solid var(--border-purple);border-radius:14px;overflow:hidden;backdrop-filter:blur(8px);margin-bottom:32px;transition:border-color .25s}
   .product-card::before{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--purple),var(--amber))}
-  .product-card:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 0 30px rgba(232,134,42,.25)}
-  .product-card.bundle{border-color:var(--amber);background:rgba(232,134,42,.06)}
+  .product-card.bundle{border-color:rgba(232,134,42,.4);background:rgba(232,134,42,.06)}
   .product-card.bundle::before{height:4px;background:linear-gradient(90deg,var(--amber-glow),var(--amber),var(--orange))}
   .product-card.flagship{border-color:var(--amber-glow);box-shadow:0 0 20px rgba(232,134,42,.2)}
   .product-card.flagship::before{height:5px;background:linear-gradient(90deg,var(--amber-glow),#fff,var(--amber-glow))}
-  .pc-body{padding:24px 24px 0;flex:1}
-  .pc-tag{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
-  .pc-title{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.35}
-  .pc-short{font-size:.84rem;color:var(--text-muted);line-height:1.7;margin-bottom:14px}
-  .pc-includes{font-size:.78rem;color:var(--text-muted);line-height:1.7;margin-bottom:14px;padding-left:16px}
-  .pc-includes li{margin-bottom:4px}
-  .pc-includes li::marker{color:var(--amber)}
-  .pc-save{display:inline-block;font-size:.72rem;font-weight:700;color:var(--success);background:var(--success-bg);
-    padding:3px 10px;border-radius:4px;margin-bottom:14px}
-  .pc-footer{padding:16px 24px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(107,47,160,.15)}
-  .pc-price{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--amber-glow)}
-  .pc-orig-price{font-size:.82rem;color:var(--text-muted);text-decoration:line-through;margin-left:8px}
-  .pc-buy{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--amber),var(--orange));
-    color:white;padding:12px 24px;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none;
-    letter-spacing:.04em;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;white-space:nowrap}
-  .pc-buy:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(232,134,42,.5)}
 
-  /* DETAIL TOGGLE */
-  .pc-details{display:none;padding:0 24px 16px}
-  .pc-details.open{display:block}
-  .pc-toggle{font-size:.78rem;color:var(--purple-light);cursor:pointer;border:none;background:none;
-    font-family:'Raleway',sans-serif;font-weight:600;padding:0;margin-bottom:14px;transition:color .2s}
-  .pc-toggle:hover{color:var(--amber-light)}
+  .pc-layout{display:grid;grid-template-columns:1fr 280px;gap:0}
+  .pc-main{padding:28px 28px 24px}
+  .pc-sidebar{padding:28px;border-left:1px solid rgba(107,47,160,.15);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:rgba(14,6,24,.3)}
+
+  .pc-tag{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
+  .pc-title{font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:10px;line-height:1.35}
+  .pc-short{font-size:.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:16px}
   .pc-detail-text{font-size:.82rem;color:var(--text-muted);line-height:1.8}
   .pc-detail-text strong{color:var(--text);font-weight:600}
   .pc-detail-text ul{padding-left:18px;margin:8px 0}
   .pc-detail-text ul li{margin-bottom:4px}
   .pc-detail-text ul li::marker{color:var(--amber)}
-  .pc-compat{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-  .pc-compat-tag{font-size:.68rem;font-weight:600;color:var(--text-muted);background:rgba(107,47,160,.15);
-    padding:4px 10px;border-radius:4px;border:1px solid var(--border-purple)}
+  .pc-compat{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .pc-compat-tag{font-size:.68rem;font-weight:600;color:var(--text-muted);background:rgba(107,47,160,.15);padding:4px 10px;border-radius:4px;border:1px solid var(--border-purple)}
+  .pc-includes{font-size:.82rem;color:var(--text-muted);line-height:1.7;margin-bottom:16px;padding-left:18px}
+  .pc-includes li{margin-bottom:4px}
+  .pc-includes li::marker{color:var(--amber)}
+  .pc-save{display:inline-block;font-size:.75rem;font-weight:700;color:var(--success);background:var(--success-bg);padding:4px 12px;border-radius:4px;margin-bottom:16px}
 
-  /* FOOTER */
-  footer{position:relative;z-index:1;background:#060310;border-top:1px solid var(--border-purple);
-    padding:40px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+  .pc-price{font-family:'Cinzel',serif;font-size:1.8rem;font-weight:900;color:var(--amber-glow);display:block;margin-bottom:4px}
+  .pc-orig-price{font-size:.85rem;color:var(--text-muted);text-decoration:line-through;display:block;margin-bottom:12px}
+  .pc-buy{display:block;width:100%;padding:14px 24px;border-radius:8px;font-weight:700;font-size:.88rem;text-decoration:none;letter-spacing:.04em;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;white-space:nowrap;text-align:center;background:linear-gradient(135deg,var(--amber),var(--orange));color:white;font-family:'Raleway',sans-serif;margin-bottom:10px}
+  .pc-buy:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(232,134,42,.5)}
+  .pc-preview-btn{display:block;width:100%;padding:10px 24px;border-radius:8px;font-weight:600;font-size:.82rem;text-decoration:none;letter-spacing:.04em;border:1px solid var(--border-purple);cursor:pointer;transition:all .2s;text-align:center;background:transparent;color:var(--purple-light);font-family:'Raleway',sans-serif}
+  .pc-preview-btn:hover{border-color:var(--amber);color:var(--amber-light);background:rgba(232,134,42,.08)}
+  .pc-note{font-size:.72rem;color:var(--text-muted);margin-top:12px;line-height:1.5}
+
+  /* PREVIEW PANEL */
+  .pc-preview{display:none;padding:0 28px 24px;border-top:1px solid rgba(107,47,160,.15)}
+  .pc-preview.open{display:block}
+  .pc-preview h4{font-size:.82rem;font-weight:700;color:var(--amber-light);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.08em}
+  .pc-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+  .pc-preview-sheet{background:rgba(45,16,84,.4);border:1px solid var(--border-purple);border-radius:8px;padding:14px;transition:border-color .2s}
+  .pc-preview-sheet:hover{border-color:var(--amber)}
+  .pc-preview-sheet .sheet-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:4px}
+  .pc-preview-sheet .sheet-desc{font-size:.72rem;color:var(--text-muted);line-height:1.6}
+
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(14,6,24,.85);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s}
+  .modal-overlay.open{opacity:1;pointer-events:all}
+  .modal-box{background:var(--deep-purple);border:1px solid var(--border-purple);border-radius:16px;max-width:440px;width:92%;padding:32px;position:relative;box-shadow:0 16px 48px rgba(0,0,0,.5)}
+  .modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-muted);font-size:1.2rem;cursor:pointer;padding:4px}
+  .modal-close:hover{color:var(--amber-light)}
+  .form-label{font-size:.75rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px}
+  .form-input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border-purple);background:rgba(45,16,84,.5);color:var(--text);font-family:'Raleway',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s}
+  .form-input:focus{border-color:var(--amber)}
+  .form-group{margin-bottom:14px}
+
+  footer{position:relative;z-index:1;background:#060310;border-top:1px solid var(--border-purple);padding:40px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
   footer p{font-size:.78rem;color:rgba(240,230,211,.25)}
   footer a{font-size:.78rem;color:var(--text-muted);text-decoration:none}
   footer a:hover{color:var(--amber-light)}
 
   @media(max-width:768px){
     .store-hero{padding:100px 5% 40px}
-    .product-grid{grid-template-columns:1fr}
-    .pc-footer{flex-direction:column;align-items:stretch;text-align:center}
-    .pc-buy{justify-content:center}
+    .pc-layout{grid-template-columns:1fr}
+    .pc-sidebar{border-left:none;border-top:1px solid rgba(107,47,160,.15);padding:20px 28px}
+    .pc-preview-grid{grid-template-columns:1fr 1fr}
   }
 </style>
 </head>
@@ -152,6 +154,36 @@
   </div>
 </footer>
 
+<!-- CHECKOUT MODAL -->
+<div class="modal-overlay" id="checkout-modal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeCheckout()">✕</button>
+    <div style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:8px">Purchase</div>
+    <div id="co-product-name" style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:4px"></div>
+    <div id="co-product-price" style="font-family:'Cinzel',serif;font-size:1.5rem;font-weight:900;color:var(--amber-glow);margin-bottom:20px"></div>
+    <form id="checkout-form" onsubmit="submitOrder(event)">
+      <input type="hidden" id="co-product-id">
+      <div class="form-group">
+        <label class="form-label">Full Name *</label>
+        <input class="form-input" id="co-name" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address *</label>
+        <input class="form-input" id="co-email" type="email" required>
+      </div>
+      <div class="form-group" style="margin-bottom:20px">
+        <label class="form-label">School / District <span style="font-size:.68rem;opacity:.6">(optional)</span></label>
+        <input class="form-input" id="co-district">
+      </div>
+      <button type="submit" class="pc-buy" id="co-submit-btn">Complete Purchase →</button>
+      <p style="font-size:.72rem;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.5">
+        Your download link will be sent to your email immediately.<br>
+        Questions? <a href="mailto:support@clearpathedgroup.com" style="color:var(--purple-light)">support@clearpathedgroup.com</a>
+      </p>
+    </form>
+  </div>
+</div>
+
 <script>
 const PRODUCTS = [
   {
@@ -173,7 +205,20 @@ const PRODUCTS = [
 <li>Plus: Investigation Notes, Appeal Tracker, Outcome & Letters, Threat Assessment, SCOC Reference</li>
 </ul>
 <strong>15 parent phone scripts included:</strong> Assault, Fighting, Bullying, Drug Possession, Dangerous Weapon, Terroristic Threat, Harassment, Truancy, Vandalism, Theft, Sexual Harassment, Defiance, Disruption, Tobacco/Vaping, Other.`,
-    buyUrl: '',
+    preview: [
+      { name: 'Command Dashboard', desc: 'Live campus summary across 5 sections. Critical alerts, investigation pipeline, SPED compliance status, appeal outcomes. Print-ready.' },
+      { name: 'Incident Intake', desc: '34-column master log. Auto-calculates day of week, rolling 10-day SPED total, live flags, days case open, and case age.' },
+      { name: 'Investigation Tracker', desc: '5-stage workflow with integrity checklist. Auto-calculates appeal deadlines. Tracks every case from intake to closure.' },
+      { name: '10-Day Compliance', desc: 'Per-student SPED removal tracking. Color-coded: Day 7 yellow, Day 9 orange, Day 10+ red with MDR alert.' },
+      { name: 'Evidence Tracker', desc: 'Chain of custody: received from, stored where, who accessed, when returned. Legal Hold flag turns row red.' },
+      { name: 'Parent Contact Log', desc: 'Every call logged. Select offense → full phone script auto-populates. 15 scripts for 15 offense types.' },
+      { name: 'Discipline Trends', desc: '13 offense categories, consequence summary, SPED breakdown, repeat offender flags, monthly breakdown.' },
+      { name: 'Monday Briefing', desc: 'Print-ready weekly report. Open investigations, SPED alerts, parent follow-ups, campus stats. All auto-populated.' },
+      { name: 'Investigation Notes', desc: 'Structured template for witness interviews, evidence review, and findings. Legally separate from the Intake record.' },
+      { name: 'Appeal Tracker', desc: 'Consequence decisions, auto-calculated 21-day appeal deadlines, appeal status tracking.' },
+      { name: 'Threat Assessment', desc: 'Structured threat assessment aligned with HB 3 requirements.' },
+      { name: 'SCOC Reference', desc: 'Student Code of Conduct reference with TEC §37 text summaries and offense categories.' },
+    ],
     compat: ['Excel 2016+', 'Google Sheets', '14 Sheets'],
   },
   {
@@ -186,12 +231,18 @@ const PRODUCTS = [
 <li><strong>Student Roster</strong> — 100 rows with auto-calculated Days in DAEP, Days Remaining, and Incident Count</li>
 <li><strong>DAEP Placements</strong> — projected end date, days remaining countdown, MDR flag (auto-fires when required but not scheduled)</li>
 <li><strong>Incident Log</strong> — 200 rows with VLOOKUP auto-fill from Roster. Offense categories and TEC references from dropdowns</li>
-<li><strong>Compliance Checklist</strong> — 150 rows tracking all required actions. Overdue = red. Within 3 days = gold</li>
+<li><strong>Compliance Checklist</strong> — 150 rows. Overdue items = red. Within 3 days = gold</li>
 <li><strong>Dashboard</strong> — live metrics: active placements, expiring, SPED flags, compliance status</li>
-<li><strong>Status Board</strong> — print-ready weekly board: students returning within 7 days + compliance status</li>
+<li><strong>Status Board</strong> — print-ready: students returning within 7 days + compliance status</li>
 <li><strong>Reference Tab</strong> — TEC §37 text summaries, SPED codes, glossary, compliance timelines</li>
 </ul>`,
-    buyUrl: '',
+    preview: [
+      { name: 'Student Roster', desc: 'Auto-calculated Days in DAEP, Days Remaining, Incident Count per student. 100 rows.' },
+      { name: 'DAEP Placements', desc: 'Projected end date, days remaining countdown, auto MDR flag when required but not scheduled.' },
+      { name: 'Compliance Checklist', desc: '150 rows tracking all required actions per student. Overdue = red. Within 3 days = gold.' },
+      { name: 'Dashboard', desc: 'Live COUNTIF/COUNTIFS: active placements, expiring, SPED flags, compliance status, incidents.' },
+      { name: 'Status Board', desc: 'Print weekly — students returning within 7 days and their compliance checklist status.' },
+    ],
     compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
   },
   {
@@ -201,15 +252,19 @@ const PRODUCTS = [
     price: 12,
     short: 'ISS only works when it changes behavior. This tracker logs daily interventions, measures outcomes, and requires a structured re-entry plan before students return.',
     details: `<ul>
-<li><strong>8 intervention tracks</strong> fully written with research basis: Reflection & Journaling, Restorative Practices, SEL, Conflict Resolution, Academic Support, Behavioral Skills, Family Engagement, Crisis Support</li>
-<li><strong>12 offense-specific daily activity plans</strong> in student-facing language for Day 1–4+ and re-entry</li>
-<li><strong>8-step re-entry checklist</strong> — auto-calculates "READY TO RETURN" only when all steps complete</li>
-<li><strong>Daily Activity Log</strong> — 500 rows for every intervention session. Engagement level, completion, follow-up flags</li>
-<li><strong>Outcome Tracker</strong> — before/after incident counts, auto-calculated reduction %, recidivism tracking</li>
-<li><strong>Dashboard</strong> — 20 live metrics: active placements, re-entry readiness, intervention completion rates</li>
-<li><strong>Re-Entry Board</strong> — print-ready weekly board showing students returning within 7 days</li>
+<li><strong>8 intervention tracks</strong> fully written: Reflection, Restorative Practices, SEL, Conflict Resolution, Academic Support, Behavioral Skills, Family Engagement, Crisis Support</li>
+<li><strong>12 offense-specific daily activity plans</strong> in student-facing language</li>
+<li><strong>8-step re-entry checklist</strong> — "READY TO RETURN" only when all complete</li>
+<li><strong>Daily Activity Log</strong> — 500 rows. Engagement level, completion, follow-up flags</li>
+<li><strong>Outcome Tracker</strong> — before/after incident counts, reduction %, recidivism tracking</li>
+<li><strong>Dashboard</strong> — 20 live metrics</li>
 </ul>`,
-    buyUrl: '',
+    preview: [
+      { name: 'Intervention Library', desc: '8 tracks fully written with research basis. Ready to assign immediately.' },
+      { name: 'Student Activity Plans', desc: '12 offense-specific daily activities for Day 1–4+ in student-facing language.' },
+      { name: 'Re-Entry Checklist', desc: '8 required steps. Auto-calculates readiness. Overdue return dates turn red.' },
+      { name: 'Outcome Tracker', desc: 'Before/after incident counts with auto-calculated reduction % and recidivism flag.' },
+    ],
     compat: ['Excel 2016+', 'Google Sheets', '10 Sheets'],
   },
   {
@@ -219,14 +274,18 @@ const PRODUCTS = [
     price: 10,
     short: 'The TEC tells you what you CAN do. This tells you what you SHOULD do. Every TEC §37 offense mapped with consequence options, restorative alternatives, and SPED flags.',
     details: `<ul>
-<li><strong>18 TEC §37 offenses</strong> fully pre-populated: mandatory vs. discretionary, consequence range, 3 restorative alternatives per offense</li>
-<li><strong>10 restorative protocols</strong> written step-by-step with research citations</li>
-<li><strong>Offense Lookup</strong> — select offense from dropdown → TEC section, options, SPED flags auto-populate</li>
-<li><strong>CBC Workflow</strong> — TEC §37.0012 decision log with red flags when alternatives weren't considered</li>
-<li><strong>SPED Safeguards</strong> — every offense mapped to MDR triggers, 10-day rule, FAPE requirements</li>
-<li><strong>Documentation Checklist</strong> — 8-document package per incident. Auto-counts complete vs. missing</li>
+<li><strong>18 TEC §37 offenses</strong> — mandatory vs. discretionary, consequence range, 3 restorative alternatives per offense</li>
+<li><strong>10 restorative protocols</strong> step-by-step with research citations</li>
+<li><strong>Offense Lookup</strong> — select offense → TEC section, options, SPED flags auto-populate</li>
+<li><strong>CBC Workflow</strong> — TEC §37.0012 decision log with red flags</li>
+<li><strong>SPED Safeguards</strong> — every offense mapped to MDR triggers, 10-day rule, FAPE</li>
+<li><strong>Documentation Checklist</strong> — 8-document package per incident</li>
 </ul>`,
-    buyUrl: '',
+    preview: [
+      { name: 'Decision Matrix', desc: '18 offense rows. Mandatory/discretionary, consequence range, 3 restorative alternatives, SPED flags.' },
+      { name: 'Restorative Protocols', desc: '10 protocols: Restorative Circle, Mediated Conversation, Behavior Contract, Mentoring, etc.' },
+      { name: 'Offense Lookup', desc: 'Dropdown → auto-populates TEC section, options, SPED flags, required docs.' },
+    ],
     compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
   },
   {
@@ -234,16 +293,19 @@ const PRODUCTS = [
     title: 'Navigator — Student Behavior Tracker',
     tag: 'Core Product',
     price: 12,
-    short: 'Track referrals, suspensions, student supports, and intervention effectiveness. Built-in risk score calculator flags students before they escalate to DAEP.',
+    short: 'Track referrals, suspensions, supports, and intervention effectiveness. Built-in risk score flags students before they escalate to DAEP.',
     details: `<ul>
-<li><strong>Risk Score Calculator</strong> — weighted scoring: referral frequency, suspension count, attendance, support engagement, ELL/SPED status → HIGH / MEDIUM / LOW</li>
-<li><strong>Student Supports</strong> — track active interventions with effectiveness measurement: incidents before vs. after, reduction %, auto-calculated "Effective?" flag</li>
-<li><strong>Referral Log</strong> — 200 rows with VLOOKUP auto-fill. Per-student referral number auto-increments</li>
-<li><strong>ISS/OSS Placements</strong> — 90-day OSS count flags when approaching escalation threshold</li>
-<li><strong>Dashboard</strong> — 20+ live metrics: students monitored, referrals, ISS/OSS counts, high-risk flags</li>
-<li><strong>Risk Alert Board</strong> — print-ready weekly briefing: OSS escalation flags, students without supports</li>
+<li><strong>Risk Score Calculator</strong> — weighted: referral frequency, suspension count, attendance, support engagement → HIGH / MEDIUM / LOW</li>
+<li><strong>Student Supports</strong> — effectiveness measurement: incidents before vs. after, reduction %, "Effective?" flag</li>
+<li><strong>Referral Log</strong> — 200 rows with auto-fill. Per-student referral number auto-increments</li>
+<li><strong>ISS/OSS Placements</strong> — 90-day OSS count flags escalation threshold</li>
+<li><strong>Risk Alert Board</strong> — print-ready weekly briefing</li>
 </ul>`,
-    buyUrl: '',
+    preview: [
+      { name: 'Risk Score Calculator', desc: 'Weighted scoring across 5 factors. Auto-generates color-coded risk level per student.' },
+      { name: 'Student Supports', desc: 'Active interventions with before/after metrics and auto-calculated effectiveness.' },
+      { name: 'Risk Alert Board', desc: 'Print weekly — OSS escalation flags, students without supports, approaching consequences.' },
+    ],
     compat: ['Excel 2016+', 'Google Sheets', '7 Sheets'],
   },
   {
@@ -251,16 +313,20 @@ const PRODUCTS = [
     title: 'Meridian — SPED Compliance Tracker',
     tag: 'Core Product',
     price: 14,
-    short: 'IEP annual reviews, 504 plans, Dyslexia HB 3928, CAP findings, and SPPI-13 transition — all in one tracker. Built for Texas SPED coordinators.',
+    short: 'IEP annual reviews, 504 plans, Dyslexia HB 3928, CAP findings, and SPPI-13 transition — all in one tracker.',
     details: `<ul>
-<li><strong>5 compliance areas in one system:</strong> IEPs, 504 plans, Dyslexia/HB 3928, TEA Corrective Action Plans, SPPI-13 transition</li>
-<li><strong>IEP Tracker</strong> — annual review deadlines, ARD scheduling, re-evaluation dates. Overdue flags auto</li>
-<li><strong>504 Plan Tracker</strong> — annual review tracking with Dyslexia/HB 3928 MDT verification</li>
-<li><strong>CAP Findings Tracker</strong> — systemic and child-specific correction deadlines tracked separately</li>
-<li><strong>SPPI-13 Transition</strong> — all 5 core compliance elements per student. Auto-calculates compliance rate</li>
-<li><strong>Compliance Health Board</strong> — print weekly: IEPs due within 30 days, 504 reviews, HB 3928 pending, SPPI-13 non-compliant</li>
+<li><strong>5 compliance areas:</strong> IEPs, 504 plans, Dyslexia/HB 3928, TEA Corrective Action Plans, SPPI-13</li>
+<li><strong>IEP Tracker</strong> — annual review deadlines, ARD scheduling, re-evaluation dates</li>
+<li><strong>504 Plan Tracker</strong> — annual review with Dyslexia/HB 3928 MDT verification</li>
+<li><strong>CAP Findings</strong> — systemic and child-specific deadlines tracked separately</li>
+<li><strong>SPPI-13 Transition</strong> — 5 compliance elements per student, auto compliance rate</li>
+<li><strong>Compliance Health Board</strong> — print weekly for SPED coordinator</li>
 </ul>`,
-    buyUrl: '',
+    preview: [
+      { name: 'IEP Tracker', desc: 'Annual review deadlines, ARD meeting scheduling, re-evaluation dates. Overdue flags automatically.' },
+      { name: 'SPPI-13 Transition', desc: 'All 5 core compliance elements per student. Auto-calculates compliant vs. non-compliant.' },
+      { name: 'Compliance Health Board', desc: 'Print weekly — IEPs due 30 days, 504 reviews, HB 3928 pending, SPPI-13 non-compliant.' },
+    ],
     compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
   },
   {
@@ -271,15 +337,21 @@ const PRODUCTS = [
     short: '5 offense-specific investigation records — Fighting, Drugs, Harassment, Threats, General Misconduct. Due process checklist built in. Word + PDF.',
     details: `<strong>Each template includes:</strong>
 <ul>
-<li>10-section structured layout: Incident Overview, Student Info, Immediate Actions, Due Process Checklist, Timeline, Student Statement, Witness Statements ×3, Evidence Summary, Findings & Disposition, Administrator Certification</li>
-<li>Due process checklist with legal warnings — 8 required steps for any removal</li>
+<li>10-section layout: Incident Overview, Student Info, Immediate Actions, Due Process Checklist, Timeline, Student Statement, Witness Statements ×3, Evidence Summary, Findings, Certification</li>
+<li>Due process checklist — 8 required steps with legal warnings</li>
 <li>SPED/504 alert boxes that fire when IEP or 504 is checked</li>
-<li>MDR finding section with "STOP — PLACEMENT BLOCKED" red box for manifestation findings</li>
+<li>MDR finding → "STOP — PLACEMENT BLOCKED" red box</li>
 <li>Evidence summary table with Legal Hold field</li>
-<li>FERPA reminders on witness statement section</li>
+<li>FERPA reminders on witness section</li>
 </ul>
-<strong>5 templates:</strong> Fighting/Assault, Drugs/Alcohol, Harassment/Bullying/Cyberbullying, Threats/Terroristic Threat, General Misconduct. Each in Word (.docx) + PDF. Total: 10 files.`,
-    buyUrl: '',
+<strong>5 templates:</strong> Fighting/Assault, Drugs/Alcohol, Harassment/Bullying, Threats, General Misconduct. Each in Word + PDF = 10 files.`,
+    preview: [
+      { name: 'Fighting / Assault', desc: 'Initiator, injury description, weapon checkbox, self-defense finding, mandatory expulsion warning.' },
+      { name: 'Drugs / Alcohol', desc: 'Possession/use/distribution, substance description, chain of custody, law enforcement field.' },
+      { name: 'Harassment / Bullying', desc: 'Conduct basis, pattern documentation, cyberbullying fields, Title IX/OCR warning.' },
+      { name: 'Threats / Terroristic', desc: 'HB 3 threat assessment fields, 4-level determination, law enforcement referral, safety plan.' },
+      { name: 'General Misconduct', desc: 'SCOC classification, repeat offense documentation, prior interventions, alternatives.' },
+    ],
     compat: ['Word', 'Google Docs', 'PDF', '10 Files'],
   },
   {
@@ -287,19 +359,23 @@ const PRODUCTS = [
     title: 'Digital Investigation Intake Form',
     tag: 'Core Product',
     price: 10,
-    short: 'Fill out investigations digitally. Exports a CSV row that populates your Admin Command Toolkit automatically. No double entry. Works offline in any browser.',
+    short: 'Fill out investigations digitally. Exports a CSV row that populates your Admin Command Toolkit automatically. No double entry. Works offline.',
     details: `<ul>
 <li>Select offense type → offense-specific fields and legal alerts load dynamically</li>
-<li>SPED/504 checkbox → red MDR warning fires automatically with 10-day timeline</li>
-<li>Add/remove timeline rows, witness blocks, and evidence entries as needed</li>
-<li><strong>Export to Toolkit</strong> → CSV row pre-mapped to all 34 columns of the Incident Intake tab</li>
-<li><strong>Export Full Record</strong> → JSON for archiving or Waypoint import</li>
+<li>SPED/504 checkbox → red MDR warning fires automatically</li>
+<li>Add/remove timeline rows, witness blocks, evidence entries as needed</li>
+<li><strong>Export to Toolkit</strong> → CSV row pre-mapped to all 34 columns</li>
+<li><strong>Export Full Record</strong> → JSON for archiving</li>
 <li><strong>Print / Save as PDF</strong> → clean print view for disciplinary file</li>
-<li><strong>Save Draft</strong> → browser storage for in-progress investigations</li>
-<li>Works on desktop, laptop, Chromebook, tablet. Completely offline after download</li>
+<li><strong>Save Draft</strong> → browser storage for in-progress forms</li>
+<li>Works offline on any device after download</li>
 </ul>`,
-    buyUrl: '',
-    compat: ['Any Browser', 'Offline', 'HTML File'],
+    preview: [
+      { name: 'Dynamic Offense Fields', desc: 'Select offense → fields change. Fighting shows weapon checkbox, drugs shows substance type, etc.' },
+      { name: 'SPED Alert System', desc: 'Check IEP or 504 → red MDR warning with 10-day timeline fires instantly.' },
+      { name: 'Export to Toolkit', desc: 'One click → CSV row lands in exactly the right 34 columns of the Incident Intake tab.' },
+    ],
+    compat: ['Any Browser', 'Offline', 'Single HTML File'],
   },
 ];
 
@@ -308,55 +384,33 @@ const BUNDLES = [
     id: 'bundle-daep',
     title: 'DAEP & Discipline Complete Pack',
     tag: '3-Tool Bundle',
-    price: 28,
-    origPrice: 36,
-    save: 8,
-    short: 'Everything you need to document, investigate, and track DAEP placements. Covers the full lifecycle: know what consequence to apply, document the investigation, track through re-entry.',
+    price: 28, origPrice: 36, save: 8,
+    short: 'Full DAEP lifecycle: know what consequence to apply (Matrix), document the investigation (Templates), track through re-entry (Tracker).',
     includes: ['DAEP Student Tracker ($12)', 'TEC Consequence Decision Matrix ($10)', 'Investigation Templates 5-Pack ($14)'],
-    buyUrl: '',
   },
   {
     id: 'bundle-behavior',
     title: 'Behavior Intervention System',
     tag: '3-Tool Bundle',
-    price: 28,
-    origPrice: 34,
-    save: 6,
-    short: 'The complete behavior intervention toolkit: ISS with daily activities and re-entry, RTI/MTSS behavior tracking with risk scores, and a TEC consequence reference.',
+    price: 28, origPrice: 34, save: 6,
+    short: 'Complete behavior intervention: ISS with daily activities, RTI/MTSS tracking with risk scores, and TEC consequence reference.',
     includes: ['ISS Engagement & Intervention Tracker ($12)', 'Navigator Behavior Tracker ($12)', 'TEC Consequence Decision Matrix ($10)'],
-    buyUrl: '',
   },
   {
     id: 'bundle-investigation',
     title: "Administrator's Investigation Kit",
     tag: '3-Tool Bundle',
-    price: 32,
-    origPrice: 42,
-    save: 10,
-    short: 'The complete investigation system: digital intake → auto-populates the Command Toolkit → prints as a professional investigation record. Zero double entry.',
+    price: 32, origPrice: 42, save: 10,
+    short: 'Complete investigation system: digital intake → auto-populates Command Toolkit → prints as professional record. Zero double entry.',
     includes: ["Administrator's Command Toolkit ($18)", 'Investigation Templates 5-Pack ($14)', 'Digital Investigation Intake Form ($10)'],
-    buyUrl: '',
   },
   {
     id: 'bundle-flagship',
     title: 'Campus Leadership Complete System',
     tag: 'Flagship Bundle — Best Value',
-    price: 52,
-    origPrice: 102,
-    save: 50,
-    flagship: true,
-    short: 'Every Clear Path tool in one download. A connected system, not a collection of unrelated spreadsheets. Every product was designed to work together.',
-    includes: [
-      "Administrator's Command Toolkit ($18)",
-      'DAEP Student Tracker ($12)',
-      'ISS Engagement & Intervention Tracker ($12)',
-      'TEC Consequence Decision Matrix ($10)',
-      'Navigator Behavior Tracker ($12)',
-      'Meridian SPED Compliance Tracker ($14)',
-      'Investigation Templates 5-Pack ($14)',
-      'Digital Investigation Intake Form ($10)',
-    ],
-    buyUrl: '',
+    price: 52, origPrice: 102, save: 50, flagship: true,
+    short: 'Every Clear Path tool in one download. A connected system — every product was designed to work together.',
+    includes: ["Administrator's Command Toolkit ($18)",'DAEP Student Tracker ($12)','ISS Engagement & Intervention Tracker ($12)','TEC Consequence Decision Matrix ($10)','Navigator Behavior Tracker ($12)','Meridian SPED Compliance Tracker ($14)','Investigation Templates 5-Pack ($14)','Digital Investigation Intake Form ($10)'],
   },
 ];
 
@@ -364,15 +418,83 @@ function esc(s) {
   return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function toggleDetails(id) {
-  const el = document.getElementById('details-' + id);
-  const btn = document.getElementById('toggle-' + id);
+function togglePreview(id) {
+  const el = document.getElementById('preview-' + id);
+  const btn = document.getElementById('preview-btn-' + id);
   if (el.classList.contains('open')) {
     el.classList.remove('open');
-    btn.textContent = 'View Details ▾';
+    btn.textContent = 'Preview What\'s Inside ▾';
   } else {
     el.classList.add('open');
-    btn.textContent = 'Hide Details ▴';
+    btn.textContent = 'Hide Preview ▴';
+  }
+}
+
+function openCheckout(productId) {
+  const item = PRODUCTS.find(p => p.id === productId) || BUNDLES.find(b => b.id === productId);
+  if (!item) return;
+  document.getElementById('co-product-name').textContent = item.title;
+  document.getElementById('co-product-price').textContent = '$' + item.price;
+  document.getElementById('co-product-id').value = productId;
+  document.getElementById('co-submit-btn').textContent = 'Complete Purchase →';
+  document.getElementById('co-submit-btn').disabled = false;
+  // Reset form fields but keep the product info
+  document.getElementById('co-name').value = '';
+  document.getElementById('co-email').value = '';
+  document.getElementById('co-district').value = '';
+  document.getElementById('checkout-form').style.display = '';
+  document.getElementById('checkout-modal').classList.add('open');
+}
+
+function closeCheckout() {
+  document.getElementById('checkout-modal').classList.remove('open');
+}
+
+// Close modal on overlay click
+document.getElementById('checkout-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeCheckout();
+});
+
+async function submitOrder(e) {
+  e.preventDefault();
+  const btn = document.getElementById('co-submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Processing…';
+
+  const productId = document.getElementById('co-product-id').value;
+  const name = document.getElementById('co-name').value.trim();
+  const email = document.getElementById('co-email').value.trim();
+  const district = document.getElementById('co-district').value.trim();
+  const item = PRODUCTS.find(p => p.id === productId) || BUNDLES.find(b => b.id === productId);
+
+  try {
+    const res = await fetch('https://formspree.io/f/xpqjngpp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        product: item ? item.title : productId,
+        product_id: productId,
+        price: item ? '$' + item.price : '',
+        name, email, district,
+        source: 'store_checkout',
+        _subject: 'Store Order: ' + (item ? item.title : productId) + ' — ' + name,
+      }),
+    });
+    if (res.ok) {
+      document.getElementById('checkout-form').innerHTML = '<div style="text-align:center;padding:20px 0">' +
+        '<div style="font-size:2.5rem;margin-bottom:12px">✓</div>' +
+        '<div style="font-family:Cinzel,serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:10px">Order Received!</div>' +
+        '<p style="font-size:.88rem;color:var(--text-muted);line-height:1.7">We\'ll send your download link to<br><strong style="color:var(--amber-light)">' + esc(email) + '</strong><br>within one business hour.</p>' +
+        '<p style="font-size:.82rem;color:var(--text-muted);margin-top:16px">Questions? <a href="mailto:support@clearpathedgroup.com" style="color:var(--purple-light)">support@clearpathedgroup.com</a></p></div>';
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Complete Purchase →';
+      alert('Something went wrong. Please email support@clearpathedgroup.com to place your order.');
+    }
+  } catch(err) {
+    btn.disabled = false;
+    btn.textContent = 'Complete Purchase →';
+    alert('Network error. Please email support@clearpathedgroup.com to place your order.');
   }
 }
 
@@ -380,192 +502,104 @@ function renderProducts() {
   const container = document.getElementById('products-container');
   let html = '';
 
-  // Flagship bundle first
+  // Flagship
   const flagship = BUNDLES.find(b => b.flagship);
   if (flagship) {
     html += `<div class="store-section">
       <div class="section-label">Best Value</div>
       <div class="section-desc">Get everything at once and save $${flagship.save}.</div>
-      <div class="product-grid">
-        ${renderBundleCard(flagship)}
-      </div>
+      ${renderBundleCard(flagship)}
     </div>`;
   }
 
-  // Core products
+  // Core
   html += `<div class="store-section">
     <div class="section-label">Core Products</div>
     <div class="section-desc">8 standalone tools — each solves a specific campus discipline challenge.</div>
-    <div class="product-grid">
-      ${PRODUCTS.map(p => renderProductCard(p)).join('')}
-    </div>
+    ${PRODUCTS.map(p => renderProductCard(p)).join('')}
   </div>`;
 
-  // Other bundles
-  const otherBundles = BUNDLES.filter(b => !b.flagship);
+  // Bundles
+  const others = BUNDLES.filter(b => !b.flagship);
   html += `<div class="store-section">
     <div class="section-label">Save with Bundles</div>
     <div class="section-desc">Curated combinations that cover complete workflows.</div>
-    <div class="product-grid">
-      ${otherBundles.map(b => renderBundleCard(b)).join('')}
-    </div>
+    ${others.map(b => renderBundleCard(b)).join('')}
   </div>`;
 
-  // Waypoint upgrade CTA
+  // Waypoint CTA
   html += `<div class="store-section" style="text-align:center;padding-top:20px;padding-bottom:80px">
     <div style="background:var(--card-bg);border:1px solid var(--border-purple);border-radius:14px;padding:40px;max-width:680px;margin:0 auto;backdrop-filter:blur(8px)">
       <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:12px">Ready to automate?</div>
       <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:12px">Waypoint automates these tools district-wide</div>
-      <p style="font-size:.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:24px">Real-time dashboards, automated parent notices, SPED alerts pushed to your phone, multi-campus visibility — everything these spreadsheets do, running automatically across your entire district.</p>
-      <a href="/#contact" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--purple),var(--amber));color:white;padding:14px 32px;border-radius:8px;font-weight:700;font-size:.88rem;text-decoration:none;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 24px rgba(232,134,42,.5)'" onmouseout="this.style.transform='';this.style.boxShadow=''">Request a Waypoint Demo →</a>
+      <p style="font-size:.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:24px">Real-time dashboards, automated parent notices, SPED alerts pushed to your phone — everything these spreadsheets do, running automatically across your entire district.</p>
+      <a href="/#contact" class="pc-buy" style="display:inline-block;width:auto;background:linear-gradient(135deg,var(--purple),var(--amber))">Request a Waypoint Demo →</a>
     </div>
   </div>`;
 
   container.innerHTML = html;
 }
 
-function buyButton(item) {
-  if (item.buyUrl) {
-    return `<a href="${esc(item.buyUrl)}" class="pc-buy">Buy Now →</a>`;
-  }
-  return `<button class="pc-buy" onclick="showCheckoutModal('${item.id}')">Buy Now →</button>`;
-}
-
 function renderProductCard(p) {
   return `<div class="product-card" id="card-${p.id}">
-    <div class="pc-body">
-      <span class="pc-tag">${esc(p.tag)}</span>
-      <div class="pc-title">${esc(p.title)}</div>
-      <div class="pc-short">${esc(p.short)}</div>
-      <button class="pc-toggle" id="toggle-${p.id}" onclick="toggleDetails('${p.id}')">View Details ▾</button>
-      <div class="pc-details" id="details-${p.id}">
+    <div class="pc-layout">
+      <div class="pc-main">
+        <span class="pc-tag">${esc(p.tag)}</span>
+        <div class="pc-title">${esc(p.title)}</div>
+        <div class="pc-short">${esc(p.short)}</div>
         <div class="pc-detail-text">${p.details}</div>
         <div class="pc-compat">${p.compat.map(c => `<span class="pc-compat-tag">${esc(c)}</span>`).join('')}</div>
       </div>
+      <div class="pc-sidebar">
+        <span class="pc-price">$${p.price}</span>
+        <button class="pc-buy" onclick="openCheckout('${p.id}')">Buy Now →</button>
+        <button class="pc-preview-btn" id="preview-btn-${p.id}" onclick="togglePreview('${p.id}')">Preview What's Inside ▾</button>
+        <div class="pc-note">Instant delivery to your email.<br>Excel + Google Sheets ready.</div>
+      </div>
     </div>
-    <div class="pc-footer">
-      <div><span class="pc-price">$${p.price}</span></div>
-      ${buyButton(p)}
-    </div>
+    ${p.preview ? `<div class="pc-preview" id="preview-${p.id}">
+      <h4>What's Inside — Sheet by Sheet</h4>
+      <div class="pc-preview-grid">
+        ${p.preview.map(s => `<div class="pc-preview-sheet">
+          <div class="sheet-name">${esc(s.name)}</div>
+          <div class="sheet-desc">${esc(s.desc)}</div>
+        </div>`).join('')}
+      </div>
+    </div>` : ''}
   </div>`;
 }
 
 function renderBundleCard(b) {
-  return `<div class="product-card bundle${b.flagship ? ' flagship' : ''}" id="card-${b.id}" style="${b.flagship ? 'grid-column:1/-1;' : ''}">
-    <div class="pc-body">
-      <span class="pc-tag">${esc(b.tag)}</span>
-      <div class="pc-title">${esc(b.title)}</div>
-      <div class="pc-short">${esc(b.short)}</div>
-      <div class="pc-save">Save $${b.save}</div>
-      <ul class="pc-includes">${b.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
-    </div>
-    <div class="pc-footer">
-      <div>
-        <span class="pc-price">$${b.price}</span>
-        <span class="pc-orig-price">$${b.origPrice}</span>
+  return `<div class="product-card bundle${b.flagship ? ' flagship' : ''}" id="card-${b.id}">
+    <div class="pc-layout">
+      <div class="pc-main">
+        <span class="pc-tag">${esc(b.tag)}</span>
+        <div class="pc-title">${esc(b.title)}</div>
+        <div class="pc-short">${esc(b.short)}</div>
+        <div class="pc-save">Save $${b.save}</div>
+        <ul class="pc-includes">${b.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
       </div>
-      ${buyButton(b)}
+      <div class="pc-sidebar">
+        <span class="pc-price">$${b.price}</span>
+        <span class="pc-orig-price">$${b.origPrice} value</span>
+        <button class="pc-buy" onclick="openCheckout('${b.id}')">Buy Now →</button>
+        <div class="pc-note">Instant delivery to your email.<br>All products included.</div>
+      </div>
     </div>
   </div>`;
 }
 
-// ── STRIPE PAYMENT LINKS ──
-// Replace these with your real Stripe Payment Links from https://dashboard.stripe.com/payment-links
-// Each key matches a product/bundle id. The value is the Stripe Payment Link URL.
-// After creating each link in Stripe, set the success URL to: https://clearpathedgroup.com/download.html?product=PRODUCT_ID
-const STRIPE_LINKS = {
-  'command-toolkit':        '', // Create in Stripe → $18
-  'daep-tracker':           '', // Create in Stripe → $12
-  'iss-tracker':            '', // Create in Stripe → $12
-  'tec-matrix':             '', // Create in Stripe → $10
-  'navigator-tracker':      '', // Create in Stripe → $12
-  'meridian-sped':          '', // Create in Stripe → $14
-  'investigation-templates':'', // Create in Stripe → $14
-  'digital-intake':         '', // Create in Stripe → $10
-  'bundle-daep':            '', // Create in Stripe → $28
-  'bundle-behavior':        '', // Create in Stripe → $28
-  'bundle-investigation':   '', // Create in Stripe → $32
-  'bundle-flagship':        '', // Create in Stripe → $52
-};
-
-function showCheckoutModal(productId) {
-  const link = STRIPE_LINKS[productId];
-  if (link) {
-    window.location.href = link;
-    return;
-  }
-  // Stripe link not configured yet — show contact modal
-  const item = PRODUCTS.find(p => p.id === productId) || BUNDLES.find(b => b.id === productId);
-  const name = item ? item.title : productId;
-  const price = item ? ('$' + item.price) : '';
-  document.getElementById('checkout-product-name').textContent = name;
-  document.getElementById('checkout-product-price').textContent = price;
-  document.getElementById('checkout-product-id').value = productId;
-  document.getElementById('checkout-modal').classList.add('open');
-}
-
-function closeCheckoutModal() {
-  document.getElementById('checkout-modal').classList.remove('open');
-}
-
-async function submitOrder(e) {
-  e.preventDefault();
-  const form = e.target;
-  const btn = form.querySelector('button[type="submit"]');
-  btn.disabled = true;
-  btn.textContent = 'Processing…';
-
-  const data = {
-    product: document.getElementById('checkout-product-id').value,
-    name: form.querySelector('#co-name').value,
-    email: form.querySelector('#co-email').value,
-    district: form.querySelector('#co-district').value || '',
-    source: 'store_checkout',
-  };
-
-  try {
-    // Send order to Formspree (same as other lead capture)
-    const res = await fetch('https://formspree.io/f/xpqjngpp', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...data, _subject: `Store Order: ${data.product} — ${data.name}` }),
-    });
-    if (res.ok) {
-      form.innerHTML = `<div style="text-align:center;padding:20px 0">
-        <div style="font-size:2rem;margin-bottom:12px">✓</div>
-        <div style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:10px">Order Received</div>
-        <p style="font-size:.88rem;color:var(--text-muted);line-height:1.7">We'll send your download link to <strong style="color:var(--amber-light)">${esc(data.email)}</strong> within one business hour.</p>
-        <p style="font-size:.82rem;color:var(--text-muted);margin-top:12px">Questions? <a href="mailto:support@clearpathedgroup.com" style="color:var(--purple-light)">support@clearpathedgroup.com</a></p>
-      </div>`;
-    } else {
-      btn.disabled = false;
-      btn.textContent = 'Complete Purchase →';
-      alert('Something went wrong. Please email support@clearpathedgroup.com');
-    }
-  } catch(err) {
-    btn.disabled = false;
-    btn.textContent = 'Complete Purchase →';
-    alert('Network error. Please email support@clearpathedgroup.com');
-  }
-}
-
-// Auto-open product from URL hash
+// Deep link from hash
 function handleHash() {
   const hash = window.location.hash.slice(1);
-  if (hash) {
-    const card = document.getElementById('card-' + hash);
-    if (card) {
-      setTimeout(() => {
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        // Auto-expand details
-        const details = document.getElementById('details-' + hash);
-        const toggle = document.getElementById('toggle-' + hash);
-        if (details && !details.classList.contains('open')) {
-          details.classList.add('open');
-          if (toggle) toggle.textContent = 'Hide Details ▴';
-        }
-      }, 200);
-    }
+  if (!hash) return;
+  const card = document.getElementById('card-' + hash);
+  if (card) {
+    setTimeout(() => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.style.boxShadow = '0 0 40px rgba(232,134,42,.4)';
+      setTimeout(() => card.style.boxShadow = '', 2000);
+    }, 200);
   }
 }
 
@@ -573,50 +607,5 @@ renderProducts();
 handleHash();
 window.addEventListener('hashchange', handleHash);
 </script>
-
-<!-- CHECKOUT MODAL -->
-<div id="checkout-modal" style="position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;
-  background:rgba(14,6,24,.85);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s">
-  <div style="background:var(--deep-purple);border:1px solid var(--border-purple);border-radius:16px;
-    max-width:440px;width:92%;padding:32px;position:relative;box-shadow:0 16px 48px rgba(0,0,0,.5)">
-    <button onclick="closeCheckoutModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;
-      color:var(--text-muted);font-size:1.2rem;cursor:pointer;padding:4px">✕</button>
-    <div style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:8px">Purchase</div>
-    <div id="checkout-product-name" style="font-family:'Cinzel',serif;font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:4px"></div>
-    <div id="checkout-product-price" style="font-family:'Cinzel',serif;font-size:1.5rem;font-weight:900;color:var(--amber-glow);margin-bottom:20px"></div>
-    <form onsubmit="submitOrder(event)">
-      <input type="hidden" id="checkout-product-id">
-      <div style="margin-bottom:14px">
-        <label style="font-size:.75rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px">Full Name *</label>
-        <input id="co-name" required style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border-purple);
-          background:rgba(45,16,84,.5);color:var(--text);font-family:'Raleway',sans-serif;font-size:.88rem;outline:none"
-          onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border-purple)'">
-      </div>
-      <div style="margin-bottom:14px">
-        <label style="font-size:.75rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px">Email Address *</label>
-        <input id="co-email" type="email" required style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border-purple);
-          background:rgba(45,16,84,.5);color:var(--text);font-family:'Raleway',sans-serif;font-size:.88rem;outline:none"
-          onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border-purple)'">
-      </div>
-      <div style="margin-bottom:20px">
-        <label style="font-size:.75rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:4px">School / District <span style="font-size:.68rem;opacity:.6">(optional)</span></label>
-        <input id="co-district" style="width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border-purple);
-          background:rgba(45,16,84,.5);color:var(--text);font-family:'Raleway',sans-serif;font-size:.88rem;outline:none"
-          onfocus="this.style.borderColor='var(--amber)'" onblur="this.style.borderColor='var(--border-purple)'">
-      </div>
-      <button type="submit" style="width:100%;padding:14px;border-radius:8px;border:none;cursor:pointer;
-        background:linear-gradient(135deg,var(--amber),var(--orange));color:white;font-family:'Raleway',sans-serif;
-        font-size:.92rem;font-weight:700;letter-spacing:.04em;transition:transform .2s,box-shadow .2s"
-        onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 24px rgba(232,134,42,.5)'"
-        onmouseout="this.style.transform='';this.style.boxShadow=''">Complete Purchase →</button>
-      <p style="font-size:.72rem;color:var(--text-muted);text-align:center;margin-top:12px;line-height:1.5">
-        Your download link will be sent to your email.<br>Secure checkout powered by Clear Path Education Group.
-      </p>
-    </form>
-  </div>
-</div>
-<style>
-  #checkout-modal.open{opacity:1;pointer-events:all}
-</style>
 </body>
 </html>

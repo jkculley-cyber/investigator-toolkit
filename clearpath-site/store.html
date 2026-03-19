@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Texas Discipline & Compliance Tools — Clear Path Education Group</title>
+<meta name="description" content="Campus administrator tools for Texas TEC Chapter 37 discipline, DAEP tracking, SPED compliance, and investigation documentation. Excel + Google Sheets ready.">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep-purple:#1a0a2e; --dark-bg:#0e0618; --mid-purple:#2d1054;
+    --purple:#6b2fa0; --purple-light:#9b5fd4; --amber:#e8862a;
+    --amber-light:#f5b050; --amber-glow:#ffcc66; --orange:#d4541a;
+    --text:#f0e6d3; --text-muted:rgba(240,230,211,0.6);
+    --border:rgba(232,134,42,0.2); --border-purple:rgba(107,47,160,0.35);
+    --card-bg:rgba(26,10,46,0.7); --success:#2a7a50; --success-bg:rgba(42,122,80,.15);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Raleway',sans-serif;background:var(--dark-bg);color:var(--text);min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background:
+    radial-gradient(ellipse at 20% 20%,rgba(107,47,160,.15) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 80%,rgba(212,84,26,.1) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(26,10,46,1) 0%,#0e0618 100%);
+    pointer-events:none}
+
+  /* NAV */
+  nav{position:fixed;top:0;width:100%;z-index:200;background:rgba(14,6,24,.92);
+    backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+    padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:70px}
+  .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+  .nav-logo img{height:44px;width:44px;object-fit:contain;border-radius:8px}
+  .nav-logo-text .name{font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;
+    background:linear-gradient(90deg,var(--amber-light),var(--amber-glow));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;display:block}
+  .nav-logo-text .sub{font-size:.6rem;font-weight:600;color:var(--text-muted);letter-spacing:.12em;text-transform:uppercase;display:block}
+  .nav-back{font-size:.8rem;font-weight:600;color:var(--text-muted);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:color .2s}
+  .nav-back:hover{color:var(--amber-light)}
+
+  /* HERO */
+  .store-hero{position:relative;z-index:1;padding:110px 5% 50px;max-width:1100px;margin:0 auto;text-align:center}
+  .store-eyebrow{display:inline-flex;align-items:center;gap:8px;
+    background:rgba(232,134,42,.1);border:1px solid rgba(232,134,42,.3);
+    color:var(--amber-light);padding:6px 16px;border-radius:4px;
+    font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:20px}
+  .store-eyebrow span{width:5px;height:5px;background:var(--amber);border-radius:50%;box-shadow:0 0 8px var(--amber)}
+  .store-title{font-family:'Cinzel',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:900;line-height:1.15;margin-bottom:16px;
+    background:linear-gradient(160deg,var(--amber-glow) 0%,var(--amber-light) 50%,var(--text) 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .store-sub{font-size:1rem;color:var(--text-muted);line-height:1.75;max-width:620px;margin:0 auto 16px}
+  .store-trust{display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-top:24px}
+  .trust-item{font-size:.78rem;color:var(--text-muted);display:flex;align-items:center;gap:6px}
+  .trust-icon{color:var(--amber)}
+
+  /* SECTION */
+  .store-section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 5% 60px}
+  .section-label{font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;color:var(--amber-light);margin-bottom:8px}
+  .section-desc{font-size:.88rem;color:var(--text-muted);margin-bottom:28px}
+
+  /* PRODUCT GRID */
+  .product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:24px;margin-bottom:48px}
+
+  /* PRODUCT CARD */
+  .product-card{background:var(--card-bg);border:1px solid var(--border-purple);border-radius:14px;
+    overflow:hidden;transition:transform .25s,border-color .25s,box-shadow .25s;backdrop-filter:blur(8px);display:flex;flex-direction:column}
+  .product-card::before{content:'';display:block;height:3px;background:linear-gradient(90deg,var(--purple),var(--amber))}
+  .product-card:hover{transform:translateY(-4px);border-color:var(--amber);box-shadow:0 0 30px rgba(232,134,42,.25)}
+  .product-card.bundle{border-color:var(--amber);background:rgba(232,134,42,.06)}
+  .product-card.bundle::before{height:4px;background:linear-gradient(90deg,var(--amber-glow),var(--amber),var(--orange))}
+  .product-card.flagship{border-color:var(--amber-glow);box-shadow:0 0 20px rgba(232,134,42,.2)}
+  .product-card.flagship::before{height:5px;background:linear-gradient(90deg,var(--amber-glow),#fff,var(--amber-glow))}
+  .pc-body{padding:24px 24px 0;flex:1}
+  .pc-tag{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px;display:block}
+  .pc-title{font-family:'Cinzel',serif;font-size:1.05rem;font-weight:700;color:var(--text);margin-bottom:8px;line-height:1.35}
+  .pc-short{font-size:.84rem;color:var(--text-muted);line-height:1.7;margin-bottom:14px}
+  .pc-includes{font-size:.78rem;color:var(--text-muted);line-height:1.7;margin-bottom:14px;padding-left:16px}
+  .pc-includes li{margin-bottom:4px}
+  .pc-includes li::marker{color:var(--amber)}
+  .pc-save{display:inline-block;font-size:.72rem;font-weight:700;color:var(--success);background:var(--success-bg);
+    padding:3px 10px;border-radius:4px;margin-bottom:14px}
+  .pc-footer{padding:16px 24px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid rgba(107,47,160,.15)}
+  .pc-price{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:900;color:var(--amber-glow)}
+  .pc-orig-price{font-size:.82rem;color:var(--text-muted);text-decoration:line-through;margin-left:8px}
+  .pc-buy{display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--amber),var(--orange));
+    color:white;padding:12px 24px;border-radius:8px;font-weight:700;font-size:.82rem;text-decoration:none;
+    letter-spacing:.04em;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s;white-space:nowrap}
+  .pc-buy:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(232,134,42,.5)}
+
+  /* DETAIL TOGGLE */
+  .pc-details{display:none;padding:0 24px 16px}
+  .pc-details.open{display:block}
+  .pc-toggle{font-size:.78rem;color:var(--purple-light);cursor:pointer;border:none;background:none;
+    font-family:'Raleway',sans-serif;font-weight:600;padding:0;margin-bottom:14px;transition:color .2s}
+  .pc-toggle:hover{color:var(--amber-light)}
+  .pc-detail-text{font-size:.82rem;color:var(--text-muted);line-height:1.8}
+  .pc-detail-text strong{color:var(--text);font-weight:600}
+  .pc-detail-text ul{padding-left:18px;margin:8px 0}
+  .pc-detail-text ul li{margin-bottom:4px}
+  .pc-detail-text ul li::marker{color:var(--amber)}
+  .pc-compat{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .pc-compat-tag{font-size:.68rem;font-weight:600;color:var(--text-muted);background:rgba(107,47,160,.15);
+    padding:4px 10px;border-radius:4px;border:1px solid var(--border-purple)}
+
+  /* FOOTER */
+  footer{position:relative;z-index:1;background:#060310;border-top:1px solid var(--border-purple);
+    padding:40px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+  footer p{font-size:.78rem;color:rgba(240,230,211,.25)}
+  footer a{font-size:.78rem;color:var(--text-muted);text-decoration:none}
+  footer a:hover{color:var(--amber-light)}
+
+  @media(max-width:768px){
+    .store-hero{padding:100px 5% 40px}
+    .product-grid{grid-template-columns:1fr}
+    .pc-footer{flex-direction:column;align-items:stretch;text-align:center}
+    .pc-buy{justify-content:center}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path" />
+    <div class="nav-logo-text">
+      <span class="name">Clear Path Education Group</span>
+      <span class="sub">Pathways to Student Success</span>
+    </div>
+  </a>
+  <a class="nav-back" href="/">← Back to Home</a>
+</nav>
+
+<div class="store-hero">
+  <div class="store-eyebrow"><span></span> Available Now on TpT</div>
+  <h1 class="store-title">Texas Discipline & Compliance Tools</h1>
+  <p class="store-sub">Built by administrators, for administrators. Every tool is designed around Texas Education Code Chapter 37 — structured, compliance-ready, and immediately usable.</p>
+  <div class="store-trust">
+    <div class="trust-item"><span class="trust-icon">✓</span> Excel + Google Sheets compatible</div>
+    <div class="trust-item"><span class="trust-icon">✓</span> TEC Chapter 37 aligned</div>
+    <div class="trust-item"><span class="trust-icon">✓</span> Instant digital download</div>
+    <div class="trust-item"><span class="trust-icon">✓</span> No subscription required</div>
+  </div>
+</div>
+
+<div id="products-container"></div>
+
+<footer>
+  <p>© 2026 Clear Path Education Group, LLC · All rights reserved</p>
+  <div style="display:flex;gap:20px">
+    <a href="/">clearpathedgroup.com</a>
+    <a href="/resources.html">Resources</a>
+    <a href="mailto:support@clearpathedgroup.com">support@clearpathedgroup.com</a>
+  </div>
+</footer>
+
+<script>
+const PRODUCTS = [
+  {
+    id: 'command-toolkit',
+    title: "Administrator's Command Toolkit — Texas Edition",
+    tag: 'Flagship Product',
+    price: 18,
+    short: 'Enter one incident → 14 tabs auto-populate. 15 parent phone scripts. 10-day SPED alerts. Evidence chain of custody. Print your Monday briefing in 30 seconds.',
+    details: `<strong>14 connected tabs — enter once, everything updates:</strong>
+<ul>
+<li><strong>Command Dashboard</strong> — live campus summary: critical alerts, investigation status, SPED compliance, appeal outcomes. Print for Monday meetings in 30 seconds.</li>
+<li><strong>Incident Intake</strong> — 34-column master record. Auto-calculates rolling 10-day SPED total with live flags (Day 7 / Day 9 / Day 10+).</li>
+<li><strong>Investigation Tracker</strong> — 5-stage workflow (Intake → In Progress → Finding → Consequence → Closed). 6-point integrity checklist before case closure.</li>
+<li><strong>10-Day Compliance</strong> — per-SPED-student removal tracking. Fires at Day 7 (warning), Day 9 (urgent), Day 10+ (MDR required NOW).</li>
+<li><strong>Evidence Tracker</strong> — chain of custody log. Legal Hold flag turns entire row red.</li>
+<li><strong>Parent Contact Log</strong> — select offense category → complete phone script auto-populates. 15 scripts for 15 offense types.</li>
+<li><strong>Discipline Trends</strong> — auto-built from Intake. 13 offense categories, SPED breakdown, repeat offender flags.</li>
+<li><strong>Monday Briefing</strong> — print-ready weekly report. All auto-populated.</li>
+<li>Plus: Investigation Notes, Appeal Tracker, Outcome & Letters, Threat Assessment, SCOC Reference</li>
+</ul>
+<strong>15 parent phone scripts included:</strong> Assault, Fighting, Bullying, Drug Possession, Dangerous Weapon, Terroristic Threat, Harassment, Truancy, Vandalism, Theft, Sexual Harassment, Defiance, Disruption, Tobacco/Vaping, Other.`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Excel 2016+', 'Google Sheets', '14 Sheets'],
+  },
+  {
+    id: 'daep-tracker',
+    title: 'DAEP Student Tracker — Texas Edition',
+    tag: 'Core Product',
+    price: 12,
+    short: 'Stop tracking DAEP placements in email and sticky notes. This tracker handles placements, compliance deadlines, and MDR flags automatically. TEC §37 aligned.',
+    details: `<ul>
+<li><strong>Student Roster</strong> — 100 rows with auto-calculated Days in DAEP, Days Remaining, and Incident Count</li>
+<li><strong>DAEP Placements</strong> — projected end date, days remaining countdown, MDR flag (auto-fires when required but not scheduled)</li>
+<li><strong>Incident Log</strong> — 200 rows with VLOOKUP auto-fill from Roster. Offense categories and TEC references from dropdowns</li>
+<li><strong>Compliance Checklist</strong> — 150 rows tracking all required actions. Overdue = red. Within 3 days = gold</li>
+<li><strong>Dashboard</strong> — live metrics: active placements, expiring, SPED flags, compliance status</li>
+<li><strong>Status Board</strong> — print-ready weekly board: students returning within 7 days + compliance status</li>
+<li><strong>Reference Tab</strong> — TEC §37 text summaries, SPED codes, glossary, compliance timelines</li>
+</ul>`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
+  },
+  {
+    id: 'iss-tracker',
+    title: 'ISS Engagement & Intervention Tracker',
+    tag: 'Core Product',
+    price: 12,
+    short: 'ISS only works when it changes behavior. This tracker logs daily interventions, measures outcomes, and requires a structured re-entry plan before students return.',
+    details: `<ul>
+<li><strong>8 intervention tracks</strong> fully written with research basis: Reflection & Journaling, Restorative Practices, SEL, Conflict Resolution, Academic Support, Behavioral Skills, Family Engagement, Crisis Support</li>
+<li><strong>12 offense-specific daily activity plans</strong> in student-facing language for Day 1–4+ and re-entry</li>
+<li><strong>8-step re-entry checklist</strong> — auto-calculates "READY TO RETURN" only when all steps complete</li>
+<li><strong>Daily Activity Log</strong> — 500 rows for every intervention session. Engagement level, completion, follow-up flags</li>
+<li><strong>Outcome Tracker</strong> — before/after incident counts, auto-calculated reduction %, recidivism tracking</li>
+<li><strong>Dashboard</strong> — 20 live metrics: active placements, re-entry readiness, intervention completion rates</li>
+<li><strong>Re-Entry Board</strong> — print-ready weekly board showing students returning within 7 days</li>
+</ul>`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Excel 2016+', 'Google Sheets', '10 Sheets'],
+  },
+  {
+    id: 'tec-matrix',
+    title: 'TEC Consequence Decision Matrix',
+    tag: 'Core Product',
+    price: 10,
+    short: 'The TEC tells you what you CAN do. This tells you what you SHOULD do. Every TEC §37 offense mapped with consequence options, restorative alternatives, and SPED flags.',
+    details: `<ul>
+<li><strong>18 TEC §37 offenses</strong> fully pre-populated: mandatory vs. discretionary, consequence range, 3 restorative alternatives per offense</li>
+<li><strong>10 restorative protocols</strong> written step-by-step with research citations</li>
+<li><strong>Offense Lookup</strong> — select offense from dropdown → TEC section, options, SPED flags auto-populate</li>
+<li><strong>CBC Workflow</strong> — TEC §37.0012 decision log with red flags when alternatives weren't considered</li>
+<li><strong>SPED Safeguards</strong> — every offense mapped to MDR triggers, 10-day rule, FAPE requirements</li>
+<li><strong>Documentation Checklist</strong> — 8-document package per incident. Auto-counts complete vs. missing</li>
+</ul>`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
+  },
+  {
+    id: 'navigator-tracker',
+    title: 'Navigator — Student Behavior Tracker',
+    tag: 'Core Product',
+    price: 12,
+    short: 'Track referrals, suspensions, student supports, and intervention effectiveness. Built-in risk score calculator flags students before they escalate to DAEP.',
+    details: `<ul>
+<li><strong>Risk Score Calculator</strong> — weighted scoring: referral frequency, suspension count, attendance, support engagement, ELL/SPED status → HIGH / MEDIUM / LOW</li>
+<li><strong>Student Supports</strong> — track active interventions with effectiveness measurement: incidents before vs. after, reduction %, auto-calculated "Effective?" flag</li>
+<li><strong>Referral Log</strong> — 200 rows with VLOOKUP auto-fill. Per-student referral number auto-increments</li>
+<li><strong>ISS/OSS Placements</strong> — 90-day OSS count flags when approaching escalation threshold</li>
+<li><strong>Dashboard</strong> — 20+ live metrics: students monitored, referrals, ISS/OSS counts, high-risk flags</li>
+<li><strong>Risk Alert Board</strong> — print-ready weekly briefing: OSS escalation flags, students without supports</li>
+</ul>`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Excel 2016+', 'Google Sheets', '7 Sheets'],
+  },
+  {
+    id: 'meridian-sped',
+    title: 'Meridian — SPED Compliance Tracker',
+    tag: 'Core Product',
+    price: 14,
+    short: 'IEP annual reviews, 504 plans, Dyslexia HB 3928, CAP findings, and SPPI-13 transition — all in one tracker. Built for Texas SPED coordinators.',
+    details: `<ul>
+<li><strong>5 compliance areas in one system:</strong> IEPs, 504 plans, Dyslexia/HB 3928, TEA Corrective Action Plans, SPPI-13 transition</li>
+<li><strong>IEP Tracker</strong> — annual review deadlines, ARD scheduling, re-evaluation dates. Overdue flags auto</li>
+<li><strong>504 Plan Tracker</strong> — annual review tracking with Dyslexia/HB 3928 MDT verification</li>
+<li><strong>CAP Findings Tracker</strong> — systemic and child-specific correction deadlines tracked separately</li>
+<li><strong>SPPI-13 Transition</strong> — all 5 core compliance elements per student. Auto-calculates compliance rate</li>
+<li><strong>Compliance Health Board</strong> — print weekly: IEPs due within 30 days, 504 reviews, HB 3928 pending, SPPI-13 non-compliant</li>
+</ul>`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
+  },
+  {
+    id: 'investigation-templates',
+    title: 'Investigation Templates 5-Pack',
+    tag: 'Core Product',
+    price: 14,
+    short: '5 offense-specific investigation records — Fighting, Drugs, Harassment, Threats, General Misconduct. Due process checklist built in. Word + PDF.',
+    details: `<strong>Each template includes:</strong>
+<ul>
+<li>10-section structured layout: Incident Overview, Student Info, Immediate Actions, Due Process Checklist, Timeline, Student Statement, Witness Statements ×3, Evidence Summary, Findings & Disposition, Administrator Certification</li>
+<li>Due process checklist with legal warnings — 8 required steps for any removal</li>
+<li>SPED/504 alert boxes that fire when IEP or 504 is checked</li>
+<li>MDR finding section with "STOP — PLACEMENT BLOCKED" red box for manifestation findings</li>
+<li>Evidence summary table with Legal Hold field</li>
+<li>FERPA reminders on witness statement section</li>
+</ul>
+<strong>5 templates:</strong> Fighting/Assault, Drugs/Alcohol, Harassment/Bullying/Cyberbullying, Threats/Terroristic Threat, General Misconduct. Each in Word (.docx) + PDF. Total: 10 files.`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Word', 'Google Docs', 'PDF', '10 Files'],
+  },
+  {
+    id: 'digital-intake',
+    title: 'Digital Investigation Intake Form',
+    tag: 'Core Product',
+    price: 10,
+    short: 'Fill out investigations digitally. Exports a CSV row that populates your Admin Command Toolkit automatically. No double entry. Works offline in any browser.',
+    details: `<ul>
+<li>Select offense type → offense-specific fields and legal alerts load dynamically</li>
+<li>SPED/504 checkbox → red MDR warning fires automatically with 10-day timeline</li>
+<li>Add/remove timeline rows, witness blocks, and evidence entries as needed</li>
+<li><strong>Export to Toolkit</strong> → CSV row pre-mapped to all 34 columns of the Incident Intake tab</li>
+<li><strong>Export Full Record</strong> → JSON for archiving or Waypoint import</li>
+<li><strong>Print / Save as PDF</strong> → clean print view for disciplinary file</li>
+<li><strong>Save Draft</strong> → browser storage for in-progress investigations</li>
+<li>Works on desktop, laptop, Chromebook, tablet. Completely offline after download</li>
+</ul>`,
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+    compat: ['Any Browser', 'Offline', 'HTML File'],
+  },
+];
+
+const BUNDLES = [
+  {
+    id: 'bundle-daep',
+    title: 'DAEP & Discipline Complete Pack',
+    tag: '3-Tool Bundle',
+    price: 28,
+    origPrice: 36,
+    save: 8,
+    short: 'Everything you need to document, investigate, and track DAEP placements. Covers the full lifecycle: know what consequence to apply, document the investigation, track through re-entry.',
+    includes: ['DAEP Student Tracker ($12)', 'TEC Consequence Decision Matrix ($10)', 'Investigation Templates 5-Pack ($14)'],
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+  },
+  {
+    id: 'bundle-behavior',
+    title: 'Behavior Intervention System',
+    tag: '3-Tool Bundle',
+    price: 28,
+    origPrice: 34,
+    save: 6,
+    short: 'The complete behavior intervention toolkit: ISS with daily activities and re-entry, RTI/MTSS behavior tracking with risk scores, and a TEC consequence reference.',
+    includes: ['ISS Engagement & Intervention Tracker ($12)', 'Navigator Behavior Tracker ($12)', 'TEC Consequence Decision Matrix ($10)'],
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+  },
+  {
+    id: 'bundle-investigation',
+    title: "Administrator's Investigation Kit",
+    tag: '3-Tool Bundle',
+    price: 32,
+    origPrice: 42,
+    save: 10,
+    short: 'The complete investigation system: digital intake → auto-populates the Command Toolkit → prints as a professional investigation record. Zero double entry.',
+    includes: ["Administrator's Command Toolkit ($18)", 'Investigation Templates 5-Pack ($14)', 'Digital Investigation Intake Form ($10)'],
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+  },
+  {
+    id: 'bundle-flagship',
+    title: 'Campus Leadership Complete System',
+    tag: 'Flagship Bundle — Best Value',
+    price: 52,
+    origPrice: 102,
+    save: 50,
+    flagship: true,
+    short: 'Every Clear Path tool in one download. A connected system, not a collection of unrelated spreadsheets. Every product was designed to work together.',
+    includes: [
+      "Administrator's Command Toolkit ($18)",
+      'DAEP Student Tracker ($12)',
+      'ISS Engagement & Intervention Tracker ($12)',
+      'TEC Consequence Decision Matrix ($10)',
+      'Navigator Behavior Tracker ($12)',
+      'Meridian SPED Compliance Tracker ($14)',
+      'Investigation Templates 5-Pack ($14)',
+      'Digital Investigation Intake Form ($10)',
+    ],
+    tptUrl: 'https://www.teacherspayteachers.com/store/kimberly-culley',
+  },
+];
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function toggleDetails(id) {
+  const el = document.getElementById('details-' + id);
+  const btn = document.getElementById('toggle-' + id);
+  if (el.classList.contains('open')) {
+    el.classList.remove('open');
+    btn.textContent = 'View Details ▾';
+  } else {
+    el.classList.add('open');
+    btn.textContent = 'Hide Details ▴';
+  }
+}
+
+function renderProducts() {
+  const container = document.getElementById('products-container');
+  let html = '';
+
+  // Flagship bundle first
+  const flagship = BUNDLES.find(b => b.flagship);
+  if (flagship) {
+    html += `<div class="store-section">
+      <div class="section-label">Best Value</div>
+      <div class="section-desc">Get everything at once and save $${flagship.save}.</div>
+      <div class="product-grid">
+        ${renderBundleCard(flagship)}
+      </div>
+    </div>`;
+  }
+
+  // Core products
+  html += `<div class="store-section">
+    <div class="section-label">Core Products</div>
+    <div class="section-desc">8 standalone tools — each solves a specific campus discipline challenge.</div>
+    <div class="product-grid">
+      ${PRODUCTS.map(p => renderProductCard(p)).join('')}
+    </div>
+  </div>`;
+
+  // Other bundles
+  const otherBundles = BUNDLES.filter(b => !b.flagship);
+  html += `<div class="store-section">
+    <div class="section-label">Save with Bundles</div>
+    <div class="section-desc">Curated combinations that cover complete workflows.</div>
+    <div class="product-grid">
+      ${otherBundles.map(b => renderBundleCard(b)).join('')}
+    </div>
+  </div>`;
+
+  // Waypoint upgrade CTA
+  html += `<div class="store-section" style="text-align:center;padding-top:20px;padding-bottom:80px">
+    <div style="background:var(--card-bg);border:1px solid var(--border-purple);border-radius:14px;padding:40px;max-width:680px;margin:0 auto;backdrop-filter:blur(8px)">
+      <div style="font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:12px">Ready to automate?</div>
+      <div style="font-family:'Cinzel',serif;font-size:1.3rem;font-weight:700;color:var(--text);margin-bottom:12px">Waypoint automates these tools district-wide</div>
+      <p style="font-size:.88rem;color:var(--text-muted);line-height:1.7;margin-bottom:24px">Real-time dashboards, automated parent notices, SPED alerts pushed to your phone, multi-campus visibility — everything these spreadsheets do, running automatically across your entire district.</p>
+      <a href="/#contact" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--purple),var(--amber));color:white;padding:14px 32px;border-radius:8px;font-weight:700;font-size:.88rem;text-decoration:none;transition:transform .2s,box-shadow .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 0 24px rgba(232,134,42,.5)'" onmouseout="this.style.transform='';this.style.boxShadow=''">Request a Waypoint Demo →</a>
+    </div>
+  </div>`;
+
+  container.innerHTML = html;
+}
+
+function renderProductCard(p) {
+  return `<div class="product-card" id="card-${p.id}">
+    <div class="pc-body">
+      <span class="pc-tag">${esc(p.tag)}</span>
+      <div class="pc-title">${esc(p.title)}</div>
+      <div class="pc-short">${esc(p.short)}</div>
+      <button class="pc-toggle" id="toggle-${p.id}" onclick="toggleDetails('${p.id}')">View Details ▾</button>
+      <div class="pc-details" id="details-${p.id}">
+        <div class="pc-detail-text">${p.details}</div>
+        <div class="pc-compat">${p.compat.map(c => `<span class="pc-compat-tag">${esc(c)}</span>`).join('')}</div>
+      </div>
+    </div>
+    <div class="pc-footer">
+      <div><span class="pc-price">$${p.price}</span></div>
+      <a href="${esc(p.tptUrl)}" target="_blank" rel="noopener" class="pc-buy">Purchase on TpT →</a>
+    </div>
+  </div>`;
+}
+
+function renderBundleCard(b) {
+  return `<div class="product-card bundle${b.flagship ? ' flagship' : ''}" id="card-${b.id}" style="${b.flagship ? 'grid-column:1/-1;' : ''}">
+    <div class="pc-body">
+      <span class="pc-tag">${esc(b.tag)}</span>
+      <div class="pc-title">${esc(b.title)}</div>
+      <div class="pc-short">${esc(b.short)}</div>
+      <div class="pc-save">Save $${b.save}</div>
+      <ul class="pc-includes">${b.includes.map(i => `<li>${esc(i)}</li>`).join('')}</ul>
+    </div>
+    <div class="pc-footer">
+      <div>
+        <span class="pc-price">$${b.price}</span>
+        <span class="pc-orig-price">$${b.origPrice}</span>
+      </div>
+      <a href="${esc(b.tptUrl)}" target="_blank" rel="noopener" class="pc-buy">Purchase on TpT →</a>
+    </div>
+  </div>`;
+}
+
+renderProducts();
+</script>
+</body>
+</html>

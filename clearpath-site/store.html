@@ -89,33 +89,31 @@
   .pc-preview.open{display:block}
   .pc-preview h4{font-size:.82rem;font-weight:700;color:var(--amber-light);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.08em}
 
-  /* IMAGE GALLERY */
-  .preview-gallery{display:flex;gap:16px;overflow-x:auto;padding:8px 0 16px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
-  .preview-gallery::-webkit-scrollbar{height:6px}
-  .preview-gallery::-webkit-scrollbar-track{background:rgba(45,16,84,.3);border-radius:3px}
-  .preview-gallery::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px}
-  .preview-img-wrap{flex:0 0 auto;scroll-snap-align:start;cursor:pointer;position:relative;border-radius:10px;overflow:hidden;border:2px solid var(--border-purple);transition:border-color .2s,transform .2s}
-  .preview-img-wrap:hover{border-color:var(--amber);transform:scale(1.02)}
-  .preview-img-wrap img{display:block;height:220px;width:auto;object-fit:contain;background:rgba(255,255,255,.04)}
-  .preview-img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(14,6,24,.9));padding:8px 12px 10px;font-size:.72rem;font-weight:600;color:var(--text)}
+  /* SPREADSHEET TABLE PREVIEW */
+  .sheet-tab-bar{display:flex;gap:0;overflow-x:auto;padding:0;margin:12px 0 0;border-bottom:2px solid #2a6b3a}
+  .sheet-tab-bar::-webkit-scrollbar{height:4px}
+  .sheet-tab-bar::-webkit-scrollbar-thumb{background:var(--purple);border-radius:2px}
+  .sheet-tab{padding:7px 16px;font-size:.7rem;font-weight:600;cursor:pointer;border:1px solid rgba(42,107,58,.4);border-bottom:none;border-radius:6px 6px 0 0;background:rgba(42,107,58,.12);color:var(--text-muted);white-space:nowrap;transition:all .15s}
+  .sheet-tab:hover{background:rgba(42,107,58,.25);color:var(--text)}
+  .sheet-tab.active{background:#2a6b3a;color:white;border-color:#2a6b3a}
+  .sheet-table-wrap{overflow-x:auto;border:1px solid rgba(42,107,58,.3);border-radius:0 0 8px 8px;margin-bottom:16px;background:rgba(0,0,0,.2)}
+  .sheet-table{width:100%;border-collapse:collapse;font-size:.72rem;min-width:600px}
+  .sheet-table thead th{background:#2a6b3a;color:white;padding:8px 12px;font-weight:700;text-align:left;white-space:nowrap;border-right:1px solid rgba(255,255,255,.15);position:sticky;top:0}
+  .sheet-table thead th:last-child{border-right:none}
+  .sheet-table tbody td{padding:6px 12px;border-bottom:1px solid rgba(42,107,58,.15);border-right:1px solid rgba(42,107,58,.1);color:var(--text);white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+  .sheet-table tbody tr:nth-child(even){background:rgba(42,107,58,.06)}
+  .sheet-table tbody tr:hover{background:rgba(42,107,58,.12)}
+  .sheet-table .cell-flag{color:#ff6b6b;font-weight:700}
+  .sheet-table .cell-auto{color:var(--amber-light);font-style:italic}
+  .sheet-info{display:flex;gap:16px;align-items:center;padding:8px 0;font-size:.68rem;color:var(--text-muted)}
+  .sheet-info span{display:flex;align-items:center;gap:4px}
 
-  /* SHEET TEXT GRID (for products without images) */
+  /* SHEET TEXT GRID */
   .pc-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
   .pc-preview-sheet{background:rgba(45,16,84,.4);border:1px solid var(--border-purple);border-radius:8px;padding:14px;transition:border-color .2s}
   .pc-preview-sheet:hover{border-color:var(--amber)}
   .pc-preview-sheet .sheet-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:4px}
   .pc-preview-sheet .sheet-desc{font-size:.72rem;color:var(--text-muted);line-height:1.6}
-
-  /* LIGHTBOX */
-  .lightbox{position:fixed;inset:0;z-index:400;background:rgba(14,6,24,.95);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;cursor:zoom-out}
-  .lightbox.open{opacity:1;pointer-events:all}
-  .lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px;box-shadow:0 0 60px rgba(0,0,0,.5)}
-  .lightbox-close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer}
-  .lightbox-close:hover{color:var(--amber-light)}
-  .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(107,47,160,.4);border:none;color:white;font-size:1.5rem;padding:12px 16px;cursor:pointer;border-radius:8px;transition:background .2s}
-  .lightbox-nav:hover{background:rgba(232,134,42,.5)}
-  .lightbox-prev{left:16px}
-  .lightbox-next{right:16px}
 
   /* MODAL */
   .modal-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(14,6,24,.85);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s}
@@ -228,26 +226,20 @@ const PRODUCTS = [
 <li>Plus: Investigation Notes, Appeal Tracker, Outcome & Letters, Threat Assessment, SCOC Reference</li>
 </ul>
 <strong>15 parent phone scripts included:</strong> Assault, Fighting, Bullying, Drug Possession, Dangerous Weapon, Terroristic Threat, Harassment, Truancy, Vandalism, Theft, Sexual Harassment, Defiance, Disruption, Tobacco/Vaping, Other.`,
-    images: [
-      { src: '/previews/Admin-Command-Toolkit-01-hero.png', label: 'Product Overview' },
-      { src: '/previews/Admin-Command-Toolkit-02-tabs.png', label: '14 Connected Tabs' },
-      { src: '/previews/Admin-Command-Toolkit-03-data.png', label: 'Live Data & Formulas' },
-      { src: '/previews/Admin-Command-Toolkit-04-features.png', label: 'Key Features' },
-      { src: '/previews/Admin-Command-Toolkit-05-value.png', label: 'What You Get' },
+    sheets: [
+      { name: 'Incident Intake', cols: 22, rows: 200, headers: ['Case ID','Date','Time','Campus','Location','Last Name','First Name','Grade','SPED','504','Offense Category','TEC Reference','Disposition','Assigned Admin'], sample: [['ADM-001','3/3/2026','10:15 AM','Lincoln High','Hallway','Thompson','Marcus','10th Grade','Yes','No','Fighting','TEC §37.006','DAEP Removal','Mr. Kim'],['ADM-002','2/20/2026','1:30 PM','Jefferson Middle','Parking Lot','Nguyen','Linh','8th Grade','No','No','Drugs/Alcohol','TEC §37.006','DAEP Removal','Ms. Patel']] },
+      { name: 'Evidence Tracker', cols: 14, rows: 50, headers: ['Evidence ID','Case ID','Date Collected','Time','Collected By','Description','Type','Storage Location','Digital Copy?','File Name','Legal Hold?'], sample: [['EVD-001','ADM-001','3/3/2026','10:25 AM','Mr. Kim','Hallway security camera 10:12-10:17','Video Recording','\\\\lincoln\\security\\ADM-001','Yes','ADM-001-video.mp4','No'],['EVD-002','ADM-001','3/3/2026','10:30 AM','Mr. Kim','Written witness statement — J. Davis','Written Statement','Filing Cabinet Rm 102','Yes','ADM-001-witness-01.pdf','No']] },
+      { name: '10-Day Compliance', cols: 19, rows: 100, headers: ['Case ID','Student ⚙','Grade ⚙','SPED? ⚙','Calendar Days ⚙','Offense ⚙','Removal Date ⚙','Day 10 Deadline ⚙','Status ⚙','Notice Provided?','Parent Conference?','MDR Scheduled?','MDR Date','MDR Finding','BIP Updated?'], sample: [['ADM-001','Thompson, Marcus','10th','Yes','5','Fighting','3/3/2026','3/17/2026','⚠ Day 5','Yes','Yes','Yes','3/10/2026','Pending','N/A']] },
+      { name: 'Parent Contact Log', cols: 16, rows: 200, headers: ['Contact ID','Case ID','Student','Parent/Guardian','Relationship','Phone/Email','Method','Date','Time','Attempt #','Reached?','Summary','Follow-Up Promised','Script Used'], sample: [['PCT-001','ADM-001','Thompson, Marcus','Mrs. Thompson','Mother','(512) 555-0142','Phone Call','3/3/2026','10:50 AM','1','Yes','Informed of incident. Conference scheduled 3/4.','Conference 3/4 @ 2pm','Fighting/Assault'],['PCT-002','ADM-001','Thompson, Marcus','Mr. Thompson','Father','(512) 555-0198','Phone Call','3/3/2026','11:15 AM','1','No — Voicemail','Left message requesting callback. Provided direct line.','Callback','Fighting/Assault']] },
+      { name: 'Investigation Pipeline', cols: 19, rows: 100, headers: ['Case ID','Student ⚙','Offense ⚙','Assigned Admin ⚙','Incident Date ⚙','Investigation Opened','Student Conference','Parent Conference','Evidence Review','Preliminary Decision','Stage ⚙','Days Open ⚙'], sample: [['ADM-001','Thompson, Marcus','Fighting','Mr. Kim','3/3/2026','3/3/2026','3/3/2026','3/4/2026','3/4/2026','DAEP Removal','Finding','2'],['ADM-002','Nguyen, Linh','Drugs/Alcohol','Ms. Patel','2/20/2026','2/20/2026','2/20/2026','','','','In Progress','13']] },
+      { name: 'Appeal Tracker', cols: 18, rows: 50, headers: ['Appeal ID','Case ID','Student ⚙','Original Disposition ⚙','Campus Appeal Filed','Campus Hearing Date','Campus Outcome','Supt Appeal Filed','Supt Hearing Date','Supt Outcome'], sample: [['APL-001','ADM-003','Rivera, Sofia','DAEP 45 days','1/15/2026','1/20/2026','Upheld','1/21/2026','1/27/2026','Upheld']] },
+      { name: 'SCOC Reference', cols: 8, rows: 22, headers: ['Offense','Primary TEC Reference','Removal Type','Mandatory/Discretionary','Typical Consequence Range','SPED/504 Consideration','Required Notifications','JJAEP?'], sample: [['Fighting / Mutual Combat','TEC §37.005, §37.006','Suspension or DAEP','Discretionary','OSS 1-3 days; DAEP 30-45 days','MDR required if SPED. FBA if pattern.','Parent notification (TEC §37.013)','No'],['Drug Possession','TEC §37.006(a)(3)','Mandatory DAEP','Mandatory','DAEP 45-60 days minimum','MDR required. BIP review.','Parent + law enforcement','Yes']] },
     ],
     preview: [
-      { name: 'Command Dashboard', desc: 'Live campus summary across 5 sections. Critical alerts, investigation pipeline, SPED compliance status, appeal outcomes. Print-ready.' },
-      { name: 'Incident Intake', desc: '34-column master log. Auto-calculates day of week, rolling 10-day SPED total, live flags, days case open, and case age.' },
-      { name: 'Investigation Tracker', desc: '5-stage workflow with integrity checklist. Auto-calculates appeal deadlines. Tracks every case from intake to closure.' },
-      { name: '10-Day Compliance', desc: 'Per-student SPED removal tracking. Color-coded: Day 7 yellow, Day 9 orange, Day 10+ red with MDR alert.' },
-      { name: 'Evidence Tracker', desc: 'Chain of custody: received from, stored where, who accessed, when returned. Legal Hold flag turns row red.' },
-      { name: 'Parent Contact Log', desc: 'Every call logged. Select offense → full phone script auto-populates. 15 scripts for 15 offense types.' },
-      { name: 'Discipline Trends', desc: '13 offense categories, consequence summary, SPED breakdown, repeat offender flags, monthly breakdown.' },
-      { name: 'Monday Briefing', desc: 'Print-ready weekly report. Open investigations, SPED alerts, parent follow-ups, campus stats. All auto-populated.' },
-      { name: 'Investigation Notes', desc: 'Structured template for witness interviews, evidence review, and findings. Legally separate from the Intake record.' },
-      { name: 'Appeal Tracker', desc: 'Consequence decisions, auto-calculated 21-day appeal deadlines, appeal status tracking.' },
-      { name: 'Threat Assessment', desc: 'Structured threat assessment aligned with HB 3 requirements.' },
-      { name: 'SCOC Reference', desc: 'Student Code of Conduct reference with TEC §37 text summaries and offense categories.' },
+      { name: 'Command Dashboard', desc: 'Live campus summary: critical alerts, investigation pipeline, SPED compliance, appeal outcomes. Print for Monday meetings.' },
+      { name: 'Discipline Trends', desc: '13 offense categories, SPED breakdown, repeat offender flags, monthly breakdown. Auto-built from Intake.' },
+      { name: 'Investigation Notes', desc: 'Structured witness statements, evidence review, findings. Separate from Intake.' },
+      { name: 'Threat Assessment', desc: 'HB 3 threat assessment log with 4-level determination.' },
     ],
     compat: ['Excel 2016+', 'Google Sheets', '14 Sheets'],
   },
@@ -266,12 +258,16 @@ const PRODUCTS = [
 <li><strong>Status Board</strong> — print-ready: students returning within 7 days + compliance status</li>
 <li><strong>Reference Tab</strong> — TEC §37 text summaries, SPED codes, glossary, compliance timelines</li>
 </ul>`,
+    sheets: [
+      { name: 'Roster', cols: 18, rows: 100, headers: ['Student ID','Last Name','First Name','Grade','Campus of Origin','DAEP Campus','Enrollment Date','Offense Category','SPED?','504?','Status','Days in DAEP ⚙','Days Remaining ⚙','Incident Count ⚙'], sample: [['STU-001','Ramirez','Carlos','8th Grade','Jefferson Middle','DAEP South','2/1/2026','Fighting','Yes','No','Active','48','12','3'],['STU-002','Williams','Destiny','10th Grade','Lincoln High','DAEP South','1/15/2026','Drugs/Alcohol','No','No','Active','65','0','1']] },
+      { name: 'DAEP Placements', cols: 22, rows: 100, headers: ['Placement ID','Student ID','Last Name ⚙','First Name ⚙','Incident ID','Start Date','Authorized Days','End Date ⚙','Days Remaining ⚙','MDR Required?','MDR Scheduled?','MDR Flag ⚙'], sample: [['PLC-001','STU-001','Ramirez','Carlos','INC-001','2/1/2026','60','4/1/2026','12','Yes','Yes','✓ Scheduled'],['PLC-002','STU-002','Williams','Destiny','INC-003','1/15/2026','45','3/1/2026','0','No','N/A','—']] },
+      { name: 'Compliance Checklist', cols: 18, rows: 150, headers: ['Checklist ID','Student ID','Last Name ⚙','First Name ⚙','Placement ID','SPED/504','Action Required','TEC Reference','Deadline','Status','Completed Date','Notes'], sample: [['CHK-001','STU-001','Ramirez','Carlos','PLC-001','SPED','Manifestation Determination Review','IDEA §300.530','2/11/2026','Complete','2/10/2026','MDR held — not a manifestation'],['CHK-002','STU-001','Ramirez','Carlos','PLC-001','SPED','FBA — Functional Behavioral Assessment','IDEA §300.530','2/15/2026','⚠ Overdue','','FBA not yet initiated']] },
+      { name: 'Incident Log', cols: 19, rows: 200, headers: ['Incident ID','Date','Campus','Student ID','Last Name ⚙','First Name ⚙','Grade ⚙','Offense','TEC Reference','SPED?','504?','Disposition'], sample: [['INC-001','2/1/2026','Jefferson Middle','STU-001','Ramirez','Carlos','8th','Fighting','TEC §37.006','Yes','No','DAEP 60 days']] },
+    ],
     preview: [
-      { name: 'Student Roster', desc: 'Auto-calculated Days in DAEP, Days Remaining, Incident Count per student. 100 rows.' },
-      { name: 'DAEP Placements', desc: 'Projected end date, days remaining countdown, auto MDR flag when required but not scheduled.' },
-      { name: 'Compliance Checklist', desc: '150 rows tracking all required actions per student. Overdue = red. Within 3 days = gold.' },
-      { name: 'Dashboard', desc: 'Live COUNTIF/COUNTIFS: active placements, expiring, SPED flags, compliance status, incidents.' },
+      { name: 'Dashboard', desc: 'Live metrics: active placements, expiring within 7 days, SPED flags, compliance status.' },
       { name: 'Status Board', desc: 'Print weekly — students returning within 7 days and their compliance checklist status.' },
+      { name: 'Reference', desc: 'TEC §37 DAEP framework, timelines, SPED codes, glossary.' },
     ],
     compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
   },
@@ -289,11 +285,15 @@ const PRODUCTS = [
 <li><strong>Outcome Tracker</strong> — before/after incident counts, reduction %, recidivism tracking</li>
 <li><strong>Dashboard</strong> — 20 live metrics</li>
 </ul>`,
+    sheets: [
+      { name: 'Daily Activity Log', cols: 14, rows: 500, headers: ['Log ID','Date','Student ID','Last Name','First Name','ISS Day #','Intervention Track','Activity','Engagement Level','Completed?','Staff Notes','Follow-Up?'], sample: [['LOG-001','3/3/2026','ISS-001','Torres','Miguel','Day 1','Conflict Resolution','Perspective-Taking Exercise','High','Yes','Engaged, completed full reflection','No'],['LOG-002','3/3/2026','ISS-002','Davis','Aiden','Day 2','SEL','Emotional Regulation Worksheet','Medium','Partial','Struggled with identifying triggers','Yes — counselor follow-up']] },
+      { name: 'Re-Entry Checklist', cols: 12, rows: 100, headers: ['Student ID','Last Name','First Name','ISS Start','Planned Return','Reflection Complete?','Behavior Plan Signed?','Parent Conference?','Counselor Check-In?','Teacher Re-Entry Plan?','All Steps Complete? ⚙','Status ⚙'], sample: [['ISS-001','Torres','Miguel','3/3/2026','3/5/2026','Yes','Yes','Yes','Yes','Yes','✓ READY TO RETURN','Cleared'],['ISS-002','Davis','Aiden','3/2/2026','3/4/2026','Yes','No','No','Yes','No','✗ NOT READY','⚠ 3 steps incomplete']] },
+      { name: 'Outcome Tracker', cols: 10, rows: 100, headers: ['Student ID','Last Name','First Name','Incidents Before (30d)','Incidents After (30d)','Reduction % ⚙','Recidivism? ⚙','Days to Next Incident','Effective? ⚙'], sample: [['ISS-001','Torres','Miguel','4','1','-75%','No','—','✓ Effective'],['ISS-003','Park','Soo-Jin','2','3','+50%','Yes','8','✗ Not Effective']] },
+    ],
     preview: [
       { name: 'Intervention Library', desc: '8 tracks fully written with research basis. Ready to assign immediately.' },
-      { name: 'Student Activity Plans', desc: '12 offense-specific daily activities for Day 1–4+ in student-facing language.' },
-      { name: 'Re-Entry Checklist', desc: '8 required steps. Auto-calculates readiness. Overdue return dates turn red.' },
-      { name: 'Outcome Tracker', desc: 'Before/after incident counts with auto-calculated reduction % and recidivism flag.' },
+      { name: 'Student Activity Plans', desc: '12 offense-specific daily activities for Day 1-4+ in student-facing language.' },
+      { name: 'Dashboard', desc: '20 live metrics: completion rates, engagement levels, recidivism, effectiveness.' },
     ],
     compat: ['Excel 2016+', 'Google Sheets', '10 Sheets'],
   },
@@ -311,10 +311,15 @@ const PRODUCTS = [
 <li><strong>SPED Safeguards</strong> — every offense mapped to MDR triggers, 10-day rule, FAPE</li>
 <li><strong>Documentation Checklist</strong> — 8-document package per incident</li>
 </ul>`,
+    sheets: [
+      { name: 'Decision Matrix', cols: 10, rows: 18, headers: ['Offense','TEC Reference','Removal Type','Mandatory/Discretionary','Consequence Range','Restorative Alt. 1','Restorative Alt. 2','Restorative Alt. 3','SPED Flags','Required Docs'], sample: [['Fighting / Mutual Combat','TEC §37.005, §37.006','Suspension or DAEP','Discretionary','OSS 1-3d; DAEP 30-45d','Restorative Circle','Peer Mediation','Behavior Contract','MDR if SPED. FBA if pattern.','Notice, conference, disposition letter'],['Drug Possession','TEC §37.006(a)(3)','Mandatory DAEP','Mandatory','DAEP 45-60d minimum','Substance Abuse Counseling','Mentoring Program','Community Service','MDR required. BIP review.','Notice, evidence log, law enforcement referral']] },
+      { name: 'Restorative Protocols', cols: 6, rows: 10, headers: ['Protocol','Description','When to Use','Steps','Duration','Research Basis'], sample: [['Restorative Circle','Facilitated group dialogue with affected parties','Peer conflict, community harm, repeat minor offenses','1. Prep participants 2. Opening 3. Storytelling 4. Impact 5. Agreement 6. Follow-up','45-60 min session + 2 follow-ups','Zehr (2002), Morrison (2007)'],['Peer Mediation','Student-led structured conversation between parties','Interpersonal conflict, relational aggression','1. Ground rules 2. Each side speaks 3. Identify needs 4. Brainstorm solutions 5. Written agreement','30-45 min','Johnson & Johnson (1996)']] },
+      { name: 'CBC Workflow', cols: 8, rows: 20, headers: ['Case ID','Student','Offense','TEC §37.0012 Applies?','CBC Decision','Red Flags','Documentation','Status'], sample: [['CBC-001','Torres, Miguel','Fighting — 2nd offense','Yes — repeat conduct','DAEP recommended','Prior ISS x2, same offense type','Conference notes, prior records','Pending parent conference']] },
+    ],
     preview: [
-      { name: 'Decision Matrix', desc: '18 offense rows. Mandatory/discretionary, consequence range, 3 restorative alternatives, SPED flags.' },
-      { name: 'Restorative Protocols', desc: '10 protocols: Restorative Circle, Mediated Conversation, Behavior Contract, Mentoring, etc.' },
       { name: 'Offense Lookup', desc: 'Dropdown → auto-populates TEC section, options, SPED flags, required docs.' },
+      { name: 'SPED Safeguards', desc: 'Every offense mapped to MDR triggers, 10-day rule, FAPE requirements.' },
+      { name: 'Documentation Checklist', desc: '8-document package per incident.' },
     ],
     compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
   },
@@ -331,10 +336,15 @@ const PRODUCTS = [
 <li><strong>ISS/OSS Placements</strong> — 90-day OSS count flags escalation threshold</li>
 <li><strong>Risk Alert Board</strong> — print-ready weekly briefing</li>
 </ul>`,
+    sheets: [
+      { name: 'Referral Log', cols: 17, rows: 200, headers: ['Referral ID','Date','Campus','Student ID','Last Name ⚙','First Name ⚙','Grade ⚙','Offense Category','Skill Gap','Referring Staff','Assigned To','Status','Outcome'], sample: [['REF-001','1/20/2026','Lincoln High','NAV-001','Torres','Miguel','9th','Fighting','Conflict Resolution','Mr. Adams (Teacher)','Ms. Rivera (AP)','Closed','Support Assigned'],['REF-002','1/25/2026','Lincoln High','NAV-002','Park','Soo-Jin','10th','Defiance','Emotional Regulation','Mrs. Chen (Teacher)','Ms. Rivera (AP)','In Progress','Conference Pending']] },
+      { name: 'Student Supports', cols: 17, rows: 100, headers: ['Support ID','Student ID','Last Name ⚙','First Name ⚙','Grade ⚙','Support Type','Start Date','End Date','Assigned By','Assigned To','Status','Incidents Before','Incidents After','Reduction % ⚙','Effective? ⚙'], sample: [['SUP-001','NAV-002','Park','Soo-Jin','10th','CICO (Check-In/Check-Out)','2/1/2026','','Ms. Johnson','Mr. Davis','Active','5','2','-60%','✓ Effective'],['SUP-002','NAV-001','Torres','Miguel','9th','Counseling Referral','1/25/2026','2/25/2026','Ms. Rivera','School Counselor','Completed','4','1','-75%','✓ Effective']] },
+      { name: 'ISS/OSS Placements', cols: 18, rows: 100, headers: ['Placement ID','Student ID','Last Name ⚙','First Name ⚙','Grade ⚙','Type','Start Date','End Date','Days','Referral ID','Assigned By','90-Day OSS Count ⚙','Escalation Flag ⚙'], sample: [['PLC-001','NAV-001','Torres','Miguel','9th','OSS','1/22/2026','1/26/2026','5','REF-001','Ms. Rivera','5','—'],['PLC-002','NAV-003','Williams','Jaylen','11th','OSS','2/5/2026','2/7/2026','3','REF-004','Mr. Kim','8','⚠ 3+ OSS in 90 days']] },
+      { name: 'Risk Score Calculator', cols: 11, rows: 50, headers: ['Student ID','Last Name','First Name','Referral Count','Suspension Count','Attendance %','Support Engagement','Prior Year Incidents','Weighted Score ⚙','Risk Level ⚙'], sample: [['NAV-001','Torres','Miguel','3','1','92%','High','2','34','MEDIUM'],['NAV-003','Williams','Jaylen','6','3','78%','Low','5','72','HIGH']] },
+    ],
     preview: [
-      { name: 'Risk Score Calculator', desc: 'Weighted scoring across 5 factors. Auto-generates color-coded risk level per student.' },
-      { name: 'Student Supports', desc: 'Active interventions with before/after metrics and auto-calculated effectiveness.' },
       { name: 'Risk Alert Board', desc: 'Print weekly — OSS escalation flags, students without supports, approaching consequences.' },
+      { name: 'Dashboard', desc: 'Active monitoring, referral trends, support effectiveness, risk distribution.' },
     ],
     compat: ['Excel 2016+', 'Google Sheets', '7 Sheets'],
   },
@@ -352,10 +362,16 @@ const PRODUCTS = [
 <li><strong>SPPI-13 Transition</strong> — 5 compliance elements per student, auto compliance rate</li>
 <li><strong>Compliance Health Board</strong> — print weekly for SPED coordinator</li>
 </ul>`,
+    sheets: [
+      { name: 'IEP Tracker', cols: 18, rows: 100, headers: ['IEP ID','Student ID','Last Name ⚙','First Name ⚙','Grade ⚙','Campus ⚙','IEP Status','Case Manager','Primary Disability','Last Annual Review','Next Review Due ⚙','Days Until Due ⚙','ARD Scheduled?','Re-Eval Due','Status ⚙'], sample: [['IEP-001','MER-001','Alvarez','Elena','11th','Lincoln High','Active','Ms. Rodriguez','Learning Disability (LD)','9/15/2025','9/15/2026','180','Yes — 8/20/2026','9/15/2027','✓ On Track'],['IEP-002','MER-003','Jackson','Marcus','8th','Jefferson Middle','Active','Mr. Thompson','Emotional Disturbance (ED)','1/10/2026','1/10/2027','297','Not Yet','1/10/2028','✓ On Track']] },
+      { name: '504 Plan Tracker', cols: 18, rows: 100, headers: ['504 ID','Student ID','Last Name ⚙','First Name ⚙','Grade ⚙','Campus ⚙','504 Status','Case Manager','Primary Condition','Last Review','Next Review Due ⚙','Days Until Due ⚙','Dyslexia?','HB 3928 MDT Verified?'], sample: [['504-001','MER-002','Patel','Priya','9th','Lincoln High','Active','Ms. Johnson','ADHD','10/1/2025','10/1/2026','196','No','N/A'],['504-002','MER-004','Kim','Daniel','6th','Davis Elementary','Active','Mrs. Lee','Dyslexia','11/15/2025','11/15/2026','241','Yes','Yes']] },
+      { name: 'SPPI-13 Transition', cols: 20, rows: 50, headers: ['Student ID','Last Name ⚙','First Name ⚙','Grade ⚙','Age','Postsecondary Goals?','Transition Services?','Course of Study?','Age-Appropriate Assessment?','Coordinated Activities?','All 5 Complete? ⚙','Compliant? ⚙'], sample: [['MER-005','Rodriguez','Ana','12th','18','Yes','Yes','Yes','Yes','Yes','5/5','✓ Compliant'],['MER-006','Brown','Tyler','11th','17','Yes','No','Yes','Yes','No','3/5','✗ Non-Compliant']] },
+      { name: 'CAP Findings', cols: 14, rows: 30, headers: ['Finding ID','Monitor Visit Date','Finding Type','Area','Description','Corrective Action Required','Deadline','Status','Evidence Submitted?','TEA Approved?'], sample: [['CAP-001','11/1/2025','Child-Specific','IEP Compliance','Annual review not held within 12 months for 3 students','Convene ARDs for identified students within 30 days','12/1/2025','Complete','Yes','Yes']] },
+    ],
     preview: [
-      { name: 'IEP Tracker', desc: 'Annual review deadlines, ARD meeting scheduling, re-evaluation dates. Overdue flags automatically.' },
-      { name: 'SPPI-13 Transition', desc: 'All 5 core compliance elements per student. Auto-calculates compliant vs. non-compliant.' },
-      { name: 'Compliance Health Board', desc: 'Print weekly — IEPs due 30 days, 504 reviews, HB 3928 pending, SPPI-13 non-compliant.' },
+      { name: 'Dyslexia/HB 3928', desc: 'Annual review tracking, MDT composition verification, structured literacy compliance.' },
+      { name: 'Dashboard', desc: 'IEPs due, 504 reviews, CAP deadlines, SPPI-13 compliance rate.' },
+      { name: 'Compliance Health Board', desc: 'Print weekly — overdue IEPs, upcoming 504 reviews, HB 3928 pending, SPPI-13 non-compliant.' },
     ],
     compat: ['Excel 2016+', 'Google Sheets', '8 Sheets'],
   },
@@ -375,10 +391,12 @@ const PRODUCTS = [
 <li>FERPA reminders on witness section</li>
 </ul>
 <strong>5 templates:</strong> Fighting/Assault, Drugs/Alcohol, Harassment/Bullying, Threats, General Misconduct. Each in Word + PDF = 10 files.`,
+    sheets: [
+      { name: 'Fighting / Assault', cols: 1, rows: 10, headers: ['Section','Field','Sample Content'], sample: [['Incident Overview','Offense Classification','TEC §37.005 — Assault / §37.006 — Serious Bodily Injury'],['Incident Overview','Initiator / Mutual?','☐ Student initiated  ☑ Mutual combat  ☐ Self-defense claimed'],['Immediate Actions','Weapon Involved?','☐ Yes — describe: _______________  ☑ No'],['Due Process','Step 1 of 8','☑ Student notified of charges in language they understand'],['SPED/504 Alert','IEP Student?','☑ YES → MDR MUST be held within 10 school days'],['Findings','MDR Finding','☐ Manifestation  ☐ Not a manifestation  ⚠ STOP if manifestation — PLACEMENT BLOCKED']] },
+      { name: 'Drugs / Alcohol', cols: 1, rows: 10, headers: ['Section','Field','Sample Content'], sample: [['Incident Overview','Offense Type','☐ Possession  ☐ Use  ☐ Under influence  ☐ Distribution'],['Evidence','Substance Description','Marijuana, approx. 2g, found in student backpack front pocket'],['Evidence','Chain of Custody','Collected by: Mr. Kim  |  Secured at: Admin safe Rm 102  |  Law enforcement transfer: Pending']] },
+      { name: 'Harassment / Bullying', cols: 1, rows: 10, headers: ['Section','Field','Sample Content'], sample: [['Conduct Basis','Harassment Type','☐ Race  ☐ Sex  ☐ Disability  ☑ Other — describe: appearance'],['Pattern','Prior Incidents','☑ Yes — 2 prior documented incidents (dates: 10/15, 11/2)'],['Cyberbullying','Digital Evidence','☑ Screenshots collected  ☐ Social media platform: Instagram']] },
+    ],
     preview: [
-      { name: 'Fighting / Assault', desc: 'Initiator, injury description, weapon checkbox, self-defense finding, mandatory expulsion warning.' },
-      { name: 'Drugs / Alcohol', desc: 'Possession/use/distribution, substance description, chain of custody, law enforcement field.' },
-      { name: 'Harassment / Bullying', desc: 'Conduct basis, pattern documentation, cyberbullying fields, Title IX/OCR warning.' },
       { name: 'Threats / Terroristic', desc: 'HB 3 threat assessment fields, 4-level determination, law enforcement referral, safety plan.' },
       { name: 'General Misconduct', desc: 'SCOC classification, repeat offense documentation, prior interventions, alternatives.' },
     ],
@@ -400,6 +418,9 @@ const PRODUCTS = [
 <li><strong>Save Draft</strong> → browser storage for in-progress forms</li>
 <li>Works offline on any device after download</li>
 </ul>`,
+    sheets: [
+      { name: 'CSV Export Preview', cols: 10, rows: 5, headers: ['Case ID','Date','Time','Campus','Student Last','Student First','Grade','SPED?','Offense Category','TEC Reference','...34 columns total'], sample: [['ADM-004','3/5/2026','9:30 AM','Lincoln High','Torres','Miguel','9th','Yes','Fighting','TEC §37.005','...']] },
+    ],
     preview: [
       { name: 'Dynamic Offense Fields', desc: 'Select offense → fields change. Fighting shows weapon checkbox, drugs shows substance type, etc.' },
       { name: 'SPED Alert System', desc: 'Check IEP or 504 → red MDR warning with 10-day timeline fires instantly.' },
@@ -448,15 +469,16 @@ function esc(s) {
   return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function togglePreview(id) {
-  const el = document.getElementById('preview-' + id);
-  const btn = document.getElementById('preview-btn-' + id);
-  if (el.classList.contains('open')) {
-    el.classList.remove('open');
-    btn.textContent = 'Preview What\'s Inside ▾';
-  } else {
-    el.classList.add('open');
-    btn.textContent = 'Hide Preview ▴';
+function switchSheet(productId, index) {
+  const tabs = document.querySelectorAll(`#tabs-${productId} .sheet-tab`);
+  tabs.forEach((t, i) => t.classList.toggle('active', i === index));
+  // Find all sheet wraps for this product
+  let i = 0;
+  while (true) {
+    const el = document.getElementById(`sheet-${productId}-${i}`);
+    if (!el) break;
+    el.style.display = i === index ? '' : 'none';
+    i++;
   }
 }
 
@@ -571,27 +593,42 @@ function renderProducts() {
 }
 
 function renderProductCard(p) {
-  const hasImages = p.images && p.images.length > 0;
-  const hasSheets = p.preview && p.preview.length > 0;
+  const hasSheetData = p.sheets && p.sheets.length > 0;
+  const hasDescSheets = p.preview && p.preview.length > 0;
 
   let previewHtml = '';
-  if (hasImages || hasSheets) {
-    // If product has images, show preview section open by default. Otherwise, toggle.
-    const openClass = hasImages ? ' open' : '';
-    previewHtml += `<div class="pc-preview${openClass}" id="preview-${p.id}">`;
+  if (hasSheetData || hasDescSheets) {
+    previewHtml += `<div class="pc-preview open" id="preview-${p.id}">`;
 
-    if (hasImages) {
-      previewHtml += `<h4>Product Preview — click to enlarge</h4>
-      <div class="preview-gallery">
-        ${p.images.map((img, i) => `<div class="preview-img-wrap" onclick="openLightbox('${p.id}',${i})">
-          <img src="${esc(img.src)}" alt="${esc(img.label)}" loading="lazy">
-          <div class="preview-img-label">${esc(img.label)}</div>
-        </div>`).join('')}
-      </div>`;
+    if (hasSheetData) {
+      previewHtml += `<h4>Live Spreadsheet Preview — actual product data</h4>`;
+      // Tab bar
+      previewHtml += `<div class="sheet-tab-bar" id="tabs-${p.id}">`;
+      p.sheets.forEach((s, i) => {
+        previewHtml += `<div class="sheet-tab${i===0?' active':''}" onclick="switchSheet('${p.id}',${i})">${esc(s.name)}</div>`;
+      });
+      previewHtml += `</div>`;
+      // Tables (one per sheet, only first visible)
+      p.sheets.forEach((s, i) => {
+        previewHtml += `<div class="sheet-table-wrap" id="sheet-${p.id}-${i}" style="${i>0?'display:none':''}">
+          <table class="sheet-table"><thead><tr>${s.headers.map(h => `<th>${esc(h)}</th>`).join('')}</tr></thead>
+          <tbody>${s.sample.map(row => `<tr>${row.map(cell => {
+            let cls = '';
+            if (/⚠|OVERDUE|NOT READY|Non-Compliant|Not Effective|BLOCKED|✗/i.test(cell)) cls = ' class="cell-flag"';
+            else if (/✓|Effective|On Track|Compliant|Scheduled|Cleared/i.test(cell)) cls = ' class="cell-auto"';
+            return `<td${cls}>${esc(cell)}</td>`;
+          }).join('')}</tr>`).join('')}</tbody></table>
+          <div class="sheet-info">
+            ${s.cols ? `<span>📊 ${s.cols} columns</span>` : ''}
+            ${s.rows ? `<span>📋 ${s.rows} row capacity</span>` : ''}
+            <span style="color:var(--amber-light)">⚙ = auto-calculated</span>
+          </div>
+        </div>`;
+      });
     }
 
-    if (hasSheets) {
-      previewHtml += `<h4>What's Inside — Sheet by Sheet</h4>
+    if (hasDescSheets) {
+      previewHtml += `<h4>Also Included</h4>
       <div class="pc-preview-grid">
         ${p.preview.map(s => `<div class="pc-preview-sheet">
           <div class="sheet-name">${esc(s.name)}</div>
@@ -615,7 +652,6 @@ function renderProductCard(p) {
       <div class="pc-sidebar">
         <span class="pc-price">$${p.price}</span>
         <button class="pc-buy" onclick="openCheckout('${p.id}')">Buy Now →</button>
-        ${!hasImages ? `<button class="pc-preview-btn" id="preview-btn-${p.id}" onclick="togglePreview('${p.id}')">Preview What's Inside ▾</button>` : ''}
         <div class="pc-note">Instant delivery to your email.<br>Excel + Google Sheets ready.</div>
       </div>
     </div>
@@ -657,57 +693,10 @@ function handleHash() {
   }
 }
 
-// Lightbox
-let lbProduct = null;
-let lbIndex = 0;
-
-function openLightbox(productId, index) {
-  const p = PRODUCTS.find(x => x.id === productId);
-  if (!p || !p.images) return;
-  lbProduct = p;
-  lbIndex = index;
-  updateLightbox();
-  document.getElementById('lightbox').classList.add('open');
-}
-
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-}
-
-function lbNav(dir) {
-  if (!lbProduct || !lbProduct.images) return;
-  lbIndex = (lbIndex + dir + lbProduct.images.length) % lbProduct.images.length;
-  updateLightbox();
-}
-
-function updateLightbox() {
-  const img = lbProduct.images[lbIndex];
-  document.getElementById('lb-img').src = img.src;
-  document.getElementById('lb-img').alt = img.label;
-  document.getElementById('lb-label').textContent = img.label + ' (' + (lbIndex+1) + '/' + lbProduct.images.length + ')';
-}
-
-document.addEventListener('keydown', function(e) {
-  if (!document.getElementById('lightbox').classList.contains('open')) return;
-  if (e.key === 'Escape') closeLightbox();
-  if (e.key === 'ArrowLeft') lbNav(-1);
-  if (e.key === 'ArrowRight') lbNav(1);
-});
-
 renderProducts();
 handleHash();
 window.addEventListener('hashchange', handleHash);
 </script>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation();lbNav(-1)">‹</button>
-  <div style="text-align:center">
-    <img id="lb-img" src="" alt="">
-    <div id="lb-label" style="color:var(--text-muted);font-size:.85rem;margin-top:12px"></div>
-  </div>
-  <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation();lbNav(1)">›</button>
-</div>
 </body>
 </html>

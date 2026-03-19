@@ -83,6 +83,10 @@
     transition:transform .2s,box-shadow .2s}
   .resource-link:hover{transform:translateY(-2px);box-shadow:0 0 20px rgba(232,134,42,.4)}
 
+  /* BUNDLE HIGHLIGHT */
+  .resource-card.bundle{border-color:var(--amber);background:rgba(232,134,42,.08)}
+  .resource-card.bundle::before{height:3px;background:linear-gradient(90deg,var(--amber-glow),var(--amber),var(--orange))}
+
   /* EMPTY STATE */
   .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;
     color:var(--text-muted);font-size:.95rem}
@@ -126,6 +130,7 @@
 
   <div class="cat-tabs" id="cat-tabs">
     <button class="cat-tab" data-cat="all" onclick="setCategory('all', this)">All Resources</button>
+    <button class="cat-tab" data-cat="tpt" onclick="setCategory('tpt', this)">TpT Store Products</button>
     <button class="cat-tab" data-cat="teacher" onclick="setCategory('teacher', this)">Teacher Resources</button>
     <button class="cat-tab" data-cat="principal" onclick="setCategory('principal', this)">Principal Resources</button>
     <button class="cat-tab" data-cat="ib" onclick="setCategory('ib', this)">IB Resources</button>
@@ -152,7 +157,7 @@ const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const HEADERS = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` };
 
 const TYPE_LABELS = { link: 'Article / Link', pdf: 'PDF', video: 'Video', doc: 'Document', tool: 'Tool' };
-const CAT_LABELS = { teacher: 'Teacher', principal: 'Principal', ib: 'IB', pd: 'Professional Development' };
+const CAT_LABELS = { teacher: 'Teacher', principal: 'Principal', ib: 'IB', pd: 'Professional Development', tpt: 'TpT Store' };
 
 let allResources = [];
 let currentCat = 'all';
@@ -185,13 +190,17 @@ function renderResources() {
     container.innerHTML = `<div class="resource-grid"><div class="empty-state"><div class="empty-icon">📂</div>No resources in this category yet.<br><span style="font-size:.8rem;margin-top:8px;display:block">Check back soon — we're adding new materials regularly.</span></div></div>`;
     return;
   }
-  container.innerHTML = `<div class="resource-grid">${filtered.map(res => `
-    <div class="resource-card">
-      <span class="resource-type-badge">${TYPE_LABELS[res.resource_type] || res.resource_type} · ${CAT_LABELS[res.category] || res.category}</span>
-      <h3>${escHtml(res.title)}</h3>
+  container.innerHTML = `<div class="resource-grid">${filtered.map(res => {
+    const isTpt = res.category === 'tpt';
+    const isBundle = isTpt && /bundle/i.test(res.title);
+    const cta = isTpt ? 'View on TpT →' : 'View Resource →';
+    return `<div class="resource-card${isBundle ? ' bundle' : ''}">
+      <span class="resource-type-badge">${isTpt ? 'TpT Store' : (TYPE_LABELS[res.resource_type] || res.resource_type) + ' · ' + (CAT_LABELS[res.category] || res.category)}</span>
+      <h3>${escHtml(res.title)}${res.price ? ` <span style="font-family:'Raleway',sans-serif;font-size:.82rem;font-weight:700;color:var(--amber);margin-left:6px">${escHtml(res.price)}</span>` : ''}</h3>
       ${res.description ? `<p>${escHtml(res.description)}</p>` : '<p style="min-height:20px"></p>'}
-      ${res.url ? `<a href="${escHtml(res.url)}" class="resource-link" target="_blank" rel="noopener">View Resource →</a>` : ''}
-    </div>`).join('')}</div>`;
+      ${res.url ? `<a href="${escHtml(res.url)}" class="resource-link" target="_blank" rel="noopener">${cta}</a>` : ''}
+    </div>`;
+  }).join('')}</div>`;
 }
 
 function escHtml(s) {

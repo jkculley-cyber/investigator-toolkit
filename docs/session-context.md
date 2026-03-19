@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-19 (Session AQ — DAEP campus picker, clickable stat cards, Apex OTP auth fix, email templates)
+> Last updated: 2026-03-19 (Session AR — Apex OTP auth fix deployed, site restored, email templates, DAEP campus picker)
 
 ---
 
@@ -143,11 +143,11 @@
 - **Repo:** `jkculley-cyber/clearpath-apex` (branch: master)
 - **Supabase ref:** `jvjsotlyvrzhsbgcsdfw` (separate project — different auth pool from Waypoint)
 - **DB password:** `ApexClearPath2025!`
-- **Auth:** OTP code entry (6-digit) — magic link kept as fallback. Resend SMTP configured
+- **Auth:** OTP code entry (6-digit) — magic link kept as fallback. Resend SMTP configured. `shouldCreateUser` removed so new users get auth accounts on first sign-in.
 - **Migrations applied:** 001 (core schema), 002 (pg_cron morning brief scheduler) + `marketing_sends` table (SQL Editor)
-- **Edge Functions deployed:** `transcribe-observation`, `generate-coaching-draft`, `send-observation-feedback`, `generate-morning-brief`, `send-marketing-blast`, `send-welcome-email`
+- **Edge Functions deployed:** `transcribe-observation`, `generate-coaching-draft`, `send-observation-feedback`, `generate-morning-brief`, `send-marketing-blast`, `send-welcome-email`, `approve-access` (redeployed Session AR — OTP code instructions)
 - **Secrets set:** `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`
-- **Supabase PAT:** `sbp_34e3b7ef1d4e7b49995850e9e51d2550e8a78f05`
+- **Supabase PAT:** Refreshed via `npx supabase login` (Session AR) — CLI authenticated locally
 
 **Built this session:** Dashboard command center · Observation Loop (voice→Whisper→Claude→email) · Teachers Page (recency/growth arc) · Observation Review Page · Morning Brief (daily/weekly/monthly/long-range, pg_cron auto-delivers 5:50 AM CST)
 

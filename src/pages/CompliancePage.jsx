@@ -29,19 +29,25 @@ export default function CompliancePage() {
 
   const { checklists: allChecklists, loading } = useComplianceChecklists(filters)
 
-  // Stats — always computed from full dataset
-  const blocked = allChecklists.filter(c => c.placement_blocked && !c.block_overridden).length
-  const inProgress = allChecklists.filter(c => c.status === 'in_progress').length
-  const completed = allChecklists.filter(c => c.status === 'completed').length
-  const overridden = allChecklists.filter(c => c.block_overridden).length
+  // Stats — mutually exclusive categories
+  // Priority: Blocked > Overridden > Completed > In Progress
+  const isBlocked = c => c.placement_blocked && !c.block_overridden
+  const isOverridden = c => c.block_overridden
+  const isCompleted = c => !isBlocked(c) && !isOverridden(c) && c.status === 'completed'
+  const isInProgress = c => !isBlocked(c) && !isOverridden(c) && c.status !== 'completed'
+
+  const blocked = allChecklists.filter(isBlocked).length
+  const inProgress = allChecklists.filter(isInProgress).length
+  const completed = allChecklists.filter(isCompleted).length
+  const overridden = allChecklists.filter(isOverridden).length
 
   // Client-side filter based on which stat card is active
   const checklists = useMemo(() => {
     if (!activeCard) return allChecklists
-    if (activeCard === 'blocked') return allChecklists.filter(c => c.placement_blocked && !c.block_overridden)
-    if (activeCard === 'in_progress') return allChecklists.filter(c => c.status === 'in_progress')
-    if (activeCard === 'completed') return allChecklists.filter(c => c.status === 'completed')
-    if (activeCard === 'overridden') return allChecklists.filter(c => c.block_overridden)
+    if (activeCard === 'blocked') return allChecklists.filter(isBlocked)
+    if (activeCard === 'in_progress') return allChecklists.filter(isInProgress)
+    if (activeCard === 'completed') return allChecklists.filter(isCompleted)
+    if (activeCard === 'overridden') return allChecklists.filter(isOverridden)
     return allChecklists
   }, [allChecklists, activeCard])
 

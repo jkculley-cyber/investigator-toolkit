@@ -88,11 +88,34 @@
   .pc-preview{display:none;padding:0 28px 24px;border-top:1px solid rgba(107,47,160,.15)}
   .pc-preview.open{display:block}
   .pc-preview h4{font-size:.82rem;font-weight:700;color:var(--amber-light);margin:16px 0 10px;text-transform:uppercase;letter-spacing:.08em}
+
+  /* IMAGE GALLERY */
+  .preview-gallery{display:flex;gap:16px;overflow-x:auto;padding:8px 0 16px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch}
+  .preview-gallery::-webkit-scrollbar{height:6px}
+  .preview-gallery::-webkit-scrollbar-track{background:rgba(45,16,84,.3);border-radius:3px}
+  .preview-gallery::-webkit-scrollbar-thumb{background:var(--purple);border-radius:3px}
+  .preview-img-wrap{flex:0 0 auto;scroll-snap-align:start;cursor:pointer;position:relative;border-radius:10px;overflow:hidden;border:2px solid var(--border-purple);transition:border-color .2s,transform .2s}
+  .preview-img-wrap:hover{border-color:var(--amber);transform:scale(1.02)}
+  .preview-img-wrap img{display:block;height:220px;width:auto;object-fit:contain;background:rgba(255,255,255,.04)}
+  .preview-img-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(14,6,24,.9));padding:8px 12px 10px;font-size:.72rem;font-weight:600;color:var(--text)}
+
+  /* SHEET TEXT GRID (for products without images) */
   .pc-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
   .pc-preview-sheet{background:rgba(45,16,84,.4);border:1px solid var(--border-purple);border-radius:8px;padding:14px;transition:border-color .2s}
   .pc-preview-sheet:hover{border-color:var(--amber)}
   .pc-preview-sheet .sheet-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:4px}
   .pc-preview-sheet .sheet-desc{font-size:.72rem;color:var(--text-muted);line-height:1.6}
+
+  /* LIGHTBOX */
+  .lightbox{position:fixed;inset:0;z-index:400;background:rgba(14,6,24,.95);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s;cursor:zoom-out}
+  .lightbox.open{opacity:1;pointer-events:all}
+  .lightbox img{max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px;box-shadow:0 0 60px rgba(0,0,0,.5)}
+  .lightbox-close{position:absolute;top:20px;right:24px;background:none;border:none;color:var(--text-muted);font-size:1.5rem;cursor:pointer}
+  .lightbox-close:hover{color:var(--amber-light)}
+  .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(107,47,160,.4);border:none;color:white;font-size:1.5rem;padding:12px 16px;cursor:pointer;border-radius:8px;transition:background .2s}
+  .lightbox-nav:hover{background:rgba(232,134,42,.5)}
+  .lightbox-prev{left:16px}
+  .lightbox-next{right:16px}
 
   /* MODAL */
   .modal-overlay{position:fixed;inset:0;z-index:300;display:flex;align-items:center;justify-content:center;background:rgba(14,6,24,.85);backdrop-filter:blur(8px);opacity:0;pointer-events:none;transition:opacity .25s}
@@ -205,6 +228,13 @@ const PRODUCTS = [
 <li>Plus: Investigation Notes, Appeal Tracker, Outcome & Letters, Threat Assessment, SCOC Reference</li>
 </ul>
 <strong>15 parent phone scripts included:</strong> Assault, Fighting, Bullying, Drug Possession, Dangerous Weapon, Terroristic Threat, Harassment, Truancy, Vandalism, Theft, Sexual Harassment, Defiance, Disruption, Tobacco/Vaping, Other.`,
+    images: [
+      { src: '/previews/Admin-Command-Toolkit-01-hero.png', label: 'Product Overview' },
+      { src: '/previews/Admin-Command-Toolkit-02-tabs.png', label: '14 Connected Tabs' },
+      { src: '/previews/Admin-Command-Toolkit-03-data.png', label: 'Live Data & Formulas' },
+      { src: '/previews/Admin-Command-Toolkit-04-features.png', label: 'Key Features' },
+      { src: '/previews/Admin-Command-Toolkit-05-value.png', label: 'What You Get' },
+    ],
     preview: [
       { name: 'Command Dashboard', desc: 'Live campus summary across 5 sections. Critical alerts, investigation pipeline, SPED compliance status, appeal outcomes. Print-ready.' },
       { name: 'Incident Intake', desc: '34-column master log. Auto-calculates day of week, rolling 10-day SPED total, live flags, days case open, and case age.' },
@@ -557,10 +587,17 @@ function renderProductCard(p) {
         <div class="pc-note">Instant delivery to your email.<br>Excel + Google Sheets ready.</div>
       </div>
     </div>
-    ${p.preview ? `<div class="pc-preview" id="preview-${p.id}">
+    ${(p.images || p.preview) ? `<div class="pc-preview" id="preview-${p.id}">
+      ${p.images ? `<h4>Product Preview</h4>
+      <div class="preview-gallery">
+        ${p.images.map((img, i) => `<div class="preview-img-wrap" onclick="openLightbox('${p.id}',${i})">
+          <img src="${esc(img.src)}" alt="${esc(img.label)}" loading="lazy">
+          <div class="preview-img-label">${esc(img.label)}</div>
+        </div>`).join('')}
+      </div>` : ''}
       <h4>What's Inside — Sheet by Sheet</h4>
       <div class="pc-preview-grid">
-        ${p.preview.map(s => `<div class="pc-preview-sheet">
+        ${(p.preview||[]).map(s => `<div class="pc-preview-sheet">
           <div class="sheet-name">${esc(s.name)}</div>
           <div class="sheet-desc">${esc(s.desc)}</div>
         </div>`).join('')}
@@ -603,9 +640,57 @@ function handleHash() {
   }
 }
 
+// Lightbox
+let lbProduct = null;
+let lbIndex = 0;
+
+function openLightbox(productId, index) {
+  const p = PRODUCTS.find(x => x.id === productId);
+  if (!p || !p.images) return;
+  lbProduct = p;
+  lbIndex = index;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+function lbNav(dir) {
+  if (!lbProduct || !lbProduct.images) return;
+  lbIndex = (lbIndex + dir + lbProduct.images.length) % lbProduct.images.length;
+  updateLightbox();
+}
+
+function updateLightbox() {
+  const img = lbProduct.images[lbIndex];
+  document.getElementById('lb-img').src = img.src;
+  document.getElementById('lb-img').alt = img.label;
+  document.getElementById('lb-label').textContent = img.label + ' (' + (lbIndex+1) + '/' + lbProduct.images.length + ')';
+}
+
+document.addEventListener('keydown', function(e) {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+});
+
 renderProducts();
 handleHash();
 window.addEventListener('hashchange', handleHash);
 </script>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="event.stopPropagation();lbNav(-1)">‹</button>
+  <div style="text-align:center">
+    <img id="lb-img" src="" alt="">
+    <div id="lb-label" style="color:var(--text-muted);font-size:.85rem;margin-top:12px"></div>
+  </div>
+  <button class="lightbox-nav lightbox-next" onclick="event.stopPropagation();lbNav(1)">›</button>
+</div>
 </body>
 </html>

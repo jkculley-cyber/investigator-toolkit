@@ -215,9 +215,12 @@ export default function AlertsPage() {
         {/* Separation Orders Hot Box */}
         <SeparationOrdersHotBox />
 
-        {/* Stats */}
+        {/* Stats — click to filter */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <div className="p-4 rounded-xl border bg-red-50 border-red-200">
+          <button
+            onClick={() => { setLevelFilter(levelFilter === 'red' ? '' : 'red'); setStatusFilter('') }}
+            className={`p-4 rounded-xl border bg-red-50 border-red-200 text-left transition-all hover:shadow-md cursor-pointer ${levelFilter === 'red' ? 'ring-2 ring-red-400 ring-offset-2' : ''}`}
+          >
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-600">Red Flags</p>
               <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
@@ -226,8 +229,11 @@ export default function AlertsPage() {
             </div>
             <p className="text-2xl font-bold text-red-700 mt-1">{redCount}</p>
             <p className="text-xs text-red-600 mt-0.5">2nd DAEP or 3+ ISS in 30 days</p>
-          </div>
-          <div className="p-4 rounded-xl border bg-yellow-50 border-yellow-200">
+          </button>
+          <button
+            onClick={() => { setLevelFilter(levelFilter === 'yellow' ? '' : 'yellow'); setStatusFilter('') }}
+            className={`p-4 rounded-xl border bg-yellow-50 border-yellow-200 text-left transition-all hover:shadow-md cursor-pointer ${levelFilter === 'yellow' ? 'ring-2 ring-yellow-400 ring-offset-2' : ''}`}
+          >
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-600">Yellow Flags</p>
               <svg className="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
@@ -236,19 +242,25 @@ export default function AlertsPage() {
             </div>
             <p className="text-2xl font-bold text-yellow-700 mt-1">{yellowCount}</p>
             <p className="text-xs text-yellow-600 mt-0.5">Same offense 3+ or 5+ referrals</p>
-          </div>
-          <div className="p-4 rounded-xl border bg-orange-50 border-orange-200">
+          </button>
+          <button
+            onClick={() => { setStatusFilter(statusFilter === 'in_progress' ? '' : 'in_progress'); setLevelFilter('') }}
+            className={`p-4 rounded-xl border bg-orange-50 border-orange-200 text-left transition-all hover:shadow-md cursor-pointer ${statusFilter === 'in_progress' ? 'ring-2 ring-orange-400 ring-offset-2' : ''}`}
+          >
             <p className="text-sm text-gray-600">In Progress</p>
             <p className="text-2xl font-bold text-orange-700 mt-1">
               {alerts.filter(a => a.status === 'in_progress').length}
             </p>
             <p className="text-xs text-orange-600 mt-0.5">Being reviewed by team</p>
-          </div>
-          <div className="p-4 rounded-xl border bg-green-50 border-green-200">
+          </button>
+          <button
+            onClick={() => { setStatusFilter(statusFilter === 'resolved' ? '' : 'resolved'); setLevelFilter('') }}
+            className={`p-4 rounded-xl border bg-green-50 border-green-200 text-left transition-all hover:shadow-md cursor-pointer ${statusFilter === 'resolved' ? 'ring-2 ring-green-400 ring-offset-2' : ''}`}
+          >
             <p className="text-sm text-gray-600">Resolved</p>
             <p className="text-2xl font-bold text-green-700 mt-1">{resolvedAlerts.length}</p>
             <p className="text-xs text-green-600 mt-0.5">Resolved this period</p>
-          </div>
+          </button>
         </div>
 
         {/* Filters */}

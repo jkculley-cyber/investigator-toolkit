@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom'
 import { useOriginsDashboardStats } from '../../hooks/useOrigins'
 import { StatCard, Card, SectionHeader, PATHWAYS } from './OriginsUI'
 
 export default function OriginsDashboardPage() {
+  const navigate = useNavigate()
   const { data, loading } = useOriginsDashboardStats()
 
   const completionRate = data?.sessionsTotal > 0
@@ -28,6 +30,7 @@ export default function OriginsDashboardPage() {
           sub="enrolled in Origins"
           color="teal"
           loading={loading}
+          onClick={() => navigate('/origins/progress')}
         />
         <StatCard
           label="Sessions Completed"
@@ -35,6 +38,7 @@ export default function OriginsDashboardPage() {
           sub={`of ${data?.sessionsTotal ?? 0} assigned`}
           color="emerald"
           loading={loading}
+          onClick={() => navigate('/origins/response-moments')}
         />
         <StatCard
           label="Replay Sessions"
@@ -42,6 +46,7 @@ export default function OriginsDashboardPage() {
           sub="reflections completed"
           color="teal"
           loading={loading}
+          onClick={() => navigate('/origins/replay-tool')}
         />
         <StatCard
           label="Family Engagement"
@@ -49,6 +54,7 @@ export default function OriginsDashboardPage() {
           sub={`${data?.familyComplete ?? 0} of ${data?.familyTotal ?? 0} activities done`}
           color="emerald"
           loading={loading}
+          onClick={() => navigate('/origins/family-workspace')}
         />
       </div>
 

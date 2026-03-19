@@ -18,6 +18,7 @@ import { useIncident, useIncidentActions, useIncidentAuditLog } from '../hooks/u
 import { useTransitionPlansByIncident, useTransitionPlanActions } from '../hooks/useTransitionPlans'
 import { useSeparations, useStudentSearch } from '../hooks/useSeparations'
 import { useCapacityCount } from '../hooks/useDaepDashboard'
+import { useCampuses } from '../hooks/useCampuses'
 import { useAuth } from '../contexts/AuthContext'
 import { supabase } from '../lib/supabase'
 import {
@@ -64,8 +65,30 @@ export default function IncidentDetailPage() {
   }, [incident?.student?.id, incident?.consequence_start, incident?.consequence_end])
 
   const capacityInfo = useCapacityCount()
+  const { campuses: allCampuses } = useCampuses()
+  const daepCampuses = allCampuses.filter(c => c.campus_type === 'daep')
   const { plans: linkedPlans, loading: plansLoading } = useTransitionPlansByIncident(incident?.id)
   const { completePlan } = useTransitionPlanActions()
+
+  // DAEP campus assignment
+  const [savingCampus, setSavingCampus] = useState(false)
+
+  const handleDaepCampusChange = async (campusId) => {
+    setSavingCampus(true)
+    try {
+      const { error } = await supabase
+        .from('incidents')
+        .update({ daep_campus_id: campusId || null })
+        .eq('id', incident.id)
+      if (error) throw error
+      toast.success('DAEP campus assignment updated')
+      refetch()
+    } catch (err) {
+      toast.error(err.message || 'Failed to update DAEP campus')
+    } finally {
+      setSavingCampus(false)
+    }
+  }
 
   // Modal state — deny + complete-early confirmation
   const [showDenyModal, setShowDenyModal] = useState(false)
@@ -334,6 +357,30 @@ export default function IncidentDetailPage() {
                 />
                 <DetailRow label="Start Date" value={formatDate(incident.consequence_start)} />
                 <DetailRow label="End Date" value={formatDate(incident.consequence_end)} />
+                {isDaep && (
+                  <div className="col-span-2">
+                    <dt className="text-xs font-medium text-gray-500 mb-1">DAEP Campus</dt>
+                    <dd>
+                      {hasRole(['admin', 'principal', 'ap']) ? (
+                        <select
+                          value={incident.daep_campus_id || ''}
+                          onChange={(e) => handleDaepCampusChange(e.target.value)}
+                          disabled={savingCampus}
+                          className="w-full max-w-xs rounded-lg border border-gray-300 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 disabled:opacity-50"
+                        >
+                          <option value="">Not assigned</option>
+                          {daepCampuses.map(c => (
+                            <option key={c.id} value={c.id}>{c.name}</option>
+                          ))}
+                        </select>
+                      ) : (
+                        <span className="text-sm text-gray-900">
+                          {daepCampuses.find(c => c.id === incident.daep_campus_id)?.name || 'Not assigned'}
+                        </span>
+                      )}
+                    </dd>
+                  </div>
+                )}
                 {incident.consequence_days && ['active', 'approved'].includes(incident.status) && (
                   (() => {
                     const remaining = Math.max(0, incident.consequence_days - daysServed)

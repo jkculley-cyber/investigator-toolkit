@@ -1,40 +1,49 @@
 import { useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Topbar from '../components/layout/Topbar'
-import Card, { CardTitle } from '../components/ui/Card'
+import Card from '../components/ui/Card'
 import DataTable from '../components/ui/DataTable'
 import Badge from '../components/ui/Badge'
-import { SelectField } from '../components/ui/FormField'
 import { StudentFlagsSummary } from '../components/students/StudentFlags'
 import { useComplianceChecklists } from '../hooks/useCompliance'
 import { useAuth } from '../contexts/AuthContext'
 import { useAccessScope } from '../hooks/useAccessScope'
-import { formatStudentName, formatDate, formatDateTime } from '../lib/utils'
+import { formatStudentName, formatDate } from '../lib/utils'
 import { CONSEQUENCE_TYPE_LABELS } from '../lib/constants'
 // exportUtils loaded dynamically on first export click
 
 export default function CompliancePage() {
   const navigate = useNavigate()
-  const [statusFilter, setStatusFilter] = useState('')
+  const [activeCard, setActiveCard] = useState('')
   const { profile } = useAuth()
   const { scope } = useAccessScope()
 
+  // Fetch ALL checklists (no status filter) so stat cards are always accurate
   const filters = useMemo(() => {
     const f = {}
     if (!scope.isDistrictWide && scope.scopedCampusIds?.length) {
       f._campusScope = scope.scopedCampusIds
     }
-    if (statusFilter) f.status = statusFilter
     return f
-  }, [statusFilter, scope])
+  }, [scope])
 
-  const { checklists, loading } = useComplianceChecklists(filters)
+  const { checklists: allChecklists, loading } = useComplianceChecklists(filters)
 
-  // Stats
-  const blocked = checklists.filter(c => c.placement_blocked && !c.block_overridden).length
-  const inProgress = checklists.filter(c => c.status === 'in_progress').length
-  const completed = checklists.filter(c => c.status === 'completed').length
-  const overridden = checklists.filter(c => c.block_overridden).length
+  // Stats — always computed from full dataset
+  const blocked = allChecklists.filter(c => c.placement_blocked && !c.block_overridden).length
+  const inProgress = allChecklists.filter(c => c.status === 'in_progress').length
+  const completed = allChecklists.filter(c => c.status === 'completed').length
+  const overridden = allChecklists.filter(c => c.block_overridden).length
+
+  // Client-side filter based on which stat card is active
+  const checklists = useMemo(() => {
+    if (!activeCard) return allChecklists
+    if (activeCard === 'blocked') return allChecklists.filter(c => c.placement_blocked && !c.block_overridden)
+    if (activeCard === 'in_progress') return allChecklists.filter(c => c.status === 'in_progress')
+    if (activeCard === 'completed') return allChecklists.filter(c => c.status === 'completed')
+    if (activeCard === 'overridden') return allChecklists.filter(c => c.block_overridden)
+    return allChecklists
+  }, [allChecklists, activeCard])
 
   const columns = [
     {
@@ -195,42 +204,20 @@ export default function CompliancePage() {
       />
 
       <div className="p-3 md:p-6">
-        {/* Stats */}
+        {/* Stats — click to filter table */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-          <StatCard label="Blocked Placements" value={blocked} color="red" />
-          <StatCard label="In Progress" value={inProgress} color="yellow" />
-          <StatCard label="Completed" value={completed} color="green" />
-          <StatCard label="Overridden" value={overridden} color="orange" />
+          <StatCard label="Blocked Placements" value={blocked} color="red" active={activeCard === 'blocked'} onClick={() => setActiveCard(activeCard === 'blocked' ? '' : 'blocked')} />
+          <StatCard label="In Progress" value={inProgress} color="yellow" active={activeCard === 'in_progress'} onClick={() => setActiveCard(activeCard === 'in_progress' ? '' : 'in_progress')} />
+          <StatCard label="Completed" value={completed} color="green" active={activeCard === 'completed'} onClick={() => setActiveCard(activeCard === 'completed' ? '' : 'completed')} />
+          <StatCard label="Overridden" value={overridden} color="orange" active={activeCard === 'overridden'} onClick={() => setActiveCard(activeCard === 'overridden' ? '' : 'overridden')} />
         </div>
-
-        {/* Filters */}
-        <Card className="mb-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <SelectField
-              label="Status"
-              name="status"
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-              options={[
-                { value: 'incomplete', label: 'Blocked (Incomplete)' },
-                { value: 'in_progress', label: 'In Progress' },
-                { value: 'completed', label: 'Completed' },
-                { value: 'waived', label: 'Waived' },
-              ]}
-              placeholder="All Statuses"
-            />
+        {activeCard && (
+          <div className="mb-4 flex justify-end">
+            <button onClick={() => setActiveCard('')} className="text-sm text-gray-500 hover:text-gray-700 font-medium">
+              Clear Filter
+            </button>
           </div>
-          {statusFilter && (
-            <div className="mt-3 pt-3 border-t border-gray-100 flex justify-end">
-              <button
-                onClick={() => setStatusFilter('')}
-                className="text-sm text-gray-500 hover:text-gray-700 font-medium"
-              >
-                Clear Filters
-              </button>
-            </div>
-          )}
-        </Card>
+        )}
 
         {/* Table */}
         <Card padding={false}>
@@ -247,12 +234,18 @@ export default function CompliancePage() {
   )
 }
 
-function StatCard({ label, value, color }) {
+function StatCard({ label, value, color, active, onClick }) {
   const bgColors = {
     red: 'bg-red-50 border-red-200',
     yellow: 'bg-yellow-50 border-yellow-200',
     green: 'bg-green-50 border-green-200',
     orange: 'bg-orange-50 border-orange-200',
+  }
+  const activeRings = {
+    red: 'ring-2 ring-red-400 ring-offset-2',
+    yellow: 'ring-2 ring-yellow-400 ring-offset-2',
+    green: 'ring-2 ring-green-400 ring-offset-2',
+    orange: 'ring-2 ring-orange-400 ring-offset-2',
   }
   const textColors = {
     red: 'text-red-700',
@@ -262,9 +255,12 @@ function StatCard({ label, value, color }) {
   }
 
   return (
-    <div className={`p-4 rounded-xl border ${bgColors[color]}`}>
+    <button
+      onClick={onClick}
+      className={`p-4 rounded-xl border text-left transition-all ${bgColors[color]} ${active ? activeRings[color] : ''} hover:shadow-md cursor-pointer`}
+    >
       <p className="text-sm text-gray-600">{label}</p>
       <p className={`text-2xl font-bold mt-1 ${textColors[color]}`}>{value}</p>
-    </div>
+    </button>
   )
 }

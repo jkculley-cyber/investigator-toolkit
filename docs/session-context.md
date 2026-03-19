@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-18 PM (Session AN — Marketing blast system, welcome email, Apex admin tab, magic link speed fix, social ad copy)
+> Last updated: 2026-03-19 (Session AO — TPT calendar mapping, product file hosting, ops audit, Admin Command Toolkit TPT-ready, listing copy domain fix)
 
 ---
 
@@ -104,9 +104,11 @@
 
 ## Next Session Priority
 
-1. **SPF record** — add `include:spf.resend.com` to clearpathedgroup.com DNS so marketing blast emails land in inboxes (not just Resend dashboard).
-2. **Resources table** — create `resources` table in ops Supabase so clearpath website resources feature works.
-3. **Apex Navigator polish** — TeacherDetailPage, CommunicatePage, SettingsPage enhancements.
+1. **Post Admin Command Toolkit to TPT** — listing copy ready (`TPT/TpT-Listing-Copy-All-Products-CORRECTED.txt`, Listing 6). Only blocker: preview images need domain fix in Canva (`clearpatheg.com` → `clearpathedgroup.com`).
+2. **Fix remaining TPT product xlsx files** — DAEP Tracker, Navigator, Meridian likely have wrong domains (only Admin Toolkit fixed so far).
+3. **Navigator MVP** — Disproportionality by demographics, SIS import mappers, real-time alerts.
+4. **SPF record** — add `include:spf.resend.com` to clearpathedgroup.com DNS.
+5. **Resources table** — create `resources` table in ops Supabase.
 
 ---
 

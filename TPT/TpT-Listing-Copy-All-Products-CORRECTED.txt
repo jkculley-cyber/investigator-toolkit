@@ -1,0 +1,488 @@
+
+CLEAR PATH EDUCATION GROUP, LLC
+TpT LISTING COPY — COMPLETE
+clearpathedgroup.com | clearpathedgroup.com/waypoint
+================================================
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 1: DAEP Student Tracker — Texas Edition
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (79 chars):
+DAEP Student Tracker | Texas TEC §37 | Excel + Google Sheets
+
+SHORT DESCRIPTION (149 chars):
+Stop tracking DAEP placements in email and sticky notes. This tracker handles placements, compliance deadlines, and MDR flags automatically. TEC §37 aligned.
+
+LONG DESCRIPTION:
+---
+Every campus administrator in Texas knows the DAEP compliance problem: placement orders, parent conference logs, MDR deadlines, and SPED tracking all living in different places — or nowhere at all. One missed 10-day MDR deadline can overturn a placement and expose the district to legal liability.
+
+The DAEP Student Tracker — Texas Edition is a fully structured Excel and Google Sheets tracker designed specifically for Texas campuses. It handles everything from initial placement through re-entry, built around the requirements of TEC Chapter 37.
+
+WHAT'S INCLUDED:
+• Student Roster — 100 rows with auto-calculated Days in DAEP, Days Remaining, and Incident Count. Cumulative totals update automatically as you log new placements.
+• DAEP Placements — Full placement tracking with projected end date, days remaining countdown, and Manifestation Determination flag (auto-fires when MDR is required but not scheduled).
+• Incident Log — 200 rows with VLOOKUP auto-fill from the Roster. Offense categories and TEC references from dropdown menus.
+• Compliance Checklist — 150 rows tracking all required compliance actions per student. Overdue items automatically highlight red. Items within 3 days turn gold.
+• Dashboard — Live COUNTIF/COUNTIFS metrics: active placements, expiring placements, SPED flags, compliance status, and incidents.
+• 📋 Status Board — Print-ready weekly board showing students returning within 7 days and their compliance checklist status.
+• Reference Tab — TEC §37 text summaries, SPED codes, glossary, roles, and compliance timelines.
+• Upgrade Tab — Connects to Waypoint for district-wide automation.
+
+WHO THIS IS FOR:
+Campus Behavior Coordinators, assistant principals, principals, DAEP placement officers, and any campus administrator responsible for TEC Chapter 37 compliance. Works for both elementary and secondary campuses.
+
+TECHNICAL REQUIREMENTS:
+Microsoft Excel (2016 or later) or Google Sheets. All formulas are compatible with both platforms. Google Sheets conversion: upload to Google Drive → right-click → Open with Google Sheets.
+
+IMPORTANT DISCLAIMER:
+This tracker is designed to support compliance with the Texas Education Code. It does not constitute legal advice. Consult your district's legal counsel and SPED department for all placement decisions.
+
+Clear Path Education Group, LLC | clearpathedgroup.com
+Managing discipline across multiple campuses? Waypoint automates this tracker district-wide with real-time alerts and a live dashboard. Visit clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+Texas education code, TEC 37, DAEP tracker, school discipline spreadsheet, campus administrator, CBC campus behavior coordinator, DAEP placement, manifestation determination, student discipline log, TEC chapter 37, MDR tracker, SPED compliance, Texas school compliance, DAEP compliance, school administrator tools, discipline data, Google Sheets discipline, principal resource, assistant principal tools, behavior coordinator
+
+SUBJECT: School Counseling, School Administration, Special Education
+GRADE: Not Grade Specific
+PRICE: $12.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 2: ISS Engagement & Intervention Tracker
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (79 chars):
+ISS Intervention Tracker | Student Activities + Re-Entry | Texas
+
+SHORT DESCRIPTION (148 chars):
+ISS only works when it changes behavior. This tracker logs daily interventions, measures outcomes, and requires a structured re-entry plan before students return.
+
+LONG DESCRIPTION:
+---
+Research is consistent: traditional in-school suspension with no structured activity reduces repeat incidents by zero percent. Students sit, do nothing, and come back unchanged. The same behavior occurs again within 30 days at triple the rate of students who received structured intervention during placement.
+
+The ISS Engagement & Intervention Tracker — Texas Edition solves this. It makes every day of ISS count by logging the specific intervention assigned, measuring student engagement, and requiring a documented 8-step re-entry process before any student returns to class.
+
+WHAT'S INCLUDED:
+• Student Roster — Root cause profiling (11 categories), risk tier, SPED/504/ELL flags. Cumulative ISS days auto-count across all placements.
+• ISS Placements — Full placement log with 10-day SPED flag (auto-fires at day 8), intervention track assignment, and days remaining countdown.
+• Daily Activity Log — 500 rows for logging every intervention session. Engagement level, completion status, staff observations, and follow-up flags.
+• Re-Entry Checklist — 8 required steps. Auto-calculates "✅ READY TO RETURN" only when all steps are complete. Overdue return dates turn red.
+• Intervention Library — All 8 intervention tracks fully written with research basis: Reflection & Journaling, Restorative Practices, SEL, Conflict Resolution, Academic Support + Mentoring, Behavioral Skills, Family Engagement, and Crisis Support.
+• Student Activity Plans — 12 offense-specific daily activities written in student-facing language for Day 1, Day 2, Day 3, Day 4+, and re-entry requirement.
+• Outcome Tracker — Before/after incident counts with auto-calculated reduction percentage and recidivism tracking.
+• Dashboard — 20 live metrics: active placements, re-entry readiness, intervention completion rates, SPED alerts.
+• 🔄 Re-Entry Board — Print-ready weekly board showing every student returning within 7 days.
+
+WHO THIS IS FOR:
+ISS monitors, campus administrators, school counselors, behavior coordinators, and anyone who oversees in-school suspension. The Student Activity Plans make this immediately usable for staff with no behavior intervention training.
+
+TECHNICAL REQUIREMENTS:
+Microsoft Excel (2016 or later) or Google Sheets.
+
+Clear Path Education Group, LLC | clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+ISS tracker, in-school suspension, student intervention, behavior intervention, restorative practices, school counselor tools, PBIS tier 2, RTI MTSS, student activity plans, ISS activities, school discipline, behavioral intervention, re-entry plan, campus administrator, Texas school, SEL activities, social emotional learning, behavior coordinator, school counseling, discipline tracker
+
+PRICE: $12.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 3: TEC Consequence Decision Matrix
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (78 chars):
+TEC §37 Consequence Decision Matrix | Restorative Alternatives | Texas
+
+SHORT DESCRIPTION (147 chars):
+The TEC tells you what you CAN do. This tells you what you SHOULD do. Every TEC §37 offense mapped with consequence options, restorative alternatives, and SPED flags.
+
+LONG DESCRIPTION:
+---
+Texas Education Code Chapter 37 gives administrators a framework for discipline. What it doesn't give you is guidance on what the right response actually is — when to use ISS versus DAEP, what restorative alternatives to document before a discretionary placement, or what the SPED implications are for each offense type.
+
+The TEC Consequence Decision Matrix closes that gap. Every TEC §37 offense in one row: mandatory versus discretionary, consequence range, three research-backed restorative alternatives, required documentation, parent notice requirements, CBC review checklist, and SPED flags.
+
+WHAT'S INCLUDED:
+• TEC Decision Matrix — 18 offense rows, fully pre-populated. Mandatory vs. discretionary, consequence range, 3 restorative alternatives per offense, required documentation, parent notice timeline, CBC checklist, and SPED considerations.
+• Restorative Protocols — 10 protocols written step-by-step with research citations: Restorative Circle, Mediated Conversation, Written Apology + Repair Plan, Threat Assessment Protocol, Behavior Contract with Daily Check-In, Community Service, Mentoring Assignment, Academic Catch-Up Plan, and more.
+• Offense Lookup — Select an offense from a dropdown → TEC section, consequence options, restorative alternatives, SPED flags, and required documents auto-populate instantly.
+• CBC Workflow — TEC §37.0012 required decision log with red flags when alternatives weren't considered, SPED review was skipped, or rationale wasn't documented.
+• SPED Safeguards — Every TEC offense mapped to MDR triggers, 10-day rule, FAPE requirements, and ARD implications. Color-coded Yes/No flags.
+• Parent Communication Log — Required notice tracker with overdue alerts.
+• Documentation Checklist — 8-document package per incident. Auto-counts complete vs. missing. Turns green when complete, red when incomplete.
+• Dashboard — Tracks alternative usage rate, incomplete documentation, overdue parent notices, and CBC compliance.
+• Reference Tab — TEC §37 text summaries, 2023 amendments (SB 11, suspension reform), and restorative practices research citations.
+
+WHO THIS IS FOR:
+Campus Behavior Coordinators, principals, APs, counselors — anyone who makes or recommends discipline decisions under TEC Chapter 37. The most broadly applicable product in the Clear Path store.
+
+Clear Path Education Group, LLC | clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+Texas education code, TEC 37, restorative practices, school discipline, campus behavior coordinator, CBC, DAEP alternatives, restorative justice schools, school discipline alternatives, TEC chapter 37, discipline matrix, consequence decision, alternative consequences, behavior intervention, principal tools, AP tools, school counseling, Texas school law, SPED discipline, discipline documentation
+
+PRICE: $10.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 4: Navigator — Student Behavior Tracker
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (74 chars):
+Navigator Behavior Tracker | RTI MTSS | ISS OSS Risk Scores | Texas
+
+SHORT DESCRIPTION (146 chars):
+Track referrals, suspensions, student supports, and intervention effectiveness. Built-in risk score calculator flags students before they escalate to DAEP.
+
+LONG DESCRIPTION:
+---
+Most campuses don't know which students are trending toward a serious incident until the incident happens. A student accumulates three referrals in two months, misses every ISS session, and still doesn't appear on anyone's radar until the fourth incident lands them in DAEP.
+
+Navigator — Student Behavior & Intervention Tracker gives you the visibility to see escalation before it happens. The risk score calculator automatically flags students approaching Tier 3. The weekly Risk Alert Board shows you every escalating student before Monday morning meetings.
+
+WHAT'S INCLUDED:
+• Student Roster — ISS/OSS count, active support count, and risk level auto-calculated for each student.
+• Referral Log — 200 rows with VLOOKUP auto-fill. Referral number per student auto-increments.
+• ISS/OSS Placements — Full placement log with 90-day OSS count (flags when approaching escalation threshold).
+• Student Supports — Track active interventions with effectiveness measurement: incidents before vs. after, reduction percentage, auto-calculated "Effective?" flag.
+• Risk Score Calculator — Weighted scoring based on referral frequency, suspension count, attendance, support engagement, and ELL/SPED status. Auto-generates 🔴 HIGH / 🟡 MEDIUM / 🟢 LOW risk level.
+• Dashboard — 20+ live metrics: students monitored, open referrals, ISS/OSS counts, high-risk flags, support effectiveness.
+• 🚨 Risk Alert Board — Print-ready weekly briefing showing OSS escalation flags, students without active supports, and students approaching serious consequences.
+
+WHO THIS IS FOR:
+Campus administrators, school counselors, behavior coordinators, PBIS teams, and anyone managing a Multi-Tiered System of Supports (MTSS) or Response to Intervention (RTI) framework.
+
+Clear Path Education Group, LLC | clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+RTI MTSS, behavior tracker, student behavior, school counselor, risk assessment school, PBIS tier 2 tier 3, ISS OSS tracker, behavior intervention, student referral log, discipline data, behavior coordinator, escalation prevention, school discipline spreadsheet, Texas school, principal tools, student support tracker, behavior monitoring, student risk score, counselor tools, discipline tracking
+
+PRICE: $12.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 5: Meridian — SPED Compliance Tracker
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (74 chars):
+SPED Compliance Tracker | IEP 504 Dyslexia HB 3928 CAP | Texas
+
+SHORT DESCRIPTION (148 chars):
+IEP annual reviews, 504 plans, Dyslexia HB 3928, CAP findings, and SPPI-13 transition — all in one tracker. Built for Texas SPED coordinators.
+
+LONG DESCRIPTION:
+---
+Texas SPED compliance has five distinct compliance areas — IEPs, 504 plans, Dyslexia/HB 3928, TEA Corrective Action Plan findings, and SPPI-13 secondary transition — and most campuses track them in separate spreadsheets, Word documents, or not at all. A TEA monitoring visit can surface findings in any of these areas. Findings mean corrective action plans. Corrective action plans mean more tracking.
+
+Meridian — Special Education Compliance Tracker brings all five compliance areas into a single, structured tracking system. Deadline flags auto-calculate. Overdue items highlight red automatically. The weekly Compliance Health Board shows your SPED coordinator everything requiring attention before it becomes a finding.
+
+WHAT'S INCLUDED:
+• SPED Student Roster — All students with IEPs, 504 plans, or Dyslexia identification. Auto-counts IEP and 504 instances per student.
+• IEP Tracker — Annual review deadlines, ARD meeting scheduling, re-evaluation dates, and SPED status. Overdue reviews flag automatically.
+• 504 Plan Tracker — Annual review tracking with Dyslexia/HB 3928 MDT verification fields.
+• Dyslexia — HB 3928 Tracker — Texas HB 3928 compliance: annual review status, structured literacy confirmation, progress report deadlines.
+• CAP Findings Tracker — TEA Corrective Action Plan monitoring: systemic and child-specific correction deadlines tracked separately.
+• SPPI-13 Transition Tracker — All 5 core SPPI-13 compliance elements per student. Auto-calculates compliant vs. non-compliant.
+• Dashboard — Live metrics across all compliance areas: IEP reviews due, 504 reviews due, HB 3928 status, CAP open items, SPPI-13 compliance rate.
+• 📋 Compliance Health Board — Print this weekly. Auto-populates from all tracking tabs: IEPs due within 30 days, 504 reviews due, HB 3928 pending, SPPI-13 non-compliant students.
+
+WHO THIS IS FOR:
+Special education coordinators, SPED department chairs, campus administrators with SPED oversight responsibilities, and any campus that has received TEA monitoring findings and needs an organized tracking system.
+
+Clear Path Education Group, LLC | clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+SPED compliance, IEP tracker, 504 plan tracker, special education compliance, Texas SPED, HB 3928 dyslexia, SPPI-13 transition, TEA corrective action plan, CAP findings, ARD tracker, special education coordinator, IDEA compliance, Texas special education, dyslexia tracker, IEP annual review, 504 annual review, SPED coordinator tools, Texas education compliance, special education spreadsheet, compliance tracker
+
+PRICE: $14.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 6: Administrator's Command Toolkit
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (77 chars):
+Administrator's Command Toolkit | Incident + Investigation | Texas
+
+SHORT DESCRIPTION (149 chars):
+Enter one incident → 14 tabs auto-populate. 15 parent phone scripts. 10-day SPED alerts. Evidence chain of custody. Print your Monday briefing in 30 seconds.
+
+LONG DESCRIPTION:
+---
+Here's what administrators currently do for every serious incident: take notes on paper, retype them into the district's referral system, retype again into a Word document for investigation notes, manually track the parent call in a separate spreadsheet, calculate SPED 10-day limits by hand, and build a timeline from memory if a parent files a grievance. Then start over for the next incident.
+
+The Administrator's Command Toolkit eliminates every one of those steps. Enter the incident once in the Incident Intake tab. Every other tab auto-populates from that single entry. Stop doing the same work four times.
+
+WHAT'S INCLUDED:
+• ⚡ Command Dashboard — Live campus summary across 5 sections: Critical Alerts (SPED exceeded, legal holds, appeal deadlines due in 3 days), Investigation Status breakdown, campus totals, SPED compliance, and appeal outcomes. Prints in 30 seconds for Monday meetings.
+• Incident Intake — 34-column master record. Auto-calculates day of week, rolling 10-day SPED total, live 10-day flag (🟡 Day 7 / 🟠 Day 9 / 🔴 Day 10+), days case open, and case age.
+• Investigation Tracker — 5-stage workflow (Intake → In Progress → Finding → Consequence → Closed). Integrity Checklist requires all 6 boxes confirmed before case can be closed. Auto-calculates appeal deadlines.
+• 10-Day Compliance — Per-SPED-student tracking of cumulative removal days. Fires at Day 7 (warning), Day 9 (urgent), Day 10+ (MDR required NOW). Auto-calculated from Incident Intake dates.
+• Evidence Tracker — Chain of custody log: received from, stored where, who accessed, when returned. Legal Hold flag turns the entire row red with "🔴 DO NOT DESTROY."
+• Parent Contact Log — Every call logged with date, method, and outcome. Select the offense category → a complete phone script auto-populates in the next column. 15 scripts for 15 offense types.
+• Discipline Trends — Auto-built from Incident Intake. 13 offense categories, consequence summary, SPED breakdown, repeat offender flags, monthly breakdown.
+• 📋 Monday Briefing — Print-ready weekly report: open investigations requiring action, SPED compliance alerts, parent follow-ups due this week, and at-a-glance campus stats. All auto-populated.
+• Investigation Notes — Structured template for witness interviews, evidence review, and findings. Separate from the Intake record — legally important distinction.
+• Outcome & Letters — Consequence decisions, appeal deadlines (auto-calculated 21 days out), appeal tracking. Turns red when deadline is approaching.
+
+PARENT PHONE SCRIPTS INCLUDED:
+Assault, Fighting, Bullying/Cyberbullying, Drug Possession, Dangerous Weapon, Terroristic Threat, Harassment, Truancy, Vandalism, Theft, Sexual Harassment, Defiance, Disruption, Tobacco/Vaping, and Other Campus Policy.
+
+WHO THIS IS FOR:
+Principals, assistant principals, deans of students, and Campus Behavior Coordinators. The flagship product for any campus administrator who handles 5+ incidents per month.
+
+PAIRS WITH:
+Investigation Templates 5-Pack (separate listing) and the Digital Investigation Intake Form (separate listing) for a complete investigation system with zero double entry.
+
+Clear Path Education Group, LLC | clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+campus administrator toolkit, school discipline tracker, incident investigation, Texas TEC discipline, parent contact log administrator, 10-day SPED compliance, student discipline tracker, CBC campus behavior coordinator, school investigation, administrator spreadsheet, principal tools, AP tools, discipline trends, evidence tracker school, chain of custody school, Monday morning briefing, Google Sheets discipline, school discipline data, Texas school administrator, investigation notes template
+
+PRICE: $18.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 7: Investigation Templates 5-Pack
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (77 chars):
+School Investigation Templates 5-Pack | Texas TEC §37 | Word + PDF
+
+SHORT DESCRIPTION (149 chars):
+5 offense-specific investigation records — Fighting, Drugs, Harassment, Threats, General Misconduct. Due process checklist built in. Each in editable Word + print-ready PDF.
+
+LONG DESCRIPTION:
+---
+Most administrators build investigation records from scratch — a blank Word document, trying to remember what sections are required, hoping they don't miss a due process step. When a parent files a grievance or an appeal is submitted, incomplete documentation is the single most common reason discipline decisions are overturned.
+
+These five investigation templates eliminate that risk. Each is a structured, professionally formatted investigation record built specifically for Texas TEC Chapter 37. Every section you need, in the right order, with legal reminders built in.
+
+WHAT'S INCLUDED (10 files — each template in both Word and PDF):
+• Investigation Template — Fighting / Assault
+  Who initiated, injury description, weapon checkbox, self-defense finding, mandatory expulsion warning for serious bodily injury cases.
+
+• Investigation Template — Drugs / Alcohol
+  Possession/use/distribution/paraphernalia distinction, substance description, chain of custody, law enforcement report field, counseling referral reminder, mandatory expulsion warning for distribution.
+
+• Investigation Template — Harassment / Bullying / Cyberbullying
+  Conduct basis (race, gender, disability, etc.), pattern documentation, cyberbullying platform and screenshot fields, victim support checklist, Title IX/OCR warning for protected-class conduct.
+
+• Investigation Template — Threats / Terroristic Threat
+  HB 3 threat assessment required fields, 4-level threat determination (Level 1–4), law enforcement referral, target safety plan, compliance warning for failure to document assessment.
+
+• Investigation Template — General Misconduct
+  SCOC level classification, repeat offense documentation, prior interventions attempted, recommended alternatives.
+
+EVERY TEMPLATE INCLUDES:
+✓ 10-section structured layout (Incident Overview, Student Info, Immediate Actions, Due Process Checklist, Timeline, Student Statement, Witness Statements ×3, Evidence Summary, Findings & Disposition, Administrator Certification)
+✓ Due process checklist with legal warnings — 8 required steps for any removal
+✓ SPED/504 alert boxes that fire when IEP or 504 is checked
+✓ MDR finding section with "STOP — PLACEMENT BLOCKED" red box for manifestation findings
+✓ Evidence summary table with Legal Hold field
+✓ All 5 disposition options with signature lines
+✓ Clear Path Education Group branding + Waypoint upgrade footer
+✓ FERPA reminders on witness statement section
+✓ Distribution notice: original to disciplinary file, copy to central office, copy to SPED file
+
+FORMAT:
+Each template provided in both Microsoft Word (.docx) for editing and PDF for printing. Total: 10 files. Word files open in Google Docs.
+
+WHO THIS IS FOR:
+Principals, assistant principals, and any administrator who conducts or documents formal disciplinary investigations. Works for any Texas campus regardless of size or level.
+
+PAIRS WITH:
+The Digital Investigation Intake Form (separate listing) — fill out the investigation electronically and export directly to the Administrator's Command Toolkit.
+
+Clear Path Education Group, LLC | clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+school investigation template, discipline investigation, student investigation record, Texas TEC, due process school, school discipline documentation, investigation notes, fighting investigation, drug investigation school, harassment investigation, threat assessment school, administrator template, school investigation form, discipline record, TEC 37 investigation, SPED discipline, campus administrator, AP principal tools, Texas school discipline, legally defensible investigation
+
+PRICE: $14.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LISTING 8: Digital Investigation Intake Form
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE (74 chars):
+Digital Investigation Intake Form | Exports to Admin Toolkit | Texas
+
+SHORT DESCRIPTION (148 chars):
+Fill out investigations digitally. Exports a pre-mapped CSV row that populates your Admin Command Toolkit automatically. No double entry. Works offline in any browser.
+
+LONG DESCRIPTION:
+---
+The biggest source of double work in school discipline: filling out an investigation template AND re-entering all the same information into a tracking spreadsheet. The same student name, the same offense, the same date — typed twice into two different documents.
+
+The Digital Investigation Intake Form solves this entirely. Fill out the investigation once, click Export, and the data drops directly into the correct columns of the Administrator's Command Toolkit Incident Intake tab. Investigation Tracker, Evidence Tracker, Parent Contact Log, 10-Day Compliance, Discipline Trends, and Monday Briefing all auto-populate from that single export.
+
+WHAT IT DOES:
+• Select offense type (Fighting, Drugs, Harassment, Threats, Weapons, General Misconduct) → offense-specific fields and legal alerts load dynamically
+• All 10 investigation sections in structured digital form
+• SPED/504 checkbox → red MDR warning block fires automatically with the 10-day timeline
+• MDR determination "IS a manifestation" → STOP block appears, disposition section is flagged
+• Add/remove timeline rows as needed (no more running out of space)
+• Add/remove witness blocks (up to unlimited)
+• Add/remove evidence log entries
+• "Export to Toolkit" → downloads a CSV row pre-mapped to all 34 columns of the Incident Intake tab (empty cells left for auto-calculated columns so the paste lands in exactly the right spots)
+• "Export Full Record" → downloads complete JSON for archiving or Waypoint import
+• "Print / Save as PDF" → formats a clean print view for the student's disciplinary file (sidebar, buttons hidden)
+• "Save Draft" → saves to browser storage so you can return to an in-progress form
+• Works on desktop, laptop, Chromebook, or tablet
+• Works completely offline after download — no internet connection required, no login, no account
+
+HOW TO USE WITH THE ADMIN COMMAND TOOLKIT:
+1. Open the .html file in Chrome, Edge, or Safari
+2. Fill out the investigation
+3. Click "Export to Toolkit"
+4. Open the Admin Command Toolkit → Incident Intake tab
+5. Click the first empty row → Paste the CSV row
+6. All 14 connected tabs update automatically
+
+FILE FORMAT:
+Single .html file. Save to your desktop. Open in any browser. No installation required.
+
+WHO THIS IS FOR:
+Any administrator who uses the Admin Command Toolkit and wants to eliminate double entry entirely. Also useful standalone for campuses that want a clean digital investigation record without a separate spreadsheet.
+
+BEST VALUE:
+Purchase the Administrator's Investigation Kit bundle (separate listing) to get the Command Toolkit, all 5 Investigation Templates, and this Digital Form together at a significant discount.
+
+Clear Path Education Group, LLC | clearpathedgroup.com/waypoint
+---
+
+TAGS (20):
+digital investigation form, school discipline digital, incident intake form, investigation record digital, school administrator tool, discipline tracker, Texas school discipline, no double entry, CSV export school, admin toolkit, principal digital tool, investigation template digital, school incident form, discipline data entry, Texas TEC digital, online investigation form, school admin form, Google Chrome school, discipline spreadsheet, campus administrator
+
+PRICE: $10.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BUNDLE 1: DAEP & Discipline Complete Pack
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE:
+DAEP & Discipline Complete Pack | Texas TEC §37 | 3-Tool Bundle
+
+SHORT DESCRIPTION:
+Everything you need to document, investigate, and track DAEP placements. DAEP Tracker + TEC Decision Matrix + 5 Investigation Templates. Save $8 vs. individual.
+
+INCLUDES:
+- DAEP Student Tracker ($12)
+- TEC Consequence Decision Matrix & Restorative Alternatives ($10)
+- Investigation Templates 5-Pack ($14)
+STANDALONE VALUE: $36 | BUNDLE PRICE: $28 | YOU SAVE: $8
+
+WHO THIS IS FOR: CBC, AP, or principal who handles DAEP placements and needs to document every step correctly. Covers the full lifecycle: know what consequence to apply (Matrix), document the investigation (Templates), and track the placement through re-entry (Tracker).
+
+PRICE: $28.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BUNDLE 2: Behavior Intervention System
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE:
+Behavior Intervention System | ISS + RTI MTSS + TEC Matrix | Texas
+
+SHORT DESCRIPTION:
+The complete behavior intervention toolkit: ISS with daily activities and re-entry, RTI/MTSS behavior tracking with risk scores, and a TEC consequence reference. Save $6.
+
+INCLUDES:
+- ISS Engagement & Intervention Tracker ($12)
+- Navigator Behavior Tracker ($12)
+- TEC Consequence Decision Matrix ($10)
+STANDALONE VALUE: $34 | BUNDLE PRICE: $28 | YOU SAVE: $6
+
+WHO THIS IS FOR: Counselors, behavior coordinators, and PBIS teams who manage the intervention side of discipline — not just the consequence side.
+
+PRICE: $28.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BUNDLE 3: Administrator's Investigation Kit
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE:
+Admin Investigation Kit | Command Toolkit + Templates + Digital Form
+
+SHORT DESCRIPTION:
+The complete investigation system: digital intake → auto-populates the Command Toolkit → prints as a professional investigation record. Zero double entry. Save $10.
+
+INCLUDES:
+- Administrator's Command Toolkit ($18)
+- Investigation Templates 5-Pack ($14)
+- Digital Investigation Intake Form ($10)
+STANDALONE VALUE: $42 | BUNDLE PRICE: $32 | YOU SAVE: $10
+
+WHO THIS IS FOR: APs and principals who investigate incidents and need everything to be legally defensible. This bundle eliminates every piece of double entry in the investigation process. Fill the digital form once → everything else is automatic.
+
+PRICE: $32.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BUNDLE 4: Campus Leadership Complete System  ← THE FLAGSHIP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TITLE:
+Campus Leadership Complete System | 8-Tool Bundle | Texas Discipline
+
+SHORT DESCRIPTION:
+Every Clear Path tool in one download. Command Toolkit, DAEP, ISS, SPED, Navigator, TEC Matrix, 5 Investigation Templates, Digital Intake Form. $102 value for $52. Save $50.
+
+INCLUDES ALL 8 PRODUCTS:
+- Administrator's Command Toolkit ($18)
+- DAEP Student Tracker ($12)
+- ISS Engagement & Intervention Tracker ($12)
+- TEC Consequence Decision Matrix ($10)
+- Navigator Behavior Tracker ($12)
+- Meridian SPED Compliance Tracker ($14)
+- Investigation Templates 5-Pack ($14)
+- Digital Investigation Intake Form ($10)
+STANDALONE VALUE: $102 | BUNDLE PRICE: $52 | YOU SAVE: $50
+
+WHO THIS IS FOR: A principal setting up their campus at the start of the year. A district instructional dean who wants consistent tools across campuses. A campus that just received a TEA monitoring finding and needs systems in place immediately. An AP who wants to stop reinventing the wheel for every incident.
+
+HOW THEY CONNECT:
+Every product in this bundle was designed to work together. The Digital Form exports to the Command Toolkit. The Toolkit's 10-day alerts link to the SPED Tracker. The TEC Matrix informs the ISS Tracker's intervention assignments. The Investigation Templates pair with the Command Toolkit's Investigation Tracker. This is a connected system, not a collection of unrelated spreadsheets.
+
+WHAT'S NEXT:
+When you're ready to automate this across your entire district — real-time dashboards, automated parent notices, SPED alerts pushed to your phone — visit clearpathedgroup.com/waypoint. Waypoint is the platform these tools were designed to connect to.
+
+Clear Path Education Group, LLC | clearpathedgroup.com
+
+PRICE: $52.00
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SELLER Q&A (add to every listing)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Q: Does this work with Google Sheets?
+A: Yes. Upload the .xlsx file to Google Drive, right-click, and select "Open with Google Sheets." All formulas, conditional formatting, and dropdowns transfer. A small number of Excel-specific features (some conditional formatting rules) may display slightly differently but all core functionality works.
+
+Q: Is this only for Texas schools?
+A: The trackers and templates are built around Texas Education Code Chapter 37, Texas-specific offense categories, and Texas compliance requirements (HB 3928, SPPI-13, etc.). Schools in other states can use the structure but would need to adapt TEC references to their own state law.
+
+Q: Do I need any special software?
+A: Excel files require Microsoft Excel 2016 or later, or Google Sheets (free). Word templates require Microsoft Word or Google Docs. The Digital Intake Form requires any modern browser (Chrome, Edge, Safari, Firefox). No subscriptions, no accounts, no internet required after download.
+
+Q: Can multiple staff members use the same file?
+A: Yes — one file can be shared on a shared drive or Google Drive for team use. For true multi-user access with individual logins, role-based permissions, and real-time updates across multiple campuses, that's what Waypoint provides (clearpathedgroup.com/waypoint).
+
+Q: Does this constitute legal advice?
+A: No. These tools are designed to support compliance with the Texas Education Code and are for organizational use only. Always consult your district's legal counsel for placement decisions, MDR determinations, and any situation that may involve legal action.

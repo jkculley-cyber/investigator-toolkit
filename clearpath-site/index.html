@@ -196,8 +196,17 @@
   }
   .btn-ghost:hover { border-color: var(--amber); color: var(--amber-light); transform: translateY(-3px); }
 
-  /* Hero pathway card */
+  /* Hero pathway card + carousel */
   .hero-visual { display:flex; justify-content:center; }
+  .hero-carousel { position:relative; width:100%; max-width:420px; }
+  .hero-slide { position:absolute; top:0; left:0; width:100%; opacity:0; transform:translateY(16px); transition:opacity 0.6s ease, transform 0.6s ease; pointer-events:none; }
+  .hero-slide.active { position:relative; opacity:1; transform:translateY(0); pointer-events:auto; }
+  .hero-dots { display:flex; justify-content:center; gap:10px; margin-top:18px; }
+  .hero-dot { width:10px; height:10px; border-radius:50%; border:2px solid rgba(232,134,42,0.4); background:transparent; cursor:pointer; transition:all 0.3s; padding:0; }
+  .hero-dot.active { background:var(--amber); border-color:var(--amber); box-shadow:0 0 10px rgba(232,134,42,0.5); }
+  .hero-dot:hover { border-color:var(--amber-light); }
+  .hero-live-badge { display:inline-block; font-size:0.62rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; background:rgba(42,122,80,0.15); border:1px solid rgba(42,122,80,0.35); color:#4ade80; padding:4px 14px; border-radius:999px; margin-bottom:16px; }
+  .hero-tag { font-size:0.7rem; font-weight:600; background:rgba(249,115,22,0.12); border:1px solid rgba(249,115,22,0.3); color:#f97316; padding:3px 10px; border-radius:999px; }
   .path-card {
     background: rgba(26,10,46,0.85); border: 1px solid var(--border);
     border-radius: 16px; padding: 36px 32px;
@@ -806,7 +815,7 @@
   <div class="hero-content">
     <div class="hero-eyebrow"><span></span> Clear Path Education Group &mdash; Texas K&ndash;12</div>
     <h1>Every District Deserves a Clear Path Forward.</h1>
-    <p>Clear Path Education Group envisions schools equipped with clear systems, innovative tools, and collaborative supports that empower educators. Our flagship product, Waypoint, is live today.</p>
+    <p>Clear Path Education Group envisions schools equipped with clear systems, innovative tools, and collaborative supports that empower educators. Two products live today — Waypoint and Apex.</p>
     <div class="hero-buttons">
       <a href="#contact" class="btn-primary">Request a Demo &#8594;</a>
       <a href="#products" class="btn-ghost">See Our Suite</a>
@@ -814,19 +823,48 @@
   </div>
 
   <div class="hero-visual">
-    <div class="path-card" style="text-align:center;">
-      <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Waypoint" style="width:88px;height:88px;object-fit:contain;border-radius:14px;margin:0 auto 14px;display:block;">
-      <p style="font-size:1.15rem;font-weight:800;color:#f4a84a;margin:0 0 3px;letter-spacing:0.02em;">Waypoint</p>
-      <p style="font-size:0.76rem;color:rgba(240,230,211,0.45);margin:0 0 20px;text-transform:uppercase;letter-spacing:0.1em;">Texas DAEP Compliance Platform</p>
-      <div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:22px;">
-        <span style="font-size:0.7rem;font-weight:600;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#f97316;padding:3px 10px;border-radius:999px;">TEC Chapter 37</span>
-        <span style="font-size:0.7rem;font-weight:600;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#f97316;padding:3px 10px;border-radius:999px;">SPED Blocking</span>
-        <span style="font-size:0.7rem;font-weight:600;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#f97316;padding:3px 10px;border-radius:999px;">PEIMS Export</span>
-        <span style="font-size:0.7rem;font-weight:600;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#f97316;padding:3px 10px;border-radius:999px;">Transition Plans</span>
-        <span style="font-size:0.7rem;font-weight:600;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#f97316;padding:3px 10px;border-radius:999px;">Parent Portal</span>
-        <span style="font-size:0.7rem;font-weight:600;background:rgba(249,115,22,0.12);border:1px solid rgba(249,115,22,0.3);color:#f97316;padding:3px 10px;border-radius:999px;">Repeat Offender Alerts</span>
+    <div class="hero-carousel" id="hero-carousel">
+      <!-- Slide 1: Waypoint -->
+      <div class="hero-slide active" data-slide="0">
+        <div class="path-card" style="text-align:center;">
+          <div class="hero-live-badge">Live Product</div>
+          <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Waypoint" style="width:88px;height:88px;object-fit:contain;border-radius:14px;margin:0 auto 14px;display:block;">
+          <p style="font-size:1.15rem;font-weight:800;color:#f4a84a;margin:0 0 3px;letter-spacing:0.02em;">Waypoint</p>
+          <p style="font-size:0.76rem;color:rgba(240,230,211,0.45);margin:0 0 20px;text-transform:uppercase;letter-spacing:0.1em;">Texas DAEP Compliance Platform</p>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:22px;">
+            <span class="hero-tag">TEC Chapter 37</span>
+            <span class="hero-tag">SPED Blocking</span>
+            <span class="hero-tag">PEIMS Export</span>
+            <span class="hero-tag">Transition Plans</span>
+            <span class="hero-tag">Parent Portal</span>
+          </div>
+          <a href="https://waypoint.clearpathedgroup.com" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:0.9rem;padding:11px 26px;display:inline-flex;text-decoration:none;">Launch App &#8594;</a>
+        </div>
       </div>
-      <a href="https://waypoint.clearpathedgroup.com" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:0.9rem;padding:11px 26px;display:inline-flex;text-decoration:none;">Launch App &#8594;</a>
+      <!-- Slide 2: Apex -->
+      <div class="hero-slide" data-slide="1">
+        <div class="path-card" style="text-align:center;border-color:rgba(249,115,22,0.3);">
+          <div class="hero-live-badge" style="background:rgba(249,115,22,0.15);border-color:rgba(249,115,22,0.4);color:#f97316;">Live Product</div>
+          <div style="width:88px;height:88px;border-radius:14px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e0a3c,#4c1d95);border:1px solid rgba(249,115,22,0.3);">
+            <span style="font-size:2rem;font-weight:900;color:#f97316;font-family:'Cinzel',serif;">A</span>
+          </div>
+          <p style="font-size:1.15rem;font-weight:800;color:#f97316;margin:0 0 3px;letter-spacing:0.02em;">Apex</p>
+          <p style="font-size:0.76rem;color:rgba(240,230,211,0.45);margin:0 0 20px;text-transform:uppercase;letter-spacing:0.1em;">AI Instructional Leadership Platform</p>
+          <div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:22px;">
+            <span class="hero-tag" style="background:rgba(249,115,22,0.12);border-color:rgba(249,115,22,0.3);color:#f97316;">Voice-to-Coaching</span>
+            <span class="hero-tag" style="background:rgba(249,115,22,0.12);border-color:rgba(249,115,22,0.3);color:#f97316;">T-TESS Scoring</span>
+            <span class="hero-tag" style="background:rgba(249,115,22,0.12);border-color:rgba(249,115,22,0.3);color:#f97316;">AI Morning Brief</span>
+            <span class="hero-tag" style="background:rgba(249,115,22,0.12);border-color:rgba(249,115,22,0.3);color:#f97316;">TIA-Ready Data</span>
+            <span class="hero-tag" style="background:rgba(249,115,22,0.12);border-color:rgba(249,115,22,0.3);color:#f97316;">14-Day Free Trial</span>
+          </div>
+          <a href="https://clearpath-apex.pages.dev" target="_blank" rel="noopener noreferrer" class="btn-primary" style="font-size:0.9rem;padding:11px 26px;display:inline-flex;text-decoration:none;background:linear-gradient(135deg,#ea580c,#f97316);">Start Free Trial &#8594;</a>
+        </div>
+      </div>
+      <!-- Carousel dots -->
+      <div class="hero-dots">
+        <button class="hero-dot active" onclick="heroGoTo(0)" aria-label="Waypoint"></button>
+        <button class="hero-dot" onclick="heroGoTo(1)" aria-label="Apex"></button>
+      </div>
     </div>
   </div>
 </section>
@@ -838,8 +876,8 @@
     <span class="slabel">Texas-Focused</span>
   </div>
   <div class="stats-bar-item">
-    <span class="snum">1</span>
-    <span class="slabel">Live &mdash; 3 in Suite</span>
+    <span class="snum">2</span>
+    <span class="slabel">Products Live</span>
   </div>
   <div class="stats-bar-item">
     <span class="snum">K–12</span>
@@ -2484,6 +2522,34 @@ function submitCommunityForm(){
     btn.disabled=false;
   });
 }
+</script>
+
+<script>
+// Hero carousel — auto-rotates between Waypoint and Apex
+(function(){
+  let current = 0;
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.hero-dot');
+  const total = slides.length;
+  let timer;
+
+  function goTo(i) {
+    slides[current].classList.remove('active');
+    dots[current].classList.remove('active');
+    current = i % total;
+    slides[current].classList.add('active');
+    dots[current].classList.add('active');
+  }
+
+  function next() { goTo(current + 1); }
+
+  function startAuto() { timer = setInterval(next, 5000); }
+  function resetAuto() { clearInterval(timer); startAuto(); }
+
+  window.heroGoTo = function(i) { goTo(i); resetAuto(); };
+
+  startAuto();
+})();
 </script>
 
 <!-- Cloudflare Web Analytics injected automatically by Cloudflare Pages -->

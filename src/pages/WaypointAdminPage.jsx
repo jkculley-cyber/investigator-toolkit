@@ -325,6 +325,41 @@ function ApexPanel() {
   const [loading, setLoading] = useState(true)
   const [toast, setToast] = useState(null) // { msg, type: 'success'|'error' }
   const [activatingId, setActivatingId] = useState(null)
+  const [editModal, setEditModal] = useState(null) // principal object being edited
+  const [editForm, setEditForm] = useState({})
+  const [editSaving, setEditSaving] = useState(false)
+
+  function openEdit(p) {
+    setEditForm({
+      name: p.name || '',
+      email: p.email || '',
+      school_name: p.school_name || '',
+      district_name: p.district_name || '',
+      subscription_status: p.subscription_status || 'trial',
+      paid_through: p.paid_through || '',
+    })
+    setEditModal(p)
+  }
+
+  async function saveEdit() {
+    if (!editModal) return
+    setEditSaving(true)
+    await fetch(`${APEX_URL}/rest/v1/principals?id=eq.${editModal.id}`, {
+      method: 'PATCH',
+      headers: APEX_HEADERS,
+      body: JSON.stringify({
+        name: editForm.name,
+        school_name: editForm.school_name,
+        district_name: editForm.district_name,
+        subscription_status: editForm.subscription_status,
+        paid_through: editForm.paid_through || null,
+      }),
+    })
+    setEditSaving(false)
+    setEditModal(null)
+    showToast('Principal updated')
+    load()
+  }
 
   function showToast(msg, type = 'success') {
     setToast({ msg, type })
@@ -605,6 +640,12 @@ function ApexPanel() {
                       </td>
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-1.5">
+                          <button
+                            onClick={() => openEdit(p)}
+                            className="px-2 py-1 text-xs font-medium bg-gray-800 border border-gray-700 text-gray-300 rounded hover:text-white hover:border-violet-500 transition-colors"
+                          >
+                            Edit
+                          </button>
                           {status !== 'active' ? (
                             <>
                               <button
@@ -641,6 +682,91 @@ function ApexPanel() {
           </div>
         )}
       </div>
+
+      {/* Edit Principal Modal */}
+      {editModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={() => setEditModal(null)}>
+          <div className="bg-gray-900 border border-gray-700 rounded-xl w-full max-w-lg p-6 shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h3 className="text-base font-semibold text-white mb-4">Edit Principal</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Name</label>
+                <input
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none"
+                  value={editForm.name}
+                  onChange={e => setEditForm({ ...editForm, name: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1">Email</label>
+                <input
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-500 cursor-not-allowed"
+                  value={editForm.email}
+                  disabled
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">School</label>
+                  <input
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none"
+                    value={editForm.school_name}
+                    onChange={e => setEditForm({ ...editForm, school_name: e.target.value })}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">District</label>
+                  <input
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none"
+                    value={editForm.district_name}
+                    onChange={e => setEditForm({ ...editForm, district_name: e.target.value })}
+                  />
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">Subscription Status</label>
+                  <select
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none"
+                    value={editForm.subscription_status}
+                    onChange={e => setEditForm({ ...editForm, subscription_status: e.target.value })}
+                  >
+                    <option value="trial">Trial</option>
+                    <option value="active">Active (Paid)</option>
+                    <option value="extended">Extended</option>
+                    <option value="expired">Expired</option>
+                    <option value="gated">Gated</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1">Paid Through</label>
+                  <input
+                    type="date"
+                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:border-violet-500 focus:outline-none"
+                    value={editForm.paid_through}
+                    onChange={e => setEditForm({ ...editForm, paid_through: e.target.value })}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center justify-end gap-3 mt-6">
+              <button
+                onClick={() => setEditModal(null)}
+                className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveEdit}
+                disabled={editSaving}
+                className="px-4 py-2 text-sm font-semibold bg-violet-600 hover:bg-violet-500 text-white rounded-lg transition-colors disabled:opacity-50"
+              >
+                {editSaving ? 'Saving…' : 'Save Changes'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -2,6 +2,7 @@
  * Campus Settings — District/campus config stored in IndexedDB settings store
  */
 import { getSetting, setSetting } from '../db.js';
+import { checkLicense, getLicenseKey, setLicenseKey, clearLicense } from '../license.js';
 
 export function render() {
   return `
@@ -45,6 +46,22 @@ export function render() {
       </div>
     </div>
 
+    <div class="card" style="margin-top:1.5rem;">
+      <div class="card-body">
+        <h3 style="font-size:0.9375rem;font-weight:700;margin-bottom:0.75rem;color:var(--gray-800);">License</h3>
+        <div id="license-status" style="margin-bottom:0.75rem;padding:0.5rem 0.75rem;border-radius:6px;font-size:0.8125rem;font-weight:600;"></div>
+        <div id="license-current" style="font-size:0.8125rem;color:var(--gray-600);margin-bottom:0.75rem;"></div>
+        <div style="display:flex;gap:0.5rem;align-items:flex-end;">
+          <div style="flex:1;max-width:280px;">
+            <label style="font-size:0.8125rem;font-weight:600;color:var(--gray-700);display:block;margin-bottom:0.25rem;">License Key</label>
+            <input type="text" id="lic-key-input" placeholder="INV-XXXX-XXXX" style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--gray-300);border-radius:6px;font-size:0.875rem;text-transform:uppercase;" />
+          </div>
+          <button class="btn btn-primary" id="lic-activate-btn" style="white-space:nowrap;">Activate</button>
+        </div>
+        <div id="lic-msg" style="font-size:0.8125rem;margin-top:0.5rem;"></div>
+      </div>
+    </div>
+
     <div class="card" style="margin-top:1.5rem;border-left:3px solid var(--teal);">
       <div class="card-body">
         <h3 style="font-size:0.9375rem;font-weight:700;margin-bottom:0.5rem;color:var(--gray-800);">Privacy Notice</h3>
@@ -65,6 +82,30 @@ export function render() {
 
 export function attach(container) {
   loadSettings();
+  loadLicenseStatus();
+
+  container.querySelector('#lic-activate-btn')?.addEventListener('click', async () => {
+    const input = document.getElementById('lic-key-input');
+    const msg = document.getElementById('lic-msg');
+    const key = input?.value.trim();
+    if (!key) return;
+    setLicenseKey(key);
+    const result = await checkLicense();
+    if (result.valid) {
+      msg.textContent = 'License activated!';
+      msg.style.color = '#065f46';
+      input.value = '';
+      loadLicenseStatus();
+      // Refresh the app to remove soft gate banner
+      setTimeout(() => window.location.reload(), 1000);
+    } else {
+      msg.textContent = result.reason === 'invalid_key' ? 'Invalid key.' : result.reason === 'expired' ? 'License expired.' : 'Could not verify.';
+      msg.style.color = '#dc2626';
+      clearLicense();
+      loadLicenseStatus();
+      setTimeout(() => { if (msg) msg.textContent = ''; }, 4000);
+    }
+  });
 
   container.querySelector('#settings-form')?.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -95,6 +136,41 @@ export function attach(container) {
       console.error('Reset counter error:', err);
     }
   });
+}
+
+async function loadLicenseStatus() {
+  const statusEl = document.getElementById('license-status');
+  const currentEl = document.getElementById('license-current');
+  if (!statusEl) return;
+
+  const lic = await checkLicense();
+  const key = getLicenseKey();
+
+  if (lic.valid) {
+    statusEl.textContent = 'License Active';
+    statusEl.style.background = '#f0fdfa';
+    statusEl.style.border = '1px solid #99f6e4';
+    statusEl.style.color = '#065f46';
+  } else {
+    statusEl.textContent = lic.reason === 'no_license' ? 'No License Key' :
+      lic.reason === 'invalid_key' ? 'Invalid License Key' :
+      lic.reason === 'expired' ? 'License Expired' : 'License Verification Failed';
+    statusEl.style.background = '#fef2f2';
+    statusEl.style.border = '1px solid #fecaca';
+    statusEl.style.color = '#dc2626';
+  }
+
+  if (key && currentEl) {
+    currentEl.textContent = '';
+    const text = document.createTextNode('Current key: ');
+    const code = document.createElement('code');
+    code.style.cssText = 'background:#f3f4f6;padding:2px 6px;border-radius:4px;';
+    code.textContent = key;
+    currentEl.appendChild(text);
+    currentEl.appendChild(code);
+  } else if (currentEl) {
+    currentEl.textContent = '';
+  }
 }
 
 async function loadSettings() {

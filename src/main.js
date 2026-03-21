@@ -2,6 +2,7 @@
  * Campus Investigation Toolkit — App Shell + Router
  */
 import { openDB, getSetting, setSetting } from './db.js';
+import { checkLicense, getLicenseKey, setLicenseKey, clearLicense } from './license.js';
 import './styles.css';
 
 // --- Page module imports ---
@@ -187,12 +188,75 @@ function renderSetupWizard() {
   `;
 }
 
+// --- License entry screen ---
+function renderLicenseScreen(error) {
+  return `
+    <div class="setup-wizard">
+      <h1>Campus Investigation Toolkit</h1>
+      <p style="margin-bottom:0.25rem;">Enter your license key to get started.</p>
+      <p style="font-size:0.8125rem;color:var(--gray-500);margin-bottom:1.5rem;">
+        Purchase a license at <strong>clearpathedgroup.com</strong>
+      </p>
+      ${error ? `<div style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;padding:0.625rem 0.875rem;border-radius:6px;font-size:0.8125rem;margin-bottom:1rem;">${error}</div>` : ''}
+      <form id="license-form">
+        <div class="form-group">
+          <label for="license-key">License Key</label>
+          <input type="text" id="license-key" placeholder="e.g. INV-XXXX-XXXX" required style="text-transform:uppercase;" />
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:0.5rem;">Activate License</button>
+      </form>
+    </div>
+  `;
+}
+
+// --- Soft gate banner ---
+function renderSoftGateBanner() {
+  return `<div style="background:#fef2f2;border-bottom:2px solid #fecaca;padding:0.625rem 1rem;text-align:center;font-size:0.8125rem;color:#dc2626;font-weight:600;">
+    License expired or invalid — You can view existing data but cannot create new records. Go to Settings to update your license key.
+  </div>`;
+}
+
+// Track license state for soft gate banner rendering
+let licenseValid = true;
+
+function showLicenseScreen(app, error) {
+  app.innerHTML = renderLicenseScreen(error);
+  const form = document.getElementById('license-form');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const key = document.getElementById('license-key').value.trim();
+    if (!key) return;
+    setLicenseKey(key);
+    const result = await checkLicense();
+    if (!result.valid) {
+      const msg = result.reason === 'invalid_key' ? 'Invalid license key. Please check and try again.'
+        : result.reason === 'expired' ? 'This license has expired.'
+        : 'Could not verify license. Check your internet connection.';
+      clearLicense();
+      showLicenseScreen(app, msg); // Re-render screen only, no recursive boot
+      return;
+    }
+    licenseValid = true;
+    boot(); // License valid — proceed to full boot
+  });
+}
+
 // --- App init ---
 async function boot() {
   const app = document.getElementById('app');
 
   // Open DB
   await openDB();
+
+  // Check license first
+  const licResult = await checkLicense();
+  licenseValid = licResult.valid;
+
+  // If no license key at all, show license entry screen
+  if (!getLicenseKey()) {
+    showLicenseScreen(app);
+    return;
+  }
 
   // Check first-launch
   const campusName = await getSetting('campusName');
@@ -214,8 +278,8 @@ async function boot() {
     return;
   }
 
-  // Render shell
-  app.innerHTML = renderShell(campusName);
+  // Render shell (with soft gate banner if license invalid)
+  app.innerHTML = (!licenseValid ? renderSoftGateBanner() : '') + renderShell(campusName);
 
   // Sidebar toggle (mobile)
   const hamburger = document.getElementById('hamburger');

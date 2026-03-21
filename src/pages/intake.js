@@ -2,6 +2,7 @@
  * New Case Intake Form — Section 1 (Incident Overview) + Section 2 (Student Info)
  */
 import { put, generateCaseId, getSetting } from '../db.js';
+import { checkLicense } from '../license.js';
 
 const OFFENSE_TEC = {
   'Fighting/Assault': '§37.005',
@@ -211,6 +212,13 @@ async function initForm() {
 
 async function handleSubmit(e) {
   e.preventDefault();
+
+  // Soft gate: block new cases when license is invalid
+  const lic = await checkLicense();
+  if (lic.softGated) {
+    alert('License expired — renew your license in Settings to create new cases.');
+    return;
+  }
 
   const isSped = document.getElementById('sped-yes')?.dataset.active === 'true';
   const is504 = document.getElementById('504-yes')?.dataset.active === 'true';

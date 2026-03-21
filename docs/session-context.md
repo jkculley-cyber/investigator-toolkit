@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-21 (Session AU — License system for Beacon + Toolkit, FERPA dual-mode, Google Form referrals)
+> Last updated: 2026-03-21 (Session AV — Docs suite, Product Hub on ops command center, /simplify review)
 
 ---
 
@@ -104,9 +104,9 @@
 
 ## Next Session Priority
 
-1. **Vera + Nova: Customer onboarding materials** — format license guide for store/email from `clearpath-beacon/docs/license-operations-guide.md`.
-2. **Cloudflare Pages: Deploy Beacon + Toolkit** — connect repos, set custom domains.
-3. **Store listings** — add Beacon ($8/mo, $79/yr) and Toolkit ($5/mo, $49/yr) to clearpathedgroup.com store.
+1. **Cloudflare Pages: Deploy Beacon + Toolkit** — connect repos, set custom domains (`clearpath-beacon.pages.dev`, `investigatortoolkit.clearpathedgroup.com`).
+2. **Store listings** — add Beacon ($8/mo, $79/yr) and Toolkit ($5/mo, $49/yr) to clearpathedgroup.com store with Zelle purchase options.
+3. **Vera + Nova: Customer onboarding materials** — format license guide for store/email from `clearpath-beacon/docs/license-operations-guide.md`.
 4. **Parent Communication Hub** — #1 pain point: timestamped call log for due process hearings.
 5. **Quick capture** for Apex — fast informal walkthrough mode.
 
@@ -210,6 +210,13 @@
 - **Pricing:** $5/mo or $49/yr via Zelle on clearpathedgroup.com
 - **Key generator:** `scripts/generate-license-key.mjs`
 - **Pending:** Connect to Cloudflare Pages at `investigatortoolkit.clearpathedgroup.com`, store listing
+
+## Documentation Suite (Session AV)
+
+- **Master credentials:** `clearpath-beacon/docs/master-credentials.md` — all usernames, passwords, URLs for Kim + Melissa
+- **User guides:** 5 product user guides (Waypoint, Navigator, Apex, Beacon, Investigator Toolkit) in each repo's `docs/`
+- **Terms of Service:** 5 TOS documents in each repo's `docs/legal/`
+- **Ops Command Center:** Product Hub tab added — credentials, license management, infrastructure reference. Live at `clearpath-ops.pages.dev`
 
 ## Shared License Infrastructure
 

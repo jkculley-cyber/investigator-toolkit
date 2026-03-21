@@ -548,6 +548,54 @@ function renderProducts() {
     ${others.map(b => renderBundleCard(b)).join('')}
   </div>`;
 
+  // ── Counselor Tools Section ──
+  html += `<div class="store-section" style="padding-top:40px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+      <div class="section-label" style="margin-bottom:0">Counselor Tools</div>
+      <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(42,122,80,.2);color:#4ade80;border:1px solid rgba(42,122,80,.4);padding:3px 10px;border-radius:4px">New</span>
+    </div>
+    <div class="section-desc">Software built specifically for elementary school counselors — SB 179 compliance, caseload management, and lesson tracking.</div>
+
+    <div class="product-card" id="card-beacon" style="border-color:rgba(42,122,80,.4)">
+      <div style="height:3px;background:linear-gradient(90deg,#22c55e,#0e7490,#6b2fa0)"></div>
+      <div class="pc-layout">
+        <div class="pc-main">
+          <span class="pc-tag" style="color:#4ade80">Counselor Command Center</span>
+          <div class="pc-title">Beacon — Elementary Counselor Platform</div>
+          <div class="pc-short">The first tool built specifically for elementary counselors. Track your 80/20 time split, manage caseloads, run small groups, and prove your impact — all from one dashboard.</div>
+          <div class="pc-detail-text">
+            <strong>8 modules built around your actual workflow:</strong>
+            <ul>
+              <li><strong>Dashboard</strong> — live caseload summary, SB 179 80/20 compliance gauge, upcoming sessions, alerts</li>
+              <li><strong>Caseload Management</strong> — student profiles, tier assignments (1/2/3), referral tracking, notes history</li>
+              <li><strong>Lessons & Groups</strong> — 35 bundled lesson plans, small group session tracking, attendance, curriculum alignment</li>
+              <li><strong>Scheduling</strong> — daily/weekly calendar with block-based time tracking, auto-categorizes direct vs. indirect service</li>
+              <li><strong>Reports</strong> — SB 179 compliance report, caseload demographics, intervention effectiveness, parent communication log</li>
+              <li><strong>Referral Intake</strong> — shareable referral form (works on any device), auto-routes to your caseload</li>
+              <li><strong>Communication Templates</strong> — 14 pre-written parent letters, referral acknowledgments, progress updates</li>
+              <li><strong>CSV Import</strong> — bulk import from Google Forms or school referral systems</li>
+            </ul>
+            <strong>Privacy-first:</strong> All data stays on your device by default (no student PII in the cloud). Cloud sync available with a signed district DPA.
+          </div>
+          <div class="pc-compat">
+            <span class="pc-compat-tag">Works on any device</span>
+            <span class="pc-compat-tag">Installs as app</span>
+            <span class="pc-compat-tag">Works offline</span>
+            <span class="pc-compat-tag">FERPA compliant</span>
+            <span class="pc-compat-tag">SB 179 aligned</span>
+          </div>
+        </div>
+        <div class="pc-sidebar">
+          <span class="pc-price" style="font-size:1.3rem">$8<span style="font-size:.7rem;font-weight:400;color:var(--text-muted)">/mo</span></span>
+          <span style="font-size:.82rem;color:var(--text-muted);display:block;margin-bottom:4px">or $79/school year</span>
+          <span style="font-size:.72rem;color:var(--amber-light);display:block;margin-bottom:16px">14-day free trial included</span>
+          <button class="pc-buy" onclick="openBeaconRequestModal()" style="background:linear-gradient(135deg,#22c55e,#0e7490)">Request Access →</button>
+          <div class="pc-note">No credit card required.<br>Start your free trial today.</div>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
   // Waypoint CTA
   html += `<div class="store-section" style="text-align:center;padding-top:20px;padding-bottom:80px">
     <div style="background:var(--card-bg);border:1px solid var(--border-purple);border-radius:14px;padding:40px;max-width:680px;margin:0 auto;backdrop-filter:blur(8px)">
@@ -662,10 +710,115 @@ function handleHash() {
   }
 }
 
+// ── Beacon Request Access Modal ──
+function openBeaconRequestModal() {
+  document.getElementById('beacon-modal').classList.add('open');
+}
+function closeBeaconModal() {
+  document.getElementById('beacon-modal').classList.remove('open');
+}
+document.getElementById('beacon-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeBeaconModal();
+});
+
+async function submitBeaconRequest(e) {
+  e.preventDefault();
+  const btn = document.getElementById('beacon-submit-btn');
+  const msg = document.getElementById('beacon-msg');
+  btn.disabled = true;
+  btn.textContent = 'Submitting…';
+  msg.style.display = 'none';
+
+  const form = e.target;
+  const data = {
+    name: form.name.value.trim(),
+    email: form.email.value.trim(),
+    school_name: form.school_name.value.trim(),
+    district: form.district.value.trim(),
+    source: 'beacon_request',
+    product: 'Beacon — Elementary Counselor Platform',
+  };
+
+  try {
+    const res = await fetch('https://formspree.io/f/xpqjngpp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Submit failed');
+
+    // Show success
+    document.getElementById('beacon-form-content').style.display = 'none';
+    document.getElementById('beacon-success').style.display = 'block';
+  } catch (err) {
+    msg.textContent = 'Something went wrong. Please email support@clearpathedgroup.com instead.';
+    msg.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Request Access →';
+  }
+}
+
 renderProducts();
 handleHash();
 window.addEventListener('hashchange', handleHash);
 </script>
+
+<!-- BEACON REQUEST ACCESS MODAL -->
+<div class="modal-overlay" id="beacon-modal">
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-close" onclick="closeBeaconModal()">✕</button>
+
+    <div id="beacon-form-content">
+      <div style="text-align:center;margin-bottom:24px">
+        <div style="font-size:2rem;margin-bottom:8px">🔔</div>
+        <div style="font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:6px">Request Access to Beacon</div>
+        <div style="font-size:.85rem;color:var(--text-muted);line-height:1.6">Get a 14-day free trial — no credit card, no district approval needed. Just your school email.</div>
+      </div>
+
+      <form onsubmit="submitBeaconRequest(event)">
+        <div class="form-group">
+          <label class="form-label">Your Name *</label>
+          <input class="form-input" name="name" placeholder="Ms. Sarah Johnson" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">School Email *</label>
+          <input class="form-input" name="email" type="email" placeholder="sjohnson@school.edu" required>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="form-group">
+            <label class="form-label">School Name</label>
+            <input class="form-input" name="school_name" placeholder="Lincoln Elementary">
+          </div>
+          <div class="form-group">
+            <label class="form-label">District</label>
+            <input class="form-input" name="district" placeholder="Austin ISD">
+          </div>
+        </div>
+        <div id="beacon-msg" style="display:none;padding:10px 14px;background:rgba(185,28,28,.15);border:1px solid rgba(185,28,28,.3);border-radius:8px;font-size:.82rem;color:#fca5a5;margin-bottom:14px"></div>
+        <button id="beacon-submit-btn" class="pc-buy" type="submit" style="background:linear-gradient(135deg,#22c55e,#0e7490);width:100%">Request Access →</button>
+      </form>
+
+      <div style="text-align:center;margin-top:16px;font-size:.72rem;color:var(--text-muted)">
+        Questions? <a href="mailto:support@clearpathedgroup.com" style="color:var(--purple-light)">support@clearpathedgroup.com</a>
+      </div>
+    </div>
+
+    <div id="beacon-success" style="display:none;text-align:center;padding:20px 0">
+      <div style="font-size:2.4rem;margin-bottom:12px">✓</div>
+      <div style="font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;color:#4ade80;margin-bottom:8px">You're in!</div>
+      <div style="font-size:.88rem;color:var(--text-muted);line-height:1.6;margin-bottom:20px">
+        We'll send you access details at your school email — usually within one business day.
+      </div>
+      <div style="padding:14px 18px;background:rgba(42,122,80,.1);border:1px solid rgba(42,122,80,.3);border-radius:10px;font-size:.82rem;color:var(--text-muted);line-height:1.6;margin-bottom:20px">
+        <strong style="color:var(--text)">What happens next:</strong><br>
+        1. We'll email your trial access link<br>
+        2. Open Beacon on your phone or laptop<br>
+        3. Start tracking your caseload immediately
+      </div>
+      <button class="pc-buy" onclick="closeBeaconModal()" style="background:linear-gradient(135deg,#22c55e,#0e7490);width:auto;display:inline-block;padding:12px 32px">Got it →</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

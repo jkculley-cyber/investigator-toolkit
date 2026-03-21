@@ -9,6 +9,16 @@ const STATUS_COLORS = {
   decision: '#8b5cf6', disposition: '#14b8a6', closed: '#22c55e'
 };
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function escapeAttr(str) {
+  return String(str).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
 function businessDaysFromDate(startDate, count) {
   const d = new Date(startDate);
   let added = 0;
@@ -81,11 +91,12 @@ async function loadCase(caseId, container) {
   const statusSelect = container.querySelector('#cd-status-select');
   if (statusSelect) {
     statusSelect.value = c.status;
-    statusSelect.addEventListener('change', async () => {
+    // Use onchange instead of addEventListener to prevent duplicate listeners
+    statusSelect.onchange = async () => {
       c.status = statusSelect.value;
       c.updatedAt = now();
       await put('cases', c);
-    });
+    };
   }
 
   // MDR countdown for SPED
@@ -150,15 +161,15 @@ function sectionWrapper(num, title, content, open = false) {
 function renderSection1(c) {
   return sectionWrapper(1, 'Incident Overview', `
     <div class="form-grid readonly-grid">
-      <div><span class="form-label">Case ID:</span> <strong>${c.id}</strong></div>
-      <div><span class="form-label">School Year:</span> ${c.schoolYear || 'N/A'}</div>
-      <div><span class="form-label">Campus:</span> ${c.campus || 'N/A'}</div>
-      <div><span class="form-label">Date:</span> ${c.incidentDate || 'N/A'} (${c.dayOfWeek || ''})</div>
-      <div><span class="form-label">Time:</span> ${c.incidentTime || 'N/A'}</div>
-      <div><span class="form-label">Location:</span> ${c.location || 'N/A'}</div>
-      <div><span class="form-label">Investigator:</span> ${c.investigator || 'N/A'}</div>
-      <div><span class="form-label">Offense:</span> ${c.offenseCategory || 'N/A'}</div>
-      <div><span class="form-label">TEC:</span> ${c.tecReference || 'N/A'}</div>
+      <div><span class="form-label">Case ID:</span> <strong>${escapeHtml(c.id)}</strong></div>
+      <div><span class="form-label">School Year:</span> ${escapeHtml(c.schoolYear || 'N/A')}</div>
+      <div><span class="form-label">Campus:</span> ${escapeHtml(c.campus || 'N/A')}</div>
+      <div><span class="form-label">Date:</span> ${escapeHtml(c.incidentDate || 'N/A')} (${escapeHtml(c.dayOfWeek || '')})</div>
+      <div><span class="form-label">Time:</span> ${escapeHtml(c.incidentTime || 'N/A')}</div>
+      <div><span class="form-label">Location:</span> ${escapeHtml(c.location || 'N/A')}</div>
+      <div><span class="form-label">Investigator:</span> ${escapeHtml(c.investigator || 'N/A')}</div>
+      <div><span class="form-label">Offense:</span> ${escapeHtml(c.offenseCategory || 'N/A')}</div>
+      <div><span class="form-label">TEC:</span> ${escapeHtml(c.tecReference || 'N/A')}</div>
     </div>
     <button class="btn btn-sm" id="s1-edit" style="margin-top:0.75rem;">Edit</button>
   `, true);
@@ -170,10 +181,10 @@ function renderSection2(c) {
   if (c.is504) badges.push('<span class="badge badge-warning">504 Plan</span>');
   return sectionWrapper(2, 'Student Information', `
     <div class="form-grid readonly-grid">
-      <div><span class="form-label">Name:</span> <strong>${c.studentName || 'N/A'}</strong></div>
-      <div><span class="form-label">Grade:</span> ${c.grade || 'N/A'}</div>
-      <div><span class="form-label">Student ID:</span> ${c.studentId || 'N/A'}</div>
-      <div><span class="form-label">DOB:</span> ${c.dob || 'N/A'}</div>
+      <div><span class="form-label">Name:</span> <strong>${escapeHtml(c.studentName || 'N/A')}</strong></div>
+      <div><span class="form-label">Grade:</span> ${escapeHtml(c.grade || 'N/A')}</div>
+      <div><span class="form-label">Student ID:</span> ${escapeHtml(c.studentId || 'N/A')}</div>
+      <div><span class="form-label">DOB:</span> ${escapeHtml(c.dob || 'N/A')}</div>
       <div>${badges.length ? badges.join(' ') : 'No SPED/504'}</div>
     </div>
   `, true);
@@ -208,27 +219,27 @@ function immediateActionRow(key, label, actions, extraFields = []) {
   for (const f of extraFields) {
     const val = actions[key]?.[f.key] || '';
     if (f.type === 'select') {
-      extras += `<label class="form-label-inline">${f.label}:</label>
+      extras += `<label class="form-label-inline">${escapeHtml(f.label)}:</label>
         <select class="form-input form-input-sm" data-action="${key}" data-field="${f.key}">
           <option value="">Select...</option>
-          ${f.options.map(o => `<option value="${o}" ${val === o ? 'selected' : ''}>${o}</option>`).join('')}
+          ${f.options.map(o => `<option value="${escapeAttr(o)}" ${val === o ? 'selected' : ''}>${escapeHtml(o)}</option>`).join('')}
         </select>`;
     } else if (f.type === 'checkbox') {
-      extras += `<label class="form-label-inline"><input type="checkbox" data-action="${key}" data-field="${f.key}" ${val ? 'checked' : ''} /> ${f.label}</label>`;
+      extras += `<label class="form-label-inline"><input type="checkbox" data-action="${key}" data-field="${f.key}" ${val ? 'checked' : ''} /> ${escapeHtml(f.label)}</label>`;
     } else {
-      extras += `<label class="form-label-inline">${f.label}:</label>
-        <input type="text" class="form-input form-input-sm" data-action="${key}" data-field="${f.key}" value="${val}" />`;
+      extras += `<label class="form-label-inline">${escapeHtml(f.label)}:</label>
+        <input type="text" class="form-input form-input-sm" data-action="${key}" data-field="${f.key}" value="${escapeAttr(val)}" />`;
     }
   }
   return `
     <div class="checklist-item">
       <label>
         <input type="checkbox" data-action="${key}" data-field="done" ${checked} />
-        ${label}
+        ${escapeHtml(label)}
       </label>
       <span class="checklist-meta">
-        Time: <input type="text" class="form-input form-input-xs" data-action="${key}" data-field="time" value="${time}" placeholder="auto" readonly />
-        By: <input type="text" class="form-input form-input-sm" data-action="${key}" data-field="by" value="${by}" />
+        Time: <input type="text" class="form-input form-input-xs" data-action="${key}" data-field="time" value="${escapeAttr(time)}" placeholder="auto" readonly />
+        By: <input type="text" class="form-input form-input-sm" data-action="${key}" data-field="by" value="${escapeAttr(by)}" />
         ${extras}
       </span>
     </div>
@@ -252,7 +263,7 @@ function renderSection4(c, dueProcess) {
             </label>
             <span class="checklist-meta">
               Date: <input type="date" class="form-input form-input-sm" data-dp-id="${s.id}" data-field="date" value="${s.completedAt?.split('T')[0] || ''}" />
-              <input type="text" class="form-input form-input-sm" data-dp-id="${s.id}" data-field="notes" value="${s.notes || ''}" placeholder="Notes" />
+              <input type="text" class="form-input form-input-sm" data-dp-id="${s.id}" data-field="notes" value="${escapeAttr(s.notes || '')}" placeholder="Notes" />
             </span>
           </div>
         `;
@@ -269,8 +280,8 @@ function renderSection5(c, timeline) {
       <tbody id="s5-tbody">
         ${sorted.map(t => `
           <tr data-tl-id="${t.id}">
-            <td><input type="text" class="form-input form-input-sm" data-tl-field="time" value="${t.time || ''}" /></td>
-            <td><input type="text" class="form-input" data-tl-field="event" value="${t.event || ''}" /></td>
+            <td><input type="text" class="form-input form-input-sm" data-tl-field="time" value="${escapeAttr(t.time || '')}" /></td>
+            <td><input type="text" class="form-input" data-tl-field="event" value="${escapeAttr(t.event || '')}" /></td>
             <td><button class="btn btn-danger btn-sm tl-delete" data-tl-id="${t.id}">X</button></td>
           </tr>
         `).join('')}
@@ -304,7 +315,7 @@ function renderSection6(c, studentStatements) {
     <div id="s6-statement-area" style="${s.format === 'refused' ? 'display:none;' : ''}">
       <div class="form-group" style="margin-top:0.75rem;">
         <label class="form-label">Statement Content</label>
-        <textarea class="form-input" id="s6-content" rows="6">${s.content || ''}</textarea>
+        <textarea class="form-input" id="s6-content" rows="6">${escapeHtml(s.content || '')}</textarea>
       </div>
       <div class="form-group" style="margin-top:0.75rem;">
         <label class="form-label">Signature</label>
@@ -318,7 +329,7 @@ function renderSection6(c, studentStatements) {
       </div>
       <div class="form-group">
         <label class="form-label">Reason</label>
-        <textarea class="form-input" id="s6-refuseReason" rows="3">${s.refuseReason || ''}</textarea>
+        <textarea class="form-input" id="s6-refuseReason" rows="3">${escapeHtml(s.refuseReason || '')}</textarea>
       </div>
     </div>
     <button class="btn btn-primary btn-sm" id="s6-save" style="margin-top:1rem;">Save Student Statement</button>
@@ -340,24 +351,24 @@ function witnessCard(w, idx) {
       <div class="form-grid">
         <div class="form-group">
           <label class="form-label">Name</label>
-          <input type="text" class="form-input" data-wf="name" value="${w.name || ''}" />
+          <input type="text" class="form-input" data-wf="name" value="${escapeAttr(w.name || '')}" />
         </div>
         <div class="form-group">
           <label class="form-label">Role/Relationship</label>
-          <input type="text" class="form-input" data-wf="role" value="${w.role || ''}" />
+          <input type="text" class="form-input" data-wf="role" value="${escapeAttr(w.role || '')}" />
         </div>
         <div class="form-group">
           <label class="form-label">Interview Date/Time</label>
-          <input type="datetime-local" class="form-input" data-wf="interviewAt" value="${w.interviewAt || ''}" />
+          <input type="datetime-local" class="form-input" data-wf="interviewAt" value="${escapeAttr(w.interviewAt || '')}" />
         </div>
         <div class="form-group">
           <label class="form-label">Interviewed By</label>
-          <input type="text" class="form-input" data-wf="interviewedBy" value="${w.interviewedBy || ''}" />
+          <input type="text" class="form-input" data-wf="interviewedBy" value="${escapeAttr(w.interviewedBy || '')}" />
         </div>
       </div>
       <div class="form-group" style="margin-top:0.5rem;">
         <label class="form-label">Statement Content</label>
-        <textarea class="form-input" data-wf="content" rows="4">${w.content || ''}</textarea>
+        <textarea class="form-input" data-wf="content" rows="4">${escapeHtml(w.content || '')}</textarea>
       </div>
       <div class="form-group" style="margin-top:0.5rem;">
         <label class="form-label">Written statement obtained?</label>
@@ -380,16 +391,16 @@ function renderSection8(c, evidence) {
       <tbody id="s8-tbody">
         ${evidence.map(e => `
           <tr data-ev-id="${e.id}">
-            <td>${e.evidenceId || ''}</td>
-            <td><input type="text" class="form-input form-input-sm" data-evf="description" value="${e.description || ''}" /></td>
+            <td>${escapeHtml(e.evidenceId || '')}</td>
+            <td><input type="text" class="form-input form-input-sm" data-evf="description" value="${escapeAttr(e.description || '')}" /></td>
             <td><select class="form-input form-input-sm" data-evf="type">
               <option value="">Select...</option>
               ${['Photo/Video', 'Document', 'Physical Item', 'Digital/Electronic', 'Audio Recording', 'Written Statement', 'Other'].map(t =>
                 `<option value="${t}" ${e.type === t ? 'selected' : ''}>${t}</option>`
               ).join('')}
             </select></td>
-            <td><input type="text" class="form-input form-input-sm" data-evf="collectedBy" value="${e.collectedBy || ''}" /></td>
-            <td><input type="text" class="form-input form-input-sm" data-evf="storageLocation" value="${e.storageLocation || ''}" /></td>
+            <td><input type="text" class="form-input form-input-sm" data-evf="collectedBy" value="${escapeAttr(e.collectedBy || '')}" /></td>
+            <td><input type="text" class="form-input form-input-sm" data-evf="storageLocation" value="${escapeAttr(e.storageLocation || '')}" /></td>
             <td><button class="btn btn-danger btn-sm ev-delete" data-ev-id="${e.id}">X</button></td>
           </tr>
         `).join('')}
@@ -413,11 +424,11 @@ function renderSection9(c, findings) {
     <div class="form-grid" style="margin-top:0.75rem;">
       <div class="form-group">
         <label class="form-label">Mitigating Factors</label>
-        <textarea class="form-input" id="s9-mitigating" rows="3">${findings.mitigating || ''}</textarea>
+        <textarea class="form-input" id="s9-mitigating" rows="3">${escapeHtml(findings.mitigating || '')}</textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Aggravating Factors</label>
-        <textarea class="form-input" id="s9-aggravating" rows="3">${findings.aggravating || ''}</textarea>
+        <textarea class="form-input" id="s9-aggravating" rows="3">${escapeHtml(findings.aggravating || '')}</textarea>
       </div>
     </div>
 
@@ -430,14 +441,14 @@ function renderSection9(c, findings) {
       <div class="radio-group" id="s9-disposition-group">
         <label><input type="radio" name="s9-disposition" value="warning" ${findings.disposition === 'warning' ? 'checked' : ''} /> Warning / No removal</label>
         <label><input type="radio" name="s9-disposition" value="suspension" ${findings.disposition === 'suspension' ? 'checked' : ''} /> Suspension —
-          <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" max="3" value="${findings.suspensionDays || ''}" style="width:60px;" /> days (max 3)</label>
+          <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" max="3" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;" /> days (max 3)</label>
         <label><input type="radio" name="s9-disposition" value="discretionary_daep" ${findings.disposition === 'discretionary_daep' ? 'checked' : ''} /> Discretionary DAEP —
-          <input type="number" class="form-input form-input-xs" id="s9-daepDays" value="${findings.daepDays || ''}" style="width:60px;" /> days, Campus:
-          <input type="text" class="form-input form-input-sm" id="s9-daepCampus" value="${findings.daepCampus || ''}" /></label>
+          <input type="number" class="form-input form-input-xs" id="s9-daepDays" value="${escapeAttr(findings.daepDays || '')}" style="width:60px;" /> days, Campus:
+          <input type="text" class="form-input form-input-sm" id="s9-daepCampus" value="${escapeAttr(findings.daepCampus || '')}" /></label>
         <label><input type="radio" name="s9-disposition" value="mandatory_daep" ${findings.disposition === 'mandatory_daep' ? 'checked' : ''} /> Mandatory DAEP referral — forwarded to:
-          <input type="text" class="form-input form-input-sm" id="s9-mandatoryTo" value="${findings.mandatoryTo || ''}" /></label>
+          <input type="text" class="form-input form-input-sm" id="s9-mandatoryTo" value="${escapeAttr(findings.mandatoryTo || '')}" /></label>
         <label><input type="radio" name="s9-disposition" value="expulsion" ${findings.disposition === 'expulsion' ? 'checked' : ''} /> Mandatory Expulsion recommendation — forwarded to:
-          <input type="text" class="form-input form-input-sm" id="s9-expulsionTo" value="${findings.expulsionTo || ''}" /></label>
+          <input type="text" class="form-input form-input-sm" id="s9-expulsionTo" value="${escapeAttr(findings.expulsionTo || '')}" /></label>
       </div>
     </div>
     <button class="btn btn-primary btn-sm" id="s9-save" style="margin-top:1rem;">Save Findings</button>
@@ -453,8 +464,8 @@ function renderOffenseSpecific(c, findings) {
     <div class="card" style="margin-top:1rem;padding:1rem;background:#f0f9ff;border-left:3px solid #3b82f6;">
       <h3 style="margin-top:0;">Fighting/Assault Details</h3>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">Initiator</label><input type="text" class="form-input" id="s9o-initiator" value="${f.initiator || ''}" /></div>
-        <div class="form-group"><label class="form-label">Injury Description</label><input type="text" class="form-input" id="s9o-injury" value="${f.injury || ''}" /></div>
+        <div class="form-group"><label class="form-label">Initiator</label><input type="text" class="form-input" id="s9o-initiator" value="${escapeAttr(f.initiator || '')}" /></div>
+        <div class="form-group"><label class="form-label">Injury Description</label><input type="text" class="form-input" id="s9o-injury" value="${escapeAttr(f.injury || '')}" /></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-medical" ${f.medicalRequired ? 'checked' : ''} /> Medical attention required</label></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-weapon" ${f.weaponInvolved ? 'checked' : ''} /> Weapon involved</label></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-separation" ${f.separationOrder ? 'checked' : ''} /> Separation order issued</label></div>
@@ -471,7 +482,7 @@ function renderOffenseSpecific(c, findings) {
             <option value="">Select...</option>
             ${['Possession', 'Under influence', 'Distribution', 'Paraphernalia'].map(o => `<option value="${o}" ${f.nature === o ? 'selected' : ''}>${o}</option>`).join('')}
           </select></div>
-        <div class="form-group"><label class="form-label">Substance Description</label><input type="text" class="form-input" id="s9o-substance" value="${f.substance || ''}" /></div>
+        <div class="form-group"><label class="form-label">Substance Description</label><input type="text" class="form-input" id="s9o-substance" value="${escapeAttr(f.substance || '')}" /></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-impairment" ${f.impairment ? 'checked' : ''} /> Signs of impairment</label></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-sroInvolved" ${f.sroInvolved ? 'checked' : ''} /> SRO involved</label></div>
       </div>
@@ -482,9 +493,9 @@ function renderOffenseSpecific(c, findings) {
     <div class="card" style="margin-top:1rem;padding:1rem;background:#fef2f2;border-left:3px solid #ef4444;">
       <h3 style="margin-top:0;">Threat Assessment Details</h3>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">Threat Type</label><input type="text" class="form-input" id="s9o-threatType" value="${f.threatType || ''}" /></div>
-        <div class="form-group"><label class="form-label">Specificity</label><input type="text" class="form-input" id="s9o-specificity" value="${f.specificity || ''}" /></div>
-        <div class="form-group"><label class="form-label">Target</label><input type="text" class="form-input" id="s9o-target" value="${f.target || ''}" /></div>
+        <div class="form-group"><label class="form-label">Threat Type</label><input type="text" class="form-input" id="s9o-threatType" value="${escapeAttr(f.threatType || '')}" /></div>
+        <div class="form-group"><label class="form-label">Specificity</label><input type="text" class="form-input" id="s9o-specificity" value="${escapeAttr(f.specificity || '')}" /></div>
+        <div class="form-group"><label class="form-label">Target</label><input type="text" class="form-input" id="s9o-target" value="${escapeAttr(f.target || '')}" /></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-hb3" ${f.hb3Team ? 'checked' : ''} /> HB3 Threat Assessment Team convened</label></div>
         <div class="form-group"><label class="form-label">Threat Level (1-4)</label>
           <select class="form-input" id="s9o-threatLevel">
@@ -499,11 +510,11 @@ function renderOffenseSpecific(c, findings) {
     <div class="card" style="margin-top:1rem;padding:1rem;background:#fdf4ff;border-left:3px solid #a855f7;">
       <h3 style="margin-top:0;">Harassment/Bullying Details</h3>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">Harassment Type</label><input type="text" class="form-input" id="s9o-harassType" value="${f.harassType || ''}" /></div>
-        <div class="form-group"><label class="form-label">Basis</label><input type="text" class="form-input" id="s9o-basis" value="${f.basis || ''}" /></div>
+        <div class="form-group"><label class="form-label">Harassment Type</label><input type="text" class="form-input" id="s9o-harassType" value="${escapeAttr(f.harassType || '')}" /></div>
+        <div class="form-group"><label class="form-label">Basis</label><input type="text" class="form-input" id="s9o-basis" value="${escapeAttr(f.basis || '')}" /></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-pattern" ${f.pattern ? 'checked' : ''} /> Pattern of behavior</label></div>
-        <div class="form-group"><label class="form-label">Target Impact</label><input type="text" class="form-input" id="s9o-targetImpact" value="${f.targetImpact || ''}" /></div>
-        <div class="form-group"><label class="form-label">Cyberbullying Platform</label><input type="text" class="form-input" id="s9o-cyberPlatform" value="${f.cyberPlatform || ''}" /></div>
+        <div class="form-group"><label class="form-label">Target Impact</label><input type="text" class="form-input" id="s9o-targetImpact" value="${escapeAttr(f.targetImpact || '')}" /></div>
+        <div class="form-group"><label class="form-label">Cyberbullying Platform</label><input type="text" class="form-input" id="s9o-cyberPlatform" value="${escapeAttr(f.cyberPlatform || '')}" /></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-screenshots" ${f.screenshots ? 'checked' : ''} /> Screenshots obtained</label></div>
       </div>
     </div>`;
@@ -513,9 +524,9 @@ function renderOffenseSpecific(c, findings) {
     <div class="card" style="margin-top:1rem;padding:1rem;background:#f0fdf4;border-left:3px solid #22c55e;">
       <h3 style="margin-top:0;">General Misconduct Details</h3>
       <div class="form-grid">
-        <div class="form-group"><label class="form-label">SCOC Level</label><input type="text" class="form-input" id="s9o-scocLevel" value="${f.scocLevel || ''}" /></div>
+        <div class="form-group"><label class="form-label">SCOC Level</label><input type="text" class="form-input" id="s9o-scocLevel" value="${escapeAttr(f.scocLevel || '')}" /></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-repeat" ${f.repeatOffense ? 'checked' : ''} /> Repeat offense</label></div>
-        <div class="form-group"><label class="form-label">Prior Interventions</label><textarea class="form-input" id="s9o-priorInterventions" rows="2">${f.priorInterventions || ''}</textarea></div>
+        <div class="form-group"><label class="form-label">Prior Interventions</label><textarea class="form-input" id="s9o-priorInterventions" rows="2">${escapeHtml(f.priorInterventions || '')}</textarea></div>
       </div>
     </div>`;
   }
@@ -554,11 +565,11 @@ function renderSection10(c) {
     <div class="form-grid">
       <div class="form-group">
         <label class="form-label">Investigating Administrator</label>
-        <input type="text" class="form-input" id="s10-adminName" value="${cert.adminName || c.investigator || ''}" />
+        <input type="text" class="form-input" id="s10-adminName" value="${escapeAttr(cert.adminName || c.investigator || '')}" />
       </div>
       <div class="form-group">
         <label class="form-label">Title</label>
-        <input type="text" class="form-input" id="s10-adminTitle" value="${cert.adminTitle || ''}" />
+        <input type="text" class="form-input" id="s10-adminTitle" value="${escapeAttr(cert.adminTitle || '')}" />
       </div>
     </div>
     <div class="form-group" style="margin-top:0.75rem;">
@@ -574,7 +585,7 @@ function renderSection10(c) {
     <div class="form-grid">
       <div class="form-group">
         <label class="form-label">Reviewed By (optional)</label>
-        <input type="text" class="form-input" id="s10-reviewerName" value="${cert.reviewerName || ''}" />
+        <input type="text" class="form-input" id="s10-reviewerName" value="${escapeAttr(cert.reviewerName || '')}" />
       </div>
       <div class="form-group">
         <label class="form-label">Review Date</label>
@@ -1024,9 +1035,7 @@ function attachSection10(container, c) {
     alert('Certification saved.');
   });
 
-  container.querySelector('#s10-sig-clear')?.addEventListener('click', () => {
-    clearCanvas(container, 's10-sig');
-  });
+  // Note: s10-sig-clear listener is already attached by initSignatureCanvas
 }
 
 // ==================== Signature Canvas ====================

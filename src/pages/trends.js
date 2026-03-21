@@ -3,6 +3,12 @@
  */
 import { getAll } from '../db.js';
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 const CHART_COLORS = [
   '#2A9D8F', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6',
   '#14b8a6', '#ec4899', '#f97316', '#6366f1', '#22c55e'
@@ -298,9 +304,9 @@ function renderRepeatOffenders(cases) {
     const offenses = [...new Set(arr.map(c => c.offenseCategory).filter(Boolean))].join(', ');
     return `
       <tr>
-        <td><strong>${name}</strong></td>
+        <td><strong>${escapeHtml(name)}</strong></td>
         <td style="text-align:center;"><span class="badge" style="background:#fee2e2;color:#991b1b;">${arr.length}</span></td>
-        <td>${offenses || '—'}</td>
+        <td>${escapeHtml(offenses || '—')}</td>
       </tr>
     `;
   }).join('');

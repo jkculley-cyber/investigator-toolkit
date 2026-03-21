@@ -148,9 +148,9 @@ async function loadDashboard() {
       const statusColor = STATUS_COLORS[c.status] || '#9ca3af';
       return `
         <tr class="clickable-row" data-case-id="${c.id}">
-          <td><strong>${c.id}</strong></td>
-          <td>${c.studentName || 'N/A'}</td>
-          <td>${c.offenseCategory || 'N/A'}</td>
+          <td><strong>${escapeHtml(c.id)}</strong></td>
+          <td>${escapeHtml(c.studentName || 'N/A')}</td>
+          <td>${escapeHtml(c.offenseCategory || 'N/A')}</td>
           <td><span class="badge" style="background:${statusColor};color:#fff;">${STATUS_LABELS[c.status] || c.status}</span></td>
           <td>${daysOpen}</td>
         </tr>
@@ -171,4 +171,10 @@ async function loadDashboard() {
 function setText(id, value) {
   const el = document.getElementById(id);
   if (el) el.textContent = value;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }

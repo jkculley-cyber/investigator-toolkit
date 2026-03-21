@@ -85,6 +85,12 @@ async function loadContacts(container) {
   }
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function filterAndRender(container) {
   const methodFilter = container.querySelector('#contacts-filter-method')?.value || '';
   const ackFilter = container.querySelector('#contacts-filter-ack')?.value || '';
@@ -119,14 +125,14 @@ function filterAndRender(container) {
 
     return `
       <tr>
-        <td>${c.contactDate || c.createdAt?.split('T')[0] || '—'}</td>
+        <td>${c.contactDate || (c.createdAt ? c.createdAt.split('T')[0] : '—')}</td>
         <td><a href="#case/${c.caseId}" style="color:var(--teal);font-weight:600;text-decoration:none;">${c.caseId}</a></td>
-        <td>${caseRec.studentName || '—'}</td>
-        <td>${c.contactPerson || '—'}</td>
-        <td>${c.relationship || '—'}</td>
-        <td>${c.method || '—'}</td>
+        <td>${escapeHtml(caseRec.studentName || '—')}</td>
+        <td>${escapeHtml(c.contactPerson || '—')}</td>
+        <td>${escapeHtml(c.relationship || '—')}</td>
+        <td>${escapeHtml(c.method || '—')}</td>
         <td>${ackBadge}</td>
-        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${c.notes || '—'}</td>
+        <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(c.notes || '—')}</td>
       </tr>
     `;
   }).join('');

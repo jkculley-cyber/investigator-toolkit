@@ -58,6 +58,12 @@ async function loadAppeals(container) {
   }
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function renderAppeals(container) {
   const contentEl = container.querySelector('#appeals-content');
   if (!contentEl) return;
@@ -112,11 +118,11 @@ function renderAppeals(container) {
                   return `
                     <tr>
                       <td><a href="#case/${a.caseId}" style="color:var(--teal);font-weight:600;text-decoration:none;">${a.caseId}</a></td>
-                      <td>${caseRec.studentName || '—'}</td>
+                      <td>${escapeHtml(caseRec.studentName || '—')}</td>
                       <td>${a.filedDate || '—'}</td>
                       <td>${a.hearingDate || '—'}</td>
                       <td><span class="badge" style="background:${outColor};color:#fff;">${outLabel}</span></td>
-                      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${a.notes || '—'}</td>
+                      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(a.notes || '—')}</td>
                     </tr>
                   `;
                 }).join('')}

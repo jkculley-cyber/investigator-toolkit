@@ -220,6 +220,175 @@ tbody tr:nth-child(even):hover { background: var(--gray-50); }
   .form-row { grid-template-columns: 1fr; }
 }
 
+/* --- Page Header --- */
+.page-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;
+}
+.page-header h1 {
+  font-size: 1.25rem; font-weight: 700; color: var(--gray-800); margin: 0;
+}
+.page-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
+
+/* --- Card Header / Body --- */
+.card-header {
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--gray-200);
+  margin-bottom: 0.75rem;
+}
+.card-header h2 { font-size: 1rem; font-weight: 700; color: var(--gray-800); margin: 0; }
+.card-body { /* no extra padding needed since .card already has padding */ }
+
+/* --- Form Grid / Labels / Inputs --- */
+.form-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;
+}
+.form-label {
+  display: block; font-size: 0.8125rem; font-weight: 600;
+  color: var(--gray-700); margin-bottom: 0.25rem;
+}
+.form-label-inline {
+  display: inline; font-size: 0.8125rem; font-weight: 600;
+  color: var(--gray-700); margin-left: 0.5rem;
+}
+.form-input {
+  width: 100%; padding: 0.5rem 0.75rem;
+  border: 1px solid var(--gray-300); border-radius: 6px;
+  font-size: 0.875rem; font-family: inherit; color: var(--gray-800);
+  background: #fff; transition: border-color 0.15s;
+}
+.form-input:focus {
+  outline: none; border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(42,157,143,0.15);
+}
+.form-input-sm { width: auto; padding: 0.35rem 0.5rem; font-size: 0.8125rem; }
+.form-input-xs { width: auto; padding: 0.25rem 0.4rem; font-size: 0.75rem; }
+textarea.form-input { min-height: 80px; resize: vertical; }
+
+/* --- Intake Form --- */
+.intake-form .card + .card { margin-top: 1rem; }
+
+/* --- Toggle Buttons (SPED/504) --- */
+.toggle-group { display: inline-flex; border: 1px solid var(--gray-300); border-radius: 6px; overflow: hidden; }
+.toggle-btn {
+  padding: 0.4rem 1rem; font-size: 0.8125rem; font-weight: 600;
+  border: none; background: #fff; color: var(--gray-600);
+  cursor: pointer; transition: background 0.15s, color 0.15s;
+}
+.toggle-btn[data-active="true"] { background: var(--teal); color: #fff; }
+.toggle-btn:not(:last-child) { border-right: 1px solid var(--gray-300); }
+
+/* --- Alerts --- */
+.alert {
+  padding: 0.75rem 1rem; border-radius: 6px;
+  font-size: 0.8125rem; line-height: 1.5;
+}
+.alert-danger { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+.alert-warning { background: #fffbeb; border: 1px solid #fed7aa; color: #92400e; }
+
+/* --- Accordion (Case Detail) --- */
+.accordion-card { overflow: hidden; }
+.accordion-header {
+  display: flex; align-items: center; justify-content: space-between;
+  cursor: pointer; user-select: none; padding-bottom: 0;
+  border-bottom: none; margin-bottom: 0;
+}
+.accordion-header h2 { font-size: 0.9375rem; font-weight: 700; color: var(--gray-800); margin: 0; }
+.accordion-icon {
+  font-size: 1.25rem; font-weight: 700; color: var(--gray-400);
+  width: 24px; text-align: center; flex-shrink: 0;
+}
+.accordion-body { padding-top: 1rem; }
+
+/* --- Checklist (Immediate Actions, Due Process) --- */
+.checklist-item {
+  padding: 0.625rem 0; border-bottom: 1px solid var(--gray-100);
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap;
+}
+.checklist-item:last-child { border-bottom: none; }
+.checklist-item label {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.8125rem; font-weight: 500; color: var(--gray-700);
+  cursor: pointer; margin-bottom: 0;
+}
+.checklist-item label input[type="checkbox"] { flex-shrink: 0; }
+.checklist-meta {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.75rem; color: var(--gray-500); flex-wrap: wrap;
+}
+
+/* --- Radio Group --- */
+.radio-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.radio-group label {
+  display: flex; align-items: center; gap: 0.5rem;
+  font-size: 0.8125rem; font-weight: 500; color: var(--gray-700);
+  cursor: pointer; margin-bottom: 0;
+}
+
+/* --- Readonly Grid (Case Overview) --- */
+.readonly-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.5rem 1rem;
+  font-size: 0.8125rem; color: var(--gray-700);
+}
+.readonly-grid .form-label { display: inline; font-weight: 600; color: var(--gray-500); margin: 0; }
+
+/* --- Kanban Board (Pipeline) --- */
+.kanban-board {
+  display: flex; gap: 0.75rem; overflow-x: auto;
+  padding-bottom: 1rem; min-height: 400px;
+}
+.kanban-column {
+  min-width: 200px; flex: 1; background: var(--gray-50);
+  border-radius: var(--radius); display: flex; flex-direction: column;
+}
+.kanban-column-header {
+  padding: 0.75rem; display: flex; align-items: center;
+  justify-content: space-between; font-size: 0.8125rem;
+  font-weight: 700; color: var(--gray-700); border-radius: var(--radius) var(--radius) 0 0;
+}
+.kanban-count {
+  background: var(--gray-200); color: var(--gray-600);
+  padding: 0.1rem 0.5rem; border-radius: 9999px; font-size: 0.6875rem; font-weight: 700;
+}
+.kanban-cards {
+  flex: 1; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.5rem;
+  min-height: 60px; transition: background 0.15s;
+}
+.kanban-cards.kanban-drop-active { background: rgba(42,157,143,0.08); border-radius: 0 0 var(--radius) var(--radius); }
+.kanban-card {
+  background: #fff; border-radius: 6px; padding: 0.625rem 0.75rem;
+  box-shadow: var(--shadow); cursor: grab; transition: opacity 0.15s, box-shadow 0.15s;
+  border-left: 3px solid transparent;
+}
+.kanban-card:hover { box-shadow: var(--shadow-md); }
+.kanban-card-sped { border-left-color: var(--red); }
+.kanban-card-dragging { opacity: 0.5; }
+.kanban-card-id { font-size: 0.6875rem; font-weight: 700; color: var(--teal); }
+.kanban-card-name { font-size: 0.8125rem; font-weight: 600; color: var(--gray-800); margin-top: 0.15rem; }
+.kanban-card-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 0.6875rem; color: var(--gray-500); margin-top: 0.35rem;
+}
+
+/* --- Badge variants (danger/warning) --- */
+.badge-danger { background: #fee2e2; color: #991b1b; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+
+/* --- Metric card variants --- */
+.metric-card-danger { border-top: 3px solid var(--red); }
+.metric-card-warning { border-top: 3px solid var(--amber); }
+
+/* --- Metrics grid alias (dashboard uses metrics-grid) --- */
+.metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+
+/* --- Witness Card --- */
+.witness-card { position: relative; }
+
+/* --- Clickable Row --- */
+.clickable-row { cursor: pointer; }
+.clickable-row:hover { color: var(--teal); }
+
 /* --- Print --- */
 @media print {
   .sidebar, .header, .hamburger { display: none !important; }
@@ -227,4 +396,12 @@ tbody tr:nth-child(even):hover { background: var(--gray-50); }
   .content { padding: 0 !important; }
   .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
   .btn { display: none !important; }
+}
+
+/* --- Mobile Kanban --- */
+@media (max-width: 768px) {
+  .kanban-board { flex-direction: column; }
+  .kanban-column { min-width: unset; }
+  .page-header { flex-direction: column; align-items: flex-start; }
+  .metrics-grid { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
 }

@@ -39,7 +39,10 @@ export function render() {
   `;
 }
 
+let listenersAttached = false;
+
 export function attach(container) {
+  listenersAttached = false;
   loadPipeline(container);
 }
 
@@ -54,6 +57,38 @@ async function loadPipeline(container) {
       if (cards) cards.innerHTML = '';
     });
 
+    // Attach drop zone listeners ONCE
+    if (!listenersAttached) {
+      listenersAttached = true;
+      COLUMNS.forEach(col => {
+        const cardsEl = container.querySelector(`.kanban-cards[data-status="${col.key}"]`);
+        if (!cardsEl) return;
+
+        cardsEl.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          cardsEl.classList.add('kanban-drop-active');
+        });
+        cardsEl.addEventListener('dragleave', () => {
+          cardsEl.classList.remove('kanban-drop-active');
+        });
+        cardsEl.addEventListener('drop', async (e) => {
+          e.preventDefault();
+          cardsEl.classList.remove('kanban-drop-active');
+          const caseId = e.dataTransfer.getData('text/plain');
+          const newStatus = cardsEl.dataset.status;
+          // Re-fetch the case to get the latest state
+          const allCases = await getAll('cases');
+          const caseRec = allCases.find(c => c.id === caseId);
+          if (caseRec && caseRec.status !== newStatus) {
+            caseRec.status = newStatus;
+            caseRec.updatedAt = new Date().toISOString();
+            await put('cases', caseRec);
+            loadPipeline(container);
+          }
+        });
+      });
+    }
+
     // Group and render
     for (const col of COLUMNS) {
       const colCases = cases.filter(c => c.status === col.key);
@@ -62,28 +97,6 @@ async function loadPipeline(container) {
 
       const cardsEl = container.querySelector(`.kanban-cards[data-status="${col.key}"]`);
       if (!cardsEl) continue;
-
-      // Enable drop zone
-      cardsEl.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        cardsEl.classList.add('kanban-drop-active');
-      });
-      cardsEl.addEventListener('dragleave', () => {
-        cardsEl.classList.remove('kanban-drop-active');
-      });
-      cardsEl.addEventListener('drop', async (e) => {
-        e.preventDefault();
-        cardsEl.classList.remove('kanban-drop-active');
-        const caseId = e.dataTransfer.getData('text/plain');
-        const newStatus = cardsEl.dataset.status;
-        const caseRec = cases.find(c => c.id === caseId);
-        if (caseRec && caseRec.status !== newStatus) {
-          caseRec.status = newStatus;
-          caseRec.updatedAt = new Date().toISOString();
-          await put('cases', caseRec);
-          loadPipeline(container);
-        }
-      });
 
       // Sort by days open descending
       const sorted = [...colCases].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
@@ -98,10 +111,10 @@ async function loadPipeline(container) {
         card.draggable = true;
         card.dataset.caseId = c.id;
         card.innerHTML = `
-          <div class="kanban-card-id">${c.id}</div>
-          <div class="kanban-card-name">${c.studentName || 'Unknown'}</div>
+          <div class="kanban-card-id">${escapeHtml(c.id)}</div>
+          <div class="kanban-card-name">${escapeHtml(c.studentName || 'Unknown')}</div>
           <div class="kanban-card-meta">
-            <span>${icon} ${c.offenseCategory || ''}</span>
+            <span>${icon} ${escapeHtml(c.offenseCategory || '')}</span>
             <span>${daysOpen}d</span>
           </div>
         `;
@@ -123,4 +136,10 @@ async function loadPipeline(container) {
   } catch (err) {
     console.error('Pipeline load error:', err);
   }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }

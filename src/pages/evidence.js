@@ -74,6 +74,12 @@ async function loadEvidence(container) {
   }
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function filterAndRender(container) {
   const holdFilter = container.querySelector('#ev-filter-hold')?.value || '';
   const sortDir = container.querySelector('#ev-sort')?.value || 'newest';
@@ -109,12 +115,12 @@ function filterAndRender(container) {
       <tr>
         <td>${i + 1}</td>
         <td><a href="#case/${e.caseId}" style="color:var(--teal);font-weight:600;text-decoration:none;">${e.caseId}</a></td>
-        <td>${e.description || '—'}</td>
-        <td>${e.type || '—'}</td>
-        <td>${e.collectedBy || '—'}</td>
-        <td>${e.storageLocation || '—'}</td>
+        <td>${escapeHtml(e.description || '—')}</td>
+        <td>${escapeHtml(e.type || '—')}</td>
+        <td>${escapeHtml(e.collectedBy || '—')}</td>
+        <td>${escapeHtml(e.storageLocation || '—')}</td>
         <td>${holdBadge}</td>
-        <td>${e.collectedDate || e.createdAt?.split('T')[0] || '—'}</td>
+        <td>${e.collectedDate || (e.createdAt ? e.createdAt.split('T')[0] : '—')}</td>
       </tr>
     `;
   }).join('');

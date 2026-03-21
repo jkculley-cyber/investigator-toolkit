@@ -123,6 +123,12 @@ function filterAndRender(container) {
   renderTable(container, filtered);
 }
 
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
 function renderTable(container, cases) {
   const tbody = container.querySelector('#cases-body');
   if (!tbody) return;
@@ -142,9 +148,9 @@ function renderTable(container, cases) {
 
     return `
       <tr>
-        <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;"><strong>${c.id}</strong></td>
-        <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;">${c.studentName || 'N/A'}</td>
-        <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;">${c.offenseCategory || 'N/A'}</td>
+        <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;"><strong>${escapeHtml(c.id)}</strong></td>
+        <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;">${escapeHtml(c.studentName || 'N/A')}</td>
+        <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;">${escapeHtml(c.offenseCategory || 'N/A')}</td>
         <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;"><span class="badge" style="background:${statusColor};color:#fff;">${STATUS_LABELS[c.status] || c.status}</span></td>
         <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;">${c.incidentDate || 'N/A'}</td>
         <td class="clickable-row" data-case-id="${c.id}" style="cursor:pointer;">${flags.join(' ') || '—'}</td>

@@ -187,25 +187,18 @@ export async function importAllData(json) {
   const data = typeof json === 'string' ? JSON.parse(json) : json;
   const db = await openDB();
 
-  // Clear all stores then repopulate
+  // Clear and repopulate each store in a single transaction per store
   for (const storeName of STORES) {
     if (!data[storeName]) continue;
     await new Promise((resolve, reject) => {
       const tx = db.transaction(storeName, 'readwrite');
       const store = tx.objectStore(storeName);
       store.clear();
+      for (const record of data[storeName]) {
+        store.put(record);
+      }
       tx.oncomplete = () => resolve();
       tx.onerror = () => reject(tx.error);
     });
-    // Insert all records
-    for (const record of data[storeName]) {
-      await new Promise((resolve, reject) => {
-        const tx = db.transaction(storeName, 'readwrite');
-        const store = tx.objectStore(storeName);
-        const req = store.put(record);
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-      });
-    }
   }
 }

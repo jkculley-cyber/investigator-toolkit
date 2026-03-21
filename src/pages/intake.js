@@ -160,8 +160,8 @@ export function attach(container) {
   setupToggle(container, '504-yes', '504-no', '504-alert');
 
   // Cancel buttons
-  container.querySelector('#intake-cancel')?.addEventListener('click', () => { window.location.hash = '#dashboard'; });
-  container.querySelector('#intake-cancel-2')?.addEventListener('click', () => { window.location.hash = '#dashboard'; });
+  container.querySelector('#intake-cancel')?.addEventListener('click', () => { window.location.hash = '#'; });
+  container.querySelector('#intake-cancel-2')?.addEventListener('click', () => { window.location.hash = '#'; });
 
   // Submit
   container.querySelector('#intake-form')?.addEventListener('submit', handleSubmit);
@@ -193,10 +193,10 @@ async function initForm() {
     const schoolYear = await getSetting('schoolYear');
     setVal('f-schoolYear', schoolYear || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`);
 
-    const campus = await getSetting('defaultCampus');
+    const campus = await getSetting('campusName');
     if (campus) setVal('f-campus', campus);
 
-    const investigator = await getSetting('defaultInvestigator');
+    const investigator = await getSetting('adminName');
     if (investigator) setVal('f-investigator', investigator);
 
     // Default incident date to today

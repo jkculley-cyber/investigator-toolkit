@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-20 (Session AS — Store checkout dual-option, hero carousel, Apex Buy Now, ops URLs+PD tabs)
+> Last updated: 2026-03-20 (Session AT — Zelle admin dashboard, edit modal, subscription gating fixes)
 
 ---
 
@@ -12,7 +12,7 @@
 - **whitepaper.html:** 20-point DAEP compliance self-audit checklist, 5 sections with TEC citation callout boxes, scorecard with scoring bands (18–20 compliant / 14–17 at risk / <14 urgent), print-optimized CSS, "Save as PDF" button. Lead magnet for district sales.
 - **Hosting:** Cloudflare Pages — `waypoint` project (app, deployed via GitHub Actions on push to `main`), `cpeg-site` project (marketing site, deployed via GitHub Actions `deploy-clearpath-site.yml` on push to `main` — **do NOT use `node deploy-clearpath.mjs` Direct Upload**, it creates broken deployments)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
-- **Migrations applied:** 001–058 (production). Migration 058: `incident_audit_log` table with RLS. Migration 059 written but **NOT YET APPLIED** (`daep_campus_id` on incidents).
+- **Migrations applied:** 001–059 (production). Migration 058: `incident_audit_log` table with RLS. Migration 059: `daep_campus_id` on incidents (applied 2026-03-20).
 - **Demo seed data:** `supabase/seed_demo_video.mjs` — 12 active incidents, 6 transition plans, 57 days behavior tracking (Marcus/David/DeShawn), parent auth user `parent.marcus@gmail.com` / `Password123!` (Sandra Johnson, guardian of Marcus). `supabase/seed_navigator.mjs` — 13 referrals, 28 placements (6 completed + 2 active + 20 prior year), 6 supports, 3 campus goals seeded for Lone Star ISD (8 student risk scenarios: 3 HIGH, 3 MEDIUM, 2 LOW). 2 active placements (Marcus OSS, DeShawn ISS — no end_date) power the Active ISS/Active OSS tabs. `supabase/seed_meridian.mjs` — 9 SPED students, 4 IEPs, 2 504 plans, 3 ARD referrals, 1 CAP finding seeded for Lone Star ISD. Both Navigator and Meridian **enabled** for Lone Star ISD. Both seeders use Supabase REST API (no DB password needed).
 - **Demo video script:** `docs/brand/demo-video-script.md` — full production package rewritten Session T. 10 HeyGen blocks (≤840 chars each), student-first framing, T.E.A./I.E.P./P.E.I.M.S. abbreviations with periods. B-roll shot guide (7 clips) at bottom of script.
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
@@ -55,7 +55,7 @@
 - Audit log table (migration 035) + `src/lib/audit.js` helper
 - Data import wizard (campuses, students, staff, incidents)
 - Laserfiche DAEP report import — daily Excel sync, upserts by Instance ID
-- Waypoint internal admin panel (`/waypoint-admin`) — provision districts; Manage drawer; **Business Dashboard** (ARR/MRR/pipeline metrics, charts, contracts CRUD); **Product Hub** tab (product cards, 8 demo site links, demo credentials with copy/show-password toggle); **header URL pill** (live URL `https://waypoint.clearpathedgroup.com/waypoint-admin` with copy + open buttons); **Partner Chat** floating bubble (bottom-right, polls ops Supabase `xbpuqaqpcbixxodblaes` messages table every 5s, sender=Kim)
+- Waypoint internal admin panel (`/waypoint-admin`) — provision districts; Manage drawer; **Business Dashboard** (ARR/MRR/pipeline metrics, charts, contracts CRUD); **Product Hub** tab (product cards, 8 demo site links, demo credentials with copy/show-password toggle); **header URL pill** (live URL `https://waypoint.clearpathedgroup.com/waypoint-admin` with copy + open buttons); **Partner Chat** floating bubble (bottom-right, polls ops Supabase `xbpuqaqpcbixxodblaes` messages table every 5s, sender=Kim); **Apex tab** — 6 metric cards (total/paid/trial/gated/new/pending), principals table with status + paid_through + activate/deactivate actions, **Edit modal** (name/school/district/status/paid_through)
 - Password reset flow (`/reset-password`)
 - Error boundary — crash recovery screen
 - **PWA** — `manifest.json` + service worker + Apple meta tags; installable on iOS/Android/Chrome desktop
@@ -104,12 +104,11 @@
 
 ## Next Session Priority
 
-1. **Apply Apex migrations 009 + 010** — framework columns + subscription columns (SQL Editor on `jvjsotlyvrzhsbgcsdfw`).
-2. **Build Kim admin panel** — mark principals as `active` with `paid_through` date after Zelle payment confirmation.
-3. **Apply migration 059** — `daep_campus_id` column on incidents (SQL Editor). Required for DAEP campus picker.
-4. **Remaining audit bugs** — #9 (generate-communication no auth), #10 (CORS too permissive), #11 (password verify).
-5. **Navigator MVP** — Disproportionality by demographics, SIS import mappers, real-time alerts.
-6. **SPF record** — add `include:spf.resend.com` to clearpathedgroup.com DNS.
+1. **Deploy updated Apex edge functions** — 7 app-facing functions need redeployment for CORS + auth changes from Session AS.
+2. **CSV roster import** for Apex — teachers bulk upload.
+3. **Mobile optimization** for Apex.
+4. **Navigator enhancements** — Disproportionality by demographics, SIS import mappers.
+5. **SPF record** — add `include:spf.resend.com` to clearpathedgroup.com DNS.
 
 ---
 
@@ -142,7 +141,7 @@
 - **Supabase ref:** `jvjsotlyvrzhsbgcsdfw` (separate project — different auth pool from Waypoint)
 - **DB password:** `ApexClearPath2025!`
 - **Auth:** OTP code entry (6-digit) — magic link kept as fallback. Resend SMTP configured. `shouldCreateUser` removed so new users get auth accounts on first sign-in.
-- **Migrations applied:** 001 (core schema), 002 (pg_cron morning brief scheduler), `marketing_sends` table (SQL Editor). **009 + 010 NOT YET APPLIED** (framework columns + subscription columns)
+- **Migrations applied:** 001 (core schema), 002 (pg_cron morning brief scheduler), 009 (framework + IB columns), 010 (subscription_status/paid_through/trial_started_at), `marketing_sends` table (SQL Editor)
 - **Edge Functions deployed:** `transcribe-observation`, `generate-coaching-draft`, `send-observation-feedback`, `generate-morning-brief`, `send-marketing-blast`, `send-welcome-email`, `approve-access` (redeployed Session AR — OTP code instructions)
 - **Secrets set:** `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, `RESEND_API_KEY`
 - **Supabase PAT:** Refreshed via `npx supabase login` (Session AR) — CLI authenticated locally
@@ -188,7 +187,7 @@
 - Partner briefing doc — `docs/partner-briefing-03182026.md` for Melissa.
 - Clearpath website resources feature — dropdown nav + `resources.html` page.
 
-**Apex Pending:** Apply migration 009+010 (framework+subscription columns) · Build Kim admin panel for Zelle payment activation · CSV roster import · Mobile optimization · Quick capture · SPF record (manual, needs DNS:Edit CF token)
+**Apex Pending:** ~~Build Kim admin panel for Zelle payment activation~~ ✅ Done (Session AT) · Deploy edge functions (CORS+auth) · CSV roster import · Mobile optimization · Quick capture · SPF record (manual, needs DNS:Edit CF token)
 
 ---
 

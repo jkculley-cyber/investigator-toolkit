@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Navigator — ISS/OSS Student Behavior Tracking | Clear Path Education Group</title>
+<meta name="description" content="Navigator tracks ISS and OSS referrals, placements, and supports — with risk scoring, escalation detection, and disproportionality analytics built in.">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep-purple:#1a0a2e; --dark-bg:#0e0618; --mid-purple:#2d1054;
+    --purple:#6b2fa0; --purple-light:#9b5fd4; --amber:#e8862a;
+    --amber-light:#f5b050; --amber-glow:#ffcc66; --orange:#d4541a;
+    --text:#f0e6d3; --text-muted:rgba(240,230,211,0.6);
+    --border:rgba(232,134,42,0.2); --border-purple:rgba(107,47,160,0.35);
+    --card-bg:rgba(26,10,46,0.7);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{font-family:'Raleway',sans-serif;background:var(--dark-bg);color:var(--text);min-height:100vh}
+  body::before{content:'';position:fixed;inset:0;z-index:0;background:
+    radial-gradient(ellipse at 20% 20%,rgba(107,47,160,.15) 0%,transparent 50%),
+    radial-gradient(ellipse at 80% 80%,rgba(212,84,26,.1) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 50%,rgba(26,10,46,1) 0%,#0e0618 100%);
+    pointer-events:none}
+
+  nav{position:fixed;top:0;width:100%;z-index:200;background:rgba(14,6,24,.92);
+    backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
+    padding:0 5%;display:flex;align-items:center;justify-content:space-between;height:70px}
+  .nav-logo{display:flex;align-items:center;gap:14px;text-decoration:none}
+  .nav-logo img{height:44px;width:44px;object-fit:contain;border-radius:8px}
+  .nav-logo-text .name{font-family:'Cinzel',serif;font-size:.95rem;font-weight:700;
+    background:linear-gradient(90deg,var(--amber-light),var(--amber-glow));
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;display:block}
+  .nav-logo-text .sub{font-size:.6rem;font-weight:600;color:var(--text-muted);letter-spacing:.12em;text-transform:uppercase;display:block}
+  .nav-back{font-size:.8rem;font-weight:600;color:var(--text-muted);text-decoration:none;letter-spacing:.06em;text-transform:uppercase;transition:color .2s}
+  .nav-back:hover{color:var(--amber-light)}
+
+  .hero{position:relative;z-index:1;padding:120px 5% 60px;text-align:center;max-width:900px;margin:0 auto}
+  .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(232,134,42,.1);border:1px solid rgba(232,134,42,.3);color:var(--amber-light);padding:6px 16px;border-radius:99px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px}
+  .hero-badge span{width:6px;height:6px;background:var(--amber);border-radius:50%;box-shadow:0 0 8px var(--amber)}
+  .hero h1{font-family:'Cinzel',serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:900;line-height:1.15;margin-bottom:16px;
+    background:linear-gradient(160deg,var(--amber-glow),var(--amber-light),var(--text));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero p{font-size:1rem;color:var(--text-muted);line-height:1.7;max-width:640px;margin:0 auto 32px}
+  .hero-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn-primary{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:8px;font-weight:700;font-size:.88rem;text-decoration:none;border:none;cursor:pointer;
+    background:linear-gradient(135deg,var(--amber),var(--orange));color:white;font-family:'Raleway',sans-serif;letter-spacing:.04em;transition:transform .2s,box-shadow .2s}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 24px rgba(232,134,42,.5)}
+  .btn-ghost{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none;
+    background:transparent;border:1px solid var(--border-purple);color:var(--purple-light);font-family:'Raleway',sans-serif;letter-spacing:.04em;transition:all .2s}
+  .btn-ghost:hover{border-color:var(--amber);color:var(--amber-light);background:rgba(232,134,42,.06)}
+
+  section{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:60px 5%}
+  .section-label{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
+  .section-title{font-family:'Cinzel',serif;font-size:clamp(1.3rem,3vw,1.8rem);font-weight:700;color:var(--text);margin-bottom:16px}
+
+  .screenshot-placeholder{width:100%;max-width:720px;margin:0 auto 40px;aspect-ratio:16/9;border-radius:14px;border:2px solid rgba(20,184,166,.5);display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,#0a1e2e,#0d2a3a);box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  .screenshot-placeholder .label{font-size:.9rem;color:var(--text-muted);margin-bottom:8px}
+  .screenshot-placeholder .hint{font-size:.72rem;color:rgba(240,230,211,.3)}
+
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-bottom:40px}
+  .feature-card{background:var(--card-bg);border:1px solid var(--border-purple);border-radius:12px;padding:22px;backdrop-filter:blur(8px);transition:border-color .2s}
+  .feature-card:hover{border-color:var(--amber)}
+  .feature-card h3{font-size:.9rem;font-weight:700;color:var(--text);margin:0 0 6px}
+  .feature-card p{font-size:.82rem;color:var(--text-muted);line-height:1.6;margin:0}
+
+  .founding-card{background:linear-gradient(135deg,rgba(232,134,42,.08),rgba(26,10,46,.7));border:2px solid rgba(232,134,42,.3);border-radius:16px;padding:40px;text-align:center;margin-bottom:40px}
+  .founding-card h2{font-family:'Cinzel',serif;font-size:1.4rem;font-weight:800;color:var(--text);margin:0 0 12px}
+  .founding-card p{font-size:.9rem;color:var(--text-muted);line-height:1.7;max-width:560px;margin:0 auto 24px}
+
+  .pricing-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:600px;margin:0 auto 32px}
+  .price-card{border:1px solid var(--border-purple);border-radius:12px;padding:24px;text-align:center;background:rgba(0,0,0,.15)}
+  .price-card .amount{font-family:'Cinzel',serif;font-size:1.8rem;font-weight:900;color:var(--text)}
+  .price-card .period{font-size:.82rem;color:var(--text-muted);margin-top:4px}
+
+  footer{position:relative;z-index:1;background:#060310;border-top:1px solid var(--border-purple);padding:32px 5%;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+  footer p{font-size:.75rem;color:rgba(240,230,211,.25)}
+  footer a{font-size:.75rem;color:var(--text-muted);text-decoration:none}
+  footer a:hover{color:var(--amber-light)}
+
+  @media(max-width:768px){
+    .hero{padding:100px 5% 40px}
+    .features{grid-template-columns:1fr}
+    .pricing-row{grid-template-columns:1fr}
+    .hero-actions{flex-direction:column;align-items:center}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="/">
+    <img src="Waypoint_Behavioral_Solutions_logo_design.jpeg" alt="Clear Path" />
+    <div class="nav-logo-text">
+      <span class="name">Clear Path Education Group</span>
+      <span class="sub">Pathways to Student Success</span>
+    </div>
+  </a>
+  <a class="nav-back" href="/">← Back to Home</a>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge"><span></span> ISS/OSS Behavior Tracking</div>
+  <h1>Know which students are escalating before they reach DAEP.</h1>
+  <p>Navigator tracks ISS and OSS referrals, placements, and supports — with risk scoring, escalation detection, and disproportionality analytics built in.</p>
+  <div class="hero-actions">
+    <a href="mailto:support@clearpathedgroup.com?subject=Navigator%20Demo%20Request" class="btn-primary">Request a Demo →</a>
+    <a href="https://waypoint.clearpathedgroup.com" class="btn-ghost" target="_blank">View Live App →</a>
+  </div>
+</div>
+
+<!-- SCREENSHOT -->
+<section>
+  <div class="section-label" style="text-align:center">Product Preview</div>
+  <div class="section-title" style="text-align:center;margin-bottom:24px">See the Navigator dashboard</div>
+  <div class="screenshot-placeholder">
+    <div class="label">Dashboard screenshot coming soon</div>
+    <div class="hint">Drop your screenshot image here</div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section>
+  <div class="section-label" style="text-align:center">What Navigator Does</div>
+  <div class="section-title" style="text-align:center;margin-bottom:28px">Catch escalation patterns before they become DAEP placements.</div>
+  <div class="features">
+    <div class="feature-card">
+      <h3>Teacher Referral Intake</h3>
+      <p>Urgency levels, concern categories, and campus routing — teachers document, administrators triage.</p>
+    </div>
+    <div class="feature-card">
+      <h3>ISS/OSS Placement Tracking</h3>
+      <p>Active, completed, and overdue placements with days served. Know who's where and for how long.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Student Risk Scoring</h3>
+      <p>0–100 risk score based on referral frequency, suspensions, and attendance patterns. Prioritize who needs help now.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Escalation Engine</h3>
+      <p>Flags ISS → OSS → DAEP patterns before they happen. Early warning gives you time to intervene.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Support Assignments</h3>
+      <p>Track interventions, assigned staff, and effectiveness measurement. Know what's working and what isn't.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Skill Gap Map</h3>
+      <p>Identifies which behavioral skills need campus-wide intervention based on referral patterns.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Disproportionality Radar</h3>
+      <p>Surfaces equity concerns by race, gender, and SPED status. Catch disproportionate discipline before TEA does.</p>
+    </div>
+    <div class="feature-card">
+      <h3>Campus Goals</h3>
+      <p>Set targets, track progress, and compare year-over-year. Data-driven discipline improvement for your campus.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="founding-card">
+    <div style="font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:14px">Pricing</div>
+    <h2>Navigator for Your Campus or District</h2>
+    <p>Starting at $2,500/yr — available for individual campuses or district-wide deployment.</p>
+    <div class="pricing-row" style="max-width:300px">
+      <div class="price-card" style="border-color:var(--amber)">
+        <div class="amount">$2,500</div>
+        <div class="period">per year · Campus or District</div>
+      </div>
+    </div>
+    <a href="mailto:support@clearpathedgroup.com?subject=Navigator%20Demo%20Request&body=I'm%20interested%20in%20Navigator%20for%20my%20campus/district.%0A%0ADistrict:%0ARole:%0AEmail:" class="btn-primary" style="font-size:.92rem;padding:14px 28px">Request a Demo →</a>
+    <p style="font-size:.75rem;color:var(--text-muted);margin-top:16px">Questions? <a href="mailto:support@clearpathedgroup.com" style="color:var(--amber-light);text-decoration:none;font-weight:600">support@clearpathedgroup.com</a></p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2026 Clear Path Education Group, LLC · All rights reserved</p>
+  <div style="display:flex;gap:20px">
+    <a href="/">clearpathedgroup.com</a>
+    <a href="/store.html">Store</a>
+    <a href="mailto:support@clearpathedgroup.com">support@clearpathedgroup.com</a>
+  </div>
+</footer>
+
+</body>
+</html>

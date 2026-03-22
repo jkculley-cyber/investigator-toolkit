@@ -24,6 +24,7 @@ import {
   INCIDENT_LOCATIONS,
   DAEP_DOCUMENT_TYPES,
 } from '../lib/constants'
+import { notifyIncidentCreated } from '../lib/notifications'
 
 const STEPS_FULL = ['Student', 'Offense', 'Consequence', 'Details', 'Review']
 const STEPS_TEACHER = ['Student', 'Offense', 'Details', 'Review']
@@ -331,6 +332,14 @@ export default function NewIncidentPage() {
       if (error) throw error
 
       try { localStorage.removeItem(DRAFT_KEY) } catch {}
+
+      // Fire-and-forget notification to relevant staff
+      notifyIncidentCreated(
+        data.id,
+        formatStudentNameShort(formData.student),
+        formData.student.campus_name || '',
+        profile?.full_name || ''
+      )
 
       if (data.sped_compliance_required) {
         toast.success('Incident created. SPED compliance review required before placement.', { duration: 5000 })

@@ -38,6 +38,7 @@ import {
   OFFENSE_CATEGORY_LABELS,
   DAEP_DOCUMENT_LABELS,
 } from '../lib/constants'
+import { notifyApprovalChainStep } from '../lib/notifications'
 
 export default function IncidentDetailPage() {
   const { id } = useParams()
@@ -141,6 +142,7 @@ export default function IncidentDetailPage() {
       toast.error('Failed to approve incident')
     } else {
       toast.success('Incident approved')
+      notifyApprovalChainStep(incident.id, 'approved', formatStudentNameShort(student))
       refetch()
       refetchLog()
     }
@@ -196,6 +198,7 @@ export default function IncidentDetailPage() {
       toast.error('Failed to deny incident')
     } else {
       toast.success('Incident denied')
+      notifyApprovalChainStep(incident.id, 'denied', formatStudentNameShort(student))
       setDenyReason('')
       refetch()
       refetchLog()
@@ -212,6 +215,7 @@ export default function IncidentDetailPage() {
       toast.error('Failed to return incident')
     } else {
       toast.success('Incident returned for revision')
+      notifyApprovalChainStep(incident.id, 'returned', formatStudentNameShort(student))
       setReturnReason('')
       refetch()
       refetchLog()

@@ -43,6 +43,7 @@ const SettingsPage              = lazy(() => import('./pages/SettingsPage'))
 const NotificationPrefsPage     = lazy(() => import('./pages/SettingsPage').then(m => ({ default: m.NotificationPreferencesPage })))
 const UserManagementPage        = lazy(() => import('./pages/UserManagementPage'))
 const TeacherReferralPage       = lazy(() => import('./pages/TeacherReferralPage'))
+const QuickIncidentPage         = lazy(() => import('./pages/QuickIncidentPage'))
 const DaepScoringPage           = lazy(() => import('./pages/DaepScoringPage'))
 const CalendarPage              = lazy(() => import('./pages/CalendarPage'))
 const KioskPage                 = lazy(() => import('./pages/KioskPage'))
@@ -145,6 +146,7 @@ function App() {
                 <Route path="/daep/scoring" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="daep_dashboard"><DaepScoringPage /></RequireTier></RequireRole>} />
 
                 <Route path="/referral" element={<RequireRole roles={STAFF_ROLES}><TeacherReferralPage /></RequireRole>} />
+                <Route path="/quick-report" element={<RequireRole roles={STAFF_ROLES}><QuickIncidentPage /></RequireRole>} />
                 <Route path="/calendar" element={<RequireRole roles={STAFF_ROLES}><CalendarPage /></RequireRole>} />
 
                 <Route path="/reports" element={<RequireRole roles={[ROLES.ADMIN, ROLES.PRINCIPAL]}><RequireTier feature="reports"><ReportsPage /></RequireTier></RequireRole>} />

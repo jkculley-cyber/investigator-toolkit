@@ -55,3 +55,52 @@ export async function sendNotification({ to, subject, template, data }) {
     // Never block the caller
   }
 }
+
+/**
+ * Notify the next approver in the approval chain after an approve/deny/return action.
+ * Fire-and-forget — the Edge Function handles recipient lookup based on the
+ * incident's current approval chain step and notification preferences.
+ *
+ * @param {string} incidentId - The incident UUID
+ * @param {string} action     - One of 'approved', 'denied', 'returned'
+ * @param {string} studentName - Display name of the student
+ */
+export async function notifyApprovalChainStep(incidentId, action, studentName) {
+  try {
+    await supabase.functions.invoke('send-notification', {
+      body: {
+        type: 'approval_chain_update',
+        incident_id: incidentId,
+        action,
+        student_name: studentName,
+      }
+    })
+  } catch {
+    // non-blocking — notification failure should never block UI
+  }
+}
+
+/**
+ * Notify relevant staff when a new incident is created.
+ * Fire-and-forget — the Edge Function handles recipient lookup.
+ *
+ * @param {string} incidentId   - The new incident UUID
+ * @param {string} studentName  - Display name of the student
+ * @param {string} campusName   - Name of the campus where the incident occurred
+ * @param {string} reporterName - Display name of the person who reported
+ */
+export async function notifyIncidentCreated(incidentId, studentName, campusName, reporterName) {
+  try {
+    await supabase.functions.invoke('send-notification', {
+      body: {
+        type: 'incident_created',
+        incident_id: incidentId,
+        student_name: studentName,
+        campus_name: campusName,
+        reporter_name: reporterName,
+      }
+    })
+  } catch {
+    // non-blocking — notification failure should never block UI
+  }
+}

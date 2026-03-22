@@ -10,7 +10,7 @@ import { applyCampusScope } from '../lib/accessControl'
 import Topbar from '../components/layout/Topbar'
 import Card, { CardTitle } from '../components/ui/Card'
 import SetupChecklist from '../components/ui/SetupChecklist'
-import { ROLE_LABELS, ROLES, APPROVAL_CHAIN_STEPS, INCIDENT_STATUS_COLORS } from '../lib/constants'
+import { ROLE_LABELS, ROLES, APPROVAL_CHAIN_STEPS, STAFF_ROLES, INCIDENT_STATUS_COLORS } from '../lib/constants'
 import { getSchoolYearLabel, getSchoolYearStart, formatDate } from '../lib/utils'
 
 const APPROVAL_ROLES = APPROVAL_CHAIN_STEPS.map(s => s.role)
@@ -118,6 +118,74 @@ export default function DashboardPage() {
     }
     fetchPending()
   }, [districtId, profile?.role, isApprovalRole, scope])
+
+  // ── My Action Items ────────────────────────────────────────────────────────
+  const [actionItems, setActionItems] = useState({ pendingApproval: 0, teacherDrafts: 0, returned: 0 })
+  const [actionItemsLoaded, setActionItemsLoaded] = useState(false)
+  useEffect(() => {
+    if (!districtId || !profile?.id || scopeLoading) return
+    const fetchActionItems = async () => {
+      const role = profile.role
+      const promises = []
+
+      // 1. Incidents pending approval at the user's step in the approval chain
+      if (APPROVAL_ROLES.includes(role)) {
+        const p = (async () => {
+          let q = supabase
+            .from('incidents')
+            .select('id, approval_chain:daep_approval_chains!fk_incidents_approval_chain(id, current_step)')
+            .eq('district_id', districtId)
+            .eq('status', 'pending_approval')
+          q = applyCampusScope(q, scope)
+          const { data } = await q
+          return (data || []).filter(inc => inc.approval_chain?.current_step === role).length
+        })()
+        promises.push(p)
+      } else {
+        promises.push(Promise.resolve(0))
+      }
+
+      // 2. Teacher-submitted drafts needing consequence (admin/principal/ap only)
+      if ([ROLES.ADMIN, ROLES.PRINCIPAL, ROLES.AP].includes(role)) {
+        const p = (async () => {
+          let q = supabase
+            .from('incidents')
+            .select('id', { count: 'exact', head: true })
+            .eq('district_id', districtId)
+            .eq('status', 'draft')
+            .is('consequence_type', null)
+          q = applyCampusScope(q, scope)
+          const { count } = await q
+          return count ?? 0
+        })()
+        promises.push(p)
+      } else {
+        promises.push(Promise.resolve(0))
+      }
+
+      // 3. User's own returned incidents
+      {
+        const p = (async () => {
+          let q = supabase
+            .from('incidents')
+            .select('id', { count: 'exact', head: true })
+            .eq('district_id', districtId)
+            .eq('status', 'returned')
+            .eq('reported_by', profile.id)
+          const { count } = await q
+          return count ?? 0
+        })()
+        promises.push(p)
+      }
+
+      const [pendingApproval, teacherDrafts, returned] = await Promise.all(promises)
+      setActionItems({ pendingApproval, teacherDrafts, returned })
+      setActionItemsLoaded(true)
+    }
+    fetchActionItems()
+  }, [districtId, profile?.id, profile?.role, scopeLoading, scope])
+
+  const actionTotal = actionItems.pendingApproval + actionItems.teacherDrafts + actionItems.returned
 
   // ── Compliance ROI Widget ──────────────────────────────────────────────────
   const [roiStats, setRoiStats] = useState({ blocked: 0, approaching: 0, spedIncidents: 0 })

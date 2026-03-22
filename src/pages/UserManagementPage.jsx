@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { supabase } from '../lib/supabase'
@@ -8,6 +8,7 @@ import Card, { CardTitle } from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
 import Button from '../components/ui/Button'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
+import Modal from '../components/ui/Modal'
 import { ROLES, ROLE_LABELS, STAFF_ROLES } from '../lib/constants'
 
 export default function UserManagementPage() {
@@ -16,6 +17,7 @@ export default function UserManagementPage() {
   const [campuses, setCampuses] = useState([])
   const [loading, setLoading] = useState(true)
   const [showInvite, setShowInvite] = useState(false)
+  const [showBulkImport, setShowBulkImport] = useState(false)
   const [editingRole, setEditingRole] = useState(null) // profileId
   const serviceRoleKey = import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY
 
@@ -82,6 +84,9 @@ export default function UserManagementPage() {
         actions={
           <div className="flex items-center gap-2">
             <Link to="/settings" className="text-sm text-gray-500 hover:text-gray-700">← Settings</Link>
+            <Button size="sm" variant="secondary" onClick={() => setShowBulkImport(true)} disabled={!serviceRoleKey}>
+              Import Staff
+            </Button>
             <Button size="sm" onClick={() => setShowInvite(true)} disabled={!serviceRoleKey}>
               + Invite User
             </Button>
@@ -177,6 +182,18 @@ export default function UserManagementPage() {
           supabaseUrl={import.meta.env.VITE_SUPABASE_URL}
           onClose={() => setShowInvite(false)}
           onSuccess={() => { setShowInvite(false); fetchProfiles() }}
+        />
+      )}
+
+      {showBulkImport && (
+        <BulkStaffImportModal
+          districtId={districtId}
+          campuses={campuses}
+          existingEmails={profiles.map(p => p.email?.toLowerCase())}
+          serviceRoleKey={serviceRoleKey}
+          supabaseUrl={import.meta.env.VITE_SUPABASE_URL}
+          onClose={() => setShowBulkImport(false)}
+          onSuccess={() => { setShowBulkImport(false); fetchProfiles() }}
         />
       )}
     </div>

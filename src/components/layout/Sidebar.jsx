@@ -332,7 +332,7 @@ export default function Sidebar() {
                 <img src="/logo.png" alt="Waypoint" className="w-full h-full object-cover" />
               </div>
               <p className="text-base font-bold text-white tracking-wide">Waypoint</p>
-              <p className="text-[10px] text-gray-500 mt-0.5">Clear Path Education Group</p>
+              <p className="text-[10px] text-gray-500 mt-0.5">Clear Path Education Group, LLC</p>
             </div>
           ) : (
             /* Other products — compact header with icon + label */
@@ -345,7 +345,7 @@ export default function Sidebar() {
                   </div>
                   <div>
                     <p className="text-sm font-bold text-white leading-tight">Waypoint</p>
-                    <p className="text-[10px] text-gray-500">Clear Path Education Group</p>
+                    <p className="text-[10px] text-gray-500">Clear Path Education Group, LLC</p>
                   </div>
                 </div>
               )}
@@ -442,7 +442,7 @@ export default function Sidebar() {
               Sign Out
             </button>
             <p className="text-[10px] text-gray-700 text-center mt-3 leading-tight">
-              &copy; 2026 Clear Path Education Group, LLC
+              &copy; 2026 Clear Path Education Group, LLC, LLC
             </p>
           </div>
         )}

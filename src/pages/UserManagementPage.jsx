@@ -210,12 +210,28 @@ function BulkStaffImportModal({ districtId, campuses, existingEmails, serviceRol
   const [error, setError] = useState('')
   const fileRef = useRef(null)
 
+  function splitCSVLine(line) {
+    const result = []
+    let cur = '', inQuotes = false
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i]
+      if (ch === '"') {
+        if (inQuotes && line[i + 1] === '"') { cur += '"'; i++ }
+        else inQuotes = !inQuotes
+      } else if (ch === ',' && !inQuotes) {
+        result.push(cur.trim()); cur = ''
+      } else { cur += ch }
+    }
+    result.push(cur.trim())
+    return result
+  }
+
   function parseCSV(text) {
-    const lines = text.trim().split('\n').filter(l => l.trim())
+    const lines = text.trim().split(/\r?\n/).filter(l => l.trim())
     if (lines.length < 2) return { headers: [], rows: [] }
-    const hdrs = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/\s+/g, '_').replace(/[^a-z_]/g, ''))
+    const hdrs = splitCSVLine(lines[0]).map(h => h.replace(/^"|"$/g, '').trim().toLowerCase().replace(/\s+/g, '_').replace(/[^a-z_]/g, ''))
     const dataRows = lines.slice(1).map(line => {
-      const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''))
+      const vals = splitCSVLine(line)
       const row = {}
       hdrs.forEach((h, i) => { row[h] = vals[i] || '' })
       return row

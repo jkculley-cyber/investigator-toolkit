@@ -390,7 +390,7 @@ export default function DashboardPage() {
                 </a>
               )}
               {actionItems.teacherDrafts > 0 && (
-                <a href="/incidents?status=draft&referred=teacher" className="flex items-center gap-3 p-3 bg-amber-50 border border-amber-100 rounded-lg hover:bg-amber-100 transition-colors no-underline">
+                <a href="/incidents?status=draft" className="flex items-center gap-3 p-3 bg-amber-50 border border-amber-100 rounded-lg hover:bg-amber-100 transition-colors no-underline">
                   <span className="w-8 h-8 rounded-full bg-amber-500 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">{actionItems.teacherDrafts}</span>
                   <span className="text-sm font-medium text-gray-800">teacher referral{actionItems.teacherDrafts !== 1 ? 's' : ''} need consequence assignment</span>
                 </a>

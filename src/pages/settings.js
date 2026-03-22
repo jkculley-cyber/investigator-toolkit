@@ -74,6 +74,18 @@ export function render() {
       </div>
     </div>
 
+    <div class="card" style="margin-top:1.5rem;">
+      <div class="card-body">
+        <h3 style="font-size:0.9375rem;font-weight:700;margin-bottom:0.5rem;color:var(--gray-800);">Share Investigator Toolkit with a colleague</h3>
+        <p style="font-size:0.8125rem;color:var(--gray-600);margin-bottom:0.75rem;">Know another administrator who needs an investigation system?</p>
+        <textarea id="share-msg" rows="4" style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--gray-300);border-radius:8px;font-size:0.8125rem;line-height:1.6;resize:vertical;font-family:inherit;margin-bottom:0.75rem;">I've been using the Investigator Toolkit for campus investigations — it keeps everything organized with 10-section templates for every offense type. Works offline, no student data leaves the device. Free trial: investigatortoolkit.clearpathedgroup.com</textarea>
+        <div style="display:flex;gap:0.5rem;">
+          <button id="share-copy-btn" class="btn btn-primary" style="font-size:0.8125rem;">Copy Message</button>
+          <button id="share-email-btn" class="btn btn-outline" style="font-size:0.8125rem;">Email This</button>
+        </div>
+      </div>
+    </div>
+
     <div id="settings-toast" style="display:none;position:fixed;bottom:1.5rem;right:1.5rem;background:#065f46;color:#fff;padding:0.75rem 1.25rem;border-radius:8px;font-size:0.875rem;font-weight:600;box-shadow:var(--shadow-md);z-index:300;">
       Settings saved successfully.
     </div>
@@ -194,6 +206,23 @@ async function loadSettings() {
 function setVal(id, value) {
   const el = document.getElementById(id);
   if (el) el.value = value;
+}
+
+  // Share buttons
+  container.querySelector('#share-copy-btn')?.addEventListener('click', async () => {
+    const msg = container.querySelector('#share-msg')?.value || '';
+    try {
+      await navigator.clipboard.writeText(msg);
+      const btn = container.querySelector('#share-copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy Message'; }, 2000);
+    } catch { alert('Copy failed — please select the text and copy manually.'); }
+  });
+
+  container.querySelector('#share-email-btn')?.addEventListener('click', () => {
+    const msg = container.querySelector('#share-msg')?.value || '';
+    window.open(`mailto:?subject=${encodeURIComponent('Check out Investigator Toolkit')}&body=${encodeURIComponent(msg)}`);
+  });
 }
 
 function showToast(container) {

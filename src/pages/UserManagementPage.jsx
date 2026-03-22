@@ -200,6 +200,159 @@ export default function UserManagementPage() {
   )
 }
 
+/* ── Bulk Staff Import Modal ── */
+function BulkStaffImportModal({ districtId, campuses, existingEmails, serviceRoleKey, supabaseUrl, onClose, onSuccess }) {
+  const [csv, setCsv] = useState('')
+  const [rows, setRows] = useState([])
+  const [headers, setHeaders] = useState([])
+  const [importing, setImporting] = useState(false)
+  const [result, setResult] = useState(null)
+  const [error, setError] = useState('')
+  const fileRef = useRef(null)
+
+  function parseCSV(text) {
+    const lines = text.trim().split('\n').filter(l => l.trim())
+    if (lines.length < 2) return { headers: [], rows: [] }
+    const hdrs = lines[0].split(',').map(h => h.trim().toLowerCase().replace(/\s+/g, '_').replace(/[^a-z_]/g, ''))
+    const dataRows = lines.slice(1).map(line => {
+      const vals = line.split(',').map(v => v.trim().replace(/^"|"$/g, ''))
+      const row = {}
+      hdrs.forEach((h, i) => { row[h] = vals[i] || '' })
+      return row
+    }).filter(r => r.full_name || r.name || r.email)
+    return { headers: hdrs, rows: dataRows }
+  }
+
+  function handleFile(e) {
+    const file = e.target.files[0]
+    if (!file) return
+    const reader = new FileReader()
+    reader.onload = (ev) => {
+      const text = ev.target.result
+      setCsv(text)
+      const parsed = parseCSV(text)
+      setHeaders(parsed.headers)
+      setRows(parsed.rows)
+      setError('')
+    }
+    reader.readAsText(file)
+  }
+
+  const campusMap = Object.fromEntries(campuses.map(c => [c.name.toLowerCase(), c.id]))
+  const validRoles = STAFF_ROLES.map(r => r.toLowerCase())
+  const existingSet = new Set((existingEmails || []).map(e => (e || '').toLowerCase()))
+
+  const validated = rows.map(r => {
+    const name = r.full_name || r.name || ''
+    const email = (r.email || '').toLowerCase()
+    const role = (r.role || '').toLowerCase()
+    const campusName = (r.campus || r.campus_name || '').toLowerCase()
+    const campusId = campusMap[campusName] || null
+    const errors = []
+    if (!name.trim()) errors.push('Missing name')
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('Invalid email')
+    if (!validRoles.includes(role)) errors.push(`Invalid role "${r.role}"`)
+    if (!campusId && campusName) errors.push(`Campus "${r.campus || r.campus_name}" not found`)
+    if (existingSet.has(email)) errors.push('Email already exists')
+    return { name, email, role, campusName: r.campus || r.campus_name || '', campusId, errors, valid: errors.length === 0 }
+  })
+
+  const validCount = validated.filter(r => r.valid).length
+
+  async function handleImport() {
+    setImporting(true)
+    setError('')
+    let success = 0, skipped = 0, failures = []
+    const headers = { 'Content-Type': 'application/json', 'apikey': serviceRoleKey, 'Authorization': `Bearer ${serviceRoleKey}` }
+
+    for (const row of validated) {
+      if (!row.valid) { skipped++; continue }
+      try {
+        // Create auth user
+        const authRes = await fetch(`${supabaseUrl}/auth/v1/admin/users`, {
+          method: 'POST', headers,
+          body: JSON.stringify({ email: row.email, password: 'TempPass123!', email_confirm: true, user_metadata: { full_name: row.name } }),
+        })
+        const authData = await authRes.json()
+        if (!authRes.ok) throw new Error(authData.msg || authData.message || 'Auth failed')
+        const userId = authData.id
+
+        // Create profile
+        await supabase.from('profiles').insert({
+          id: userId, email: row.email, full_name: row.name, role: row.role,
+          district_id: districtId, is_active: true,
+        })
+
+        // Campus assignment
+        if (row.campusId) {
+          await supabase.from('profile_campus_assignments').insert({ profile_id: userId, campus_id: row.campusId })
+        }
+
+        success++
+      } catch (err) {
+        failures.push(`${row.name}: ${err.message}`)
+      }
+    }
+    setImporting(false)
+    setResult({ success, skipped, failures })
+  }
+
+  if (result) {
+    return (
+      <Modal onClose={onSuccess} title="Import Complete">
+        <div className="space-y-3">
+          <p className="text-green-600 font-semibold">{result.success} staff member{result.success !== 1 ? 's' : ''} imported successfully.</p>
+          {result.skipped > 0 && <p className="text-amber-600 text-sm">{result.skipped} row{result.skipped !== 1 ? 's' : ''} skipped (validation errors).</p>}
+          {result.failures.length > 0 && (
+            <div className="text-red-600 text-sm space-y-1">
+              {result.failures.map((f, i) => <p key={i}>{f}</p>)}
+            </div>
+          )}
+          <Button onClick={onSuccess}>Done</Button>
+        </div>
+      </Modal>
+    )
+  }
+
+  return (
+    <Modal onClose={onClose} title="Import Staff from CSV" size="lg">
+      <div className="space-y-4">
+        <p className="text-sm text-gray-600">Upload a CSV with columns: <strong>full_name, email, role, campus</strong>. Role must match a valid staff role. Campus must match an existing campus name.</p>
+        <input ref={fileRef} type="file" accept=".csv" onChange={handleFile} className="hidden" />
+        <Button variant="secondary" onClick={() => fileRef.current?.click()}>Choose CSV File</Button>
+
+        {rows.length > 0 && (
+          <>
+            <div className="border rounded-lg overflow-hidden max-h-64 overflow-y-auto">
+              <table className="w-full text-sm">
+                <thead><tr className="bg-gray-50 border-b"><th className="p-2 text-left">Name</th><th className="p-2 text-left">Email</th><th className="p-2 text-left">Role</th><th className="p-2 text-left">Campus</th><th className="p-2 text-left">Status</th></tr></thead>
+                <tbody>
+                  {validated.slice(0, 20).map((r, i) => (
+                    <tr key={i} className={`border-b ${r.valid ? '' : 'bg-red-50'}`}>
+                      <td className="p-2">{r.name}</td>
+                      <td className="p-2">{r.email}</td>
+                      <td className="p-2">{ROLE_LABELS[r.role] || r.role}</td>
+                      <td className="p-2">{r.campusName}</td>
+                      <td className="p-2">{r.valid ? <span className="text-green-600 text-xs font-medium">Ready</span> : <span className="text-red-600 text-xs">{r.errors.join(', ')}</span>}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {validated.length > 20 && <p className="p-2 text-xs text-gray-500">...and {validated.length - 20} more</p>}
+            </div>
+            <p className="text-sm text-gray-600">{validCount} of {validated.length} rows ready to import. {validated.length - validCount} will be skipped.</p>
+            {error && <p className="text-red-600 text-sm">{error}</p>}
+            <div className="flex gap-2">
+              <Button variant="secondary" onClick={onClose}>Cancel</Button>
+              <Button onClick={handleImport} loading={importing} disabled={validCount === 0}>Import {validCount} Staff Member{validCount !== 1 ? 's' : ''}</Button>
+            </div>
+          </>
+        )}
+      </div>
+    </Modal>
+  )
+}
+
 function InviteUserModal({ districtId, campuses, serviceRoleKey, supabaseUrl, onClose, onSuccess }) {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')

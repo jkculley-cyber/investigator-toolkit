@@ -87,6 +87,7 @@ export default function QuickIncidentPage() {
         reported_by: profile.id,
         status: 'draft',
         consequence_type: null,
+        referred_by_teacher: true,
       })
 
       if (error) throw error

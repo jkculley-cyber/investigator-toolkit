@@ -409,7 +409,11 @@ const PRODUCTS = [
 <li>Evidence summary table with Legal Hold field</li>
 <li>FERPA reminders on witness section</li>
 </ul>
-<strong>5 templates:</strong> Fighting/Assault, Drugs/Alcohol, Harassment/Bullying, Threats, General Misconduct. Each in Word + PDF = 10 files.`,
+<strong>5 templates:</strong> Fighting/Assault, Drugs/Alcohol, Harassment/Bullying, Threats, General Misconduct. Each in Word + PDF = 10 files.
+<div style="margin-top:16px;padding:14px 16px;background:linear-gradient(135deg,rgba(99,102,241,0.08),rgba(99,102,241,0.02));border:1px solid rgba(99,102,241,0.25);border-radius:10px;">
+<strong style="color:#6366f1;font-size:.82rem;">🚀 Want the automated version?</strong>
+<p style="margin:6px 0 0;font-size:.82rem;line-height:1.6;color:rgba(240,230,211,0.6);">The <strong style="color:#a5b4fc;">Investigator Toolkit</strong> turns these templates into a full digital investigation system — case management, evidence tracking, witness statements, and chain of custody all on your phone. Works offline, no student data leaves your device. <a href="#card-investigator-toolkit" style="color:#818cf8;font-weight:700;text-decoration:none;">Try it free for 14 days →</a></p>
+</div>`,
     sheets: [
       { name: 'Fighting / Assault', cols: 1, rows: 10, headers: ['Section','Field','Sample Content'], sample: [['Incident Overview','Offense Classification','TEC §37.005 — Assault / §37.006 — Serious Bodily Injury'],['Incident Overview','Initiator / Mutual?','☐ Student initiated  ☑ Mutual combat  ☐ Self-defense claimed'],['Immediate Actions','Weapon Involved?','☐ Yes — describe: _______________  ☑ No'],['Due Process','Step 1 of 8','☑ Student notified of charges in language they understand'],['SPED/504 Alert','IEP Student?','☑ YES → MDR MUST be held within 10 school days'],['Findings','MDR Finding','☐ Manifestation  ☐ Not a manifestation  ⚠ STOP if manifestation — PLACEMENT BLOCKED']] },
       { name: 'Drugs / Alcohol', cols: 1, rows: 10, headers: ['Section','Field','Sample Content'], sample: [['Incident Overview','Offense Type','☐ Possession  ☐ Use  ☐ Under influence  ☐ Distribution'],['Evidence','Substance Description','Marijuana, approx. 2g, found in student backpack front pocket'],['Evidence','Chain of Custody','Collected by: Mr. Kim  |  Secured at: Admin safe Rm 102  |  Law enforcement transfer: Pending']] },
@@ -648,6 +652,50 @@ function renderProducts() {
         and professional PDF reports. Import your existing student data via CSV in under 2 minutes.
       </p>
       <a href="#card-beacon" style="font-size:.84rem;font-weight:700;color:#4ade80;text-decoration:none;letter-spacing:.02em">Learn more &rarr;</a>
+    </div>
+  </div>`;
+
+  // ── Investigator Toolkit Section ──
+  html += `<div class="store-section" style="padding-top:40px">
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:8px">
+      <div class="section-label" style="margin-bottom:0">Investigation Tools</div>
+      <span style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.4);padding:3px 10px;border-radius:4px">Live</span>
+    </div>
+    <div class="section-desc">Digital investigation case management — the automated version of the Investigation Templates above.</div>
+
+    <div class="product-card" id="card-investigator-toolkit" style="border-color:rgba(99,102,241,.4)">
+      <div style="height:3px;background:linear-gradient(90deg,#4338ca,#6366f1,#818cf8)"></div>
+      <div class="pc-layout">
+        <div class="pc-main">
+          <span class="pc-tag" style="color:#818cf8">Campus Case Management</span>
+          <div class="pc-title">Investigator Toolkit</div>
+          <div class="pc-short">Everything the Investigation Templates do — automated, on your phone, with case management built in. 10-section workflow for every offense type, evidence chain of custody, witness statements.</div>
+          <div class="pc-detail-text">
+            <ul>
+              <li><strong>5 offense-specific workflows</strong> — Fighting, Drugs, Harassment, Threats, General Misconduct</li>
+              <li><strong>10-section investigation</strong> — incident overview, immediate actions, due process, timeline, statements, evidence, findings</li>
+              <li><strong>Evidence tracker</strong> — chain of custody, legal hold, digital evidence linking</li>
+              <li><strong>SPED/504 alerts</strong> — automatic MDR flags when IEP or 504 is checked</li>
+              <li><strong>Case dashboard</strong> — all open/closed cases, status tracking, appeal tracking</li>
+              <li><strong>Backup & restore</strong> — export all cases as JSON, move between devices</li>
+              <li><strong>100% on-device</strong> — no student data touches any server. FERPA safe by design.</li>
+            </ul>
+          </div>
+          <div class="pc-compat">
+            <span class="pc-compat-tag">Works on any device</span>
+            <span class="pc-compat-tag">Installs as app</span>
+            <span class="pc-compat-tag">Works offline</span>
+            <span class="pc-compat-tag">FERPA compliant</span>
+          </div>
+        </div>
+        <div class="pc-sidebar">
+          <span class="pc-price" style="font-size:1.3rem">$5<span style="font-size:.7rem;font-weight:400;color:var(--text-muted)">/mo</span></span>
+          <span style="font-size:.82rem;color:var(--text-muted);display:block;margin-bottom:4px">or $49/school year</span>
+          <span style="font-size:.72rem;color:var(--amber-light);display:block;margin-bottom:16px">14-day free trial included</span>
+          <a href="https://investigatortoolkit.clearpathedgroup.com" target="_blank" class="pc-buy" style="background:linear-gradient(135deg,#4338ca,#6366f1);text-decoration:none;display:block;text-align:center">Start Free Trial →</a>
+          <div class="pc-note">No credit card required.<br>No student data leaves your device.</div>
+        </div>
+      </div>
     </div>
   </div>`;
 

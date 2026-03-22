@@ -141,9 +141,13 @@ function renderShell(campusName) {
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <div class="app-layout">
       <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand" style="display:flex;align-items:center;gap:10px;">
-          <img src="/icons/Investigator-AppIcon-192.png" alt="" style="width:32px;height:32px;border-radius:8px;" />
-          INVESTIGATION TOOLKIT
+        <div class="sidebar-brand">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+            <img src="/icons/Investigator-AppIcon-192.png" alt="" style="width:32px;height:32px;border-radius:8px;" />
+            <span style="font-weight:700;font-size:14px;">INVESTIGATION TOOLKIT</span>
+          </div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.03em;">Campus Case Management</div>
+          <div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:2px;">Clear Path Education Group, LLC</div>
         </div>
         <nav class="sidebar-nav" id="sidebar-nav"></nav>
       </aside>

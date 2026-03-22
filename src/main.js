@@ -141,7 +141,10 @@ function renderShell(campusName) {
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
     <div class="app-layout">
       <aside class="sidebar" id="sidebar">
-        <div class="sidebar-brand">INVESTIGATION TOOLKIT</div>
+        <div class="sidebar-brand" style="display:flex;align-items:center;gap:10px;">
+          <img src="/icons/Investigator-AppIcon-192.png" alt="" style="width:32px;height:32px;border-radius:8px;" />
+          INVESTIGATION TOOLKIT
+        </div>
         <nav class="sidebar-nav" id="sidebar-nav"></nav>
       </aside>
       <div class="main-area">
@@ -149,7 +152,10 @@ function renderShell(campusName) {
           <div style="display:flex;align-items:center;gap:0.75rem;">
             <button class="hamburger" id="hamburger">${icons.menu}</button>
             <div>
-              <div class="header-title">Campus Investigation Toolkit</div>
+              <div class="header-title" style="display:flex;align-items:center;gap:8px;">
+                <img src="/icons/Investigator-AppIcon-192.png" alt="" style="width:24px;height:24px;border-radius:6px;" />
+                Campus Investigation Toolkit
+              </div>
               <div class="header-campus" id="header-campus">${campusName || ''}</div>
             </div>
           </div>

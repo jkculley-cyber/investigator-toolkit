@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-22 (Session AZ continued — ISS Kiosk, product landing pages, store rebuild, Apex SW fix)
+> Last updated: 2026-03-23 (Session BB — Full audit + simulation of Apex, Beacon, Navigator to A+ status)
 
 ---
 
@@ -12,7 +12,7 @@
 - **whitepaper.html:** 20-point DAEP compliance self-audit checklist, 5 sections with TEC citation callout boxes, scorecard with scoring bands (18–20 compliant / 14–17 at risk / <14 urgent), print-optimized CSS, "Save as PDF" button. Lead magnet for district sales.
 - **Hosting:** Cloudflare Pages — `waypoint` project (app, deployed via GitHub Actions on push to `main`), `cpeg-site` project (marketing site, deployed via GitHub Actions `deploy-clearpath-site.yml` on push to `main` — **do NOT use `node deploy-clearpath.mjs` Direct Upload**, it creates broken deployments)
 - **Supabase project:** `kvxecksvkimcgwhxxyhw` (single project, all tenants)
-- **Migrations applied:** 001–059 (production). Migration 058: `incident_audit_log` table with RLS. Migration 059: `daep_campus_id` on incidents (applied 2026-03-20).
+- **Migrations applied:** 001–060 (production). Migration 060: `iss_daily_tracking` table for ISS Kiosk (applied 2026-03-22).
 - **Demo seed data:** `supabase/seed_demo_video.mjs` — 12 active incidents, 6 transition plans, 57 days behavior tracking (Marcus/David/DeShawn), parent auth user `parent.marcus@gmail.com` / `Password123!` (Sandra Johnson, guardian of Marcus). `supabase/seed_navigator.mjs` — 13 referrals, 28 placements (6 completed + 2 active + 20 prior year), 6 supports, 3 campus goals seeded for Lone Star ISD (8 student risk scenarios: 3 HIGH, 3 MEDIUM, 2 LOW). 2 active placements (Marcus OSS, DeShawn ISS — no end_date) power the Active ISS/Active OSS tabs. `supabase/seed_meridian.mjs` — 9 SPED students, 4 IEPs, 2 504 plans, 3 ARD referrals, 1 CAP finding seeded for Lone Star ISD. Both Navigator and Meridian **enabled** for Lone Star ISD. Both seeders use Supabase REST API (no DB password needed).
 - **Demo video script:** `docs/brand/demo-video-script.md` — full production package rewritten Session T. 10 HeyGen blocks (≤840 chars each), student-first framing, T.E.A./I.E.P./P.E.I.M.S. abbreviations with periods. B-roll shot guide (7 clips) at bottom of script.
 - **Demo district:** Lone Star ISD (seeded), `admin@lonestar-isd.org` / `Password123!`
@@ -104,11 +104,12 @@
 
 ## Next Session Priority
 
-1. **Cloudflare Pages: Deploy Beacon + Toolkit** — connect repos, set custom domains (`clearpath-beacon.pages.dev`, `investigatortoolkit.clearpathedgroup.com`).
-2. **Store listings** — add Beacon ($8/mo, $79/yr) and Toolkit ($5/mo, $49/yr) to clearpathedgroup.com store with Zelle purchase options.
-3. **Vera + Nova: Customer onboarding materials** — format license guide for store/email from `clearpath-beacon/docs/license-operations-guide.md`.
-4. **Parent Communication Hub** — #1 pain point: timestamped call log for due process hearings.
-5. **Quick capture** for Apex — fast informal walkthrough mode.
+1. **Meridian module audit** — never audited, SPED compliance product with legal risk if bugs exist.
+2. **Origins module audit** — never audited.
+3. **Beacon missing pages** — NeedsAssessment, Goals, dedicated Sessions page.
+4. **Connect Navigator + Dashboard repos to Cloudflare Pages.**
+5. **Parent Communication Hub** — #1 pain point: timestamped call log for due process hearings.
+6. **Test PWA icons on iPhone** for all apps.
 
 ---
 

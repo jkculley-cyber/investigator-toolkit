@@ -27,7 +27,8 @@ After making a meaningful decision during a session, add it to DECISIONS.md with
 2. Write handover doc to `docs/handovers/MMDDYYYY_handoff.md`
 3. Log any new decisions to DECISIONS.md
 4. Commit all changes to git
-5. Brief the user: what was done, what's next, any blockers
+5. **Sync to Ops Command Center** — push new decisions + handoff to the ops Supabase (`xbpuqaqpcbixxodblaes`) `command_center` table. See "Ops Command Center Sync" section below.
+6. Brief the user: what was done, what's next, any blockers
 
 ---
 
@@ -177,6 +178,66 @@ SUPABASE_SERVICE_ROLE_KEY=xxx node supabase/create_admin.mjs
 # Create waypoint internal admin
 SUPABASE_SERVICE_ROLE_KEY=xxx node supabase/create_waypoint_admin.mjs [email] [password] [name]
 ```
+
+---
+
+## Ops Command Center Sync
+
+Every closing process **must** push new decisions and the session handoff to the ops Supabase so the command center stays current. The ops site is a standalone vanilla JS app at `clearpath-ops.pages.dev` backed by Supabase project `xbpuqaqpcbixxodblaes`.
+
+**Supabase details:**
+- URL: `https://xbpuqaqpcbixxodblaes.supabase.co`
+- Anon key: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicHVxYXFwY2JpeHhvZGJsYWVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjk4MDQsImV4cCI6MjA4Nzk0NTgwNH0.9Rhmz-FLUXnEQXpRCkg3G2ppzPxs2DinaYDmdD_wvPA`
+- Table: `command_center` (key/value JSON store, key=`main`)
+
+**Sync procedure (run as Node.js):**
+
+```js
+// 1. GET current state
+const OPS_URL = 'https://xbpuqaqpcbixxodblaes.supabase.co';
+const OPS_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhicHVxYXFwY2JpeHhvZGJsYWVzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzNjk4MDQsImV4cCI6MjA4Nzk0NTgwNH0.9Rhmz-FLUXnEQXpRCkg3G2ppzPxs2DinaYDmdD_wvPA';
+const hdrs = { 'apikey': OPS_KEY, 'Authorization': `Bearer ${OPS_KEY}`, 'Content-Type': 'application/json' };
+
+const res = await fetch(`${OPS_URL}/rest/v1/command_center?key=eq.main&select=value&order=updated_at.desc&limit=1`, { headers: hdrs });
+const rows = await res.json();
+const state = rows.length ? JSON.parse(rows[0].value) : null;
+if (!state) { console.log('No ops state found, skipping sync'); return; }
+
+// 2. Push new handoff (if session label not already present)
+const sessionLabel = 'Session XX'; // replace with actual
+if (!state.handoffs.find(h => h.session === sessionLabel)) {
+  state.handoffs.push({
+    id: state.nextHoId++,
+    session: sessionLabel,
+    date: 'YYYY-MM-DD',
+    author: 'Archer', // or whichever agent
+    focus: 'One-line session focus',
+    done: ['Item 1', 'Item 2'],
+    next: []
+  });
+}
+
+// 3. Push new decisions (check by rule text to avoid dupes)
+const newDecisions = [/* { rule, why, date } */];
+for (const d of newDecisions) {
+  if (!state.decisions.find(x => x.rule === d.rule)) {
+    state.decisions.push({ id: state.nextDecId++, rule: d.rule, why: d.why, by: sessionLabel, date: d.date });
+  }
+}
+
+// 4. PATCH back
+await fetch(`${OPS_URL}/rest/v1/command_center?key=eq.main`, {
+  method: 'PATCH',
+  headers: { ...hdrs, 'Prefer': 'return=minimal' },
+  body: JSON.stringify({ value: JSON.stringify(state), updated_at: new Date().toISOString() })
+});
+```
+
+**Rules:**
+- Always deduplicate by session label (handoffs) or rule text (decisions) before inserting
+- Increment `nextHoId` / `nextDecId` when adding entries
+- Agent name goes in the `author` field (Archer, Vera, Nova, Sage)
+- This runs in the closing process — do not skip it
 
 ---
 

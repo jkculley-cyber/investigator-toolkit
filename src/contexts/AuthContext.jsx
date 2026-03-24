@@ -113,6 +113,8 @@ export function AuthProvider({ children }) {
           .eq('id', profileData.district_id)
           .single()
         setDistrict(districtData)
+      } else {
+        setDistrict(null) // waypoint_admin or no-district users
       }
 
       // Fetch campus assignments
@@ -196,7 +198,9 @@ export function AuthProvider({ children }) {
   }
 
   function hasProduct(productName) {
-    // waypoint_admin (district=null) sees all products
+    // waypoint_admin sees all products regardless of district state
+    if (profile?.role === 'waypoint_admin') return true
+    // No district loaded yet — default to all products visible
     if (!district) return true
     const products = district?.settings?.products || ['waypoint']
     return products.includes(productName)

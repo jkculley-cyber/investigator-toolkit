@@ -69,12 +69,11 @@ export default function LoginPage() {
       <div className="w-full max-w-md">
         {/* Logo / Header */}
         <div className="text-center mb-8">
-          <img src="/logo.png" alt="Compass Pathway" className="h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 mx-auto mb-4 object-contain" />
+          <img src="/logo.png" alt="Waypoint" className="h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 mx-auto mb-4 object-contain" />
           <h1 className="text-3xl font-bold mb-1">
-            <span className="text-orange-600">Compass</span>
-            <span className="text-purple-600"> Pathway</span>
+            <span className="text-orange-600">Way</span><span className="text-purple-600">point</span>
           </h1>
-          <p className="text-gray-500">Behavioral Solutions</p>
+          <p className="text-gray-500">DAEP & Discipline Management</p>
         </div>
 
         {/* Login Card */}
@@ -184,7 +183,7 @@ export default function LoginPage() {
         </p>
         <p className="text-center text-xs text-gray-400 mt-4">
           &copy; {new Date().getFullYear()} Clear Path Education Group, LLC. All rights reserved.<br />
-          Compass Pathway is a product of Clear Path Education Group.
+          Waypoint is a product of Clear Path Education Group.
         </p>
       </div>
     </div>

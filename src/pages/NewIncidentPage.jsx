@@ -37,14 +37,14 @@ export default function NewIncidentPage() {
   const { campusIds, profile, districtId } = useAuth()
   const isTeacher = profile?.role === 'teacher'
   const STEPS = isTeacher ? STEPS_TEACHER : STEPS_FULL
-  // Map visible step index to content step for teachers (skip consequence)
-  const contentStep = isTeacher && step >= 2 ? step + 1 : step
   const DRAFT_KEY = `incident_draft_${districtId || 'local'}`
   const { createIncident } = useIncidentActions()
   const { offenseCodes } = useOffenseCodes()
   const { interventions: interventionCatalog } = useInterventions()
 
   const [step, setStep] = useState(0)
+  // Map visible step index to content step for teachers (skip consequence)
+  const contentStep = isTeacher && step >= 2 ? step + 1 : step
   const [submitting, setSubmitting] = useState(false)
   const [matrixEntry, setMatrixEntry] = useState(null)
   const [isMatrixOverride, setIsMatrixOverride] = useState(false)

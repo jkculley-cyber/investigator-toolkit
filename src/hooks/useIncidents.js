@@ -34,9 +34,7 @@ export function useIncidents(filters = {}) {
           offense:offense_codes(id, code, title, category, severity),
           campus:campuses!campus_id(id, name),
           reporter:profiles!incidents_reported_by_fkey(id, full_name, role),
-          reviewer:profiles!incidents_reviewed_by_fkey(id, full_name),
-          compliance:compliance_checklists!fk_incidents_compliance(id, status, placement_blocked),
-          approval_chain:daep_approval_chains!fk_incidents_approval_chain(id, chain_status, current_step)
+          reviewer:profiles!incidents_reviewed_by_fkey(id, full_name)
         `, paginated ? { count: 'exact' } : undefined)
         .eq('district_id', districtId)
         .order('incident_date', { ascending: false })
@@ -109,9 +107,7 @@ export function useIncident(incidentId) {
           student:students(*),
           offense:offense_codes(*),
           reporter:profiles!incidents_reported_by_fkey(id, full_name, role, email),
-          reviewer:profiles!incidents_reviewed_by_fkey(id, full_name),
-          compliance:compliance_checklists!fk_incidents_compliance(*),
-          transition_plan:transition_plans!fk_incidents_transition_plan(id, status, plan_type)
+          reviewer:profiles!incidents_reviewed_by_fkey(id, full_name)
         `)
         .eq('id', incidentId)
         .eq('district_id', districtId)
@@ -121,6 +117,19 @@ export function useIncident(incidentId) {
       const { data, error: fetchError } = await query.maybeSingle()
 
       if (fetchError) throw fetchError
+
+      // Load compliance + transition plan separately (avoids FK hint failures)
+      if (data) {
+        if (data.compliance_checklist_id) {
+          const { data: comp } = await supabase.from('compliance_checklists').select('*').eq('id', data.compliance_checklist_id).maybeSingle()
+          data.compliance = comp || null
+        }
+        if (data.transition_plan_id) {
+          const { data: plan } = await supabase.from('transition_plans').select('id, status, plan_type').eq('id', data.transition_plan_id).maybeSingle()
+          data.transition_plan = plan || null
+        }
+      }
+
       setIncident(data)
     } catch (err) {
       console.error('Error fetching incident:', err)

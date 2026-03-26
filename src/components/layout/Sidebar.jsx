@@ -54,7 +54,7 @@ const staffNavigation = [
   { name: 'DAEP Dashboard',   path: '/daep',                            icon: DaepIcon,        roles: DAEP_ROLES,       feature: 'daep_dashboard',      product: 'waypoint', group: 'daep' },
   { name: 'Orientations',     path: '/daep/orientations',               icon: CalendarIcon,    roles: DAEP_ROLES,       feature: 'daep_dashboard',      product: 'waypoint', group: 'daep' },
   { name: 'Phone Return',     path: '/daep/phone-return',               icon: PhoneIcon,       roles: DAEP_ROLES,       feature: 'phone_return',        product: 'waypoint', group: 'daep' },
-  { name: 'Daily Scoring',    path: '/daep/scoring',                    icon: ScoringIcon,     roles: [ROLES.TEACHER, ROLES.ADMIN, ROLES.PRINCIPAL], feature: 'daep_dashboard', product: 'waypoint', group: 'daep' },
+  // Daily Scoring removed — tracked via Kiosk and behavior tracking instead
   { name: 'Discipline Matrix',path: '/matrix',                          icon: MatrixIcon,      roles: null,                                              product: 'waypoint', group: 'tools' },
   { name: 'Calendar',         path: '/calendar',                        icon: CalendarIcon,    roles: null,                                              product: 'waypoint', group: 'tools' },
   { name: 'Reports',          path: '/reports',                         icon: ReportsIcon,     roles: [ROLES.ADMIN, ROLES.PRINCIPAL], feature: 'reports', product: 'waypoint', group: 'tools' },

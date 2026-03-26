@@ -488,17 +488,10 @@ export default function IncidentDetailPage() {
               <CardTitle>Timeline</CardTitle>
               <div className="mt-4 space-y-0">
                 <TimelineItem
-                  label="Created"
+                  label={incident.status === 'draft' ? 'Created' : 'Submitted'}
                   value={formatDateTime(incident.created_at)}
                   active
                 />
-                {incident.status !== 'draft' && (
-                  <TimelineItem
-                    label="Submitted"
-                    value={formatDateTime(incident.created_at)}
-                    active
-                  />
-                )}
                 {isComplianceHold && (
                   <TimelineItem
                     label="Compliance Hold"

@@ -15,7 +15,6 @@ import LoadingSpinner from '../components/ui/LoadingSpinner'
 import EmptyState from '../components/ui/EmptyState'
 import StudentFlags from '../components/students/StudentFlags'
 import {
-  PLAN_STATUS,
   PLAN_STATUS_LABELS,
   PLAN_STATUS_COLORS,
   PLAN_TYPE_LABELS,
@@ -277,7 +276,7 @@ function MiniStat({ label, value, color = 'gray' }) {
     gray: 'text-gray-900',
     green: 'text-green-600',
     yellow: 'text-yellow-600',
-    blue: 'text-orange-600',
+    blue: 'text-blue-600',
     red: 'text-red-600',
   }
 

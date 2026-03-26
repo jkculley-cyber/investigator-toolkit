@@ -690,13 +690,7 @@ export default function DashboardPage() {
             </div>
           </Card>
 
-          <Card>
-            <CardTitle>Recent Activity</CardTitle>
-            <div className="mt-4 text-sm text-gray-500 text-center py-8">
-              <p>No recent activity to display.</p>
-              <p className="text-xs mt-1">Activity will appear here once incidents are created.</p>
-            </div>
-          </Card>
+          {/* Recent Activity removed — incidents list provides this view */}
         </div>
       </div>
     </div>

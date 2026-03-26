@@ -23,13 +23,6 @@ const SETTINGS_SECTIONS = [
     ready: true,
   },
   {
-    title: 'District Configuration',
-    description: 'Manage district info, campuses, school year settings, and PEIMS configuration.',
-    href: '/settings/district',
-    icon: DistrictIcon,
-    ready: false,
-  },
-  {
     title: 'User Management',
     description: 'Manage staff accounts, role assignments, and campus assignments.',
     href: '/settings/users',
@@ -42,13 +35,6 @@ const SETTINGS_SECTIONS = [
     href: '/settings/notifications',
     icon: NotificationIcon,
     ready: true,
-  },
-  {
-    title: 'Interventions Catalog',
-    description: 'Manage the catalog of behavioral and academic interventions available for plans.',
-    href: '/settings/interventions',
-    icon: InterventionIcon,
-    ready: false,
   },
   {
     title: 'Orientation Schedule',

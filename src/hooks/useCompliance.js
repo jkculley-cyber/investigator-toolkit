@@ -65,9 +65,10 @@ export function useComplianceChecklist(checklistId) {
   const [checklist, setChecklist] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { districtId } = useAuth()
 
   const fetchChecklist = useCallback(async () => {
-    if (!checklistId) {
+    if (!checklistId || !districtId) {
       setLoading(false)
       return
     }
@@ -84,6 +85,7 @@ export function useComplianceChecklist(checklistId) {
           )
         `)
         .eq('id', checklistId)
+        .eq('district_id', districtId)
         .single()
 
       if (fetchError) throw fetchError
@@ -94,7 +96,7 @@ export function useComplianceChecklist(checklistId) {
     } finally {
       setLoading(false)
     }
-  }, [checklistId])
+  }, [checklistId, districtId])
 
   useEffect(() => {
     fetchChecklist()

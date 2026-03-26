@@ -68,9 +68,10 @@ export function useTransitionPlan(id) {
   const [interventions, setInterventions] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { districtId } = useAuth()
 
   const fetchPlan = useCallback(async () => {
-    if (!id) {
+    if (!id || !districtId) {
       setPlan(null)
       setLoading(false)
       return
@@ -90,6 +91,7 @@ export function useTransitionPlan(id) {
           profiles!transition_plans_created_by_fkey (id, full_name)
         `)
         .eq('id', id)
+        .eq('district_id', districtId)
         .single()
 
       if (planError) throw planError
@@ -124,7 +126,7 @@ export function useTransitionPlan(id) {
     } finally {
       setLoading(false)
     }
-  }, [id])
+  }, [id, districtId])
 
   useEffect(() => {
     fetchPlan()

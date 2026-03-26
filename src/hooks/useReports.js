@@ -116,11 +116,12 @@ export function useDisproportionalityData() {
         }
 
         // Get total student population for comparison
-        const { data: allStudents } = await supabase
+        const { data: allStudents } = await applyCampusScope(
+          supabase
           .from('students')
           .select('id, race, gender, is_sped, is_504, is_ell')
           .eq('district_id', districtId)
-          .eq('is_active', true)
+          .eq('is_active', true), scope)
 
         const totalStudents = allStudents?.length || 1
 
@@ -189,21 +190,23 @@ export function useIncidentTrends() {
   const [trends, setTrends] = useState([])
   const [loading, setLoading] = useState(true)
   const { districtId } = useAuth()
+  const { scope, loading: scopeLoading } = useAccessScope()
 
   useEffect(() => {
-    if (!districtId) return
+    if (!districtId || scopeLoading) return
 
     const fetchTrends = async () => {
       setLoading(true)
       const schoolYearStart = getSchoolYearStart().toISOString()
 
       try {
-        const { data: incidents } = await supabase
+        const { data: incidents } = await applyCampusScope(
+          supabase
           .from('incidents')
           .select('id, incident_date, consequence_type')
           .eq('district_id', districtId)
           .gte('incident_date', schoolYearStart)
-          .order('incident_date')
+          .order('incident_date'), scope)
 
         if (!incidents?.length) {
           setTrends([])
@@ -244,7 +247,7 @@ export function useIncidentTrends() {
     }
 
     fetchTrends()
-  }, [districtId])
+  }, [districtId, scopeLoading, scope])
 
   return { trends, loading }
 }
@@ -256,9 +259,10 @@ export function useRecidivismData() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const { districtId } = useAuth()
+  const { scope, loading: scopeLoading } = useAccessScope()
 
   useEffect(() => {
-    if (!districtId) return
+    if (!districtId || scopeLoading) return
 
     const fetchRecidivism = async () => {
       setLoading(true)
@@ -266,14 +270,15 @@ export function useRecidivismData() {
 
       try {
         // Get all DAEP placements this year
-        const { data: daepIncidents } = await supabase
+        const { data: daepIncidents } = await applyCampusScope(
+          supabase
           .from('incidents')
           .select('id, student_id, incident_date, status')
           .eq('district_id', districtId)
           .eq('consequence_type', 'daep')
           .gte('incident_date', schoolYearStart)
           .order('student_id')
-          .order('incident_date')
+          .order('incident_date'), scope)
 
         if (!daepIncidents?.length) {
           setData({ rate: 0, totalPlacements: 0, repeatStudents: 0, uniqueStudents: 0, details: [] })
@@ -293,11 +298,12 @@ export function useRecidivismData() {
         const rate = uniqueStudents > 0 ? Math.round((repeatStudents / uniqueStudents) * 100) : 0
 
         // Get all incidents this year for broader recidivism
-        const { data: allIncidents } = await supabase
+        const { data: allIncidents } = await applyCampusScope(
+          supabase
           .from('incidents')
           .select('id, student_id, consequence_type')
           .eq('district_id', districtId)
-          .gte('incident_date', schoolYearStart)
+          .gte('incident_date', schoolYearStart), scope)
 
         const allByStudent = {}
         allIncidents?.forEach((inc) => {
@@ -328,7 +334,7 @@ export function useRecidivismData() {
     }
 
     fetchRecidivism()
-  }, [districtId])
+  }, [districtId, scopeLoading, scope])
 
   return { data, loading }
 }
@@ -340,20 +346,22 @@ export function useInterventionEffectiveness() {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(true)
   const { districtId } = useAuth()
+  const { scope, loading: scopeLoading } = useAccessScope()
 
   useEffect(() => {
-    if (!districtId) return
+    if (!districtId || scopeLoading) return
 
     const fetchData = async () => {
       setLoading(true)
       try {
-        const { data: studentInterventions } = await supabase
+        const { data: studentInterventions } = await applyCampusScope(
+          supabase
           .from('student_interventions')
           .select(`
             id, status, effectiveness_rating, start_date, end_date,
             interventions (id, name, category, tier)
           `)
-          .eq('district_id', districtId)
+          .eq('district_id', districtId), scope)
 
         if (!studentInterventions?.length) {
           setData([])
@@ -405,7 +413,7 @@ export function useInterventionEffectiveness() {
     }
 
     fetchData()
-  }, [districtId])
+  }, [districtId, scopeLoading, scope])
 
   return { data, loading }
 }
@@ -415,12 +423,14 @@ export function useInterventionEffectiveness() {
  */
 export function usePeimsExport() {
   const { districtId } = useAuth()
+  const { scope, loading: scopeLoading } = useAccessScope()
 
   const generateExport = useCallback(async () => {
-    if (!districtId) return null
+    if (!districtId || scopeLoading) return null
     const schoolYearStart = getSchoolYearStart().toISOString()
 
-    const { data: incidents } = await supabase
+    const { data: incidents } = await applyCampusScope(
+      supabase
       .from('incidents')
       .select(`
         id, incident_date, incident_time, location, consequence_type, consequence_days,
@@ -433,7 +443,7 @@ export function usePeimsExport() {
       .eq('district_id', districtId)
       .gte('incident_date', schoolYearStart)
       .in('status', ['approved', 'active', 'completed'])
-      .order('incident_date')
+      .order('incident_date'), scope)
 
     if (!incidents?.length) return null
 
@@ -512,7 +522,7 @@ export function usePeimsExport() {
       filename: `PEIMS_Discipline_Export_${new Date().toISOString().split('T')[0]}.csv`,
       recordCount: rows.length,
     }
-  }, [districtId])
+  }, [districtId, scopeLoading, scope])
 
   return { generateExport }
 }

@@ -91,7 +91,7 @@ export default function NavigatorStudentPage() {
       <div className="p-6 space-y-6">
         {/* Student Header */}
         <div className="bg-white rounded-xl border border-gray-200 p-6 flex items-start gap-5">
-          <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center text-2xl font-bold text-orange-500 shrink-0">
+          <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center text-2xl font-bold text-blue-500 shrink-0">
             {student.first_name?.charAt(0)}{student.last_name?.charAt(0)}
           </div>
           <div className="flex-1">
@@ -117,7 +117,7 @@ export default function NavigatorStudentPage() {
         {riskTriggers && riskTriggers.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {riskTriggers.map(t => (
-              <span key={t} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-50 text-orange-700 border border-orange-100">
+              <span key={t} className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
                 {t}
               </span>
             ))}
@@ -127,7 +127,7 @@ export default function NavigatorStudentPage() {
         {/* Stats Row */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
-            <p className="text-2xl font-bold text-orange-500">{referrals.length}</p>
+            <p className="text-2xl font-bold text-blue-500">{referrals.length}</p>
             <p className="text-xs text-gray-500 mt-1">Total Referrals</p>
           </div>
           <div className="bg-white rounded-xl border border-gray-200 p-4 text-center">
@@ -179,7 +179,7 @@ export default function NavigatorStudentPage() {
                   const isPlacement = item.type === 'placement'
                   const isSupport = item.type === 'support'
                   const dotClass = isReferral
-                    ? 'bg-orange-100 text-orange-600'
+                    ? 'bg-blue-100 text-blue-600'
                     : isPlacement
                     ? 'bg-blue-100 text-blue-600'
                     : 'bg-green-100 text-green-600'
@@ -233,7 +233,7 @@ export default function NavigatorStudentPage() {
             )}
           </div>
           <div className="px-5 pb-4 flex gap-4 text-xs text-gray-400">
-            <span className="flex items-center gap-1.5"><span className="w-4 h-4 rounded-full bg-orange-100 inline-block" />Referral</span>
+            <span className="flex items-center gap-1.5"><span className="w-4 h-4 rounded-full bg-blue-100 inline-block" />Referral</span>
             <span className="flex items-center gap-1.5"><span className="w-4 h-4 rounded-full bg-blue-100 inline-block" />Placement</span>
             <span className="flex items-center gap-1.5"><span className="w-4 h-4 rounded-full bg-green-100 inline-block" />Support</span>
           </div>

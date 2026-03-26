@@ -11,8 +11,9 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState(null)
+  const [noAccess, setNoAccess] = useState(false)
 
-  const { signIn, signInWithOAuth, profile, loading: authLoading, hasProduct } = useAuth()
+  const { signIn, signInWithOAuth, signOut, profile, loading: authLoading, hasProduct } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
   const from = location.state?.from?.pathname || null
@@ -25,8 +26,8 @@ export default function LoginPage() {
       if (profile.role === 'waypoint_admin') {
         navigate('/waypoint-admin', { replace: true })
       } else if (profile.role === 'teacher' || profile.role === 'parent' || profile.role === 'student') {
-        // Teachers use /referral, parents/students don't have app access
-        navigate('/referral', { replace: true })
+        // Teachers, parents, and students do not have Waypoint app access
+        setNoAccess(true)
       } else {
         // Administrative staff — route to licensed product
         let defaultPath = '/dashboard'
@@ -62,6 +63,38 @@ export default function LoginPage() {
       setLoading(false)
     }
     // Navigation is handled by the useEffect above after profile loads
+  }
+
+  // If a teacher/parent/student logged in, show a no-access message instead of the form
+  if (noAccess) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="w-full max-w-md text-center">
+          <img src="/logo.png" alt="Waypoint" className="h-28 w-28 sm:h-36 sm:w-36 md:h-44 md:w-44 mx-auto mb-4 object-contain" />
+          <h1 className="text-3xl font-bold mb-1">
+            <span className="text-orange-600">Way</span><span className="text-purple-600">point</span>
+          </h1>
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mt-6">
+            <div className="w-12 h-12 mx-auto mb-4 rounded-full bg-yellow-100 flex items-center justify-center">
+              <svg className="h-6 w-6 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+              </svg>
+            </div>
+            <h2 className="text-lg font-semibold text-gray-900 mb-2">Access Restricted</h2>
+            <p className="text-sm text-gray-600 mb-6">
+              Waypoint is for campus and district administrators. Contact your administrator for access.
+            </p>
+            <Button
+              onClick={() => { signOut(); setNoAccess(false); }}
+              className="w-full"
+              variant="secondary"
+            >
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (

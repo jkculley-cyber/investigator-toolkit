@@ -62,7 +62,7 @@ export default function NavigatorReferralsPage() {
         actions={
           <button
             onClick={() => { setSelectedReferral(null); setShowDrawer(true) }}
-            className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 transition-colors"
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             + New Referral
           </button>
@@ -76,7 +76,7 @@ export default function NavigatorReferralsPage() {
             <select
               value={filters.status}
               onChange={e => setFilters(f => ({ ...f, status: e.target.value }))}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-orange-400"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-blue-400"
             >
               <option value="">All Statuses</option>
               <option value="pending">Pending</option>
@@ -87,7 +87,7 @@ export default function NavigatorReferralsPage() {
             <select
               value={filters.campus_id}
               onChange={e => setFilters(f => ({ ...f, campus_id: e.target.value }))}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-orange-400"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-blue-400"
             >
               <option value="">All Campuses</option>
               {campuses.map(c => (
@@ -98,13 +98,13 @@ export default function NavigatorReferralsPage() {
               type="date"
               value={filters.date_from}
               onChange={e => setFilters(f => ({ ...f, date_from: e.target.value }))}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-orange-400"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-blue-400"
             />
             <input
               type="date"
               value={filters.date_to}
               onChange={e => setFilters(f => ({ ...f, date_to: e.target.value }))}
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-orange-400"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-blue-400"
             />
             <button
               onClick={() => setFilters({ status: '', campus_id: '', date_from: '', date_to: '' })}
@@ -139,7 +139,7 @@ export default function NavigatorReferralsPage() {
                   {referrals.map(r => (
                     <tr key={r.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-4 py-3">
-                        <Link to={`/navigator/students/${r.student_id}`} className="font-medium text-gray-900 hover:text-orange-600">
+                        <Link to={`/navigator/students/${r.student_id}`} className="font-medium text-gray-900 hover:text-blue-600">
                           {r.students ? `${r.students.first_name} ${r.students.last_name}` : '—'}
                         </Link>
                         <p className="text-xs text-gray-400">{r.students?.grade_level || ''}</p>
@@ -171,7 +171,7 @@ export default function NavigatorReferralsPage() {
                       <td className="px-4 py-3">
                         <button
                           onClick={() => { setSelectedReferral(r); setShowDrawer(true) }}
-                          className="text-xs text-orange-500 hover:text-orange-600 font-medium"
+                          className="text-xs text-blue-500 hover:text-blue-600 font-medium"
                         >
                           Review
                         </button>
@@ -314,7 +314,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
                 <label className="block text-xs font-medium text-gray-500 mb-1">Student *</label>
                 {selectedStudent ? (
                   <div>
-                    <div className="flex items-center justify-between p-2 bg-orange-50 border border-orange-200 rounded-lg">
+                    <div className="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded-lg">
                       <span className="text-sm font-medium text-gray-900">
                         {selectedStudent.first_name} {selectedStudent.last_name}
                         {selectedStudent.is_sped && <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-bold bg-purple-100 text-purple-700">SPED</span>}
@@ -332,7 +332,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
                 ) : (
                   <div className="relative">
                     <input
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                       placeholder="Search by name..."
                       value={studentSearch}
                       onChange={e => { setStudentSearch(e.target.value); searchStudents(e.target.value) }}
@@ -342,7 +342,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
                         {students.map(s => (
                           <button
                             key={s.id}
-                            className="w-full px-3 py-2 text-left text-sm hover:bg-orange-50 transition-colors"
+                            className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50 transition-colors"
                             onClick={() => { setSelectedStudent(s); setStudents([]) }}
                           >
                             {s.first_name} {s.last_name} <span className="text-gray-400 text-xs">(Grade {s.grade_level})</span>
@@ -357,7 +357,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Campus *</label>
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   value={form.campus_id}
                   onChange={e => setForm(f => ({ ...f, campus_id: e.target.value }))}
                 >
@@ -369,7 +369,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Offense Code</label>
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   value={form.offense_code_id}
                   onChange={e => setForm(f => ({ ...f, offense_code_id: e.target.value }))}
                 >
@@ -382,7 +382,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
                 <label className="block text-xs font-medium text-gray-500 mb-1">Date *</label>
                 <input
                   type="date"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   value={form.referral_date}
                   onChange={e => setForm(f => ({ ...f, referral_date: e.target.value }))}
                 />
@@ -391,7 +391,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Location</label>
                 <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   placeholder="e.g. Hallway, Cafeteria"
                   value={form.location}
                   onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
@@ -401,7 +401,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Description</label>
                 <textarea
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
                   rows={3}
                   placeholder="Describe the incident..."
                   value={form.description}
@@ -412,7 +412,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Witnesses</label>
                 <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   placeholder="Names of witnesses"
                   value={form.witnesses}
                   onChange={e => setForm(f => ({ ...f, witnesses: e.target.value }))}
@@ -434,7 +434,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   value={reviewForm.status}
                   onChange={e => setReviewForm(f => ({ ...f, status: e.target.value }))}
                 >
@@ -448,7 +448,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Outcome</label>
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   value={reviewForm.outcome}
                   onChange={e => setReviewForm(f => ({ ...f, outcome: e.target.value }))}
                 >
@@ -465,7 +465,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Admin Notes</label>
                 <textarea
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
                   rows={3}
                   value={reviewForm.admin_notes}
                   onChange={e => setReviewForm(f => ({ ...f, admin_notes: e.target.value }))}
@@ -475,7 +475,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Skill Gap Identified</label>
                 <select
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   value={reviewForm.skill_gap}
                   onChange={e => setReviewForm(f => ({ ...f, skill_gap: e.target.value }))}
                 >
@@ -490,7 +490,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
                 <div>
                   <label className="block text-xs font-medium text-gray-500 mb-1">Skill Gap Notes</label>
                   <textarea
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
                     rows={2}
                     placeholder="Observations about this skill gap..."
                     value={reviewForm.skill_gap_notes}
@@ -502,7 +502,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
               <div className="pt-1">
                 <Link
                   to={`/navigator/students/${referral.student_id}`}
-                  className="text-sm text-orange-500 hover:text-orange-600 font-medium"
+                  className="text-sm text-blue-500 hover:text-blue-600 font-medium"
                 >
                   View Student History →
                 </Link>
@@ -520,7 +520,7 @@ function ReferralDrawer({ referral, onClose, onSaved }) {
           <button
             onClick={isNew ? handleSubmitNew : handleSubmitReview}
             disabled={saving}
-            className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg transition-colors"
+            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg transition-colors"
           >
             {saving ? 'Saving…' : isNew ? 'Submit Referral' : 'Save Review'}
           </button>

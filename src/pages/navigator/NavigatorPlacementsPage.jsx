@@ -64,7 +64,7 @@ export default function NavigatorPlacementsPage() {
             </button>
             <button
               onClick={() => setShowDrawer(true)}
-              className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 transition-colors"
+              className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
             >
               + New Placement
             </button>
@@ -91,7 +91,7 @@ export default function NavigatorPlacementsPage() {
           <select
             value={campusFilter}
             onChange={e => setCampusFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-orange-400"
+            className="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-700 focus:outline-none focus:border-blue-400"
           >
             <option value="">All Campuses</option>
             {campuses.map(c => (
@@ -127,7 +127,7 @@ export default function NavigatorPlacementsPage() {
                   {placements.map(p => (
                     <tr key={p.id} className="hover:bg-gray-50 transition-colors">
                       <td className="px-4 py-3">
-                        <Link to={`/navigator/students/${p.student_id}`} className="font-medium text-gray-900 hover:text-orange-600">
+                        <Link to={`/navigator/students/${p.student_id}`} className="font-medium text-gray-900 hover:text-blue-600">
                           {p.students ? `${p.students.first_name} ${p.students.last_name}` : '—'}
                         </Link>
                         <p className="text-xs text-gray-400">{p.students?.grade_level || ''}</p>
@@ -144,7 +144,7 @@ export default function NavigatorPlacementsPage() {
                         {p.start_date ? format(parseISO(p.start_date), 'MMM d, yyyy') : '—'}
                       </td>
                       <td className="px-4 py-3 text-gray-600">
-                        {p.end_date ? format(parseISO(p.end_date), 'MMM d, yyyy') : <span className="text-orange-500 font-medium">Active</span>}
+                        {p.end_date ? format(parseISO(p.end_date), 'MMM d, yyyy') : <span className="text-blue-500 font-medium">Active</span>}
                       </td>
                       <td className="px-4 py-3 text-gray-600">{p.days ?? '—'}</td>
                       <td className="px-4 py-3 text-gray-600">{p.assigner?.full_name || '—'}</td>
@@ -159,7 +159,7 @@ export default function NavigatorPlacementsPage() {
                       <td className="px-4 py-3">
                         <button
                           onClick={() => setEditingPlacement(p)}
-                          className="text-xs text-orange-500 hover:text-orange-700 font-medium transition-colors"
+                          className="text-xs text-blue-500 hover:text-blue-700 font-medium transition-colors"
                         >
                           Edit
                         </button>
@@ -277,7 +277,7 @@ function NewPlacementDrawer({ onClose, onSaved }) {
             <label className="block text-xs font-medium text-gray-500 mb-1">Student *</label>
             {selectedStudent ? (
               <div>
-                <div className="flex items-center justify-between p-2 bg-orange-50 border border-orange-200 rounded-lg">
+                <div className="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded-lg">
                   <span className="text-sm font-medium text-gray-900">
                     {selectedStudent.first_name} {selectedStudent.last_name}
                     {selectedStudent.is_sped && <span className="ml-2 inline-flex items-center px-1.5 py-0.5 rounded text-xs font-bold bg-purple-100 text-purple-700">SPED</span>}
@@ -295,7 +295,7 @@ function NewPlacementDrawer({ onClose, onSaved }) {
             ) : (
               <div className="relative">
                 <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   placeholder="Search by name..."
                   value={studentSearch}
                   onChange={e => { setStudentSearch(e.target.value); searchStudents(e.target.value) }}
@@ -303,7 +303,7 @@ function NewPlacementDrawer({ onClose, onSaved }) {
                 {students.length > 0 && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg">
                     {students.map(s => (
-                      <button key={s.id} className="w-full px-3 py-2 text-left text-sm hover:bg-orange-50" onClick={() => { setSelectedStudent(s); setStudents([]) }}>
+                      <button key={s.id} className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50" onClick={() => { setSelectedStudent(s); setStudents([]) }}>
                         {s.first_name} {s.last_name} <span className="text-gray-400 text-xs">(Grade {s.grade_level})</span>
                       </button>
                     ))}
@@ -316,14 +316,14 @@ function NewPlacementDrawer({ onClose, onSaved }) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Campus *</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.campus_id} onChange={e => setForm(f => ({ ...f, campus_id: e.target.value }))}>
+              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.campus_id} onChange={e => setForm(f => ({ ...f, campus_id: e.target.value }))}>
                 <option value="">Select...</option>
                 {campuses.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Type *</label>
-              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.placement_type} onChange={e => setForm(f => ({ ...f, placement_type: e.target.value }))}>
+              <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.placement_type} onChange={e => setForm(f => ({ ...f, placement_type: e.target.value }))}>
                 <option value="iss">ISS</option>
                 <option value="oss">OSS</option>
               </select>
@@ -333,26 +333,26 @@ function NewPlacementDrawer({ onClose, onSaved }) {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Start Date *</label>
-              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.start_date} onChange={e => setForm(f => ({ ...f, start_date: e.target.value }))} />
+              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.start_date} onChange={e => setForm(f => ({ ...f, start_date: e.target.value }))} />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">End Date</label>
-              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.end_date} onChange={e => setForm(f => ({ ...f, end_date: e.target.value }))} />
+              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.end_date} onChange={e => setForm(f => ({ ...f, end_date: e.target.value }))} />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Days</label>
-              <input type="number" min="1" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.days} onChange={e => setForm(f => ({ ...f, days: e.target.value }))} />
+              <input type="number" min="1" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.days} onChange={e => setForm(f => ({ ...f, days: e.target.value }))} />
             </div>
           </div>
 
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Location</label>
-            <input className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
+            <input className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.location} onChange={e => setForm(f => ({ ...f, location: e.target.value }))} />
           </div>
 
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Reason</label>
-            <textarea className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none" rows={2} value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} />
+            <textarea className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none" rows={2} value={form.reason} onChange={e => setForm(f => ({ ...f, reason: e.target.value }))} />
           </div>
 
           <div>
@@ -363,7 +363,7 @@ function NewPlacementDrawer({ onClose, onSaved }) {
               className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none resize-none ${
                 form.placement_type === 'oss' && !form.reentry_plan
                   ? 'border-amber-400 focus:border-amber-500'
-                  : 'border-gray-300 focus:border-orange-400'
+                  : 'border-gray-300 focus:border-blue-400'
               }`}
               rows={2}
               placeholder={form.placement_type === 'oss' ? 'Required for OSS — describe conditions for student re-entry...' : 'Optional re-entry notes...'}
@@ -373,7 +373,7 @@ function NewPlacementDrawer({ onClose, onSaved }) {
           </div>
 
           <label className="flex items-center gap-2 cursor-pointer">
-            <input type="checkbox" checked={form.parent_notified} onChange={e => setForm(f => ({ ...f, parent_notified: e.target.checked }))} className="w-4 h-4 accent-orange-500" />
+            <input type="checkbox" checked={form.parent_notified} onChange={e => setForm(f => ({ ...f, parent_notified: e.target.checked }))} className="w-4 h-4 accent-blue-600" />
             <span className="text-sm text-gray-700">Parent/Guardian Notified</span>
           </label>
 
@@ -382,7 +382,7 @@ function NewPlacementDrawer({ onClose, onSaved }) {
 
         <div className="px-5 py-4 border-t border-gray-200 flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 text-sm text-gray-600">Cancel</button>
-          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg">
+          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg">
             {saving ? 'Saving…' : 'Save Placement'}
           </button>
         </div>
@@ -469,7 +469,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
               <label className="block text-xs font-medium text-gray-500 mb-1">End Date</label>
               <input
                 type="date"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                 value={form.end_date}
                 onChange={e => setForm(f => ({ ...f, end_date: e.target.value }))}
               />
@@ -477,7 +477,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
             <div className="flex flex-col justify-end">
               <button
                 onClick={endToday}
-                className="px-3 py-2 text-xs font-medium text-orange-600 border border-orange-300 rounded-lg hover:bg-orange-50 transition-colors"
+                className="px-3 py-2 text-xs font-medium text-blue-600 border border-blue-300 rounded-lg hover:bg-blue-50 transition-colors"
               >
                 End Today
               </button>
@@ -489,7 +489,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
             <input
               type="number"
               min="1"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
               value={form.days}
               onChange={e => setForm(f => ({ ...f, days: e.target.value }))}
             />
@@ -498,7 +498,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Location</label>
             <input
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
               value={form.location}
               onChange={e => setForm(f => ({ ...f, location: e.target.value }))}
             />
@@ -507,7 +507,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Reason</label>
             <textarea
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
               rows={2}
               value={form.reason}
               onChange={e => setForm(f => ({ ...f, reason: e.target.value }))}
@@ -517,7 +517,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Re-entry Plan</label>
             <textarea
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
               rows={3}
               value={form.reentry_plan}
               onChange={e => setForm(f => ({ ...f, reentry_plan: e.target.value }))}
@@ -529,7 +529,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
               type="checkbox"
               checked={form.parent_notified}
               onChange={e => setForm(f => ({ ...f, parent_notified: e.target.checked }))}
-              className="w-4 h-4 accent-orange-500"
+              className="w-4 h-4 accent-blue-600"
             />
             <span className="text-sm text-gray-700">Parent/Guardian Notified</span>
             {placement.parent_notified_at && (
@@ -547,7 +547,7 @@ function EditPlacementDrawer({ placement, onClose, onSaved }) {
           <button
             onClick={handleSave}
             disabled={saving}
-            className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg"
+            className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg"
           >
             {saving ? 'Saving…' : 'Save Changes'}
           </button>

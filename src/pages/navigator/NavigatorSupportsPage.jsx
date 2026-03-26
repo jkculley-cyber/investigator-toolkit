@@ -62,7 +62,7 @@ export default function NavigatorSupportsPage() {
         actions={
           <button
             onClick={() => setShowDrawer(true)}
-            className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 transition-colors"
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             + New Support
           </button>
@@ -79,7 +79,7 @@ export default function NavigatorSupportsPage() {
                 onClick={() => setTypeFilter(t.key)}
                 className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
                   typeFilter === t.key
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -90,7 +90,7 @@ export default function NavigatorSupportsPage() {
           <select
             value={campusFilter}
             onChange={e => setCampusFilter(e.target.value)}
-            className="px-3 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 focus:outline-none focus:border-orange-400"
+            className="px-3 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 focus:outline-none focus:border-blue-400"
           >
             <option value="">All Campuses</option>
             {campuses.map(c => (
@@ -164,7 +164,7 @@ function SupportsTable({ supports, onEdit }) {
           {supports.map(s => (
             <tr key={s.id} className="hover:bg-gray-50 transition-colors">
               <td className="px-4 py-3">
-                <Link to={`/navigator/students/${s.student_id}`} className="font-medium text-gray-900 hover:text-orange-600">
+                <Link to={`/navigator/students/${s.student_id}`} className="font-medium text-gray-900 hover:text-blue-600">
                   {s.students ? `${s.students.first_name} ${s.students.last_name}` : '—'}
                 </Link>
               </td>
@@ -185,7 +185,7 @@ function SupportsTable({ supports, onEdit }) {
               <td className="px-4 py-3">
                 <button
                   onClick={() => onEdit(s)}
-                  className="text-xs text-orange-500 hover:text-orange-700 font-medium transition-colors"
+                  className="text-xs text-blue-500 hover:text-blue-700 font-medium transition-colors"
                 >
                   Edit
                 </button>
@@ -277,14 +277,14 @@ function NewSupportDrawer({ onClose, onSaved }) {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Student *</label>
             {selectedStudent ? (
-              <div className="flex items-center justify-between p-2 bg-orange-50 border border-orange-200 rounded-lg">
+              <div className="flex items-center justify-between p-2 bg-blue-50 border border-blue-200 rounded-lg">
                 <span className="text-sm font-medium text-gray-900">{selectedStudent.first_name} {selectedStudent.last_name}</span>
                 <button onClick={() => { setSelectedStudent(null); setStudents([]) }} className="text-xs text-gray-400">Change</button>
               </div>
             ) : (
               <div className="relative">
                 <input
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                   placeholder="Search by name..."
                   value={studentSearch}
                   onChange={e => { setStudentSearch(e.target.value); searchStudents(e.target.value) }}
@@ -292,7 +292,7 @@ function NewSupportDrawer({ onClose, onSaved }) {
                 {students.length > 0 && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg">
                     {students.map(s => (
-                      <button key={s.id} className="w-full px-3 py-2 text-left text-sm hover:bg-orange-50" onClick={() => { setSelectedStudent(s); setStudents([]) }}>
+                      <button key={s.id} className="w-full px-3 py-2 text-left text-sm hover:bg-blue-50" onClick={() => { setSelectedStudent(s); setStudents([]) }}>
                         {s.first_name} {s.last_name} <span className="text-gray-400 text-xs">(Grade {s.grade_level})</span>
                       </button>
                     ))}
@@ -304,7 +304,7 @@ function NewSupportDrawer({ onClose, onSaved }) {
 
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Campus *</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.campus_id} onChange={e => setForm(f => ({ ...f, campus_id: e.target.value }))}>
+            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.campus_id} onChange={e => setForm(f => ({ ...f, campus_id: e.target.value }))}>
               <option value="">Select campus...</option>
               {campuses.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
@@ -312,14 +312,14 @@ function NewSupportDrawer({ onClose, onSaved }) {
 
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Support Type *</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.support_type} onChange={e => setForm(f => ({ ...f, support_type: e.target.value }))}>
+            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.support_type} onChange={e => setForm(f => ({ ...f, support_type: e.target.value }))}>
               {Object.entries(SUPPORT_TYPE_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </div>
 
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Assigned To</label>
-            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.assigned_to} onChange={e => setForm(f => ({ ...f, assigned_to: e.target.value }))}>
+            <select className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.assigned_to} onChange={e => setForm(f => ({ ...f, assigned_to: e.target.value }))}>
               <option value="">Unassigned</option>
               {staff.map(s => <option key={s.id} value={s.id}>{s.full_name}</option>)}
             </select>
@@ -328,24 +328,24 @@ function NewSupportDrawer({ onClose, onSaved }) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Start Date</label>
-              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.start_date} onChange={e => setForm(f => ({ ...f, start_date: e.target.value }))} />
+              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.start_date} onChange={e => setForm(f => ({ ...f, start_date: e.target.value }))} />
             </div>
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">End Date</label>
-              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" value={form.end_date} onChange={e => setForm(f => ({ ...f, end_date: e.target.value }))} />
+              <input type="date" className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" value={form.end_date} onChange={e => setForm(f => ({ ...f, end_date: e.target.value }))} />
             </div>
           </div>
 
           {form.support_type === 'parent_contact' && (
             <div>
               <label className="block text-xs font-medium text-gray-500 mb-1">Contact Method</label>
-              <input className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400" placeholder="e.g. Phone, Email, In-person" value={form.contact_method} onChange={e => setForm(f => ({ ...f, contact_method: e.target.value }))} />
+              <input className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400" placeholder="e.g. Phone, Email, In-person" value={form.contact_method} onChange={e => setForm(f => ({ ...f, contact_method: e.target.value }))} />
             </div>
           )}
 
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Notes</label>
-            <textarea className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none" rows={3} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
+            <textarea className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none" rows={3} value={form.notes} onChange={e => setForm(f => ({ ...f, notes: e.target.value }))} />
           </div>
 
           {error && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{error}</p>}
@@ -353,7 +353,7 @@ function NewSupportDrawer({ onClose, onSaved }) {
 
         <div className="px-5 py-4 border-t border-gray-200 flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 text-sm text-gray-600">Cancel</button>
-          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg">
+          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg">
             {saving ? 'Saving…' : 'Save Support'}
           </button>
         </div>
@@ -409,7 +409,7 @@ function EditSupportDrawer({ support, onClose, onSaved }) {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Status</label>
             <select
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
               value={form.status}
               onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
             >
@@ -422,7 +422,7 @@ function EditSupportDrawer({ support, onClose, onSaved }) {
           <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Notes</label>
             <textarea
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
               rows={2}
               value={form.notes}
               onChange={e => setForm(f => ({ ...f, notes: e.target.value }))}
@@ -442,7 +442,7 @@ function EditSupportDrawer({ support, onClose, onSaved }) {
                   <input
                     type="number"
                     min="0"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                     placeholder="0"
                     value={form.incidents_before}
                     onChange={e => setForm(f => ({ ...f, incidents_before: e.target.value }))}
@@ -453,7 +453,7 @@ function EditSupportDrawer({ support, onClose, onSaved }) {
                   <input
                     type="number"
                     min="0"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400"
                     placeholder="0"
                     value={form.incidents_after}
                     onChange={e => setForm(f => ({ ...f, incidents_after: e.target.value }))}
@@ -464,7 +464,7 @@ function EditSupportDrawer({ support, onClose, onSaved }) {
               <div>
                 <label className="block text-xs font-medium text-gray-500 mb-1">Outcome Notes</label>
                 <textarea
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-orange-400 resize-none"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:border-blue-400 resize-none"
                   rows={3}
                   placeholder="Describe what changed, what worked, what didn't..."
                   value={form.outcome_notes}
@@ -479,7 +479,7 @@ function EditSupportDrawer({ support, onClose, onSaved }) {
 
         <div className="px-5 py-4 border-t border-gray-200 flex justify-end gap-3">
           <button onClick={onClose} className="px-4 py-2 text-sm text-gray-600">Cancel</button>
-          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg">
+          <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 text-white text-sm font-medium rounded-lg">
             {saving ? 'Saving…' : 'Save Changes'}
           </button>
         </div>

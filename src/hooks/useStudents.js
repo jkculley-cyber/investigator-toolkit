@@ -69,9 +69,10 @@ export function useStudent(studentId) {
   const [student, setStudent] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { districtId } = useAuth()
 
   useEffect(() => {
-    if (!studentId) {
+    if (!studentId || !districtId) {
       setLoading(false)
       return
     }
@@ -87,6 +88,7 @@ export function useStudent(studentId) {
             parent:profiles!parent_profile_id(id, full_name, email, phone)
           `)
           .eq('id', studentId)
+          .eq('district_id', districtId)
           .single()
 
         if (fetchError) throw fetchError
@@ -100,7 +102,7 @@ export function useStudent(studentId) {
     }
 
     fetchStudent()
-  }, [studentId])
+  }, [studentId, districtId])
 
   return { student, loading, error }
 }

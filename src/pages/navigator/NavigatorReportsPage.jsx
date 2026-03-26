@@ -193,7 +193,7 @@ export default function NavigatorReportsPage() {
                 onClick={() => setRangePreset(p.key)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors ${
                   rangePreset === p.key
-                    ? 'bg-orange-500 text-white'
+                    ? 'bg-blue-600 text-white'
                     : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
@@ -206,14 +206,14 @@ export default function NavigatorReportsPage() {
                   type="date"
                   value={customFrom}
                   onChange={e => setCustomFrom(e.target.value)}
-                  className="px-2 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 focus:outline-none focus:border-orange-400"
+                  className="px-2 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 focus:outline-none focus:border-blue-400"
                 />
                 <span className="text-xs text-gray-400">to</span>
                 <input
                   type="date"
                   value={customTo}
                   onChange={e => setCustomTo(e.target.value)}
-                  className="px-2 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 focus:outline-none focus:border-orange-400"
+                  className="px-2 py-1.5 border border-gray-300 rounded-lg text-xs text-gray-700 focus:outline-none focus:border-blue-400"
                 />
               </div>
             )}
@@ -277,7 +277,7 @@ export default function NavigatorReportsPage() {
                       <span className="text-xs text-gray-600 w-32 truncate shrink-0" title={c.name}>{c.name}</span>
                       <div className="flex-1 bg-gray-100 rounded-full h-2">
                         <div
-                          className="bg-orange-400 h-2 rounded-full transition-all"
+                          className="bg-blue-500 h-2 rounded-full transition-all"
                           style={{ width: `${(c.count / max) * 100}%` }}
                         />
                       </div>

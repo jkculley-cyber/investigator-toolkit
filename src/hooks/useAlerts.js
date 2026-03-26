@@ -73,9 +73,10 @@ export function useAlert(alertId) {
   const [alert, setAlert] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const { districtId } = useAuth()
 
   const fetchAlert = useCallback(async () => {
-    if (!alertId) {
+    if (!alertId || !districtId) {
       setLoading(false)
       return
     }
@@ -91,6 +92,7 @@ export function useAlert(alertId) {
           resolved_by_profile:profiles!resolved_by(id, full_name, role)
         `)
         .eq('id', alertId)
+        .eq('district_id', districtId)
         .single()
 
       if (fetchError) throw fetchError
@@ -101,7 +103,7 @@ export function useAlert(alertId) {
     } finally {
       setLoading(false)
     }
-  }, [alertId])
+  }, [alertId, districtId])
 
   useEffect(() => {
     fetchAlert()

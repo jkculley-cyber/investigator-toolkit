@@ -51,7 +51,7 @@ export const ROLE_LABELS = {
 }
 
 // Staff roles (can access the main app shell — administrative roles only)
-// Teachers use standalone /referral form. Parents are notified via email.
+// Teachers, parents, and students do not have Waypoint access.
 export const STAFF_ROLES = [
   ROLES.ADMIN,
   ROLES.PRINCIPAL,

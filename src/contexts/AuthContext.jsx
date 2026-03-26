@@ -187,7 +187,7 @@ export function AuthProvider({ children }) {
   }
 
   function isStaff() {
-    const staffRoles = ['admin', 'principal', 'ap', 'counselor', 'sped_coordinator', 'teacher', 'cbc', 'sss', 'section_504_coordinator', 'director_student_affairs']
+    const staffRoles = ['admin', 'principal', 'ap', 'counselor', 'sped_coordinator', 'cbc', 'sss', 'section_504_coordinator', 'director_student_affairs']
     return staffRoles.includes(profile?.role)
   }
 

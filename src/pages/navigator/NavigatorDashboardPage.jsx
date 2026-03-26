@@ -21,7 +21,7 @@ export default function NavigatorDashboardPage() {
         actions={
           <Link
             to="/navigator/referrals"
-            className="px-4 py-2 bg-orange-500 text-white text-sm font-medium rounded-lg hover:bg-orange-600 transition-colors"
+            className="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             + New Referral
           </Link>
@@ -69,7 +69,7 @@ export default function NavigatorDashboardPage() {
             <StatCard
               label="Referrals This Month"
               value={stats?.referralsThisMonth ?? 0}
-              color="text-orange-600"
+              color="text-blue-600"
               icon={<ReferralIcon />}
               link="/navigator/referrals"
             />
@@ -101,7 +101,7 @@ export default function NavigatorDashboardPage() {
         <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <div className="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
             <h2 className="text-sm font-semibold text-gray-900">Recent Referrals</h2>
-            <Link to="/navigator/referrals" className="text-xs text-orange-500 hover:text-orange-600 font-medium">View all →</Link>
+            <Link to="/navigator/referrals" className="text-xs text-blue-500 hover:text-blue-600 font-medium">View all →</Link>
           </div>
           {loading ? (
             <div className="p-8 text-center text-gray-400 text-sm">Loading...</div>

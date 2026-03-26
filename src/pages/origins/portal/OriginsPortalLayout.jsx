@@ -14,7 +14,7 @@ export default function OriginsPortalLayout({ children }) {
           </div>
           <div>
             <span className="text-sm font-bold text-teal-700">Origins</span>
-            <span className="text-xs text-gray-400 ml-2">by Compass Pathway</span>
+            <span className="text-xs text-gray-400 ml-2">by Clear Path Education Group</span>
           </div>
         </div>
       </header>

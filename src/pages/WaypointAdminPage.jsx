@@ -2288,7 +2288,7 @@ function ProductHub({ districts = [], loadingDistricts = false }) {
 
       {/* Product Cards */}
       <section>
-        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Compass Pathway — All Products</h2>
+        <h2 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">Waypoint — All Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           {HUB_PRODUCTS.map(p => (
             <div key={p.name} className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden flex flex-col">

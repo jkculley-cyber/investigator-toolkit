@@ -94,14 +94,15 @@ const PRODUCTS = {
     textClass:       'text-blue-400',
     Icon: NavigatorProductIcon,
   },
-  meridian:  {
-    label: 'Meridian',
-    railActiveClass: 'bg-purple-600 text-white shadow-md shadow-purple-500/30',
-    railHoverClass:  'text-gray-500 hover:text-purple-400 hover:bg-white/5',
-    navActiveClass:  'text-purple-300 bg-purple-500/15 border-purple-400',
-    textClass:       'text-purple-400',
-    Icon: MeridianProductIcon,
-  },
+  // meridian: hidden until fully audited and ready for pilot
+  // meridian:  {
+  //   label: 'Meridian',
+  //   railActiveClass: 'bg-purple-600 text-white shadow-md shadow-purple-500/30',
+  //   railHoverClass:  'text-gray-500 hover:text-purple-400 hover:bg-white/5',
+  //   navActiveClass:  'text-purple-300 bg-purple-500/15 border-purple-400',
+  //   textClass:       'text-purple-400',
+  //   Icon: MeridianProductIcon,
+  // },
 }
 
 // Derive active product from the current URL path

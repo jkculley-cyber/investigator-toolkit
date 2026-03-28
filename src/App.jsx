@@ -143,8 +143,6 @@ function App() {
                 <Route path="/daep" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="daep_dashboard"><DaepDashboardPage /></RequireTier></RequireRole>} />
                 <Route path="/daep/phone-return" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="phone_return"><PhoneReturnPage /></RequireTier></RequireRole>} />
                 <Route path="/daep/orientations" element={<RequireRole roles={DAEP_ROLES}><RequireTier feature="daep_dashboard"><OrientationSchedulePage /></RequireTier></RequireRole>} />
-                <Route path="/daep/scoring" element={<RequireRole roles={STAFF_ROLES}><RequireTier feature="daep_dashboard"><DaepScoringPage /></RequireTier></RequireRole>} />
-
                 <Route path="/quick-report" element={<RequireRole roles={STAFF_ROLES}><QuickIncidentPage /></RequireRole>} />
                 <Route path="/calendar" element={<RequireRole roles={STAFF_ROLES}><CalendarPage /></RequireRole>} />
 

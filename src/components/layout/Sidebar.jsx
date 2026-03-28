@@ -20,7 +20,7 @@ const navigatorNavigation = [
   { name: 'Skill Gap Map',      path: '/navigator/skill-map',          icon: BrainIcon           },
   { name: 'Effectiveness',      path: '/navigator/effectiveness',      icon: TrendingUpIcon      },
   { name: 'Disproportionality', path: '/navigator/disproportionality', icon: ScaleIcon           },
-  { name: 'ISS Kiosk',           path: '/navigator/iss-kiosk',          icon: ClipboardListIcon   },
+  { name: 'ISS Kiosk',           path: '/navigator/iss-kiosk',          icon: ClipboardListIcon, external: true },
   { name: 'Pilot Summary',      path: '/navigator/pilot',              icon: ClipboardListIcon   },
   { name: 'Data Import',        path: '/navigator/import',             icon: ImportIcon          },
 ]
@@ -443,7 +443,7 @@ export default function Sidebar() {
               Sign Out
             </button>
             <p className="text-[10px] text-gray-700 text-center mt-3 leading-tight">
-              &copy; 2026 Clear Path Education Group, LLC, LLC
+              &copy; 2026 Clear Path Education Group, LLC
             </p>
           </div>
         )}

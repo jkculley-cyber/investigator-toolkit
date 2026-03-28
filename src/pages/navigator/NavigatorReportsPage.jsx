@@ -9,7 +9,7 @@ import { useAuth } from '../../contexts/AuthContext'
 import { supabase } from '../../lib/supabase'
 import { exportToPdf, exportToExcel } from '../../lib/exportUtils'
 
-const CHART_COLORS = ['#f97316', '#3b82f6', '#22c55e', '#ef4444', '#8b5cf6', '#f59e0b']
+const CHART_COLORS = ['#3b82f6', '#2563eb', '#22c55e', '#ef4444', '#8b5cf6', '#06b6d4']
 
 const DATE_PRESETS = [
   { key: '30d', label: 'Last 30 Days' },
@@ -229,7 +229,7 @@ export default function NavigatorReportsPage() {
               <XAxis dataKey="month" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
               <Tooltip />
-              <Line type="monotone" dataKey="referrals" stroke="#f97316" strokeWidth={2} dot={{ fill: '#f97316' }} />
+              <Line type="monotone" dataKey="referrals" stroke="#3b82f6" strokeWidth={2} dot={{ fill: '#3b82f6' }} />
             </LineChart>
           </ResponsiveContainer>
         </div>
@@ -302,7 +302,7 @@ export default function NavigatorReportsPage() {
                 <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
                 <YAxis type="category" dataKey="code" tick={{ fontSize: 11 }} width={75} />
                 <Tooltip formatter={(v, n, p) => [v, p.payload.description || p.payload.code]} />
-                <Bar dataKey="count" fill="#f97316" radius={[0, 4, 4, 0]} />
+                <Bar dataKey="count" fill="#3b82f6" radius={[0, 4, 4, 0]} />
               </BarChart>
             </ResponsiveContainer>
           )}

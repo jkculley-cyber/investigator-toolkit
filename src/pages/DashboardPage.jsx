@@ -413,19 +413,6 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {/* Teacher Quick Report card */}
-        {profile?.role === 'teacher' && (
-          <Link to="/referral" className="block mb-6 bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow no-underline">
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-white font-semibold text-sm">Report an incident</div>
-                <div className="text-orange-100 text-xs mt-1">Quick capture — 30 seconds</div>
-              </div>
-              <span className="text-white text-lg">→</span>
-            </div>
-          </Link>
-        )}
-
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
           <StatCard

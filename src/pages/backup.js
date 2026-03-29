@@ -289,12 +289,15 @@ async function generateCasePdf(jsPDF, caseId) {
 
   // Section 3: Immediate Actions
   sectionTitle('Section 3 — Immediate Actions');
+  const ia = caseRec.immediateActions || {};
   const actions = [
-    ['Student removed from class', caseRec.removedFromClass],
-    ['Parent/guardian notified', caseRec.parentNotified],
-    ['SRO/Police contacted', caseRec.policeContacted],
-    ['Medical attention provided', caseRec.medicalAttention],
+    ['Student separated from situation', ia.separated?.done],
+    ['Other parties separated', ia.othersSeparated?.done],
+    ['Principal/AP notified', ia.principalNotified?.done],
+    ['SRO notified', ia.sroNotified?.done],
+    ['Parent notified', ia.parentNotified?.done],
   ];
+  if (caseRec.isSped) actions.push(['SPED Coordinator notified', ia.spedNotified?.done]);
   actions.forEach(([label, val]) => {
     checkPage(6);
     const check = val ? '\u2611' : '\u2610';
@@ -331,16 +334,16 @@ async function generateCasePdf(jsPDF, caseId) {
   // Section 5: Timeline
   sectionTitle('Section 5 — Investigation Timeline');
   if (timeline.length > 0) {
-    timeline.sort((a, b) => new Date(a.timestamp || 0) - new Date(b.timestamp || 0));
+    timeline.sort((a, b) => (a.time || '').localeCompare(b.time || ''));
     doc.autoTable({
       startY: y,
       margin: { left: margin, right: margin },
       theme: 'grid',
       headStyles: { fillColor: [42, 157, 143], fontSize: 8 },
       bodyStyles: { fontSize: 8 },
-      head: [['Date/Time', 'Action', 'Notes']],
+      head: [['Time', 'Event / Observation']],
       body: timeline.map(t => [
-        t.timestamp || '', t.action || '', t.notes || ''
+        t.time || '', t.event || ''
       ])
     });
     y = doc.lastAutoTable.finalY + 8;
@@ -369,7 +372,7 @@ async function generateCasePdf(jsPDF, caseId) {
     witnessStatements.forEach((ws, i) => {
       checkPage(20);
       doc.setFont(undefined, 'bold');
-      doc.text(`Witness ${i + 1}: ${ws.witnessName || 'Unknown'}`, margin + 2, y);
+      doc.text(`Witness ${i + 1}: ${ws.name || 'Unknown'}`, margin + 2, y);
       y += 5;
       doc.setFont(undefined, 'normal');
       const lines = doc.splitTextToSize(ws.content || 'No content.', pageWidth - margin * 2 - 4);
@@ -479,9 +482,9 @@ async function handleExportZip(container) {
     // 2. Statements as text files
     const statements = await getAllByIndex('statements', 'caseId', caseId);
     statements.forEach((s, i) => {
-      const name = s.witnessName || (s.type === 'student' ? 'Student' : `Witness_${i + 1}`);
+      const name = s.name || (s.type === 'student' ? 'Student' : `Witness_${i + 1}`);
       folder.file(`statements/${name.replace(/\s+/g, '_')}.txt`,
-        `Type: ${s.type || 'Unknown'}\nWitness: ${s.witnessName || 'N/A'}\nDate: ${s.statementDate || s.createdAt || 'N/A'}\n\n${s.content || 'No content.'}`
+        `Type: ${s.type || 'Unknown'}\nName: ${s.name || 'N/A'}\nDate: ${s.collectedAt || s.interviewAt || s.createdAt || 'N/A'}\n\n${s.content || 'No content.'}`
       );
     });
 

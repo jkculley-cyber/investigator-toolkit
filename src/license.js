@@ -49,7 +49,7 @@ export async function checkLicense() {
 
   try {
     const res = await fetch(
-      `${OPS_URL}/rest/v1/product_licenses?license_key=eq.${encodeURIComponent(cached.key)}&select=status,expires_at`,
+      `${OPS_URL}/rest/v1/product_licenses?license_key=eq.${encodeURIComponent(cached.key)}&product=eq.investigator&select=status,expires_at`,
       {
         headers: { apikey: OPS_KEY, Authorization: `Bearer ${OPS_KEY}` },
         signal: AbortSignal.timeout(5000),

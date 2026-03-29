@@ -148,6 +148,22 @@ export function attach(container) {
       console.error('Reset counter error:', err);
     }
   });
+
+  // Share buttons
+  container.querySelector('#share-copy-btn')?.addEventListener('click', async () => {
+    const msg = container.querySelector('#share-msg')?.value || '';
+    try {
+      await navigator.clipboard.writeText(msg);
+      const btn = container.querySelector('#share-copy-btn');
+      btn.textContent = 'Copied!';
+      setTimeout(() => { btn.textContent = 'Copy Message'; }, 2000);
+    } catch (e) { alert('Copy failed — please select the text and copy manually.'); }
+  });
+
+  container.querySelector('#share-email-btn')?.addEventListener('click', () => {
+    const msg = container.querySelector('#share-msg')?.value || '';
+    window.open(`mailto:?subject=${encodeURIComponent('Check out Investigator Toolkit')}&body=${encodeURIComponent(msg)}`);
+  });
 }
 
 async function loadLicenseStatus() {
@@ -206,23 +222,6 @@ async function loadSettings() {
 function setVal(id, value) {
   const el = document.getElementById(id);
   if (el) el.value = value;
-}
-
-  // Share buttons
-  container.querySelector('#share-copy-btn')?.addEventListener('click', async () => {
-    const msg = container.querySelector('#share-msg')?.value || '';
-    try {
-      await navigator.clipboard.writeText(msg);
-      const btn = container.querySelector('#share-copy-btn');
-      btn.textContent = 'Copied!';
-      setTimeout(() => { btn.textContent = 'Copy Message'; }, 2000);
-    } catch { alert('Copy failed — please select the text and copy manually.'); }
-  });
-
-  container.querySelector('#share-email-btn')?.addEventListener('click', () => {
-    const msg = container.querySelector('#share-msg')?.value || '';
-    window.open(`mailto:?subject=${encodeURIComponent('Check out Investigator Toolkit')}&body=${encodeURIComponent(msg)}`);
-  });
 }
 
 function showToast(container) {

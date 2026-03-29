@@ -1,5 +1,5 @@
 # Session Context — Waypoint
-> Last updated: 2026-03-28 (Session BE — Apex IB Leadership Hub complete, Waypoint audit, email DNS)
+> Last updated: 2026-03-29 (Session BF — IB Hub audit + 5 demo-blockers fixed, edge function + storage deployed)
 
 ---
 

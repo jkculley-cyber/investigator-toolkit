@@ -147,7 +147,7 @@ async function loadDashboard() {
       return `
         <tr class="clickable-row" data-case-id="${c.id}">
           <td><strong>${escapeHtml(c.id)}</strong></td>
-          <td>${escapeHtml(c.studentName || 'N/A')}</td>
+          <td>${escapeHtml(c.studentName || 'N/A')}${c.investigationType === 'employee' ? ' <span class="badge" style="background:#ede9fe;color:#5b21b6;font-size:0.6rem;">EMP</span>' : ''}</td>
           <td>${escapeHtml(c.offenseCategory || 'N/A')}</td>
           <td><span class="badge" style="background:${statusColor};color:#fff;">${STATUS_LABELS[c.status] || c.status}</span></td>
           <td>${daysOpen}</td>

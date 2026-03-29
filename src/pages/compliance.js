@@ -38,7 +38,7 @@ export function render() {
   return `
     <div class="page-header">
       <h1>10-Day Compliance Tracker</h1>
-      <p class="page-subtitle">SPED cases requiring Manifestation Determination Review within 10 school days</p>
+      <p class="page-subtitle">SPED / 504 cases requiring Manifestation Determination Review within 10 school days</p>
     </div>
     <div class="card">
       <div class="card-body">
@@ -70,7 +70,7 @@ export function attach(container) {
 async function loadCompliance(container) {
   try {
     const cases = await getAll('cases');
-    const spedCases = cases.filter(c => c.isSped && c.status !== 'closed');
+    const spedCases = cases.filter(c => (c.isSped || c.is504) && c.status !== 'closed' && c.investigationType !== 'employee');
     const now = new Date();
 
     // Load findings for MDR status
@@ -84,7 +84,7 @@ async function loadCompliance(container) {
     if (!tbody) return;
 
     if (spedCases.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#9ca3af;">No active SPED cases requiring MDR tracking.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:#9ca3af;">No active SPED / 504 cases requiring MDR tracking.</td></tr>';
       return;
     }
 

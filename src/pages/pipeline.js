@@ -110,8 +110,9 @@ async function loadPipeline(container) {
         card.className = 'kanban-card' + (isSped ? ' kanban-card-sped' : '');
         card.draggable = true;
         card.dataset.caseId = c.id;
+        const typeBadge = c.investigationType === 'employee' ? '<span style="background:#ede9fe;color:#5b21b6;font-size:0.6rem;padding:1px 5px;border-radius:3px;margin-left:4px;">EMP</span>' : '';
         card.innerHTML = `
-          <div class="kanban-card-id">${escapeHtml(c.id)}</div>
+          <div class="kanban-card-id">${escapeHtml(c.id)}${typeBadge}</div>
           <div class="kanban-card-name">${escapeHtml(c.studentName || 'Unknown')}</div>
           <div class="kanban-card-meta">
             <span>${icon} ${escapeHtml(c.offenseCategory || '')}</span>

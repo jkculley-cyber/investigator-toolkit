@@ -6,11 +6,24 @@ import { checkLicense } from '../license.js';
 
 const OFFENSE_TEC = {
   'Fighting/Assault': '§37.005',
-  'Drugs/Alcohol': '§37.006',
+  'Drugs/Alcohol': '§37.006(a)',
   'Threats/Terroristic Threat': '§37.007',
-  'Harassment/Bullying': '§37.006(a)(2)',
-  'General Misconduct': '§37.005'
+  'Harassment/Bullying': '§37.0052',
+  'General Misconduct': '§37.001'
 };
+
+const EMPLOYEE_OFFENSE_CATEGORIES = [
+  'Policy Violation',
+  'Title IX / Sexual Harassment',
+  'Staff-Student Boundary Violation',
+  'Insubordination',
+  'Neglect of Duty',
+  'Misuse of Resources',
+  'Attendance/Tardiness Pattern',
+  'Physical Altercation',
+  'Substance-Related',
+  'Other'
+];
 
 const GRADES = ['K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
@@ -24,6 +37,17 @@ export function render() {
     </div>
 
     <form id="intake-form" class="intake-form">
+      <!-- Investigation Type Toggle -->
+      <div class="card" style="margin-bottom:1rem;">
+        <div class="card-body" style="display:flex;align-items:center;gap:1.5rem;">
+          <span class="form-label" style="margin:0;font-weight:700;">Investigation Type:</span>
+          <div class="toggle-group" id="inv-type-group">
+            <button type="button" class="toggle-btn" id="inv-type-student" data-active="true" style="padding:0.5rem 1.25rem;">Student Investigation</button>
+            <button type="button" class="toggle-btn" id="inv-type-employee" style="padding:0.5rem 1.25rem;">Employee Investigation</button>
+          </div>
+        </div>
+      </div>
+
       <!-- Section 1: Incident Overview -->
       <div class="card">
         <div class="card-header"><h2>Section 1 — Incident Overview</h2></div>
@@ -61,7 +85,7 @@ export function render() {
               <label class="form-label">Investigating Administrator</label>
               <input type="text" class="form-input" id="f-investigator" />
             </div>
-            <div class="form-group">
+            <div class="form-group" id="offense-group">
               <label class="form-label">Offense Category</label>
               <select class="form-input" id="f-offenseCategory" required>
                 <option value="">Select offense...</option>
@@ -72,16 +96,21 @@ export function render() {
                 <option value="General Misconduct">General Misconduct</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-group" id="tec-group">
               <label class="form-label">TEC Reference</label>
               <input type="text" class="form-input" id="f-tecRef" readonly />
             </div>
           </div>
+          <!-- Employee-only: Reporting Party -->
+          <div class="form-group" id="reporting-party-group" style="display:none;margin-top:1rem;">
+            <label class="form-label">Reporting Party (who reported the allegation)</label>
+            <input type="text" class="form-input" id="f-reportingParty" placeholder="e.g., Parent complaint, Staff report, Student report" />
+          </div>
         </div>
       </div>
 
-      <!-- Section 2: Student Information -->
-      <div class="card" style="margin-top:1rem;">
+      <!-- Section 2: Student Information (student investigations) -->
+      <div class="card" style="margin-top:1rem;" id="student-info-section">
         <div class="card-header"><h2>Section 2 — Student Information</h2></div>
         <div class="card-body">
           <div class="form-grid">
@@ -131,6 +160,38 @@ export function render() {
         </div>
       </div>
 
+      <!-- Section 2: Employee Information (employee investigations) -->
+      <div class="card" style="margin-top:1rem;display:none;" id="employee-info-section">
+        <div class="card-header"><h2>Section 2 — Employee Information</h2></div>
+        <div class="card-body">
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Employee Name</label>
+              <input type="text" class="form-input" id="f-employeeName" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Position/Title</label>
+              <input type="text" class="form-input" id="f-employeePosition" placeholder="e.g., Teacher, Paraprofessional, Custodian" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Employee ID</label>
+              <input type="text" class="form-input" id="f-employeeId" />
+            </div>
+            <div class="form-group">
+              <label class="form-label">Employment Status</label>
+              <select class="form-input" id="f-employmentStatus">
+                <option value="Active">Active</option>
+                <option value="Suspended">Suspended</option>
+                <option value="On Leave">On Leave</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:1rem;">
+            <label><input type="checkbox" id="f-unionNotified" /> Union Representative Notified (if applicable)</label>
+          </div>
+        </div>
+      </div>
+
       <div style="margin-top:1.5rem;display:flex;gap:1rem;justify-content:flex-end;">
         <button type="button" class="btn" id="intake-cancel-2">Cancel</button>
         <button type="submit" class="btn btn-primary">Create Case &amp; Open Investigation</button>
@@ -139,8 +200,65 @@ export function render() {
   `;
 }
 
+let currentInvType = 'student';
+
 export function attach(container) {
+  currentInvType = 'student';
   initForm();
+
+  // Investigation type toggle
+  const studentBtn = container.querySelector('#inv-type-student');
+  const employeeBtn = container.querySelector('#inv-type-employee');
+  const studentSection = container.querySelector('#student-info-section');
+  const employeeSection = container.querySelector('#employee-info-section');
+  const offenseGroup = container.querySelector('#offense-group');
+  const tecGroup = container.querySelector('#tec-group');
+  const reportingGroup = container.querySelector('#reporting-party-group');
+
+  function switchToStudent() {
+    currentInvType = 'student';
+    studentBtn.dataset.active = 'true';
+    employeeBtn.dataset.active = 'false';
+    studentSection.style.display = '';
+    employeeSection.style.display = 'none';
+    reportingGroup.style.display = 'none';
+    tecGroup.style.display = '';
+    // Restore student offense options
+    const sel = container.querySelector('#f-offenseCategory');
+    sel.innerHTML = `
+      <option value="">Select offense...</option>
+      <option value="Fighting/Assault">Fighting/Assault</option>
+      <option value="Drugs/Alcohol">Drugs/Alcohol</option>
+      <option value="Threats/Terroristic Threat">Threats/Terroristic Threat</option>
+      <option value="Harassment/Bullying">Harassment/Bullying</option>
+      <option value="General Misconduct">General Misconduct</option>
+    `;
+    container.querySelector('#f-tecRef').value = '';
+    // Restore required on student name, remove from employee name
+    container.querySelector('#f-studentName').required = true;
+    container.querySelector('#f-employeeName').required = false;
+  }
+
+  function switchToEmployee() {
+    currentInvType = 'employee';
+    employeeBtn.dataset.active = 'true';
+    studentBtn.dataset.active = 'false';
+    studentSection.style.display = 'none';
+    employeeSection.style.display = '';
+    reportingGroup.style.display = '';
+    tecGroup.style.display = 'none';
+    // Switch to employee offense options
+    const sel = container.querySelector('#f-offenseCategory');
+    sel.innerHTML = '<option value="">Select offense...</option>' +
+      EMPLOYEE_OFFENSE_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
+    container.querySelector('#f-tecRef').value = '';
+    // Switch required fields
+    container.querySelector('#f-studentName').required = false;
+    container.querySelector('#f-employeeName').required = true;
+  }
+
+  studentBtn?.addEventListener('click', switchToStudent);
+  employeeBtn?.addEventListener('click', switchToEmployee);
 
   const dateField = container.querySelector('#f-incidentDate');
   dateField?.addEventListener('change', () => {
@@ -152,7 +270,9 @@ export function attach(container) {
   const offenseField = container.querySelector('#f-offenseCategory');
   offenseField?.addEventListener('change', () => {
     const tecField = container.querySelector('#f-tecRef');
-    if (tecField) tecField.value = OFFENSE_TEC[offenseField.value] || '';
+    if (currentInvType === 'student') {
+      if (tecField) tecField.value = OFFENSE_TEC[offenseField.value] || '';
+    }
   });
 
   // SPED toggle
@@ -220,11 +340,13 @@ async function handleSubmit(e) {
     return;
   }
 
-  const isSped = document.getElementById('sped-yes')?.dataset.active === 'true';
-  const is504 = document.getElementById('504-yes')?.dataset.active === 'true';
+  const isEmployee = currentInvType === 'employee';
+  const isSped = isEmployee ? false : document.getElementById('sped-yes')?.dataset.active === 'true';
+  const is504 = isEmployee ? false : document.getElementById('504-yes')?.dataset.active === 'true';
 
   const caseRecord = {
     id: getVal('f-caseId'),
+    investigationType: currentInvType,
     schoolYear: getVal('f-schoolYear'),
     campus: getVal('f-campus'),
     incidentDate: getVal('f-incidentDate'),
@@ -233,13 +355,18 @@ async function handleSubmit(e) {
     location: getVal('f-location'),
     investigator: getVal('f-investigator'),
     offenseCategory: getVal('f-offenseCategory'),
-    tecReference: getVal('f-tecRef'),
-    studentName: getVal('f-studentName'),
-    grade: getVal('f-grade'),
-    studentId: getVal('f-studentId'),
-    dob: getVal('f-dob'),
+    tecReference: isEmployee ? '' : getVal('f-tecRef'),
+    // Student fields (repurposed for employee when applicable)
+    studentName: isEmployee ? getVal('f-employeeName') : getVal('f-studentName'),
+    grade: isEmployee ? getVal('f-employeePosition') : getVal('f-grade'),
+    studentId: isEmployee ? getVal('f-employeeId') : getVal('f-studentId'),
+    dob: isEmployee ? '' : getVal('f-dob'),
     isSped,
     is504,
+    // Employee-specific fields
+    employmentStatus: isEmployee ? getVal('f-employmentStatus') : '',
+    reportingParty: isEmployee ? getVal('f-reportingParty') : '',
+    unionNotified: isEmployee ? (document.getElementById('f-unionNotified')?.checked || false) : false,
     status: 'intake',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
@@ -248,29 +375,54 @@ async function handleSubmit(e) {
   try {
     await put('cases', caseRecord);
 
-    // Initialize 8 due_process steps
-    const steps = [
-      'Written/verbal notice of removal provided to student',
-      'Conference offered to student (required for age 10+)',
-      'Conference held with student',
-      'Parent/Guardian conference offered',
-      'Appeal rights explained to parent',
-      'Written notice of placement sent to parent',
-      'SPED: MDR scheduled (if applicable)',
-      '504: 504 Coordinator notified (if applicable)'
-    ];
-
-    for (let i = 0; i < steps.length; i++) {
-      await put('due_process', {
-        id: `${caseRecord.id}_dp_${i + 1}`,
-        caseId: caseRecord.id,
-        stepNumber: i + 1,
-        description: steps[i],
-        completed: false,
-        completedAt: null,
-        notes: '',
-        applicable: (i === 6) ? isSped : (i === 7) ? is504 : true
-      });
+    if (isEmployee) {
+      // Employee due process steps
+      const steps = [
+        'Employee notified of allegation in writing',
+        'Employee given opportunity to respond',
+        'Employee statement collected or refusal documented',
+        'Witness interviews conducted',
+        'Evidence collected and documented',
+        'HR Director / Supervisor notified',
+        'Administrative leave determination made (if applicable)',
+        'Union representative notified (if applicable)'
+      ];
+      for (let i = 0; i < steps.length; i++) {
+        await put('due_process', {
+          id: `${caseRecord.id}_dp_${i + 1}`,
+          caseId: caseRecord.id,
+          stepNumber: i + 1,
+          description: steps[i],
+          completed: false,
+          completedAt: null,
+          notes: '',
+          applicable: true
+        });
+      }
+    } else {
+      // Student due process steps
+      const steps = [
+        'Written/verbal notice of removal provided to student',
+        'Conference offered to student (required for age 10+)',
+        'Conference held with student',
+        'Parent/Guardian conference offered',
+        'Appeal rights explained to parent',
+        'Written notice of placement sent to parent',
+        'SPED: MDR scheduled (if applicable)',
+        '504: 504 Coordinator notified (if applicable)'
+      ];
+      for (let i = 0; i < steps.length; i++) {
+        await put('due_process', {
+          id: `${caseRecord.id}_dp_${i + 1}`,
+          caseId: caseRecord.id,
+          stepNumber: i + 1,
+          description: steps[i],
+          completed: false,
+          completedAt: null,
+          notes: '',
+          applicable: (i === 6) ? isSped : (i === 7) ? is504 : true
+        });
+      }
     }
 
     window.location.hash = `#case/${caseRecord.id}`;

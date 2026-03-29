@@ -87,7 +87,9 @@ async function loadCase(caseId, container) {
     return;
   }
 
-  container.querySelector('#case-title').textContent = `${c.id} — ${c.studentName || 'Unknown'}`;
+  const isEmployee = c.investigationType === 'employee';
+  const subjectLabel = isEmployee ? (c.studentName || 'Unknown Employee') : (c.studentName || 'Unknown');
+  container.querySelector('#case-title').textContent = `${c.id} — ${subjectLabel}`;
   const statusSelect = container.querySelector('#cd-status-select');
   if (statusSelect) {
     statusSelect.value = c.status;
@@ -99,8 +101,8 @@ async function loadCase(caseId, container) {
     };
   }
 
-  // MDR countdown for SPED
-  if (c.isSped && c.status !== 'closed') {
+  // MDR countdown for SPED (student cases only)
+  if (c.isSped && c.status !== 'closed' && !isEmployee) {
     const banner = container.querySelector('#mdr-countdown-banner');
     const deadline = businessDaysFromDate(c.incidentDate, 10);
     const remaining = businessDaysBetween(new Date(), deadline);
@@ -139,6 +141,12 @@ async function loadCase(caseId, container) {
     renderSection10(c)
   ].join('');
 
+  // Show investigation type badge
+  if (isEmployee) {
+    const titleEl = container.querySelector('#case-title');
+    if (titleEl) titleEl.innerHTML += ' <span class="badge" style="background:#7c3aed;color:#fff;font-size:0.7rem;vertical-align:middle;margin-left:6px;">EMPLOYEE</span>';
+  }
+
   attachSectionListeners(container, c, dueProcess, timeline, statements, evidence, findings);
 }
 
@@ -176,6 +184,20 @@ function renderSection1(c) {
 }
 
 function renderSection2(c) {
+  const isEmployee = c.investigationType === 'employee';
+  if (isEmployee) {
+    const statusColor = c.employmentStatus === 'Suspended' ? '#ef4444' : c.employmentStatus === 'On Leave' ? '#f59e0b' : '#22c55e';
+    return sectionWrapper(2, 'Employee Information', `
+      <div class="form-grid readonly-grid">
+        <div><span class="form-label">Name:</span> <strong>${escapeHtml(c.studentName || 'N/A')}</strong></div>
+        <div><span class="form-label">Position/Title:</span> ${escapeHtml(c.grade || 'N/A')}</div>
+        <div><span class="form-label">Employee ID:</span> ${escapeHtml(c.studentId || 'N/A')}</div>
+        <div><span class="form-label">Employment Status:</span> <span class="badge" style="background:${statusColor};color:#fff;">${escapeHtml(c.employmentStatus || 'Active')}</span></div>
+        ${c.reportingParty ? `<div><span class="form-label">Reporting Party:</span> ${escapeHtml(c.reportingParty)}</div>` : ''}
+        ${c.unionNotified ? '<div><span class="badge" style="background:#6366f1;color:#fff;">Union Rep Notified</span></div>' : ''}
+      </div>
+    `, true);
+  }
   const badges = [];
   if (c.isSped) badges.push('<span class="badge badge-danger">SPED/IEP</span>');
   if (c.is504) badges.push('<span class="badge badge-warning">504 Plan</span>');
@@ -192,6 +214,27 @@ function renderSection2(c) {
 
 function renderSection3(c) {
   const actions = c.immediateActions || {};
+  const isEmployee = c.investigationType === 'employee';
+
+  if (isEmployee) {
+    return sectionWrapper(3, 'Immediate Actions', `
+      <div class="checklist" id="s3-checklist">
+        ${immediateActionRow('adminLeave', 'Employee placed on administrative leave', actions)}
+        ${immediateActionRow('accessRevoked', 'Building/system access revoked (if needed)', actions)}
+        ${immediateActionRow('principalNotified', 'Principal/Supervisor notified', actions)}
+        ${immediateActionRow('hrNotified', 'HR Director notified', actions, [
+          { key: 'hrName', label: 'Name', type: 'text' },
+          { key: 'hrMethod', label: 'Method', type: 'select', options: ['Phone', 'In Person', 'Email'] }
+        ])}
+        ${immediateActionRow('employeeNotified', 'Employee notified of investigation', actions, [
+          { key: 'notifyMethod', label: 'Method', type: 'select', options: ['In Person', 'Written Notice', 'Both'] },
+          { key: 'notifyAcknowledged', label: 'Acknowledged', type: 'checkbox' }
+        ])}
+        ${immediateActionRow('legalNotified', 'Legal counsel notified (if applicable)', actions)}
+      </div>
+    `);
+  }
+
   return sectionWrapper(3, 'Immediate Actions', `
     <div class="checklist" id="s3-checklist">
       ${immediateActionRow('separated', 'Student separated from situation', actions)}
@@ -293,7 +336,9 @@ function renderSection5(c, timeline) {
 
 function renderSection6(c, studentStatements) {
   const s = studentStatements[0] || {};
-  return sectionWrapper(6, 'Student Statement', `
+  const isEmployee = c.investigationType === 'employee';
+  const stmtLabel = isEmployee ? 'Employee Statement' : 'Student Statement';
+  return sectionWrapper(6, stmtLabel, `
     <div class="form-grid">
       <div class="form-group">
         <label class="form-label">Date/Time Collected</label>
@@ -307,9 +352,9 @@ function renderSection6(c, studentStatements) {
     <div class="form-group" style="margin-top:0.75rem;">
       <label class="form-label">Format</label>
       <div class="radio-group" id="s6-format-group">
-        <label><input type="radio" name="s6-format" value="written" ${(s.format === 'written' || !s.format) ? 'checked' : ''} /> Written by student</label>
+        <label><input type="radio" name="s6-format" value="written" ${(s.format === 'written' || !s.format) ? 'checked' : ''} /> Written by ${isEmployee ? 'employee' : 'student'}</label>
         <label><input type="radio" name="s6-format" value="verbal" ${s.format === 'verbal' ? 'checked' : ''} /> Verbal documented by admin</label>
-        <label><input type="radio" name="s6-format" value="refused" ${s.format === 'refused' ? 'checked' : ''} /> Student Refused</label>
+        <label><input type="radio" name="s6-format" value="refused" ${s.format === 'refused' ? 'checked' : ''} /> ${isEmployee ? 'Employee' : 'Student'} Refused</label>
       </div>
     </div>
     <div id="s6-statement-area" style="${s.format === 'refused' ? 'display:none;' : ''}">
@@ -325,14 +370,14 @@ function renderSection6(c, studentStatements) {
     </div>
     <div id="s6-refused-area" style="${s.format === 'refused' ? '' : 'display:none;'}">
       <div class="form-group" style="margin-top:0.75rem;">
-        <label><input type="checkbox" id="s6-declined" ${s.declined ? 'checked' : ''} /> Student declined to provide a statement</label>
+        <label><input type="checkbox" id="s6-declined" ${s.declined ? 'checked' : ''} /> ${isEmployee ? 'Employee' : 'Student'} declined to provide a statement</label>
       </div>
       <div class="form-group">
         <label class="form-label">Reason</label>
         <textarea class="form-input" id="s6-refuseReason" rows="3">${escapeHtml(s.refuseReason || '')}</textarea>
       </div>
     </div>
-    <button class="btn btn-primary btn-sm" id="s6-save" style="margin-top:1rem;">Save Student Statement</button>
+    <button class="btn btn-primary btn-sm" id="s6-save" style="margin-top:1rem;">Save ${stmtLabel}</button>
   `);
 }
 
@@ -414,12 +459,13 @@ function renderSection8(c, evidence) {
 }
 
 function renderSection9(c, findings) {
+  const isEmployee = c.investigationType === 'employee';
   return sectionWrapper(9, 'Findings & Disposition', `
     <div class="form-group">
       <label><input type="checkbox" id="s9-occurred" ${findings.occurred ? 'checked' : ''} /> The incident occurred substantially as described</label>
     </div>
     <div class="form-group">
-      <label><input type="checkbox" id="s9-violates" ${findings.violatesScoc ? 'checked' : ''} /> Student engaged in conduct that violates SCOC</label>
+      <label><input type="checkbox" id="s9-violates" ${findings.violatesScoc ? 'checked' : ''} /> ${isEmployee ? 'Employee engaged in conduct that violates district policy' : 'Student engaged in conduct that violates SCOC'}</label>
     </div>
     <div class="form-grid" style="margin-top:0.75rem;">
       <div class="form-group">
@@ -434,8 +480,9 @@ function renderSection9(c, findings) {
 
     ${renderOffenseSpecific(c, findings)}
 
-    ${(c.isSped || c.is504) ? renderSpedFinding(findings) : ''}
+    ${(!isEmployee && (c.isSped || c.is504)) ? renderSpedFinding(findings) : ''}
 
+    ${isEmployee ? renderEmployeeFindings(findings) : `
     <div class="form-group" style="margin-top:1rem;padding-top:1rem;border-top:1px solid #e5e7eb;">
       <label class="form-label"><strong>Disposition</strong></label>
       <div class="radio-group" id="s9-disposition-group">
@@ -451,8 +498,42 @@ function renderSection9(c, findings) {
           <input type="text" class="form-input form-input-sm" id="s9-expulsionTo" value="${escapeAttr(findings.expulsionTo || '')}" /></label>
       </div>
     </div>
+    `}
     <button class="btn btn-primary btn-sm" id="s9-save" style="margin-top:1rem;">Save Findings</button>
   `);
+}
+
+function renderEmployeeFindings(findings) {
+  return `
+    <div class="card" style="margin-top:1rem;padding:1rem;background:#f5f3ff;border-left:3px solid #7c3aed;">
+      <h3 style="margin-top:0;">Employee Investigation Determination</h3>
+      <div class="form-group">
+        <label class="form-label"><strong>Finding</strong></label>
+        <div class="radio-group" id="s9-emp-finding-group">
+          <label><input type="radio" name="s9-empFinding" value="confirmed" ${findings.empFinding === 'confirmed' ? 'checked' : ''} /> Policy violation confirmed</label>
+          <label><input type="radio" name="s9-empFinding" value="not_confirmed" ${findings.empFinding === 'not_confirmed' ? 'checked' : ''} /> Policy violation not confirmed</label>
+          <label><input type="radio" name="s9-empFinding" value="inconclusive" ${findings.empFinding === 'inconclusive' ? 'checked' : ''} /> Inconclusive — insufficient evidence</label>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:1rem;">
+        <label class="form-label"><strong>Recommended Action</strong></label>
+        <div class="radio-group" id="s9-disposition-group">
+          <label><input type="radio" name="s9-disposition" value="no_action" ${findings.disposition === 'no_action' ? 'checked' : ''} /> No action / Unfounded</label>
+          <label><input type="radio" name="s9-disposition" value="verbal_warning" ${findings.disposition === 'verbal_warning' ? 'checked' : ''} /> Verbal warning</label>
+          <label><input type="radio" name="s9-disposition" value="written_warning" ${findings.disposition === 'written_warning' ? 'checked' : ''} /> Written warning (placed in personnel file)</label>
+          <label><input type="radio" name="s9-disposition" value="suspension_no_pay" ${findings.disposition === 'suspension_no_pay' ? 'checked' : ''} /> Suspension without pay —
+            <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;" /> days</label>
+          <label><input type="radio" name="s9-disposition" value="termination" ${findings.disposition === 'termination' ? 'checked' : ''} /> Termination recommendation — forwarded to:
+            <input type="text" class="form-input form-input-sm" id="s9-terminationTo" value="${escapeAttr(findings.terminationTo || '')}" /></label>
+          <label><input type="radio" name="s9-disposition" value="board_referral" ${findings.disposition === 'board_referral' ? 'checked' : ''} /> Referral to Board of Trustees</label>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:0.75rem;">
+        <label class="form-label">Additional Corrective Actions / Plan of Improvement</label>
+        <textarea class="form-input" id="s9-empCorrectiveActions" rows="3">${escapeHtml(findings.empCorrectiveActions || '')}</textarea>
+      </div>
+    </div>
+  `;
 }
 
 function renderOffenseSpecific(c, findings) {
@@ -558,6 +639,7 @@ function renderSpedFinding(findings) {
 
 function renderSection10(c) {
   const cert = c.certification || {};
+  const isEmployee = c.investigationType === 'employee';
   return sectionWrapper(10, 'Administrator Certification', `
     <div style="background:#f9fafb;padding:1rem;border-radius:6px;margin-bottom:1rem;">
       <p style="font-style:italic;margin:0;">I certify that the information contained in this investigation report is accurate and complete to the best of my knowledge. All due process requirements have been followed in accordance with the Texas Education Code and district policy. All relevant evidence has been collected, documented, and preserved. The student and parent/guardian have been afforded all required notifications and rights.</p>
@@ -597,7 +679,21 @@ function renderSection10(c) {
       <label><input type="checkbox" id="s10-distFile" checked disabled /> Student file</label>
       <label style="margin-left:1rem;"><input type="checkbox" id="s10-distCentral" ${cert.distCentral ? 'checked' : ''} /> Central office (if mandatory)</label>
       ${c.isSped ? `<label style="margin-left:1rem;"><input type="checkbox" id="s10-distSped" ${cert.distSped ? 'checked' : ''} /> SPED file</label>` : ''}
+      ${isEmployee ? `<label style="margin-left:1rem;"><input type="checkbox" id="s10-distHr" ${cert.distHr ? 'checked' : ''} /> HR / Personnel file</label>` : ''}
     </div>
+    ${isEmployee ? `
+    <hr style="margin:1.5rem 0;" />
+    <div class="form-grid">
+      <div class="form-group">
+        <label class="form-label">HR Director Review</label>
+        <input type="text" class="form-input" id="s10-hrName" value="${escapeAttr(cert.hrName || '')}" placeholder="HR Director Name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">HR Review Date</label>
+        <input type="date" class="form-input" id="s10-hrDate" value="${cert.hrDate || ''}" />
+      </div>
+    </div>
+    ` : ''}
     <button class="btn btn-primary btn-sm" id="s10-save" style="margin-top:1rem;">Save Certification</button>
   `);
 }
@@ -696,7 +792,10 @@ function attachSection1Edit(container, c) {
           <label class="form-label">Offense Category</label>
           <select class="form-input" id="s1-offenseCategory">
             <option value="">Select...</option>
-            ${['Drugs/Alcohol', 'Fighting/Assault', 'Harassment/Bullying', 'Threats', 'General Misconduct'].map(cat =>
+            ${(c.investigationType === 'employee'
+              ? ['Policy Violation', 'Title IX / Sexual Harassment', 'Staff-Student Boundary Violation', 'Insubordination', 'Neglect of Duty', 'Misuse of Resources', 'Attendance/Tardiness Pattern', 'Physical Altercation', 'Substance-Related', 'Other']
+              : ['Fighting/Assault', 'Drugs/Alcohol', 'Threats/Terroristic Threat', 'Harassment/Bullying', 'General Misconduct']
+            ).map(cat =>
               `<option value="${cat}" ${c.offenseCategory === cat ? 'selected' : ''}>${cat}</option>`
             ).join('')}
           </select>
@@ -1111,8 +1210,15 @@ function attachSection9(container, c, findings) {
       record.priorInterventions = container.querySelector('#s9o-priorInterventions')?.value || '';
     }
 
-    // SPED/504
-    if (c.isSped || c.is504) {
+    // Employee-specific fields
+    if (c.investigationType === 'employee') {
+      record.empFinding = container.querySelector('input[name="s9-empFinding"]:checked')?.value || '';
+      record.terminationTo = container.querySelector('#s9-terminationTo')?.value || '';
+      record.empCorrectiveActions = container.querySelector('#s9-empCorrectiveActions')?.value || '';
+    }
+
+    // SPED/504 (student cases only)
+    if (c.investigationType !== 'employee' && (c.isSped || c.is504)) {
       record.mdrStatus = container.querySelector('input[name="s9-mdr"]:checked')?.value || '';
       record.mdrDate = container.querySelector('#s9-mdrDate')?.value || '';
       record.mdrResult = container.querySelector('input[name="s9-mdrResult"]:checked')?.value || '';
@@ -1135,6 +1241,9 @@ function attachSection10(container, c) {
       reviewerDate: container.querySelector('#s10-reviewerDate')?.value || '',
       distCentral: container.querySelector('#s10-distCentral')?.checked || false,
       distSped: container.querySelector('#s10-distSped')?.checked || false,
+      distHr: container.querySelector('#s10-distHr')?.checked || false,
+      hrName: container.querySelector('#s10-hrName')?.value || '',
+      hrDate: container.querySelector('#s10-hrDate')?.value || '',
     };
     c.updatedAt = now();
     await put('cases', c);

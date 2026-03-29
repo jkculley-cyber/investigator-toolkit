@@ -69,7 +69,10 @@ async function loadTrends(container) {
     // 5. SPED/504 Breakdown
     html += renderSpedBreakdown(cases);
 
-    // 6. Repeat Offenders
+    // 6. Investigation Type Breakdown
+    html += renderInvestigationTypeBreakdown(cases);
+
+    // 7. Repeat Offenders
     html += renderRepeatOffenders(cases);
 
     contentEl.innerHTML = html;
@@ -271,6 +274,50 @@ function renderSpedBreakdown(cases) {
         <div class="card-body" style="text-align:center;">
           <div style="font-size:2rem;font-weight:700;color:var(--gray-800);">${count504}</div>
           <div style="font-size:0.8125rem;color:var(--gray-500);">504 Cases (${pct504}%)</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderInvestigationTypeBreakdown(cases) {
+  const studentCases = cases.filter(c => (c.investigationType || 'student') === 'student');
+  const employeeCases = cases.filter(c => c.investigationType === 'employee');
+  const total = cases.length;
+  const studentPct = total > 0 ? ((studentCases.length / total) * 100).toFixed(1) : '0.0';
+  const employeePct = total > 0 ? ((employeeCases.length / total) * 100).toFixed(1) : '0.0';
+
+  let employeeOffenses = '';
+  if (employeeCases.length > 0) {
+    const counts = {};
+    employeeCases.forEach(c => {
+      const cat = c.offenseCategory || 'Unknown';
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    const rows = entries.map(([cat, count]) =>
+      `<tr><td>${escapeHtml(cat)}</td><td style="text-align:center;font-weight:600;">${count}</td></tr>`
+    ).join('');
+    employeeOffenses = `
+      <div style="margin-top:0.75rem;">
+        <div style="font-size:0.8125rem;font-weight:600;color:var(--gray-600);margin-bottom:0.25rem;">Employee Offense Breakdown</div>
+        <table class="table" style="font-size:0.8125rem;"><thead><tr><th>Category</th><th style="text-align:center;">Count</th></tr></thead><tbody>${rows}</tbody></table>
+      </div>`;
+  }
+
+  return `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1rem;">
+      <div class="card" style="border-top:3px solid #3b82f6;">
+        <div class="card-body" style="text-align:center;">
+          <div style="font-size:2rem;font-weight:700;color:var(--gray-800);">${studentCases.length}</div>
+          <div style="font-size:0.8125rem;color:var(--gray-500);">Student Investigations (${studentPct}%)</div>
+        </div>
+      </div>
+      <div class="card" style="border-top:3px solid #7c3aed;">
+        <div class="card-body" style="text-align:center;">
+          <div style="font-size:2rem;font-weight:700;color:var(--gray-800);">${employeeCases.length}</div>
+          <div style="font-size:0.8125rem;color:var(--gray-500);">Employee Investigations (${employeePct}%)</div>
+          ${employeeOffenses}
         </div>
       </div>
     </div>

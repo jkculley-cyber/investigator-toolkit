@@ -198,12 +198,35 @@ function renderSetupWizard() {
   `;
 }
 
+// --- Trial helpers ---
+function getTrialInfo() {
+  try {
+    return JSON.parse(localStorage.getItem('inv_trial') || 'null');
+  } catch { return null; }
+}
+
+function isTrialActive() {
+  const trial = getTrialInfo();
+  if (!trial || trial.status !== 'trial') return false;
+  const started = new Date(trial.started);
+  const elapsed = (Date.now() - started.getTime()) / (1000 * 60 * 60 * 24);
+  return elapsed <= 14;
+}
+
+function getTrialDaysRemaining() {
+  const trial = getTrialInfo();
+  if (!trial || trial.status !== 'trial') return 0;
+  const started = new Date(trial.started);
+  const elapsed = (Date.now() - started.getTime()) / (1000 * 60 * 60 * 24);
+  return Math.max(0, Math.ceil(14 - elapsed));
+}
+
 // --- License entry screen ---
 function renderLicenseScreen(error) {
   return `
     <div class="setup-wizard">
       <h1>Campus Investigation Toolkit</h1>
-      <p style="margin-bottom:0.25rem;">Enter your license key to get started.</p>
+      <p style="margin-bottom:0.25rem;">Enter your license key to get started, or try free for 14 days.</p>
       <p style="font-size:0.8125rem;color:var(--gray-500);margin-bottom:1.5rem;">
         Purchase a license at <strong>clearpathedgroup.com</strong>
       </p>
@@ -211,10 +234,15 @@ function renderLicenseScreen(error) {
       <form id="license-form">
         <div class="form-group">
           <label for="license-key">License Key</label>
-          <input type="text" id="license-key" placeholder="e.g. INV-XXXX-XXXX" required style="text-transform:uppercase;" />
+          <input type="text" id="license-key" placeholder="e.g. INV-XXXX-XXXX" style="text-transform:uppercase;" />
         </div>
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:0.5rem;">Activate License</button>
       </form>
+      <div style="margin-top:1.5rem;text-align:center;border-top:1px solid #e5e7eb;padding-top:1.25rem;">
+        <p style="font-size:0.875rem;color:var(--gray-600);margin-bottom:0.75rem;">No license key? No problem.</p>
+        <button id="start-trial" class="btn" style="width:100%;justify-content:center;background:#2A9D8F;color:#fff;font-weight:700;">Start Free 14-Day Trial</button>
+        <p style="font-size:0.75rem;color:var(--gray-400);margin-top:0.5rem;">Full access. No credit card required. Data stays on your device.</p>
+      </div>
     </div>
   `;
 }
@@ -250,6 +278,14 @@ function showLicenseScreen(app, error) {
     licenseValid = true;
     boot(); // License valid — proceed to full boot
   });
+
+  // Trial button
+  const trialBtn = document.getElementById('start-trial');
+  trialBtn?.addEventListener('click', () => {
+    localStorage.setItem('inv_trial', JSON.stringify({ started: new Date().toISOString(), status: 'trial' }));
+    licenseValid = true;
+    boot();
+  });
 }
 
 // --- App init ---
@@ -263,10 +299,24 @@ async function boot() {
   const licResult = await checkLicense();
   licenseValid = licResult.valid;
 
-  // If no license key at all, show license entry screen
-  if (!getLicenseKey()) {
-    showLicenseScreen(app);
+  // Check trial status
+  const trialInfo = getTrialInfo();
+  const trialActive = isTrialActive();
+
+  // If no license key and no active trial, show license/trial entry screen
+  if (!getLicenseKey() && !trialActive) {
+    // If trial expired, show expiry message
+    if (trialInfo && trialInfo.status === 'trial') {
+      showLicenseScreen(app, 'Your 14-day free trial has expired. Enter a license key to continue.');
+    } else {
+      showLicenseScreen(app);
+    }
     return;
+  }
+
+  // Trial is active — treat as valid license
+  if (trialActive && !licenseValid) {
+    licenseValid = true;
   }
 
   // Check first-launch
@@ -289,8 +339,18 @@ async function boot() {
     return;
   }
 
-  // Render shell (with soft gate banner if license invalid)
-  app.innerHTML = (!licenseValid ? renderSoftGateBanner() : '') + renderShell(campusName);
+  // Render shell (with soft gate banner if license invalid, or trial banner if trial active)
+  let topBanner = '';
+  if (!licenseValid) {
+    topBanner = renderSoftGateBanner();
+  } else if (trialActive && !getLicenseKey()) {
+    const daysLeft = getTrialDaysRemaining();
+    topBanner = `<div style="background:#eff6ff;border-bottom:2px solid #bfdbfe;padding:0.5rem 1rem;text-align:center;font-size:0.8125rem;color:#1e40af;font-weight:600;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+      <span>Free Trial: ${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining</span>
+      <a href="https://clearpathedgroup.com/store.html#card-investigator-toolkit" target="_blank" rel="noopener noreferrer" style="background:#1e40af;color:#fff;padding:4px 12px;border-radius:6px;font-weight:700;font-size:0.75rem;text-decoration:none;white-space:nowrap;">Get Full License</a>
+    </div>`;
+  }
+  app.innerHTML = topBanner + renderShell(campusName);
 
   // Sidebar toggle (mobile)
   const hamburger = document.getElementById('hamburger');

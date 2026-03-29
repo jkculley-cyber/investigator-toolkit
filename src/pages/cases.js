@@ -47,6 +47,14 @@ export function render() {
             ${Object.entries(STATUS_LABELS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}
           </select>
         </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" style="display:block;font-size:0.8125rem;font-weight:600;color:var(--gray-700);margin-bottom:0.25rem;">Type</label>
+          <select class="form-input" id="cases-filter-type" style="padding:0.5rem 0.75rem;border:1px solid var(--gray-300);border-radius:6px;font-size:0.875rem;">
+            <option value="">All Types</option>
+            <option value="student">Student</option>
+            <option value="employee">Employee</option>
+          </select>
+        </div>
       </div>
     </div>
 
@@ -88,6 +96,7 @@ export function attach(container) {
   container.querySelector('#cases-search')?.addEventListener('input', () => filterAndRender(container));
   container.querySelector('#cases-filter-offense')?.addEventListener('change', () => filterAndRender(container));
   container.querySelector('#cases-filter-status')?.addEventListener('change', () => filterAndRender(container));
+  container.querySelector('#cases-filter-type')?.addEventListener('change', () => filterAndRender(container));
 }
 
 async function loadCases(container) {
@@ -104,6 +113,7 @@ function filterAndRender(container) {
   const search = (container.querySelector('#cases-search')?.value || '').toLowerCase();
   const offenseFilter = container.querySelector('#cases-filter-offense')?.value || '';
   const statusFilter = container.querySelector('#cases-filter-status')?.value || '';
+  const typeFilter = container.querySelector('#cases-filter-type')?.value || '';
 
   let filtered = allCases;
 
@@ -118,6 +128,9 @@ function filterAndRender(container) {
   }
   if (statusFilter) {
     filtered = filtered.filter(c => c.status === statusFilter);
+  }
+  if (typeFilter) {
+    filtered = filtered.filter(c => (c.investigationType || 'student') === typeFilter);
   }
 
   renderTable(container, filtered);
@@ -143,6 +156,7 @@ function renderTable(container, cases) {
     const daysOpen = Math.floor((now - new Date(c.createdAt)) / (1000 * 60 * 60 * 24));
     const statusColor = STATUS_COLORS[c.status] || '#9ca3af';
     const flags = [];
+    if (c.investigationType === 'employee') flags.push('<span class="badge" style="background:#ede9fe;color:#5b21b6;">Employee</span>');
     if (c.isSped) flags.push('<span class="badge" style="background:#fee2e2;color:#991b1b;">SPED</span>');
     if (c.is504) flags.push('<span class="badge" style="background:#fef3c7;color:#92400e;">504</span>');
 

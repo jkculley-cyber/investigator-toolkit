@@ -1,7 +1,7 @@
 /**
  * Global Evidence Log — Read-only table of ALL evidence across ALL cases
  */
-import { getAll } from '../db.js';
+import { getAll, get } from '../db.js';
 
 export function render() {
   return `
@@ -57,6 +57,7 @@ export function render() {
 }
 
 let allEvidence = [];
+let caseLegalHoldMap = {};
 
 export function attach(container) {
   loadEvidence(container);
@@ -68,6 +69,12 @@ export function attach(container) {
 async function loadEvidence(container) {
   try {
     allEvidence = await getAll('evidence');
+    // Build a map of caseId -> legalHold from case records
+    const cases = await getAll('cases');
+    caseLegalHoldMap = {};
+    for (const c of cases) {
+      caseLegalHoldMap[c.id] = !!c.legalHold;
+    }
     filterAndRender(container);
   } catch (err) {
     console.error('Evidence load error:', err);
@@ -87,9 +94,9 @@ function filterAndRender(container) {
   let filtered = [...allEvidence];
 
   if (holdFilter === 'yes') {
-    filtered = filtered.filter(e => e.legalHold);
+    filtered = filtered.filter(e => caseLegalHoldMap[e.caseId]);
   } else if (holdFilter === 'no') {
-    filtered = filtered.filter(e => !e.legalHold);
+    filtered = filtered.filter(e => !caseLegalHoldMap[e.caseId]);
   }
 
   filtered.sort((a, b) => {
@@ -107,7 +114,8 @@ function filterAndRender(container) {
   }
 
   tbody.innerHTML = filtered.map((e, i) => {
-    const holdBadge = e.legalHold
+    const caseHold = caseLegalHoldMap[e.caseId];
+    const holdBadge = caseHold
       ? '<span class="badge" style="background:#fee2e2;color:#991b1b;">HOLD</span>'
       : '<span class="badge" style="background:var(--gray-200);color:var(--gray-600);">No</span>';
 

@@ -25,10 +25,9 @@ function businessDaysBetween(start, end) {
   let count = 0;
   const cur = new Date(start);
   const endDate = new Date(end);
-  while (cur <= endDate) {
-    const day = cur.getDay();
-    if (day !== 0 && day !== 6) count++;
+  while (cur < endDate) {
     cur.setDate(cur.getDate() + 1);
+    if (cur.getDay() !== 0 && cur.getDay() !== 6) count++;
   }
   return count;
 }
@@ -39,7 +38,7 @@ export function render() {
       <h1>Command Dashboard</h1>
       <div class="page-actions">
         <button class="btn btn-primary" id="dash-new-case">+ New Case</button>
-        <button class="btn" id="dash-export-all">Export All PDF</button>
+        <button class="btn" id="dash-export-all">Export / Backup</button>
       </div>
     </div>
 
@@ -101,9 +100,8 @@ export function attach(container) {
     window.location.hash = '#intake';
   });
 
-  container.querySelector('#dash-export-all')?.addEventListener('click', async () => {
-    // Placeholder — PDF export will be wired later
-    alert('PDF export coming soon.');
+  container.querySelector('#dash-export-all')?.addEventListener('click', () => {
+    window.location.hash = '#backup';
   });
 }
 

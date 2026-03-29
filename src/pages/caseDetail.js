@@ -621,6 +621,9 @@ function attachSectionListeners(container, c, dueProcess, timeline, statements, 
     });
   });
 
+  // Section 1 — Edit Incident Overview
+  attachSection1Edit(container, c);
+
   // Section 3 — Immediate Actions
   attachSection3(container, c);
 
@@ -648,6 +651,109 @@ function attachSectionListeners(container, c, dueProcess, timeline, statements, 
   // Signature canvases
   initSignatureCanvas(container, 's6-sig');
   initSignatureCanvas(container, 's10-sig');
+}
+
+function attachSection1Edit(container, c) {
+  const editBtn = container.querySelector('#s1-edit');
+  if (!editBtn) return;
+
+  editBtn.addEventListener('click', () => {
+    const body = container.querySelector('[data-section-body="1"]');
+    if (!body) return;
+
+    // Replace read-only grid with editable form
+    body.innerHTML = `
+      <div class="form-grid">
+        <div class="form-group">
+          <label class="form-label">Case ID</label>
+          <input type="text" class="form-input" value="${escapeAttr(c.id)}" disabled />
+        </div>
+        <div class="form-group">
+          <label class="form-label">School Year</label>
+          <input type="text" class="form-input" value="${escapeAttr(c.schoolYear || '')}" disabled />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Campus</label>
+          <input type="text" class="form-input" value="${escapeAttr(c.campus || '')}" disabled />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Incident Date</label>
+          <input type="date" class="form-input" id="s1-incidentDate" value="${escapeAttr(c.incidentDate || '')}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Incident Time</label>
+          <input type="time" class="form-input" id="s1-incidentTime" value="${escapeAttr(c.incidentTime || '')}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Location</label>
+          <input type="text" class="form-input" id="s1-location" value="${escapeAttr(c.location || '')}" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Investigator</label>
+          <input type="text" class="form-input" value="${escapeAttr(c.investigator || '')}" disabled />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Offense Category</label>
+          <select class="form-input" id="s1-offenseCategory">
+            <option value="">Select...</option>
+            ${['Drugs/Alcohol', 'Fighting/Assault', 'Harassment/Bullying', 'Threats', 'General Misconduct'].map(cat =>
+              `<option value="${cat}" ${c.offenseCategory === cat ? 'selected' : ''}>${cat}</option>`
+            ).join('')}
+          </select>
+        </div>
+        <div class="form-group" style="grid-column:1/-1;">
+          <label class="form-label">Offense Description</label>
+          <textarea class="form-input" id="s1-offenseDescription" rows="3">${escapeHtml(c.offenseDescription || '')}</textarea>
+        </div>
+      </div>
+      <div style="margin-top:0.75rem;display:flex;gap:0.5rem;">
+        <button class="btn btn-primary btn-sm" id="s1-save">Save</button>
+        <button class="btn btn-sm" id="s1-cancel">Cancel</button>
+      </div>
+    `;
+
+    // Save handler
+    body.querySelector('#s1-save')?.addEventListener('click', async () => {
+      c.incidentDate = body.querySelector('#s1-incidentDate')?.value || c.incidentDate;
+      c.incidentTime = body.querySelector('#s1-incidentTime')?.value || c.incidentTime;
+      c.location = body.querySelector('#s1-location')?.value || c.location;
+      c.offenseCategory = body.querySelector('#s1-offenseCategory')?.value || c.offenseCategory;
+      c.offenseDescription = body.querySelector('#s1-offenseDescription')?.value || c.offenseDescription;
+      // Recalculate day of week from incident date
+      if (c.incidentDate) {
+        const d = new Date(c.incidentDate + 'T00:00:00');
+        c.dayOfWeek = d.toLocaleDateString('en-US', { weekday: 'long' });
+      }
+      c.updatedAt = now();
+      await put('cases', c);
+      // Re-render section 1 as read-only
+      body.innerHTML = renderSection1Content(c);
+      attachSection1Edit(container, c);
+    });
+
+    // Cancel handler
+    body.querySelector('#s1-cancel')?.addEventListener('click', () => {
+      body.innerHTML = renderSection1Content(c);
+      attachSection1Edit(container, c);
+    });
+  });
+}
+
+function renderSection1Content(c) {
+  return `
+    <div class="form-grid readonly-grid">
+      <div><span class="form-label">Case ID:</span> <strong>${escapeHtml(c.id)}</strong></div>
+      <div><span class="form-label">School Year:</span> ${escapeHtml(c.schoolYear || 'N/A')}</div>
+      <div><span class="form-label">Campus:</span> ${escapeHtml(c.campus || 'N/A')}</div>
+      <div><span class="form-label">Date:</span> ${escapeHtml(c.incidentDate || 'N/A')} (${escapeHtml(c.dayOfWeek || '')})</div>
+      <div><span class="form-label">Time:</span> ${escapeHtml(c.incidentTime || 'N/A')}</div>
+      <div><span class="form-label">Location:</span> ${escapeHtml(c.location || 'N/A')}</div>
+      <div><span class="form-label">Investigator:</span> ${escapeHtml(c.investigator || 'N/A')}</div>
+      <div><span class="form-label">Offense:</span> ${escapeHtml(c.offenseCategory || 'N/A')}</div>
+      <div><span class="form-label">TEC:</span> ${escapeHtml(c.tecReference || 'N/A')}</div>
+    </div>
+    <button class="btn btn-sm" id="s1-edit" style="margin-top:0.75rem;">Edit</button>
+  `;
 }
 
 function attachSection3(container, c) {

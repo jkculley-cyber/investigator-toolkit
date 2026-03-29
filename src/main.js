@@ -221,8 +221,9 @@ function renderLicenseScreen(error) {
 
 // --- Soft gate banner ---
 function renderSoftGateBanner() {
-  return `<div style="background:#fef2f2;border-bottom:2px solid #fecaca;padding:0.625rem 1rem;text-align:center;font-size:0.8125rem;color:#dc2626;font-weight:600;">
-    License expired or invalid — You can view existing data but cannot create new records. Go to Settings to update your license key.
+  return `<div style="background:#fef2f2;border-bottom:2px solid #fecaca;padding:0.75rem 1rem;text-align:center;font-size:0.8125rem;color:#dc2626;font-weight:600;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
+    <span>Your trial has expired. Your data is safe — subscribe to restore full access.</span>
+    <a href="https://clearpathedgroup.com/store.html#card-investigator-toolkit" target="_blank" rel="noopener noreferrer" style="background:#dc2626;color:#fff;padding:6px 16px;border-radius:6px;font-weight:700;font-size:0.8rem;text-decoration:none;white-space:nowrap;">Subscribe — $5/mo or $49/yr</a>
   </div>`;
 }
 

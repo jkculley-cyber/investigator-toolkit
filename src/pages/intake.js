@@ -149,10 +149,10 @@ export function render() {
             <div class="form-group">
               <label class="form-label">504 Plan?</label>
               <div class="toggle-group">
-                <button type="button" class="toggle-btn" id="504-no" data-active="true">No</button>
-                <button type="button" class="toggle-btn" id="504-yes">Yes</button>
+                <button type="button" class="toggle-btn" id="plan504-no" data-active="true">No</button>
+                <button type="button" class="toggle-btn" id="plan504-yes">Yes</button>
               </div>
-              <div id="504-alert" class="alert alert-warning" style="display:none;margin-top:0.5rem;">
+              <div id="plan504-alert" class="alert alert-warning" style="display:none;margin-top:0.5rem;">
                 <strong>Contact 504 Coordinator</strong> before proceeding with any placement decisions.
               </div>
             </div>
@@ -278,7 +278,7 @@ export function attach(container) {
   // SPED toggle
   setupToggle(container, 'sped-yes', 'sped-no', 'sped-alert');
   // 504 toggle
-  setupToggle(container, '504-yes', '504-no', '504-alert');
+  setupToggle(container, 'plan504-yes', 'plan504-no', 'plan504-alert');
 
   // Cancel buttons
   container.querySelector('#intake-cancel')?.addEventListener('click', () => { window.location.hash = '#'; });
@@ -342,7 +342,7 @@ async function handleSubmit(e) {
 
   const isEmployee = currentInvType === 'employee';
   const isSped = isEmployee ? false : document.getElementById('sped-yes')?.dataset.active === 'true';
-  const is504 = isEmployee ? false : document.getElementById('504-yes')?.dataset.active === 'true';
+  const is504 = isEmployee ? false : document.getElementById('plan504-yes')?.dataset.active === 'true';
 
   const caseRecord = {
     id: getVal('f-caseId'),

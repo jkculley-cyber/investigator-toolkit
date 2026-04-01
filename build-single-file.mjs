@@ -74,11 +74,14 @@ if (jsFiles2.length !== 1) {
 for (const jsFile of jsFiles2) {
   let js = readFileSync(join(assetsDir, jsFile), 'utf-8');
   // Escape </script> inside JS to prevent premature tag closure
-  // Browsers parse </script> literally even inside strings — split the tag
   js = js.replace(/<\/script/gi, '<"+"/script');
+  // Convert ES module to regular script so it works from file:// URLs
+  // Remove top-level import/export (single chunk has none, but just in case)
+  js = js.replace(/^export\s*\{[^}]*\}\s*;?\s*$/gm, '');
   const scriptPattern = new RegExp(`<script[^>]*${jsFile.replace(/\./g, '\\.')}[^>]*></script>`, 'g');
   if (scriptPattern.test(result)) {
-    result = result.replace(scriptPattern, `<script type="module">${js}</script>`);
+    // Use regular script (not module) so file:// works — wrap in IIFE for scope
+    result = result.replace(scriptPattern, `<script>(function(){${js}})()</script>`);
   }
 }
 

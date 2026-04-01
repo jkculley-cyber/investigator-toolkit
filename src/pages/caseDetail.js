@@ -377,6 +377,38 @@ function renderSection6(c, studentStatements) {
         <label class="form-label">Statement Content</label>
         <textarea class="form-input" id="s6-content" rows="6" placeholder="Enter or paste the ${isEmployee ? 'employee' : 'student'}'s statement...">${escapeHtml(s.content || '')}</textarea>
       </div>
+
+      <!-- Audio/File Upload -->
+      <div style="background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:1rem;margin-top:0.75rem;">
+        <label class="form-label" style="margin-bottom:0.5rem;"><strong>Attach Recording or Document</strong></label>
+        <p style="font-size:0.75rem;color:#6b7280;margin-bottom:0.75rem;">Upload an audio recording of a verbal statement, a photo of a handwritten statement, or any supporting document. Files are stored on this device only.</p>
+        <input type="file" id="s6-file-upload" accept="audio/*,image/*,.pdf,.doc,.docx" style="display:none;" />
+        <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+          <button type="button" class="btn btn-sm" id="s6-upload-btn" style="background:#0284c7;color:#fff;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload File
+          </button>
+          <button type="button" class="btn btn-sm" id="s6-record-btn" style="background:#dc2626;color:#fff;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;display:inline;vertical-align:-2px;margin-right:4px;"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            Record Audio
+          </button>
+        </div>
+        <div id="s6-recording-status" style="display:none;margin-top:0.5rem;font-size:0.8125rem;color:#dc2626;font-weight:600;">
+          <span style="display:inline-block;width:8px;height:8px;background:#dc2626;border-radius:50%;margin-right:6px;animation:pulse 1s infinite;"></span>
+          Recording... <button class="btn btn-sm" id="s6-stop-btn" style="margin-left:0.5rem;background:#374151;color:#fff;">Stop</button>
+        </div>
+        <div id="s6-attachments" style="margin-top:0.5rem;">
+          ${(s.attachments || []).map((a, i) => `
+            <div class="s6-attachment" style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;background:#fff;border:1px solid #e5e7eb;border-radius:6px;margin-top:0.25rem;font-size:0.8125rem;">
+              <span style="color:#0284c7;font-weight:600;">${escapeHtml(a.name)}</span>
+              <span style="color:#9ca3af;font-size:0.75rem;">(${a.type})</span>
+              ${a.type.startsWith('audio/') ? '<button class="btn btn-sm s6-play-btn" data-idx="' + i + '" style="padding:2px 8px;font-size:0.75rem;">Play</button>' : ''}
+              <button class="btn btn-sm btn-danger s6-remove-att" data-idx="${i}" style="margin-left:auto;padding:2px 8px;font-size:0.75rem;">Remove</button>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+
       <div class="form-group" style="margin-top:0.75rem;">
         <label class="form-label">Signature</label>
         <canvas id="s6-sig" width="400" height="120" style="border:1px solid #d1d5db;border-radius:8px;cursor:crosshair;background:#fff;"></canvas>
@@ -436,15 +468,29 @@ function witnessCard(w, idx) {
         <label class="form-label">Statement Content</label>
         <textarea class="form-input" data-wf="content" rows="4">${escapeHtml(w.content || '')}</textarea>
       </div>
-      <div class="form-group" style="margin-top:0.5rem;">
-        <label class="form-label">Written statement obtained?</label>
-        <select class="form-input" data-wf="writtenObtained" style="width:auto;">
-          <option value="">Select...</option>
-          <option value="yes" ${w.writtenObtained === 'yes' ? 'selected' : ''}>Yes - Attached</option>
-          <option value="no" ${w.writtenObtained === 'no' ? 'selected' : ''}>No</option>
-          <option value="declined" ${w.writtenObtained === 'declined' ? 'selected' : ''}>Declined</option>
-        </select>
-        <button class="btn btn-danger btn-sm witness-delete" data-witness-id="${w.id}" style="float:right;">Delete Witness</button>
+      <div style="display:flex;gap:1rem;align-items:flex-start;margin-top:0.5rem;flex-wrap:wrap;">
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Written statement obtained?</label>
+          <select class="form-input" data-wf="writtenObtained" style="width:auto;">
+            <option value="">Select...</option>
+            <option value="yes" ${w.writtenObtained === 'yes' ? 'selected' : ''}>Yes - Attached</option>
+            <option value="no" ${w.writtenObtained === 'no' ? 'selected' : ''}>No</option>
+            <option value="declined" ${w.writtenObtained === 'declined' ? 'selected' : ''}>Declined</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label">Attach Recording / Document</label>
+          <input type="file" class="w-file-upload" data-witness-id="${w.id}" accept="audio/*,image/*,.pdf,.doc,.docx" style="font-size:0.8125rem;" />
+          <div class="w-attachments" data-witness-id="${w.id}" style="margin-top:0.25rem;">
+            ${(w.attachments || []).map((a, i) => `
+              <div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;margin-top:0.2rem;font-size:0.75rem;">
+                <span style="color:#0284c7;font-weight:600;">${escapeHtml(a.name)}</span>
+                <span style="color:#9ca3af;">(${a.type.split('/')[0]})</span>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+        <button class="btn btn-danger btn-sm witness-delete" data-witness-id="${w.id}" style="margin-left:auto;align-self:flex-end;">Delete Witness</button>
       </div>
     </div>
   `;
@@ -1065,6 +1111,93 @@ function attachSection6(container, c, statements) {
     });
   });
 
+  // File upload
+  let s6Attachments = [...((statements.filter(s => s.type === 'student')[0] || {}).attachments || [])];
+  const fileInput = container.querySelector('#s6-file-upload');
+  const uploadBtn = container.querySelector('#s6-upload-btn');
+  uploadBtn?.addEventListener('click', () => fileInput?.click());
+  fileInput?.addEventListener('change', async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      s6Attachments.push({ name: file.name, type: file.type, size: file.size, data: reader.result, addedAt: now() });
+      refreshAttachments();
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // Audio recording
+  let mediaRecorder = null;
+  let audioChunks = [];
+  const recordBtn = container.querySelector('#s6-record-btn');
+  const stopBtn = container.querySelector('#s6-stop-btn');
+  const recordingStatus = container.querySelector('#s6-recording-status');
+
+  recordBtn?.addEventListener('click', async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+      audioChunks = [];
+      mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+      mediaRecorder.onstop = () => {
+        stream.getTracks().forEach(t => t.stop());
+        const blob = new Blob(audioChunks, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.onload = () => {
+          const timestamp = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+          s6Attachments.push({ name: `Recording ${timestamp}.webm`, type: 'audio/webm', size: blob.size, data: reader.result, addedAt: now() });
+          refreshAttachments();
+        };
+        reader.readAsDataURL(blob);
+        recordingStatus.style.display = 'none';
+        recordBtn.style.display = '';
+      };
+      mediaRecorder.start();
+      recordingStatus.style.display = '';
+      recordBtn.style.display = 'none';
+    } catch (err) {
+      alert('Microphone access denied. Please allow microphone access to record audio.');
+    }
+  });
+
+  stopBtn?.addEventListener('click', () => {
+    if (mediaRecorder && mediaRecorder.state === 'recording') mediaRecorder.stop();
+  });
+
+  // Playback + remove
+  function refreshAttachments() {
+    const attDiv = container.querySelector('#s6-attachments');
+    attDiv.innerHTML = s6Attachments.map((a, i) => `
+      <div style="display:flex;align-items:center;gap:0.5rem;padding:0.4rem 0.6rem;background:#fff;border:1px solid #e5e7eb;border-radius:6px;margin-top:0.25rem;font-size:0.8125rem;">
+        <span style="color:#0284c7;font-weight:600;">${escapeHtml(a.name)}</span>
+        <span style="color:#9ca3af;font-size:0.75rem;">(${a.type.split('/')[0]})</span>
+        ${a.type.startsWith('audio/') ? '<button class="btn btn-sm s6-play-btn" data-idx="' + i + '" style="padding:2px 8px;font-size:0.75rem;">Play</button>' : ''}
+        ${a.type.startsWith('image/') ? '<button class="btn btn-sm s6-view-btn" data-idx="' + i + '" style="padding:2px 8px;font-size:0.75rem;">View</button>' : ''}
+        <button class="btn btn-sm btn-danger s6-remove-att" data-idx="${i}" style="margin-left:auto;padding:2px 8px;font-size:0.75rem;">Remove</button>
+      </div>
+    `).join('');
+
+    attDiv.querySelectorAll('.s6-play-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a = s6Attachments[btn.dataset.idx];
+        if (a?.data) { const audio = new Audio(a.data); audio.play(); }
+      });
+    });
+    attDiv.querySelectorAll('.s6-view-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const a = s6Attachments[btn.dataset.idx];
+        if (a?.data) { window.open(a.data, '_blank'); }
+      });
+    });
+    attDiv.querySelectorAll('.s6-remove-att').forEach(btn => {
+      btn.addEventListener('click', () => {
+        s6Attachments.splice(Number(btn.dataset.idx), 1);
+        refreshAttachments();
+      });
+    });
+  }
+
   container.querySelector('#s6-save')?.addEventListener('click', async () => {
     const existing = statements.filter(s => s.type === 'student')[0];
     const format = container.querySelector('input[name="s6-format"]:checked')?.value || 'written';
@@ -1079,11 +1212,12 @@ function attachSection6(container, c, statements) {
       declined: format === 'refused' ? (container.querySelector('#s6-declined')?.checked || false) : false,
       refuseReason: format === 'refused' ? (container.querySelector('#s6-refuseReason')?.value || '') : '',
       signature: getSignatureData(container, 's6-sig'),
+      attachments: s6Attachments,
       updatedAt: now()
     };
     if (!record.id) record.id = `${c.id}_student_stmt`;
     await put('statements', record);
-    alert('Student statement saved.');
+    alert('Statement saved.');
   });
 }
 
@@ -1136,6 +1270,34 @@ function attachSection7(container, c, statements) {
     w[field] = el.value;
     w.updatedAt = now();
     await put('statements', w);
+  });
+
+  // Witness file uploads
+  list?.addEventListener('change', async (e) => {
+    const el = e.target;
+    if (!el.classList.contains('w-file-upload')) return;
+    const file = el.files[0];
+    if (!file) return;
+    const wId = Number(el.dataset.witnessId);
+    const w = statements.find(s => s.id === wId);
+    if (!w) return;
+    const reader = new FileReader();
+    reader.onload = async () => {
+      if (!w.attachments) w.attachments = [];
+      w.attachments.push({ name: file.name, type: file.type, size: file.size, data: reader.result, addedAt: now() });
+      w.updatedAt = now();
+      await put('statements', w);
+      // Update display
+      const attDiv = list.querySelector(`.w-attachments[data-witness-id="${wId}"]`);
+      if (attDiv) {
+        attDiv.innerHTML += `<div style="display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0.5rem;background:#f9fafb;border:1px solid #e5e7eb;border-radius:4px;margin-top:0.2rem;font-size:0.75rem;">
+          <span style="color:#0284c7;font-weight:600;">${escapeHtml(file.name)}</span>
+          <span style="color:#9ca3af;">(${file.type.split('/')[0]})</span>
+        </div>`;
+      }
+      el.value = '';
+    };
+    reader.readAsDataURL(file);
   });
 
   // Delete witness

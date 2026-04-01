@@ -392,7 +392,14 @@ async function boot() {
   navigate();
 }
 
-boot();
+boot().catch(err => {
+  console.error('Boot failed:', err);
+  const app = document.getElementById('app');
+  if (app) app.innerHTML = `<div style="padding:2rem;text-align:center;color:#dc2626;font-family:system-ui">
+    <h2>Failed to load</h2><p>${err.message || 'Unknown error'}</p>
+    <button onclick="location.reload()" style="margin-top:1rem;padding:8px 20px;background:#2A9D8F;color:#fff;border:none;border-radius:6px;cursor:pointer">Retry</button>
+  </div>`;
+});
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {

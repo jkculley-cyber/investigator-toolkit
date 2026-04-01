@@ -5,9 +5,9 @@ import { put, generateCaseId, getSetting } from '../db.js';
 import { checkLicense } from '../license.js';
 
 const OFFENSE_TEC = {
-  'Fighting/Assault': '§37.005',
-  'Drugs/Alcohol': '§37.006(a)',
-  'Threats/Terroristic Threat': '§37.007',
+  'Fighting/Assault': '§37.006(a)(2)',
+  'Drugs/Alcohol': '§37.006(a)(1)',
+  'Threats/Terroristic Threat': '§37.007(a)(3)',
   'Harassment/Bullying': '§37.0052',
   'General Misconduct': '§37.001'
 };

@@ -72,16 +72,15 @@ if (jsFiles2.length !== 1) {
   console.warn(`Warning: expected 1 JS file, got ${jsFiles2.length}: ${jsFiles2.join(', ')}`);
 }
 for (const jsFile of jsFiles2) {
-  let js = readFileSync(join(assetsDir, jsFile), 'utf-8');
-  // Escape </script> inside JS to prevent premature tag closure
-  js = js.replace(/<\/script/gi, '<"+"/script');
-  // Convert ES module to regular script so it works from file:// URLs
-  // Remove top-level import/export (single chunk has none, but just in case)
-  js = js.replace(/^export\s*\{[^}]*\}\s*;?\s*$/gm, '');
+  const js = readFileSync(join(assetsDir, jsFile), 'utf-8');
+  // Base64-encode the entire JS to avoid ANY HTML parser interference.
+  // Template literals containing <style>, </script>, <!DOCTYPE> etc. break
+  // when placed inside a <script> tag. Base64 is immune to this.
+  const b64 = Buffer.from(js, 'utf-8').toString('base64');
+  const loader = `<script>document.addEventListener("DOMContentLoaded",function(){eval(atob("${b64}"))})<\/script>`;
   const scriptPattern = new RegExp(`<script[^>]*${jsFile.replace(/\./g, '\\.')}[^>]*></script>`, 'g');
   if (scriptPattern.test(result)) {
-    // Use regular script (not module) so file:// works — wrap in IIFE for scope
-    result = result.replace(scriptPattern, `<script>(function(){${js}})()</script>`);
+    result = result.replace(scriptPattern, loader);
   }
 }
 

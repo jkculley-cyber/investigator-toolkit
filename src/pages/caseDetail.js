@@ -487,15 +487,31 @@ function renderSection9(c, findings) {
       <label class="form-label"><strong>Disposition</strong></label>
       <div class="radio-group" id="s9-disposition-group">
         <label><input type="radio" name="s9-disposition" value="warning" ${findings.disposition === 'warning' ? 'checked' : ''} /> Warning / No removal</label>
-        <label><input type="radio" name="s9-disposition" value="suspension" ${findings.disposition === 'suspension' ? 'checked' : ''} /> Suspension —
-          <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" max="3" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;" /> days (max 3)</label>
-        <label><input type="radio" name="s9-disposition" value="discretionary_daep" ${findings.disposition === 'discretionary_daep' ? 'checked' : ''} /> Discretionary DAEP —
-          <input type="number" class="form-input form-input-xs" id="s9-daepDays" value="${escapeAttr(findings.daepDays || '')}" style="width:60px;" /> days, Campus:
-          <input type="text" class="form-input form-input-sm" id="s9-daepCampus" value="${escapeAttr(findings.daepCampus || '')}" /></label>
-        <label><input type="radio" name="s9-disposition" value="mandatory_daep" ${findings.disposition === 'mandatory_daep' ? 'checked' : ''} /> Mandatory DAEP referral — forwarded to:
-          <input type="text" class="form-input form-input-sm" id="s9-mandatoryTo" value="${escapeAttr(findings.mandatoryTo || '')}" /></label>
-        <label><input type="radio" name="s9-disposition" value="expulsion" ${findings.disposition === 'expulsion' ? 'checked' : ''} /> Mandatory Expulsion recommendation — forwarded to:
-          <input type="text" class="form-input form-input-sm" id="s9-expulsionTo" value="${escapeAttr(findings.expulsionTo || '')}" /></label>
+        <div>
+          <label><input type="radio" name="s9-disposition" value="suspension" ${findings.disposition === 'suspension' ? 'checked' : ''} /> Suspension</label>
+          <div style="margin-left:1.5rem;margin-top:0.25rem;">
+            <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" max="3" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;display:inline-block;" /> <span style="font-size:0.8125rem;color:#6b7280;">days (max 3)</span>
+          </div>
+        </div>
+        <div>
+          <label><input type="radio" name="s9-disposition" value="discretionary_daep" ${findings.disposition === 'discretionary_daep' ? 'checked' : ''} /> Discretionary DAEP</label>
+          <div style="margin-left:1.5rem;margin-top:0.25rem;display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
+            <input type="number" class="form-input form-input-xs" id="s9-daepDays" value="${escapeAttr(findings.daepDays || '')}" style="width:60px;" /> <span style="font-size:0.8125rem;color:#6b7280;">days</span>
+            <span style="font-size:0.8125rem;color:#6b7280;">Campus:</span> <input type="text" class="form-input form-input-sm" id="s9-daepCampus" value="${escapeAttr(findings.daepCampus || '')}" style="width:160px;" />
+          </div>
+        </div>
+        <div>
+          <label><input type="radio" name="s9-disposition" value="mandatory_daep" ${findings.disposition === 'mandatory_daep' ? 'checked' : ''} /> Mandatory DAEP referral</label>
+          <div style="margin-left:1.5rem;margin-top:0.25rem;">
+            <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span> <input type="text" class="form-input form-input-sm" id="s9-mandatoryTo" value="${escapeAttr(findings.mandatoryTo || '')}" style="width:200px;display:inline-block;" />
+          </div>
+        </div>
+        <div>
+          <label><input type="radio" name="s9-disposition" value="expulsion" ${findings.disposition === 'expulsion' ? 'checked' : ''} /> Mandatory Expulsion recommendation</label>
+          <div style="margin-left:1.5rem;margin-top:0.25rem;">
+            <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span> <input type="text" class="form-input form-input-sm" id="s9-expulsionTo" value="${escapeAttr(findings.expulsionTo || '')}" style="width:200px;display:inline-block;" />
+          </div>
+        </div>
       </div>
     </div>
     `}
@@ -521,10 +537,18 @@ function renderEmployeeFindings(findings) {
           <label><input type="radio" name="s9-disposition" value="no_action" ${findings.disposition === 'no_action' ? 'checked' : ''} /> No action / Unfounded</label>
           <label><input type="radio" name="s9-disposition" value="verbal_warning" ${findings.disposition === 'verbal_warning' ? 'checked' : ''} /> Verbal warning</label>
           <label><input type="radio" name="s9-disposition" value="written_warning" ${findings.disposition === 'written_warning' ? 'checked' : ''} /> Written warning (placed in personnel file)</label>
-          <label><input type="radio" name="s9-disposition" value="suspension_no_pay" ${findings.disposition === 'suspension_no_pay' ? 'checked' : ''} /> Suspension without pay —
-            <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;" /> days</label>
-          <label><input type="radio" name="s9-disposition" value="termination" ${findings.disposition === 'termination' ? 'checked' : ''} /> Termination recommendation — forwarded to:
-            <input type="text" class="form-input form-input-sm" id="s9-terminationTo" value="${escapeAttr(findings.terminationTo || '')}" /></label>
+          <div>
+            <label><input type="radio" name="s9-disposition" value="suspension_no_pay" ${findings.disposition === 'suspension_no_pay' ? 'checked' : ''} /> Suspension without pay</label>
+            <div style="margin-left:1.5rem;margin-top:0.25rem;">
+              <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;display:inline-block;" /> <span style="font-size:0.8125rem;color:#6b7280;">days</span>
+            </div>
+          </div>
+          <div>
+            <label><input type="radio" name="s9-disposition" value="termination" ${findings.disposition === 'termination' ? 'checked' : ''} /> Termination recommendation</label>
+            <div style="margin-left:1.5rem;margin-top:0.25rem;">
+              <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span> <input type="text" class="form-input form-input-sm" id="s9-terminationTo" value="${escapeAttr(findings.terminationTo || '')}" style="width:200px;display:inline-block;" />
+            </div>
+          </div>
           <label><input type="radio" name="s9-disposition" value="board_referral" ${findings.disposition === 'board_referral' ? 'checked' : ''} /> Referral to Board of Trustees</label>
         </div>
       </div>

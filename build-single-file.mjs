@@ -30,17 +30,65 @@ for (const cssFile of cssFiles) {
 // Step 4: Inline all JS (order matters — collect all, inline entry last)
 const jsFiles = readdirSync(assetsDir).filter(f => f.endsWith('.js'));
 
-// Find the entry JS (the one referenced in HTML)
-for (const jsFile of jsFiles) {
-  const js = readFileSync(join(assetsDir, jsFile), 'utf-8');
-  const scriptPattern = new RegExp(`<script[^>]*${jsFile.replace('.', '\\.')}[^>]*></script>`, 'g');
+// Strategy: Use Vite's single-chunk build instead of trying to concatenate modules.
+// Re-run build with rollup config that forces everything into one chunk.
+console.log('Re-building as single chunk...');
+import { writeFileSync as wf } from 'fs';
+
+// Create a temporary vite config that outputs a single chunk
+const singleChunkConfig = `
+import { defineConfig } from 'vite';
+export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true,
+        manualChunks: undefined,
+      }
+    }
+  }
+});
+`;
+const tmpConfig = join(process.cwd(), 'vite.single.config.mjs');
+wf(tmpConfig, singleChunkConfig);
+
+execSync('npx vite build --config vite.single.config.mjs', { stdio: 'inherit' });
+
+// Re-read after single-chunk build
+const html2 = readFileSync(join(distDir, 'index.html'), 'utf-8');
+result = html2;
+
+// Inline CSS again
+const cssFiles2 = readdirSync(assetsDir).filter(f => f.endsWith('.css'));
+for (const cssFile of cssFiles2) {
+  const css = readFileSync(join(assetsDir, cssFile), 'utf-8');
+  const linkPattern = new RegExp(`<link[^>]*${cssFile.replace(/\./g, '\\.')}[^>]*>`, 'g');
+  result = result.replace(linkPattern, `<style>${css}</style>`);
+}
+
+// Now there should be only 1 JS file — inline it
+const jsFiles2 = readdirSync(assetsDir).filter(f => f.endsWith('.js'));
+if (jsFiles2.length !== 1) {
+  console.warn(`Warning: expected 1 JS file, got ${jsFiles2.length}: ${jsFiles2.join(', ')}`);
+}
+for (const jsFile of jsFiles2) {
+  let js = readFileSync(join(assetsDir, jsFile), 'utf-8');
+  // Escape </script> inside JS to prevent premature tag closure
+  // Browsers parse </script> literally even inside strings — split the tag
+  js = js.replace(/<\/script/gi, '<"+"/script');
+  const scriptPattern = new RegExp(`<script[^>]*${jsFile.replace(/\./g, '\\.')}[^>]*></script>`, 'g');
   if (scriptPattern.test(result)) {
-    // This is the entry script — inline it with all other chunks concatenated
-    const allJs = jsFiles.map(f => readFileSync(join(assetsDir, f), 'utf-8')).join('\n');
-    result = result.replace(scriptPattern, `<script type="module">${allJs}</script>`);
-    break;
+    result = result.replace(scriptPattern, `<script type="module">${js}</script>`);
   }
 }
+
+// Clean up temp config
+import { unlinkSync } from 'fs';
+try { unlinkSync(tmpConfig); } catch {}
+
+// Remove any remaining asset references
+result = result.replace(/<link[^>]*assets\/[^>]*>/g, '');
+result = result.replace(/<script[^>]*assets\/[^>]*><\/script>/g, '');
 
 // Remove any remaining asset references that didn't get inlined
 result = result.replace(/<link[^>]*assets\/[^>]*>/g, '');

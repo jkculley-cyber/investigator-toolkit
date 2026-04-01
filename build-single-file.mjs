@@ -77,7 +77,9 @@ for (const jsFile of jsFiles2) {
   // Template literals containing <style>, </script>, <!DOCTYPE> etc. break
   // when placed inside a <script> tag. Base64 is immune to this.
   const b64 = Buffer.from(js, 'utf-8').toString('base64');
-  const loader = `<script>document.addEventListener("DOMContentLoaded",function(){eval(atob("${b64}"))})<\/script>`;
+  // atob() returns Latin-1 which corrupts multi-byte UTF-8 (em dashes, unicode icons).
+  // Decode base64 → binary string → Uint8Array → TextDecoder for proper UTF-8.
+  const loader = `<script>document.addEventListener("DOMContentLoaded",function(){var b=atob("${b64}"),a=new Uint8Array(b.length);for(var i=0;i<b.length;i++)a[i]=b.charCodeAt(i);eval(new TextDecoder().decode(a))})<\/script>`;
   const scriptPattern = new RegExp(`<script[^>]*${jsFile.replace(/\./g, '\\.')}[^>]*></script>`, 'g');
   if (scriptPattern.test(result)) {
     result = result.replace(scriptPattern, loader);

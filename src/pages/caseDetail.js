@@ -339,45 +339,66 @@ function renderSection6(c, studentStatements) {
   const isEmployee = c.investigationType === 'employee';
   const stmtLabel = isEmployee ? 'Employee Statement' : 'Student Statement';
   return sectionWrapper(6, stmtLabel, `
-    <div class="form-grid">
-      <div class="form-group">
-        <label class="form-label">Date/Time Collected</label>
-        <input type="datetime-local" class="form-input" id="s6-datetime" value="${s.collectedAt || ''}" />
+    <!-- Collection Info -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;margin-bottom:1.25rem;">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Date Collected</label>
+        <input type="date" class="form-input" id="s6-date" value="${(s.collectedAt || '').split('T')[0] || ''}" />
       </div>
-      <div class="form-group">
+      <div class="form-group" style="margin-bottom:0;">
+        <label class="form-label">Time</label>
+        <input type="time" class="form-input" id="s6-time" value="${(s.collectedAt || '').split('T')[1]?.slice(0,5) || ''}" />
+      </div>
+      <div class="form-group" style="margin-bottom:0;">
         <label class="form-label">Collected By</label>
-        <input type="text" class="form-input" id="s6-collectedBy" value="${s.collectedBy || ''}" />
+        <input type="text" class="form-input" id="s6-collectedBy" value="${escapeAttr(s.collectedBy || '')}" placeholder="Administrator name" />
       </div>
     </div>
-    <div class="form-group" style="margin-top:0.75rem;">
-      <label class="form-label">Format</label>
-      <div class="radio-group" id="s6-format-group">
-        <label><input type="radio" name="s6-format" value="written" ${(s.format === 'written' || !s.format) ? 'checked' : ''} /> Written by ${isEmployee ? 'employee' : 'student'}</label>
-        <label><input type="radio" name="s6-format" value="verbal" ${s.format === 'verbal' ? 'checked' : ''} /> Verbal documented by admin</label>
-        <label><input type="radio" name="s6-format" value="refused" ${s.format === 'refused' ? 'checked' : ''} /> ${isEmployee ? 'Employee' : 'Student'} Refused</label>
+
+    <!-- Statement Format -->
+    <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:1rem;margin-bottom:1rem;">
+      <label class="form-label" style="margin-bottom:0.5rem;"><strong>Statement Format</strong></label>
+      <div style="display:flex;gap:0.75rem;flex-wrap:wrap;" id="s6-format-group">
+        <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;transition:border-color 0.15s;">
+          <input type="radio" name="s6-format" value="written" ${(s.format === 'written' || !s.format) ? 'checked' : ''} style="accent-color:#2A9D8F;" /> Written by ${isEmployee ? 'employee' : 'student'}
+        </label>
+        <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;transition:border-color 0.15s;">
+          <input type="radio" name="s6-format" value="verbal" ${s.format === 'verbal' ? 'checked' : ''} style="accent-color:#2A9D8F;" /> Verbal (documented by admin)
+        </label>
+        <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;transition:border-color 0.15s;">
+          <input type="radio" name="s6-format" value="refused" ${s.format === 'refused' ? 'checked' : ''} style="accent-color:#ef4444;" /> ${isEmployee ? 'Employee' : 'Student'} Refused
+        </label>
       </div>
     </div>
+
+    <!-- Statement Content -->
     <div id="s6-statement-area" style="${s.format === 'refused' ? 'display:none;' : ''}">
-      <div class="form-group" style="margin-top:0.75rem;">
+      <div class="form-group">
         <label class="form-label">Statement Content</label>
-        <textarea class="form-input" id="s6-content" rows="6">${escapeHtml(s.content || '')}</textarea>
+        <textarea class="form-input" id="s6-content" rows="6" placeholder="Enter or paste the ${isEmployee ? 'employee' : 'student'}'s statement...">${escapeHtml(s.content || '')}</textarea>
       </div>
       <div class="form-group" style="margin-top:0.75rem;">
         <label class="form-label">Signature</label>
-        <canvas id="s6-sig" width="400" height="120" style="border:1px solid #d1d5db;border-radius:4px;cursor:crosshair;"></canvas>
-        <button class="btn btn-sm" id="s6-sig-clear" style="margin-top:0.25rem;">Clear Signature</button>
+        <canvas id="s6-sig" width="400" height="120" style="border:1px solid #d1d5db;border-radius:8px;cursor:crosshair;background:#fff;"></canvas>
+        <button class="btn btn-sm" id="s6-sig-clear" style="margin-top:0.35rem;">Clear Signature</button>
       </div>
     </div>
+
+    <!-- Refused -->
     <div id="s6-refused-area" style="${s.format === 'refused' ? '' : 'display:none;'}">
-      <div class="form-group" style="margin-top:0.75rem;">
-        <label><input type="checkbox" id="s6-declined" ${s.declined ? 'checked' : ''} /> ${isEmployee ? 'Employee' : 'Student'} declined to provide a statement</label>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Reason</label>
-        <textarea class="form-input" id="s6-refuseReason" rows="3">${escapeHtml(s.refuseReason || '')}</textarea>
+      <div style="background:#fef2f2;border:1px solid #fecaca;border-radius:8px;padding:1rem;">
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:#dc2626;cursor:pointer;">
+          <input type="checkbox" id="s6-declined" ${s.declined ? 'checked' : ''} style="accent-color:#dc2626;" />
+          ${isEmployee ? 'Employee' : 'Student'} declined to provide a statement
+        </label>
+        <div class="form-group" style="margin-top:0.75rem;margin-bottom:0;">
+          <label class="form-label">Reason / Notes</label>
+          <textarea class="form-input" id="s6-refuseReason" rows="3" placeholder="Document why the statement was refused...">${escapeHtml(s.refuseReason || '')}</textarea>
+        </div>
       </div>
     </div>
-    <button class="btn btn-primary btn-sm" id="s6-save" style="margin-top:1rem;">Save ${stmtLabel}</button>
+
+    <button class="btn btn-primary btn-sm" id="s6-save" style="margin-top:1.25rem;">Save ${stmtLabel}</button>
   `);
 }
 
@@ -483,33 +504,48 @@ function renderSection9(c, findings) {
     ${(!isEmployee && (c.isSped || c.is504)) ? renderSpedFinding(findings) : ''}
 
     ${isEmployee ? renderEmployeeFindings(findings) : `
-    <div class="form-group" style="margin-top:1rem;padding-top:1rem;border-top:1px solid #e5e7eb;">
-      <label class="form-label"><strong>Disposition</strong></label>
-      <div class="radio-group" id="s9-disposition-group">
-        <label><input type="radio" name="s9-disposition" value="warning" ${findings.disposition === 'warning' ? 'checked' : ''} /> Warning / No removal</label>
-        <div>
-          <label><input type="radio" name="s9-disposition" value="suspension" ${findings.disposition === 'suspension' ? 'checked' : ''} /> Suspension</label>
-          <div style="margin-left:1.5rem;margin-top:0.25rem;">
-            <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" max="3" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;display:inline-block;" /> <span style="font-size:0.8125rem;color:#6b7280;">days (max 3)</span>
+    <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid #e5e7eb;">
+      <label class="form-label" style="margin-bottom:0.75rem;"><strong>Disposition</strong></label>
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;" id="s9-disposition-group">
+        <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;">
+          <input type="radio" name="s9-disposition" value="warning" ${findings.disposition === 'warning' ? 'checked' : ''} style="accent-color:#22c55e;" /> Warning / No removal
+        </label>
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
+            <input type="radio" name="s9-disposition" value="suspension" ${findings.disposition === 'suspension' ? 'checked' : ''} style="accent-color:#f59e0b;" /> Suspension
+          </label>
+          <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+            <input type="number" class="form-input" id="s9-suspDays" min="1" max="3" value="${escapeAttr(findings.suspensionDays || '')}" style="width:70px;padding:0.35rem 0.5rem;font-size:0.8125rem;" />
+            <span style="font-size:0.8125rem;color:#6b7280;">days (max 3)</span>
           </div>
         </div>
-        <div>
-          <label><input type="radio" name="s9-disposition" value="discretionary_daep" ${findings.disposition === 'discretionary_daep' ? 'checked' : ''} /> Discretionary DAEP</label>
-          <div style="margin-left:1.5rem;margin-top:0.25rem;display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;">
-            <input type="number" class="form-input form-input-xs" id="s9-daepDays" value="${escapeAttr(findings.daepDays || '')}" style="width:60px;" /> <span style="font-size:0.8125rem;color:#6b7280;">days</span>
-            <span style="font-size:0.8125rem;color:#6b7280;">Campus:</span> <input type="text" class="form-input form-input-sm" id="s9-daepCampus" value="${escapeAttr(findings.daepCampus || '')}" style="width:160px;" />
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
+            <input type="radio" name="s9-disposition" value="discretionary_daep" ${findings.disposition === 'discretionary_daep' ? 'checked' : ''} style="accent-color:#f97316;" /> Discretionary DAEP
+          </label>
+          <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+            <input type="number" class="form-input" id="s9-daepDays" value="${escapeAttr(findings.daepDays || '')}" style="width:70px;padding:0.35rem 0.5rem;font-size:0.8125rem;" />
+            <span style="font-size:0.8125rem;color:#6b7280;">days</span>
+            <span style="font-size:0.8125rem;color:#6b7280;margin-left:0.5rem;">Campus:</span>
+            <input type="text" class="form-input" id="s9-daepCampus" value="${escapeAttr(findings.daepCampus || '')}" style="width:180px;padding:0.35rem 0.5rem;font-size:0.8125rem;" placeholder="DAEP campus name" />
           </div>
         </div>
-        <div>
-          <label><input type="radio" name="s9-disposition" value="mandatory_daep" ${findings.disposition === 'mandatory_daep' ? 'checked' : ''} /> Mandatory DAEP referral</label>
-          <div style="margin-left:1.5rem;margin-top:0.25rem;">
-            <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span> <input type="text" class="form-input form-input-sm" id="s9-mandatoryTo" value="${escapeAttr(findings.mandatoryTo || '')}" style="width:200px;display:inline-block;" />
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
+            <input type="radio" name="s9-disposition" value="mandatory_daep" ${findings.disposition === 'mandatory_daep' ? 'checked' : ''} style="accent-color:#ef4444;" /> Mandatory DAEP Referral
+          </label>
+          <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+            <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span>
+            <input type="text" class="form-input" id="s9-mandatoryTo" value="${escapeAttr(findings.mandatoryTo || '')}" style="width:220px;padding:0.35rem 0.5rem;font-size:0.8125rem;" placeholder="Director / Superintendent" />
           </div>
         </div>
-        <div>
-          <label><input type="radio" name="s9-disposition" value="expulsion" ${findings.disposition === 'expulsion' ? 'checked' : ''} /> Mandatory Expulsion recommendation</label>
-          <div style="margin-left:1.5rem;margin-top:0.25rem;">
-            <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span> <input type="text" class="form-input form-input-sm" id="s9-expulsionTo" value="${escapeAttr(findings.expulsionTo || '')}" style="width:200px;display:inline-block;" />
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+          <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
+            <input type="radio" name="s9-disposition" value="expulsion" ${findings.disposition === 'expulsion' ? 'checked' : ''} style="accent-color:#dc2626;" /> Mandatory Expulsion Recommendation
+          </label>
+          <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+            <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span>
+            <input type="text" class="form-input" id="s9-expulsionTo" value="${escapeAttr(findings.expulsionTo || '')}" style="width:220px;padding:0.35rem 0.5rem;font-size:0.8125rem;" placeholder="Superintendent" />
           </div>
         </div>
       </div>
@@ -531,25 +567,39 @@ function renderEmployeeFindings(findings) {
           <label><input type="radio" name="s9-empFinding" value="inconclusive" ${findings.empFinding === 'inconclusive' ? 'checked' : ''} /> Inconclusive — insufficient evidence</label>
         </div>
       </div>
-      <div class="form-group" style="margin-top:1rem;">
-        <label class="form-label"><strong>Recommended Action</strong></label>
-        <div class="radio-group" id="s9-disposition-group">
-          <label><input type="radio" name="s9-disposition" value="no_action" ${findings.disposition === 'no_action' ? 'checked' : ''} /> No action / Unfounded</label>
-          <label><input type="radio" name="s9-disposition" value="verbal_warning" ${findings.disposition === 'verbal_warning' ? 'checked' : ''} /> Verbal warning</label>
-          <label><input type="radio" name="s9-disposition" value="written_warning" ${findings.disposition === 'written_warning' ? 'checked' : ''} /> Written warning (placed in personnel file)</label>
-          <div>
-            <label><input type="radio" name="s9-disposition" value="suspension_no_pay" ${findings.disposition === 'suspension_no_pay' ? 'checked' : ''} /> Suspension without pay</label>
-            <div style="margin-left:1.5rem;margin-top:0.25rem;">
-              <input type="number" class="form-input form-input-xs" id="s9-suspDays" min="1" value="${escapeAttr(findings.suspensionDays || '')}" style="width:60px;display:inline-block;" /> <span style="font-size:0.8125rem;color:#6b7280;">days</span>
+      <div style="margin-top:1rem;">
+        <label class="form-label" style="margin-bottom:0.75rem;"><strong>Recommended Action</strong></label>
+        <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:8px;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;" id="s9-disposition-group">
+          <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d8b4fe;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;">
+            <input type="radio" name="s9-disposition" value="no_action" ${findings.disposition === 'no_action' ? 'checked' : ''} style="accent-color:#22c55e;" /> No action / Unfounded
+          </label>
+          <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d8b4fe;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;">
+            <input type="radio" name="s9-disposition" value="verbal_warning" ${findings.disposition === 'verbal_warning' ? 'checked' : ''} style="accent-color:#f59e0b;" /> Verbal warning
+          </label>
+          <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d8b4fe;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;">
+            <input type="radio" name="s9-disposition" value="written_warning" ${findings.disposition === 'written_warning' ? 'checked' : ''} style="accent-color:#f59e0b;" /> Written warning (placed in personnel file)
+          </label>
+          <div style="border:1px solid #d8b4fe;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
+              <input type="radio" name="s9-disposition" value="suspension_no_pay" ${findings.disposition === 'suspension_no_pay' ? 'checked' : ''} style="accent-color:#ef4444;" /> Suspension without pay
+            </label>
+            <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+              <input type="number" class="form-input" id="s9-suspDays" min="1" value="${escapeAttr(findings.suspensionDays || '')}" style="width:70px;padding:0.35rem 0.5rem;font-size:0.8125rem;" />
+              <span style="font-size:0.8125rem;color:#6b7280;">days</span>
             </div>
           </div>
-          <div>
-            <label><input type="radio" name="s9-disposition" value="termination" ${findings.disposition === 'termination' ? 'checked' : ''} /> Termination recommendation</label>
-            <div style="margin-left:1.5rem;margin-top:0.25rem;">
-              <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span> <input type="text" class="form-input form-input-sm" id="s9-terminationTo" value="${escapeAttr(findings.terminationTo || '')}" style="width:200px;display:inline-block;" />
+          <div style="border:1px solid #d8b4fe;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+            <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
+              <input type="radio" name="s9-disposition" value="termination" ${findings.disposition === 'termination' ? 'checked' : ''} style="accent-color:#dc2626;" /> Termination recommendation
+            </label>
+            <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+              <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span>
+              <input type="text" class="form-input" id="s9-terminationTo" value="${escapeAttr(findings.terminationTo || '')}" style="width:220px;padding:0.35rem 0.5rem;font-size:0.8125rem;" placeholder="HR / Superintendent" />
             </div>
           </div>
-          <label><input type="radio" name="s9-disposition" value="board_referral" ${findings.disposition === 'board_referral' ? 'checked' : ''} /> Referral to Board of Trustees</label>
+          <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d8b4fe;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;">
+            <input type="radio" name="s9-disposition" value="board_referral" ${findings.disposition === 'board_referral' ? 'checked' : ''} style="accent-color:#7c3aed;" /> Referral to Board of Trustees
+          </label>
         </div>
       </div>
       <div class="form-group" style="margin-top:0.75rem;">
@@ -1022,7 +1072,7 @@ function attachSection6(container, c, statements) {
       ...(existing || {}),
       caseId: c.id,
       type: 'student',
-      collectedAt: container.querySelector('#s6-datetime')?.value || '',
+      collectedAt: ((container.querySelector('#s6-date')?.value || '') + 'T' + (container.querySelector('#s6-time')?.value || '00:00')).replace(/T$/, ''),
       collectedBy: container.querySelector('#s6-collectedBy')?.value || '',
       format,
       content: format !== 'refused' ? (container.querySelector('#s6-content')?.value || '') : '',

@@ -31,7 +31,10 @@ export function render() {
       <div class="card-body" style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;">
         <div class="form-group" style="flex:1;min-width:200px;margin-bottom:0;">
           <label class="form-label" style="display:block;font-size:0.8125rem;font-weight:600;color:var(--gray-700);margin-bottom:0.25rem;">Search</label>
-          <input type="text" class="form-input" id="cases-search" placeholder="Search by student name or case ID..." style="width:100%;padding:0.5rem 0.75rem;border:1px solid var(--gray-300);border-radius:6px;font-size:0.875rem;" />
+          <div style="position:relative;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:16px;height:16px;pointer-events:none;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" class="form-input" id="cases-search" placeholder="Search by student name or case ID..." style="width:100%;padding:0.5rem 0.75rem 0.5rem 2rem;border:1px solid var(--gray-300);border-radius:6px;font-size:0.875rem;" />
+          </div>
         </div>
         <div class="form-group" style="margin-bottom:0;">
           <label class="form-label" style="display:block;font-size:0.8125rem;font-weight:600;color:var(--gray-700);margin-bottom:0.25rem;">Offense</label>

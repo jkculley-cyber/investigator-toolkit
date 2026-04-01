@@ -143,9 +143,7 @@ function renderShell(campusName) {
       <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
-            <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#4338ca,#6366f1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:18px;height:18px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </div>
+            <img src="/icons/Investigator-AppIcon-192.png" alt="" style="width:32px;height:32px;border-radius:8px;" onerror="this.style.display='none'" />
             <span style="font-weight:700;font-size:14px;">INVESTIGATION TOOLKIT</span>
           </div>
           <div style="font-size:11px;color:rgba(255,255,255,0.35);letter-spacing:0.03em;">Campus Case Management</div>

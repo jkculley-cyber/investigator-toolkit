@@ -71,11 +71,24 @@ const jsFiles2 = readdirSync(assetsDir).filter(f => f.endsWith('.js'));
 if (jsFiles2.length !== 1) {
   console.warn(`Warning: expected 1 JS file, got ${jsFiles2.length}: ${jsFiles2.join(', ')}`);
 }
+// Pre-compute icon data URLs for embedding in JS
+const iconDir = join(process.cwd(), 'public', 'icons');
+const iconDataUrls = {};
+for (const filename of ['Investigator-AppIcon-192.png', 'Investigator-AppIcon-180.png']) {
+  try {
+    const iconData = readFileSync(join(iconDir, filename));
+    iconDataUrls[filename] = 'data:image/png;base64,' + iconData.toString('base64');
+    console.log(`Prepared icon: ${filename} (${Math.round(iconData.length / 1024)}KB)`);
+  } catch (e) { console.warn(`Failed to read icon ${filename}:`, e.message); }
+}
+
 for (const jsFile of jsFiles2) {
-  const js = readFileSync(join(assetsDir, jsFile), 'utf-8');
+  let js = readFileSync(join(assetsDir, jsFile), 'utf-8');
+  // Replace icon paths with data URLs BEFORE base64-encoding
+  for (const [filename, dataUrl] of Object.entries(iconDataUrls)) {
+    js = js.replace(new RegExp(`/icons/${filename.replace('.', '\\.')}`, 'g'), dataUrl);
+  }
   // Base64-encode the entire JS to avoid ANY HTML parser interference.
-  // Template literals containing <style>, </script>, <!DOCTYPE> etc. break
-  // when placed inside a <script> tag. Base64 is immune to this.
   const b64 = Buffer.from(js, 'utf-8').toString('base64');
   // atob() returns Latin-1 which corrupts multi-byte UTF-8 (em dashes, unicode icons).
   // Decode base64 → binary string → Uint8Array → TextDecoder for proper UTF-8.
@@ -94,9 +107,10 @@ try { unlinkSync(tmpConfig); } catch {}
 result = result.replace(/<link[^>]*assets\/[^>]*>/g, '');
 result = result.replace(/<script[^>]*assets\/[^>]*><\/script>/g, '');
 
-// Remove any remaining asset references that didn't get inlined
-result = result.replace(/<link[^>]*assets\/[^>]*>/g, '');
-result = result.replace(/<script[^>]*assets\/[^>]*><\/script>/g, '');
+// Also inline icons in HTML (manifest, apple-touch-icon)
+for (const [filename, dataUrl] of Object.entries(iconDataUrls)) {
+  result = result.replace(new RegExp(`/icons/${filename.replace('.', '\\.')}`, 'g'), dataUrl);
+}
 
 // Step 5: Write the single file
 const outPath = join(distDir, 'Campus-Investigation-Toolkit.html');

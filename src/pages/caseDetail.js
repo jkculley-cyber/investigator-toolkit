@@ -2,7 +2,7 @@
  * Full 10-Section Investigation View
  * Reads case ID from URL hash: #case/INV-2026-001
  */
-import { get, put, getAll, getAllByIndex, del } from '../db.js';
+import { get, put, getAll, getAllByIndex, del, lockCase, unlockCase, logAudit, getAuditLog, getSetting } from '../db.js';
 
 const STATUS_COLORS = {
   intake: '#9ca3af', open: '#3b82f6', conference: '#f59e0b',
@@ -43,12 +43,29 @@ function businessDaysBetween(start, end) {
 function now() { return new Date().toISOString(); }
 function timeNow() { return new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }); }
 
+function updateLockButton(btn, isLocked) {
+  if (isLocked) {
+    btn.textContent = '🔓 Unlock';
+    btn.style.background = '#fef3c7';
+    btn.style.color = '#92400e';
+    btn.style.border = '1px solid #fcd34d';
+  } else {
+    btn.textContent = '🔒 Lock Case';
+    btn.style.background = '#f1f5f9';
+    btn.style.color = '#475569';
+    btn.style.border = '1px solid #e2e8f0';
+  }
+}
+
 export function render() {
   return `
     <div class="page-header">
       <h1 id="case-title">Loading Case...</h1>
-      <div class="page-actions">
+      <div class="page-actions" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
         <button class="btn" id="cd-back">Back to Dashboard</button>
+        <button class="btn" id="cd-lock-btn" style="display:none;"></button>
+        <button class="btn" id="cd-history-btn" style="background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;">Student History</button>
+        <button class="btn" id="cd-audit-btn" style="background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;">Audit Log</button>
         <select class="form-input" id="cd-status-select" style="width:auto;">
           <option value="intake">Intake</option>
           <option value="open">Under Investigation</option>
@@ -59,7 +76,10 @@ export function render() {
         </select>
       </div>
     </div>
+    <div id="cd-locked-banner" style="display:none;background:#fef3c7;border:1px solid #fcd34d;border-radius:8px;padding:12px 16px;margin-bottom:16px;font-size:0.85rem;color:#92400e;"></div>
     <div id="mdr-countdown-banner" style="display:none;"></div>
+    <div id="cd-audit-panel" style="display:none;"></div>
+    <div id="cd-history-panel" style="display:none;"></div>
     <div id="case-sections"></div>
   `;
 }
@@ -90,14 +110,150 @@ async function loadCase(caseId, container) {
   const isEmployee = c.investigationType === 'employee';
   const subjectLabel = isEmployee ? (c.studentName || 'Unknown Employee') : (c.studentName || 'Unknown');
   container.querySelector('#case-title').textContent = `${c.id} — ${subjectLabel}`;
+  const isLocked = !!c.lockedAt;
+  const adminName = await getSetting('adminName') || 'Administrator';
+
+  // --- Lock button ---
+  const lockBtn = container.querySelector('#cd-lock-btn');
+  if (lockBtn) {
+    lockBtn.style.display = '';
+    updateLockButton(lockBtn, isLocked);
+    lockBtn.onclick = async () => {
+      if (c.lockedAt) {
+        if (!confirm('Unlock this case for editing?')) return;
+        await unlockCase(c.id, adminName);
+        c.lockedAt = null;
+        c.lockedBy = null;
+      } else {
+        if (!confirm('Lock this case? All sections will become read-only.')) return;
+        await lockCase(c.id, adminName);
+        c.lockedAt = now();
+        c.lockedBy = adminName;
+      }
+      loadCase(caseId, container);
+    };
+  }
+
+  // --- Locked banner ---
+  const lockedBanner = container.querySelector('#cd-locked-banner');
+  if (lockedBanner) {
+    if (isLocked) {
+      lockedBanner.style.display = '';
+      lockedBanner.innerHTML = `&#128274; <strong>Case Locked</strong> — locked by ${escapeHtml(c.lockedBy || 'Administrator')} on ${new Date(c.lockedAt).toLocaleDateString()}. Click "Unlock" to enable editing.`;
+    } else {
+      lockedBanner.style.display = 'none';
+    }
+  }
+
+  // --- Disable editing when locked ---
+  if (isLocked) {
+    const statusSelect = container.querySelector('#cd-status-select');
+    if (statusSelect) statusSelect.disabled = true;
+  }
+
+  // --- Audit log panel ---
+  const auditBtn = container.querySelector('#cd-audit-btn');
+  const auditPanel = container.querySelector('#cd-audit-panel');
+  if (auditBtn && auditPanel) {
+    auditBtn.onclick = async () => {
+      const visible = auditPanel.style.display !== 'none';
+      if (visible) {
+        auditPanel.style.display = 'none';
+        return;
+      }
+      const logs = await getAuditLog(c.id);
+      logs.sort((a, b) => (b.timestamp || '').localeCompare(a.timestamp || ''));
+      auditPanel.style.display = '';
+      auditPanel.innerHTML = `
+        <div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:10px;padding:16px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <h3 style="margin:0;font-size:1rem;font-weight:700;color:#6b21a8;">Audit Trail</h3>
+            <button class="btn" style="font-size:0.78rem;padding:4px 10px;" onclick="this.closest('#cd-audit-panel').style.display='none'">Close</button>
+          </div>
+          ${logs.length === 0 ? '<p style="color:#94a3b8;font-size:0.85rem;">No audit entries yet.</p>' : `
+            <table style="width:100%;font-size:0.8rem;border-collapse:collapse;">
+              <thead><tr style="border-bottom:1px solid #e9d5ff;">
+                <th style="text-align:left;padding:6px 8px;color:#7c3aed;font-weight:600;">Time</th>
+                <th style="text-align:left;padding:6px 8px;color:#7c3aed;font-weight:600;">Action</th>
+                <th style="text-align:left;padding:6px 8px;color:#7c3aed;font-weight:600;">Section</th>
+                <th style="text-align:left;padding:6px 8px;color:#7c3aed;font-weight:600;">Field</th>
+                <th style="text-align:left;padding:6px 8px;color:#7c3aed;font-weight:600;">By</th>
+              </tr></thead>
+              <tbody>${logs.map(l => `
+                <tr style="border-bottom:1px solid #f3e8ff;">
+                  <td style="padding:6px 8px;color:#64748b;white-space:nowrap;">${new Date(l.timestamp).toLocaleString()}</td>
+                  <td style="padding:6px 8px;font-weight:600;color:#1e293b;">${escapeHtml(l.action || '')}</td>
+                  <td style="padding:6px 8px;color:#475569;">${escapeHtml(l.section || '—')}</td>
+                  <td style="padding:6px 8px;color:#475569;">${escapeHtml(l.field || '—')}</td>
+                  <td style="padding:6px 8px;color:#64748b;">${escapeHtml(l.changedBy || '')}</td>
+                </tr>
+              `).join('')}</tbody>
+            </table>
+          `}
+        </div>
+      `;
+    };
+  }
+
+  // --- Student history panel ---
+  const historyBtn = container.querySelector('#cd-history-btn');
+  const historyPanel = container.querySelector('#cd-history-panel');
+  if (historyBtn && historyPanel && !isEmployee) {
+    historyBtn.onclick = async () => {
+      const visible = historyPanel.style.display !== 'none';
+      if (visible) {
+        historyPanel.style.display = 'none';
+        return;
+      }
+      const allCases = await getAll('cases');
+      const studentCases = allCases.filter(x =>
+        x.id !== c.id && x.investigationType !== 'employee' &&
+        ((c.studentId && x.studentId === c.studentId) ||
+         (c.studentName && x.studentName?.toLowerCase() === c.studentName?.toLowerCase()))
+      ).sort((a, b) => (b.incidentDate || '').localeCompare(a.incidentDate || ''));
+
+      historyPanel.style.display = '';
+      historyPanel.innerHTML = `
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:16px;margin-bottom:16px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <h3 style="margin:0;font-size:1rem;font-weight:700;color:#1d4ed8;">Prior Investigations — ${escapeHtml(c.studentName || 'Student')}</h3>
+            <button class="btn" style="font-size:0.78rem;padding:4px 10px;" onclick="this.closest('#cd-history-panel').style.display='none'">Close</button>
+          </div>
+          ${studentCases.length === 0 ? '<p style="color:#94a3b8;font-size:0.85rem;">No other investigations found for this student.</p>' : `
+            <table style="width:100%;font-size:0.82rem;border-collapse:collapse;">
+              <thead><tr style="border-bottom:1px solid #bfdbfe;">
+                <th style="text-align:left;padding:6px 8px;color:#2563eb;font-weight:600;">Case</th>
+                <th style="text-align:left;padding:6px 8px;color:#2563eb;font-weight:600;">Date</th>
+                <th style="text-align:left;padding:6px 8px;color:#2563eb;font-weight:600;">Offense</th>
+                <th style="text-align:left;padding:6px 8px;color:#2563eb;font-weight:600;">Status</th>
+              </tr></thead>
+              <tbody>${studentCases.map(x => `
+                <tr style="border-bottom:1px solid #dbeafe;cursor:pointer;" onclick="location.hash='case/${x.id}'">
+                  <td style="padding:6px 8px;font-weight:600;color:#1e293b;">${x.id}</td>
+                  <td style="padding:6px 8px;color:#64748b;">${x.incidentDate || 'N/A'}</td>
+                  <td style="padding:6px 8px;color:#334155;">${escapeHtml(x.offenseCategory || 'N/A')}</td>
+                  <td style="padding:6px 8px;color:#64748b;">${x.status || 'intake'}</td>
+                </tr>
+              `).join('')}</tbody>
+            </table>
+          `}
+        </div>
+      `;
+    };
+  } else if (historyBtn && isEmployee) {
+    historyBtn.style.display = 'none';
+  }
+
   const statusSelect = container.querySelector('#cd-status-select');
   if (statusSelect) {
     statusSelect.value = c.status;
-    // Use onchange instead of addEventListener to prevent duplicate listeners
     statusSelect.onchange = async () => {
+      if (c.lockedAt) { statusSelect.value = c.status; return; }
+      const oldStatus = c.status;
       c.status = statusSelect.value;
       c.updatedAt = now();
       await put('cases', c);
+      await logAudit({ caseId: c.id, action: 'status_change', field: 'status', oldValue: oldStatus, newValue: c.status, changedBy: adminName });
     };
   }
 
@@ -148,6 +304,16 @@ async function loadCase(caseId, container) {
   }
 
   attachSectionListeners(container, c, dueProcess, timeline, statements, evidence, findings);
+
+  // --- Disable all form inputs if case is locked ---
+  if (c.lockedAt) {
+    sectionsEl.querySelectorAll('input, textarea, select, button').forEach(el => {
+      if (el.closest('.accordion-header')) return; // Allow accordion toggles
+      el.disabled = true;
+      el.style.opacity = '0.6';
+      el.style.cursor = 'not-allowed';
+    });
+  }
 }
 
 // ==================== Section Renderers ====================

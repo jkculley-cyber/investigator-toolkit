@@ -4,12 +4,12 @@
  */
 
 const DB_NAME = 'investigator_toolkit';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 const STORES = [
   'cases', 'timeline_entries', 'statements', 'evidence',
   'contacts', 'due_process', 'findings', 'appeals',
-  'threat_assessments', 'settings'
+  'threat_assessments', 'settings', 'audit_log'
 ];
 
 let dbPromise = null;
@@ -22,6 +22,7 @@ export function openDB() {
 
     request.onupgradeneeded = (event) => {
       const db = event.target.result;
+      const tx = event.target.transaction;
 
       // 1. cases
       if (!db.objectStoreNames.contains('cases')) {
@@ -82,6 +83,21 @@ export function openDB() {
       // 10. settings (key-value)
       if (!db.objectStoreNames.contains('settings')) {
         db.createObjectStore('settings', { keyPath: 'key' });
+      }
+
+      // 11. audit_log (v2)
+      if (!db.objectStoreNames.contains('audit_log')) {
+        const al = db.createObjectStore('audit_log', { keyPath: 'id', autoIncrement: true });
+        al.createIndex('caseId', 'caseId', { unique: false });
+        al.createIndex('timestamp', 'timestamp', { unique: false });
+      }
+
+      // v2: add studentId index on cases if upgrading
+      if (event.oldVersion < 2 && db.objectStoreNames.contains('cases')) {
+        const casesStore = tx.objectStore('cases');
+        if (!casesStore.indexNames.contains('studentId')) {
+          casesStore.createIndex('studentId', 'studentId', { unique: false });
+        }
       }
     };
 
@@ -169,6 +185,59 @@ export async function generateCaseId() {
   const caseId = `INV-${year}-${String(nextNum).padStart(3, '0')}`;
   await setSetting('nextCaseNumber', nextNum + 1);
   return caseId;
+}
+
+// --- Audit log helpers ---
+
+export async function logAudit({ caseId, action, section, field, oldValue, newValue, changedBy }) {
+  return put('audit_log', {
+    caseId,
+    action,
+    section: section || null,
+    field: field || null,
+    oldValue: oldValue !== undefined ? String(oldValue) : null,
+    newValue: newValue !== undefined ? String(newValue) : null,
+    changedBy: changedBy || 'Administrator',
+    timestamp: new Date().toISOString(),
+  });
+}
+
+export async function getAuditLog(caseId) {
+  return getAllByIndex('audit_log', 'caseId', caseId);
+}
+
+// --- Case locking helpers ---
+
+export async function lockCase(caseId, lockedBy) {
+  const c = await get('cases', caseId);
+  if (!c) return;
+  c.lockedAt = new Date().toISOString();
+  c.lockedBy = lockedBy || 'Administrator';
+  c.updatedAt = new Date().toISOString();
+  await put('cases', c);
+  await logAudit({ caseId, action: 'lock', changedBy: lockedBy });
+}
+
+export async function unlockCase(caseId, unlockedBy) {
+  const c = await get('cases', caseId);
+  if (!c) return;
+  c.lockedAt = null;
+  c.lockedBy = null;
+  c.updatedAt = new Date().toISOString();
+  await put('cases', c);
+  await logAudit({ caseId, action: 'unlock', changedBy: unlockedBy });
+}
+
+// --- Student history helper ---
+
+export async function getCasesByStudentId(studentId) {
+  try {
+    return await getAllByIndex('cases', 'studentId', studentId);
+  } catch {
+    // Index may not exist for pre-v2 DBs — fallback to full scan
+    const all = await getAll('cases');
+    return all.filter(c => c.studentId === studentId);
+  }
 }
 
 // --- Bulk export / import ---

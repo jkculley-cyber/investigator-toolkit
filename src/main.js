@@ -19,6 +19,7 @@ import * as trendsPage from './pages/trends.js';
 import * as threatsPage from './pages/threats.js';
 import * as settingsPage from './pages/settings.js';
 import * as backupPage from './pages/backup.js';
+import * as studentHistoryPage from './pages/studentHistory.js';
 
 // --- SVG Icons (inline) ---
 const icons = {
@@ -50,6 +51,7 @@ const routes = {
   'appeals': 'appeals',
   'trends': 'trends',
   'threats': 'threats',
+  'students': 'studentHistory',
   'settings': 'settings',
   'backup': 'backup',
 };
@@ -62,6 +64,7 @@ const navItems = [
   { section: 'Case Work' },
   { key: 'intake', label: 'New Intake', icon: 'intake' },
   { key: 'cases', label: 'All Cases', icon: 'cases' },
+  { key: 'students', label: 'Student History', icon: 'contacts' },
   { key: 'evidence', label: 'Evidence Log', icon: 'evidence' },
   { key: 'contacts', label: 'Parent Contacts', icon: 'contacts' },
   { section: 'Compliance' },
@@ -114,6 +117,7 @@ const pages = {
   trends: wrapModule(trendsPage, 'Discipline Trends & Analytics'),
   threats: wrapModule(threatsPage, 'Threat Assessment Log'),
   settings: wrapModule(settingsPage, 'Campus Settings'),
+  studentHistory: wrapModule(studentHistoryPage, 'Student History'),
   backup: wrapModule(backupPage, 'Backup & Restore'),
 };
 

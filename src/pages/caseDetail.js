@@ -854,6 +854,7 @@ function renderOffenseSpecific(c, findings) {
       <h3 style="margin-top:0;">Fighting/Assault Details</h3>
       <div class="form-grid">
         <div class="form-group"><label class="form-label">Initiator</label><input type="text" class="form-input" id="s9o-initiator" value="${escapeAttr(f.initiator || '')}" /></div>
+        <div class="form-group"><label class="form-label">Victim(s)</label><input type="text" class="form-input" id="s9o-victim" value="${escapeAttr(f.victim || '')}" placeholder="Name(s) of victim(s)" /></div>
         <div class="form-group"><label class="form-label">Injury Description</label><input type="text" class="form-input" id="s9o-injury" value="${escapeAttr(f.injury || '')}" /></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-medical" ${f.medicalRequired ? 'checked' : ''} /> Medical attention required</label></div>
         <div class="form-group"><label><input type="checkbox" id="s9o-weapon" ${f.weaponInvolved ? 'checked' : ''} /> Weapon involved</label></div>
@@ -926,16 +927,26 @@ function renderSpedFinding(findings) {
   return `
     <div class="card" style="margin-top:1rem;padding:1rem;background:#fef2f2;border-left:3px solid #ef4444;">
       <h3 style="margin-top:0;">SPED/504 Finding</h3>
-      <div class="radio-group">
-        <label><input type="radio" name="s9-mdr" value="not_required" ${findings.mdrStatus === 'not_required' ? 'checked' : ''} /> MDR not required</label>
-        <label><input type="radio" name="s9-mdr" value="completed" ${findings.mdrStatus === 'completed' ? 'checked' : ''} /> MDR completed on:
-          <input type="date" class="form-input form-input-sm" id="s9-mdrDate" value="${findings.mdrDate || ''}" /></label>
+      <div style="display:flex;flex-direction:column;gap:0.75rem;">
+        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;">
+          <input type="radio" name="s9-mdr" value="not_required" ${findings.mdrStatus === 'not_required' ? 'checked' : ''} style="flex-shrink:0;" /> MDR not required
+        </label>
+        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;flex-shrink:0;">
+            <input type="radio" name="s9-mdr" value="completed" ${findings.mdrStatus === 'completed' ? 'checked' : ''} /> MDR completed on:
+          </label>
+          <input type="date" class="form-input" id="s9-mdrDate" value="${findings.mdrDate || ''}" style="width:auto;padding:0.375rem 0.5rem;font-size:0.8125rem;" />
+        </div>
       </div>
-      <div class="form-group" style="margin-top:0.5rem;">
+      <div class="form-group" style="margin-top:1rem;">
         <label class="form-label">MDR Determination</label>
-        <div class="radio-group">
-          <label><input type="radio" name="s9-mdrResult" value="not_manifestation" ${findings.mdrResult === 'not_manifestation' ? 'checked' : ''} /> Not a manifestation of disability — proceed with placement</label>
-          <label><input type="radio" name="s9-mdrResult" value="is_manifestation" ${findings.mdrResult === 'is_manifestation' ? 'checked' : ''} /> IS a manifestation of disability</label>
+        <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.5rem;">
+          <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;">
+            <input type="radio" name="s9-mdrResult" value="not_manifestation" ${findings.mdrResult === 'not_manifestation' ? 'checked' : ''} style="flex-shrink:0;margin-top:2px;" /> Not a manifestation of disability — proceed with placement
+          </label>
+          <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:#dc2626;cursor:pointer;">
+            <input type="radio" name="s9-mdrResult" value="is_manifestation" ${findings.mdrResult === 'is_manifestation' ? 'checked' : ''} style="flex-shrink:0;margin-top:2px;" /> IS a manifestation of disability
+          </label>
         </div>
       </div>
       <div id="s9-mdr-block" class="alert alert-danger" style="${findings.mdrResult === 'is_manifestation' ? '' : 'display:none;'}margin-top:0.5rem;">
@@ -1605,6 +1616,7 @@ function attachSection9(container, c, findings) {
     const cat = c.offenseCategory;
     if (cat === 'Fighting/Assault') {
       record.initiator = container.querySelector('#s9o-initiator')?.value || '';
+      record.victim = container.querySelector('#s9o-victim')?.value || '';
       record.injury = container.querySelector('#s9o-injury')?.value || '';
       record.medicalRequired = container.querySelector('#s9o-medical')?.checked || false;
       record.weaponInvolved = container.querySelector('#s9o-weapon')?.checked || false;

@@ -307,11 +307,8 @@ async function generateAppealPdf(caseRec, level) {
     3: 'This form initiates a Level 3 appeal to the Board of Trustees. Per TEC §37.009(c), the board shall hold a hearing. Both parties may present evidence and witnesses. The board may uphold, modify, or reverse the decision. After board action, the appellant may appeal to the Commissioner of Education per TEC §7.057.'
   };
 
-  const levelTimelines = {
-    1: { file: '3 school days', hearing: '3–5 school days', decision: '3 school days' },
-    2: { file: '5 school days', hearing: '5–10 school days', decision: '5 school days' },
-    3: { file: '5–10 school days', hearing: 'Next board meeting or within 30 calendar days', decision: '5–10 school days' }
-  };
+  // Timelines are district-specific (set in local board policy FNG LOCAL)
+  // These are left as blank fields for the district to fill in
 
   const levelDecisionMaker = {
     1: 'Campus Principal or Designee',
@@ -344,18 +341,20 @@ async function generateAppealPdf(caseRec, level) {
   y += descLines.length * 3.5 + 4;
 
   // ── Timeline Box ──
-  const tl = levelTimelines[level];
   doc.setFillColor(245, 245, 245);
-  doc.roundedRect(margin, y, contentW, 18, 2, 2, 'F');
+  doc.roundedRect(margin, y, contentW, 22, 2, 2, 'F');
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(7.5);
-  doc.text('IMPORTANT DEADLINES', margin + 3, y + 4);
+  doc.text('APPEAL DEADLINES (per district board policy FNG LOCAL)', margin + 3, y + 4);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7);
-  doc.text(`Filing deadline: Within ${tl.file} of receiving ${level === 1 ? 'notice of discipline action' : 'Level ' + (level - 1) + ' written decision'}`, margin + 3, y + 8.5);
-  doc.text(`Hearing scheduled: Within ${tl.hearing} of filing this form`, margin + 3, y + 12);
-  doc.text(`Written decision issued: Within ${tl.decision} after ${level === 3 ? 'board action' : 'conference/hearing'}`, margin + 3, y + 15.5);
-  y += 22;
+  doc.text(`Filing deadline: Within ________ school days of receiving ${level === 1 ? 'notice of discipline action' : 'Level ' + (level - 1) + ' written decision'}`, margin + 3, y + 9);
+  doc.text('Hearing/conference scheduled: Within ________ school days of filing this form', margin + 3, y + 13);
+  doc.text(`Written decision issued: Within ________ school days after ${level === 3 ? 'board action' : 'conference/hearing'}`, margin + 3, y + 17);
+  doc.setFontSize(6);
+  doc.setFont('helvetica', 'italic');
+  doc.text('Note: Deadlines vary by district. Refer to your Student Code of Conduct or board policy FNG(LOCAL) for specific timelines.', margin + 3, y + 21);
+  y += 26;
 
   // ── Section 1: Student Information (pre-filled) ──
   y = sectionHeader(doc, 'SECTION 1: STUDENT INFORMATION', margin, y, contentW);

@@ -66,6 +66,7 @@ export function render() {
         <button class="btn" id="cd-lock-btn" style="display:none;"></button>
         <button class="btn" id="cd-history-btn" style="background:#eff6ff;color:#2563eb;border:1px solid #bfdbfe;">Student History</button>
         <button class="btn" id="cd-audit-btn" style="background:#f5f3ff;color:#7c3aed;border:1px solid #ddd6fe;">Audit Log</button>
+        <button class="btn" id="cd-delete-btn" style="background:#fef2f2;color:#dc2626;border:1px solid #fecaca;">Delete Case</button>
         <select class="form-input" id="cd-status-select" style="width:auto;">
           <option value="intake">Intake</option>
           <option value="open">Under Investigation</option>
@@ -149,6 +150,27 @@ async function loadCase(caseId, container) {
   if (isLocked) {
     const statusSelect = container.querySelector('#cd-status-select');
     if (statusSelect) statusSelect.disabled = true;
+  }
+
+  // --- Delete case ---
+  const deleteBtn = container.querySelector('#cd-delete-btn');
+  if (deleteBtn) {
+    if (isLocked) {
+      deleteBtn.disabled = true;
+      deleteBtn.title = 'Unlock case before deleting';
+    }
+    deleteBtn.onclick = async () => {
+      if (!confirm(`Delete case ${c.id}? This will permanently remove the case and all related data (timeline, statements, evidence, witnesses, findings). This cannot be undone.`)) return;
+      if (!confirm('Are you sure? This is permanent.')) return;
+      const relatedStores = ['timeline_entries', 'statements', 'evidence', 'contacts', 'due_process', 'findings', 'appeals', 'threat_assessments'];
+      for (const store of relatedStores) {
+        const records = await getAllByIndex(store, 'caseId', c.id);
+        for (const r of records) await del(store, r.id);
+      }
+      await del('cases', c.id);
+      await logAudit({ caseId: c.id, action: 'delete_case', section: 'case', field: null, oldValue: c.id, newValue: null, changedBy: adminName });
+      window.location.hash = '#dashboard';
+    };
   }
 
   // --- Audit log panel ---

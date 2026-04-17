@@ -1,7 +1,7 @@
 /**
  * All Cases List — Searchable, filterable table of all cases
  */
-import { getAll, del } from '../db.js';
+import { getAll, del, getAllByIndex } from '../db.js';
 
 const STATUS_COLORS = {
   intake: '#9ca3af', open: '#3b82f6', conference: '#f59e0b',
@@ -189,8 +189,13 @@ function renderTable(container, cases) {
     btn.addEventListener('click', async (e) => {
       e.stopPropagation();
       const caseId = btn.dataset.caseId;
-      if (!confirm(`Delete case ${caseId}? This cannot be undone.`)) return;
+      if (!confirm(`Delete case ${caseId}? This will permanently remove the case and all related data.`)) return;
       try {
+        const relatedStores = ['timeline_entries', 'statements', 'evidence', 'contacts', 'due_process', 'findings', 'appeals', 'threat_assessments'];
+        for (const store of relatedStores) {
+          const records = await getAllByIndex(store, 'caseId', caseId);
+          for (const r of records) await del(store, r.id);
+        }
         await del('cases', caseId);
         allCases = allCases.filter(c => c.id !== caseId);
         filterAndRender(container);

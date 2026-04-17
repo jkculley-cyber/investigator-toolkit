@@ -733,10 +733,8 @@ function renderSection9(c, findings) {
       </div>
     </div>
 
-    <div style="display:grid;grid-template-columns:${(!isEmployee && (c.isSped || c.is504)) ? '1fr 1fr' : '1fr'};gap:1rem;align-items:start;">
-      ${renderOffenseSpecific(c, findings)}
-      ${(!isEmployee && (c.isSped || c.is504)) ? renderSpedFinding(findings) : ''}
-    </div>
+    ${renderOffenseSpecific(c, findings)}
+    ${(!isEmployee && (c.isSped || c.is504)) ? renderSpedFinding(findings) : ''}
 
     ${isEmployee ? renderEmployeeFindings(findings) : `
     <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid #e5e7eb;">
@@ -926,26 +924,27 @@ function renderOffenseSpecific(c, findings) {
 
 function renderSpedFinding(findings) {
   return `
-    <div class="card" style="margin-top:1rem;padding:1rem;background:#fef2f2;border-left:3px solid #ef4444;">
-      <h3 style="margin-top:0;">SPED/504 Finding</h3>
-      <div style="display:flex;flex-direction:column;gap:0.75rem;">
-        <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;">
-          <input type="radio" name="s9-mdr" value="not_required" ${findings.mdrStatus === 'not_required' ? 'checked' : ''} style="flex-shrink:0;" /> MDR not required
-        </label>
-        <div style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-          <label style="display:flex;align-items:center;gap:0.5rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;flex-shrink:0;">
-            <input type="radio" name="s9-mdr" value="completed" ${findings.mdrStatus === 'completed' ? 'checked' : ''} /> MDR completed on:
+    <div class="card" style="margin-top:1rem;padding:0.75rem 1rem;background:#fef2f2;border-left:3px solid #ef4444;">
+      <h3 style="margin-top:0;font-size:0.9rem;">SPED/504 Finding</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem 1.5rem;align-items:start;">
+        <div>
+          <label class="form-label" style="margin-bottom:0.35rem;font-size:0.75rem;">MDR Status</label>
+          <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;margin-bottom:0.35rem;">
+            <input type="radio" name="s9-mdr" value="not_required" ${findings.mdrStatus === 'not_required' ? 'checked' : ''} /> MDR not required
           </label>
-          <input type="date" class="form-input" id="s9-mdrDate" value="${findings.mdrDate || ''}" style="width:auto;padding:0.375rem 0.5rem;font-size:0.8125rem;" />
+          <div style="display:flex;align-items:center;gap:0.4rem;flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:0.4rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;">
+              <input type="radio" name="s9-mdr" value="completed" ${findings.mdrStatus === 'completed' ? 'checked' : ''} /> Completed:
+            </label>
+            <input type="date" class="form-input" id="s9-mdrDate" value="${findings.mdrDate || ''}" style="width:auto;padding:0.25rem 0.4rem;font-size:0.8125rem;" />
+          </div>
         </div>
-      </div>
-      <div class="form-group" style="margin-top:1rem;">
-        <label class="form-label">MDR Determination</label>
-        <div style="display:flex;flex-direction:column;gap:0.75rem;margin-top:0.5rem;">
-          <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;">
-            <input type="radio" name="s9-mdrResult" value="not_manifestation" ${findings.mdrResult === 'not_manifestation' ? 'checked' : ''} style="flex-shrink:0;margin-top:2px;" /> Not a manifestation of disability — proceed with placement
+        <div>
+          <label class="form-label" style="margin-bottom:0.35rem;font-size:0.75rem;">MDR Determination</label>
+          <label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.8125rem;font-weight:500;color:var(--gray-700);cursor:pointer;margin-bottom:0.35rem;">
+            <input type="radio" name="s9-mdrResult" value="not_manifestation" ${findings.mdrResult === 'not_manifestation' ? 'checked' : ''} style="flex-shrink:0;margin-top:2px;" /> Not a manifestation — proceed
           </label>
-          <label style="display:flex;align-items:flex-start;gap:0.5rem;font-size:0.8125rem;font-weight:600;color:#dc2626;cursor:pointer;">
+          <label style="display:flex;align-items:flex-start;gap:0.4rem;font-size:0.8125rem;font-weight:600;color:#dc2626;cursor:pointer;">
             <input type="radio" name="s9-mdrResult" value="is_manifestation" ${findings.mdrResult === 'is_manifestation' ? 'checked' : ''} style="flex-shrink:0;margin-top:2px;" /> IS a manifestation of disability
           </label>
         </div>

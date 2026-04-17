@@ -1,7 +1,7 @@
 /**
  * Command Dashboard — Live stats, recent cases, quick actions
  */
-import { getAll, getAllByIndex } from '../db.js';
+import { getAll, getAllByIndex, getSetting } from '../db.js';
 
 const STATUS_COLORS = {
   intake: '#9ca3af',
@@ -36,7 +36,8 @@ export function render() {
   return `
     <div class="page-header">
       <h1>Command Dashboard</h1>
-      <div class="page-actions">
+      <div class="page-actions" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <select class="form-input" id="dash-year-filter" style="width:auto;font-size:0.8125rem;padding:6px 10px;"></select>
         <button class="btn btn-primary" id="dash-new-case">+ New Case</button>
         <button class="btn" id="dash-export-all">Export / Backup</button>
       </div>
@@ -93,21 +94,47 @@ export function render() {
   `;
 }
 
-export function attach(container) {
-  loadDashboard();
+let allCasesCache = [];
+let currentYearFilter = '';
 
+export async function attach(container) {
   container.querySelector('#dash-new-case')?.addEventListener('click', () => {
     window.location.hash = '#intake';
   });
-
   container.querySelector('#dash-export-all')?.addEventListener('click', () => {
     window.location.hash = '#backup';
   });
+
+  // Load all cases, build year filter, then render
+  allCasesCache = await getAll('cases');
+  const currentSchoolYear = await getSetting('schoolYear') || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`;
+
+  // Collect unique school years from cases
+  const years = new Set();
+  allCasesCache.forEach(c => { if (c.schoolYear) years.add(c.schoolYear); });
+  years.add(currentSchoolYear);
+  const sortedYears = [...years].sort().reverse();
+
+  const yearSelect = container.querySelector('#dash-year-filter');
+  if (yearSelect) {
+    yearSelect.innerHTML = sortedYears.map(yr =>
+      `<option value="${yr}" ${yr === currentSchoolYear ? 'selected' : ''}>${yr}</option>`
+    ).join('') + '<option value="all">All Years</option>';
+    currentYearFilter = currentSchoolYear;
+    yearSelect.addEventListener('change', () => {
+      currentYearFilter = yearSelect.value;
+      renderDashboard();
+    });
+  }
+
+  renderDashboard();
 }
 
-async function loadDashboard() {
+function renderDashboard() {
   try {
-    const cases = await getAll('cases');
+    const cases = currentYearFilter === 'all'
+      ? allCasesCache
+      : allCasesCache.filter(c => c.schoolYear === currentYearFilter || (!c.schoolYear && c.status !== 'closed'));
     const now = new Date();
 
     // Metrics

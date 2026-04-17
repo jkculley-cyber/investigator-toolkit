@@ -1,7 +1,7 @@
 /**
  * All Cases List — Searchable, filterable table of all cases
  */
-import { getAll, del, getAllByIndex } from '../db.js';
+import { getAll, del, getAllByIndex, getSetting } from '../db.js';
 
 const STATUS_COLORS = {
   intake: '#9ca3af', open: '#3b82f6', conference: '#f59e0b',
@@ -58,6 +58,11 @@ export function render() {
             <option value="employee">Employee</option>
           </select>
         </div>
+        <div class="form-group" style="margin-bottom:0;">
+          <label class="form-label" style="display:block;font-size:0.8125rem;font-weight:600;color:var(--gray-700);margin-bottom:0.25rem;">School Year</label>
+          <select class="form-input" id="cases-filter-year" style="padding:0.5rem 0.75rem;border:1px solid var(--gray-300);border-radius:6px;font-size:0.875rem;">
+          </select>
+        </div>
       </div>
     </div>
 
@@ -89,9 +94,7 @@ export function render() {
 
 let allCases = [];
 
-export function attach(container) {
-  loadCases(container);
-
+export async function attach(container) {
   container.querySelector('#cases-new')?.addEventListener('click', () => {
     window.location.hash = '#intake';
   });
@@ -100,12 +103,29 @@ export function attach(container) {
   container.querySelector('#cases-filter-offense')?.addEventListener('change', () => filterAndRender(container));
   container.querySelector('#cases-filter-status')?.addEventListener('change', () => filterAndRender(container));
   container.querySelector('#cases-filter-type')?.addEventListener('change', () => filterAndRender(container));
+  container.querySelector('#cases-filter-year')?.addEventListener('change', () => filterAndRender(container));
+
+  await loadCases(container);
 }
 
 async function loadCases(container) {
   try {
     allCases = await getAll('cases');
     allCases.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+
+    // Populate year filter
+    const currentSchoolYear = await getSetting('schoolYear') || `${new Date().getFullYear()}-${new Date().getFullYear() + 1}`;
+    const years = new Set();
+    allCases.forEach(c => { if (c.schoolYear) years.add(c.schoolYear); });
+    years.add(currentSchoolYear);
+    const sortedYears = [...years].sort().reverse();
+    const yearSelect = container.querySelector('#cases-filter-year');
+    if (yearSelect && yearSelect.options.length === 0) {
+      yearSelect.innerHTML = sortedYears.map(yr =>
+        `<option value="${yr}" ${yr === currentSchoolYear ? 'selected' : ''}>${yr}</option>`
+      ).join('') + '<option value="all">All Years</option>';
+    }
+
     filterAndRender(container);
   } catch (err) {
     console.error('Cases load error:', err);
@@ -117,9 +137,13 @@ function filterAndRender(container) {
   const offenseFilter = container.querySelector('#cases-filter-offense')?.value || '';
   const statusFilter = container.querySelector('#cases-filter-status')?.value || '';
   const typeFilter = container.querySelector('#cases-filter-type')?.value || '';
+  const yearFilter = container.querySelector('#cases-filter-year')?.value || '';
 
   let filtered = allCases;
 
+  if (yearFilter && yearFilter !== 'all') {
+    filtered = filtered.filter(c => c.schoolYear === yearFilter || (!c.schoolYear && c.status !== 'closed'));
+  }
   if (search) {
     filtered = filtered.filter(c =>
       (c.studentName || '').toLowerCase().includes(search) ||

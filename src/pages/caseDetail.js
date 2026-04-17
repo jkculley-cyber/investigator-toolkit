@@ -725,55 +725,56 @@ function renderSection9(c, findings) {
     <div class="form-grid" style="margin-top:0.75rem;">
       <div class="form-group">
         <label class="form-label">Mitigating Factors</label>
-        <textarea class="form-input" id="s9-mitigating" rows="3">${escapeHtml(findings.mitigating || '')}</textarea>
+        <textarea class="form-input" id="s9-mitigating" rows="2" style="resize:vertical;">${escapeHtml(findings.mitigating || '')}</textarea>
       </div>
       <div class="form-group">
         <label class="form-label">Aggravating Factors</label>
-        <textarea class="form-input" id="s9-aggravating" rows="3">${escapeHtml(findings.aggravating || '')}</textarea>
+        <textarea class="form-input" id="s9-aggravating" rows="2" style="resize:vertical;">${escapeHtml(findings.aggravating || '')}</textarea>
       </div>
     </div>
 
-    ${renderOffenseSpecific(c, findings)}
-
-    ${(!isEmployee && (c.isSped || c.is504)) ? renderSpedFinding(findings) : ''}
+    <div style="display:grid;grid-template-columns:${(!isEmployee && (c.isSped || c.is504)) ? '1fr 1fr' : '1fr'};gap:1rem;align-items:start;">
+      ${renderOffenseSpecific(c, findings)}
+      ${(!isEmployee && (c.isSped || c.is504)) ? renderSpedFinding(findings) : ''}
+    </div>
 
     ${isEmployee ? renderEmployeeFindings(findings) : `
     <div style="margin-top:1.25rem;padding-top:1.25rem;border-top:1px solid #e5e7eb;">
       <label class="form-label" style="margin-bottom:0.75rem;"><strong>Disposition</strong></label>
-      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:1rem;display:flex;flex-direction:column;gap:0.75rem;" id="s9-disposition-group">
-        <label style="display:flex;align-items:center;gap:0.4rem;padding:0.5rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;">
+      <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:0.75rem;display:flex;flex-direction:column;gap:0.5rem;" id="s9-disposition-group">
+        <label style="display:flex;align-items:center;gap:0.4rem;padding:0.35rem 0.75rem;border:1px solid #d1d5db;border-radius:6px;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;background:#fff;">
           <input type="radio" name="s9-disposition" value="warning" ${findings.disposition === 'warning' ? 'checked' : ''} style="accent-color:#22c55e;" /> Warning / No removal
         </label>
-        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.35rem 0.75rem;">
           <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
             <input type="radio" name="s9-disposition" value="suspension" ${findings.disposition === 'suspension' ? 'checked' : ''} style="accent-color:#f59e0b;" /> Suspension
           </label>
-          <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
-            <input type="number" class="form-input" id="s9-suspDays" min="1" max="3" value="${escapeAttr(findings.suspensionDays || '')}" style="width:70px;padding:0.35rem 0.5rem;font-size:0.8125rem;" />
+          <div style="margin-left:1.25rem;margin-top:0.25rem;display:flex;align-items:center;gap:0.5rem;">
+            <input type="number" class="form-input" id="s9-suspDays" min="1" max="3" value="${escapeAttr(findings.suspensionDays || '')}" style="width:70px;padding:0.25rem 0.5rem;font-size:0.8125rem;" />
             <span style="font-size:0.8125rem;color:#6b7280;">days (max 3)</span>
           </div>
         </div>
-        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.35rem 0.75rem;">
           <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
             <input type="radio" name="s9-disposition" value="discretionary_daep" ${findings.disposition === 'discretionary_daep' ? 'checked' : ''} style="accent-color:#f97316;" /> Discretionary DAEP
           </label>
-          <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
-            <input type="number" class="form-input" id="s9-daepDays" value="${escapeAttr(findings.daepDays || '')}" style="width:70px;padding:0.35rem 0.5rem;font-size:0.8125rem;" />
+          <div style="margin-left:1.25rem;margin-top:0.25rem;display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+            <input type="number" class="form-input" id="s9-daepDays" value="${escapeAttr(findings.daepDays || '')}" style="width:70px;padding:0.25rem 0.5rem;font-size:0.8125rem;" />
             <span style="font-size:0.8125rem;color:#6b7280;">days</span>
             <span style="font-size:0.8125rem;color:#6b7280;margin-left:0.5rem;">Campus:</span>
-            <input type="text" class="form-input" id="s9-daepCampus" value="${escapeAttr(findings.daepCampus || '')}" style="width:180px;padding:0.35rem 0.5rem;font-size:0.8125rem;" placeholder="DAEP campus name" />
+            <input type="text" class="form-input" id="s9-daepCampus" value="${escapeAttr(findings.daepCampus || '')}" style="width:160px;padding:0.25rem 0.5rem;font-size:0.8125rem;" placeholder="DAEP campus name" />
           </div>
         </div>
-        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.35rem 0.75rem;">
           <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
             <input type="radio" name="s9-disposition" value="mandatory_daep" ${findings.disposition === 'mandatory_daep' ? 'checked' : ''} style="accent-color:#ef4444;" /> Mandatory DAEP Referral
           </label>
-          <div style="margin-left:1.25rem;margin-top:0.5rem;display:flex;align-items:center;gap:0.5rem;">
+          <div style="margin-left:1.25rem;margin-top:0.25rem;display:flex;align-items:center;gap:0.5rem;">
             <span style="font-size:0.8125rem;color:#6b7280;">Forwarded to:</span>
-            <input type="text" class="form-input" id="s9-mandatoryTo" value="${escapeAttr(findings.mandatoryTo || '')}" style="width:220px;padding:0.35rem 0.5rem;font-size:0.8125rem;" placeholder="Director / Superintendent" />
+            <input type="text" class="form-input" id="s9-mandatoryTo" value="${escapeAttr(findings.mandatoryTo || '')}" style="width:200px;padding:0.25rem 0.5rem;font-size:0.8125rem;" placeholder="Director / Superintendent" />
           </div>
         </div>
-        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.5rem 0.75rem;">
+        <div style="border:1px solid #d1d5db;border-radius:6px;background:#fff;padding:0.35rem 0.75rem;">
           <label style="display:flex;align-items:center;gap:0.4rem;cursor:pointer;font-size:0.8125rem;font-weight:500;color:#374151;">
             <input type="radio" name="s9-disposition" value="expulsion" ${findings.disposition === 'expulsion' ? 'checked' : ''} style="accent-color:#dc2626;" /> Mandatory Expulsion Recommendation
           </label>

@@ -411,7 +411,7 @@ async function generateAppealPdf(caseRec, level) {
   }
 
   // ── Check for page break ──
-  if (y > 220) { doc.addPage(); y = 18; }
+  if (y > 200) { doc.addPage(); y = 18; }
 
   // ── Section 4: Grounds for Appeal ──
   y = sectionHeader(doc, 'SECTION 4: GROUNDS FOR APPEAL (check all that apply)', margin, y, contentW);
@@ -434,6 +434,7 @@ async function generateAppealPdf(caseRec, level) {
   y += 2;
 
   // ── Section 5: Statement ──
+  if (y > 200) { doc.addPage(); y = 18; }
   y = sectionHeader(doc, 'SECTION 5: STATEMENT IN SUPPORT OF APPEAL', margin, y, contentW);
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(7);
@@ -448,7 +449,7 @@ async function generateAppealPdf(caseRec, level) {
   }
   y += 2;
 
-  if (y > 220) { doc.addPage(); y = 18; }
+  if (y > 200) { doc.addPage(); y = 18; }
 
   // ── Section 6: Supporting Documentation ──
   y = sectionHeader(doc, 'SECTION 6: SUPPORTING DOCUMENTATION (check all attached)', margin, y, contentW);
@@ -489,7 +490,7 @@ async function generateAppealPdf(caseRec, level) {
 
   // ── Level 3: Attorney ──
   if (level === 3) {
-    if (y > 220) { doc.addPage(); y = 18; }
+    if (y > 200) { doc.addPage(); y = 18; }
     y = sectionHeader(doc, 'SECTION 6B: LEGAL REPRESENTATION (if applicable)', margin, y, contentW);
     const attyFields = [
       ['Attorney Name', '', 'Bar Number', ''],
@@ -500,7 +501,7 @@ async function generateAppealPdf(caseRec, level) {
     y += 3;
   }
 
-  if (y > 230) { doc.addPage(); y = 18; }
+  if (y > 200) { doc.addPage(); y = 18; }
 
   // ── Section 7: SPED/504 Status ──
   y = sectionHeader(doc, 'SECTION 7: SPECIAL EDUCATION / SECTION 504 STATUS', margin, y, contentW);
@@ -523,6 +524,7 @@ async function generateAppealPdf(caseRec, level) {
   y += 8;
 
   // ── Section 8: Requested Relief ──
+  if (y > 200) { doc.addPage(); y = 18; }
   y = sectionHeader(doc, 'SECTION 8: REQUESTED RELIEF', margin, y, contentW);
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(7);
@@ -536,7 +538,7 @@ async function generateAppealPdf(caseRec, level) {
   }
   y += 2;
 
-  if (y > 230) { doc.addPage(); y = 18; }
+  if (y > 200) { doc.addPage(); y = 18; }
 
   // ── Section 9: Accommodations ──
   y = sectionHeader(doc, 'SECTION 9: ACCOMMODATION REQUESTS', margin, y, contentW);
@@ -551,6 +553,7 @@ async function generateAppealPdf(caseRec, level) {
   y += 3;
 
   // ── Section 10: Signature ──
+  if (y > 200) { doc.addPage(); y = 18; }
   y = sectionHeader(doc, 'SECTION 10: CERTIFICATION AND SIGNATURE', margin, y, contentW);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7.5);

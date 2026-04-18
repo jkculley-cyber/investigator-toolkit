@@ -356,8 +356,9 @@ async function generateCasePdf(jsPDF, caseId) {
   sectionTitle('Section 6 — Student Statement');
   const studentStatement = statements.find(s => (s.type || '').toLowerCase() === 'student');
   if (studentStatement) {
-    checkPage(20);
     const lines = doc.splitTextToSize(studentStatement.content || 'No content.', pageWidth - margin * 2 - 4);
+    const needed = lines.length * 4 + 15;
+    checkPage(needed);
     doc.text(lines, margin + 2, y);
     y += lines.length * 4 + 6;
   } else {
@@ -370,12 +371,13 @@ async function generateCasePdf(jsPDF, caseId) {
   const witnessStatements = statements.filter(s => (s.type || '').toLowerCase() !== 'student');
   if (witnessStatements.length > 0) {
     witnessStatements.forEach((ws, i) => {
-      checkPage(20);
+      const lines = doc.splitTextToSize(ws.content || 'No content.', pageWidth - margin * 2 - 4);
+      const needed = lines.length * 4 + 15;
+      checkPage(needed);
       doc.setFont(undefined, 'bold');
       doc.text(`Witness ${i + 1}: ${ws.name || 'Unknown'}`, margin + 2, y);
       y += 5;
       doc.setFont(undefined, 'normal');
-      const lines = doc.splitTextToSize(ws.content || 'No content.', pageWidth - margin * 2 - 4);
       doc.text(lines, margin + 2, y);
       y += lines.length * 4 + 6;
     });

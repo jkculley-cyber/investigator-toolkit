@@ -191,7 +191,13 @@ function checkPageBreak(doc, y, needed) {
 }
 
 function drawLinedArea(doc, x, y, w, lineCount) {
+  const pageH = doc.internal.pageSize.getHeight();
   for (let i = 0; i < lineCount; i++) {
+    if (y + 6 > pageH - 25) {
+      addFooter(doc, '', '');
+      doc.addPage();
+      y = 20;
+    }
     doc.setDrawColor(200);
     doc.setLineWidth(0.2);
     doc.line(x, y, x + w, y);

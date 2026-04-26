@@ -47,11 +47,11 @@ Before creating your first case, configure your settings:
 
 | Offense Type | Texas Education Code Reference |
 |-------------|-------------------------------|
-| Fighting | TEC 37.001(a)(1) -- Conduct Code violations |
-| Drugs | TEC 37.006 -- Mandatory DAEP removal offenses |
-| Threats | TEC 37.001(a)(2) -- Threatening behavior |
-| Harassment | TEC 37.001(a)(4) -- Harassment per district policy |
-| General Misconduct | TEC 37.001 -- General Student Code of Conduct violations |
+| Fighting | TEC §37.006(a)(2)(B) -- Assault on school property (Penal Code §22.01(a)(1)) |
+| Drugs | TEC §37.006(a)(2)(C)–(D) -- Controlled substances/dangerous drugs and alcohol on school property |
+| Threats | TEC §37.006(a)(1) -- Terroristic threat (Penal Code §22.07) / false alarm (PC §42.06); §37.001 for lesser SCOC threats |
+| Harassment | TEC §37.0832 -- David's Law bullying provisions; §37.001 for SCOC-defined harassment |
+| General Misconduct | TEC §37.001 -- General Student Code of Conduct violations |
 
 3. Enter the **student name**, **date of incident**, and **initial narrative**.
 4. Click **Create**. The case enters the **Intake** stage.

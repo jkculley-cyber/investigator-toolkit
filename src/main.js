@@ -2,7 +2,8 @@
  * Campus Investigation Toolkit — App Shell + Router
  */
 import { openDB, getSetting, setSetting } from './db.js';
-import { checkLicense, getLicenseKey, setLicenseKey, clearLicense } from './license.js';
+import { checkLicense, getLicenseKey, setLicenseKey, clearLicense,
+  isGated, getTrialInfo, startTrial, hasUsedTrial, isTrialActive, getTrialDaysRemaining } from './license.js';
 import './styles.css';
 
 // --- Page module imports ---
@@ -208,28 +209,8 @@ function renderSetupWizard() {
   `;
 }
 
-// --- Trial helpers ---
-function getTrialInfo() {
-  try {
-    return JSON.parse(localStorage.getItem('inv_trial') || 'null');
-  } catch { return null; }
-}
-
-function isTrialActive() {
-  const trial = getTrialInfo();
-  if (!trial || trial.status !== 'trial') return false;
-  const started = new Date(trial.started);
-  const elapsed = (Date.now() - started.getTime()) / (1000 * 60 * 60 * 24);
-  return elapsed <= 14;
-}
-
-function getTrialDaysRemaining() {
-  const trial = getTrialInfo();
-  if (!trial || trial.status !== 'trial') return 0;
-  const started = new Date(trial.started);
-  const elapsed = (Date.now() - started.getTime()) / (1000 * 60 * 60 * 24);
-  return Math.max(0, Math.ceil(14 - elapsed));
-}
+// Trial + gate helpers now live in license.js (single source of truth, also
+// used by the db.js write gate) and are imported above.
 
 // --- License entry screen ---
 function renderLicenseScreen(error) {
@@ -249,9 +230,14 @@ function renderLicenseScreen(error) {
         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:0.5rem;">Activate License</button>
       </form>
       <div style="margin-top:1.5rem;text-align:center;border-top:1px solid #e5e7eb;padding-top:1.25rem;">
-        <p style="font-size:0.875rem;color:var(--gray-600);margin-bottom:0.75rem;">No license key? No problem.</p>
-        <button id="start-trial" class="btn" style="width:100%;justify-content:center;background:#2A9D8F;color:#fff;font-weight:700;">Start Free 14-Day Trial</button>
-        <p style="font-size:0.75rem;color:var(--gray-400);margin-top:0.5rem;">Full access. No credit card required. Data stays on your device.</p>
+        ${hasUsedTrial() ? `
+          <p style="font-size:0.875rem;color:var(--gray-600);margin-bottom:0.5rem;">Your free 14-day trial has been used.</p>
+          <p style="font-size:0.8125rem;color:var(--gray-500);">Purchase a license at <strong>clearpathedgroup.com</strong> and enter your key above to continue. Your existing cases are safe on this device.</p>
+        ` : `
+          <p style="font-size:0.875rem;color:var(--gray-600);margin-bottom:0.75rem;">No license key? No problem.</p>
+          <button id="start-trial" class="btn" style="width:100%;justify-content:center;background:#2A9D8F;color:#fff;font-weight:700;">Start Free 14-Day Trial</button>
+          <p style="font-size:0.75rem;color:var(--gray-400);margin-top:0.5rem;">Full access. No credit card required. Data stays on your device.</p>
+        `}
       </div>
     </div>
   `;
@@ -289,10 +275,10 @@ function showLicenseScreen(app, error) {
     boot(); // License valid — proceed to full boot
   });
 
-  // Trial button
+  // Trial button (only rendered when the trial has never been used)
   const trialBtn = document.getElementById('start-trial');
   trialBtn?.addEventListener('click', () => {
-    localStorage.setItem('inv_trial', JSON.stringify({ started: new Date().toISOString(), status: 'trial' }));
+    startTrial(); // one-time; never resets an existing/expired trial
     licenseValid = true;
     boot();
   });
@@ -305,29 +291,25 @@ async function boot() {
   // Open DB
   await openDB();
 
-  // Check license first
-  const licResult = await checkLicense();
-  licenseValid = licResult.valid;
-
-  // Check trial status
-  const trialInfo = getTrialInfo();
+  // Refresh the cached license status (drives the synchronous isGated() used
+  // by the db.js write gate), then read trial/gate state.
+  await checkLicense();
+  const hasKey = !!getLicenseKey();
   const trialActive = isTrialActive();
+  const gated = isGated(); // no active license AND no active trial
 
-  // If no license key and no active trial, show license/trial entry screen
-  if (!getLicenseKey() && !trialActive) {
-    // If trial expired, show expiry message
-    if (trialInfo && trialInfo.status === 'trial') {
-      showLicenseScreen(app, 'Your 14-day free trial has expired. Enter a license key to continue.');
-    } else {
-      showLicenseScreen(app);
-    }
+  // True first run ONLY: never licensed, never trialed → entry screen so the
+  // user can start the trial or enter a key. Once a trial has been used, an
+  // expired user is NOT bounced here — they load the app gated (read/export
+  // still work) and convert via Settings. This is what closes the re-trial
+  // loophole: the "Start Free Trial" button is unreachable after first use.
+  if (!hasKey && !hasUsedTrial()) {
+    showLicenseScreen(app);
     return;
   }
 
-  // Trial is active — treat as valid license
-  if (trialActive && !licenseValid) {
-    licenseValid = true;
-  }
+  // licenseValid means "full access" for the rest of the UI.
+  licenseValid = !gated;
 
   // Check first-launch
   const campusName = await getSetting('campusName');
@@ -349,11 +331,11 @@ async function boot() {
     return;
   }
 
-  // Render shell (with soft gate banner if license invalid, or trial banner if trial active)
+  // Render shell (soft-gate banner once the trial has ended, or trial countdown)
   let topBanner = '';
-  if (!licenseValid) {
+  if (gated) {
     topBanner = renderSoftGateBanner();
-  } else if (trialActive && !getLicenseKey()) {
+  } else if (trialActive && !hasKey) {
     const daysLeft = getTrialDaysRemaining();
     topBanner = `<div style="background:#eff6ff;border-bottom:2px solid #bfdbfe;padding:0.5rem 1rem;text-align:center;font-size:0.8125rem;color:#1e40af;font-weight:600;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;">
       <span>Free Trial: ${daysLeft} day${daysLeft !== 1 ? 's' : ''} remaining</span>

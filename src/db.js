@@ -3,8 +3,17 @@
  * Raw IndexedDB with multiple object stores.
  */
 
+import { isGated } from './license.js';
+
 const DB_NAME = 'investigator_toolkit';
 const DB_VERSION = 2;
+
+// Stores that must remain writable even when the trial has ended, so a gated
+// user can still view/export their data, finish first-run setup, and keep an
+// honest audit trail. All case data is blocked — they must purchase to write.
+const GATE_EXEMPT_STORES = ['settings', 'audit_log'];
+
+const GATE_MESSAGE = 'Your free trial has ended. Enter a license key in Settings to continue.';
 
 const STORES = [
   'cases', 'timeline_entries', 'statements', 'evidence',
@@ -133,6 +142,9 @@ export async function get(storeName, id) {
 }
 
 export async function put(storeName, record) {
+  if (!GATE_EXEMPT_STORES.includes(storeName) && isGated()) {
+    throw new Error(GATE_MESSAGE);
+  }
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readwrite');
@@ -144,6 +156,9 @@ export async function put(storeName, record) {
 }
 
 export async function del(storeName, id) {
+  if (!GATE_EXEMPT_STORES.includes(storeName) && isGated()) {
+    throw new Error(GATE_MESSAGE);
+  }
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(storeName, 'readwrite');

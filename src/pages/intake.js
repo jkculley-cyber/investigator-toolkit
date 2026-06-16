@@ -2,7 +2,7 @@
  * New Case Intake Form — Section 1 (Incident Overview) + Section 2 (Student Info)
  */
 import { put, generateCaseId, getSetting } from '../db.js';
-import { checkLicense } from '../license.js';
+import { isGated } from '../license.js';
 
 const OFFENSE_TEC = {
   'Fighting/Assault': '§37.006(a)(2)(B)',
@@ -333,10 +333,10 @@ async function initForm() {
 async function handleSubmit(e) {
   e.preventDefault();
 
-  // Soft gate: block new cases when license is invalid
-  const lic = await checkLicense();
-  if (lic.softGated) {
-    alert('License expired — renew your license in Settings to create new cases.');
+  // Gate: block new cases once the trial has ended and there is no active
+  // license. Trial users (within 14 days) are NOT gated.
+  if (isGated()) {
+    alert('Your free trial has ended. Enter a license key in Settings to create new cases.');
     return;
   }
 

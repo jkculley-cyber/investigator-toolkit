@@ -89,3 +89,58 @@ export async function checkLicense() {
 
   return { valid: false, softGated: true, reason: 'offline_expired' };
 }
+
+// --- Trial helpers (single source of truth) ---
+// The trial is bound to a one-time localStorage record, like Beacon's
+// trial_started_at on the counselor profile. It is NEVER reset, so a user
+// cannot re-trial their way past the 14-day window — they must purchase.
+
+const TRIAL_KEY = 'inv_trial';
+const TRIAL_DAYS = 14;
+
+export function getTrialInfo() {
+  try {
+    return JSON.parse(localStorage.getItem(TRIAL_KEY) || 'null');
+  } catch { return null; }
+}
+
+// Starts the trial ONCE. Returns false (no-op) if a trial was ever started.
+export function startTrial() {
+  if (getTrialInfo()) return false;
+  localStorage.setItem(TRIAL_KEY, JSON.stringify({ started: new Date().toISOString(), status: 'trial' }));
+  return true;
+}
+
+export function hasUsedTrial() {
+  return !!getTrialInfo();
+}
+
+function trialElapsedDays() {
+  const trial = getTrialInfo();
+  if (!trial || trial.status !== 'trial') return Infinity;
+  return (Date.now() - new Date(trial.started).getTime()) / (1000 * 60 * 60 * 24);
+}
+
+export function isTrialActive() {
+  return trialElapsedDays() <= TRIAL_DAYS;
+}
+
+export function getTrialDaysRemaining() {
+  if (!getTrialInfo()) return 0;
+  return Math.max(0, Math.ceil(TRIAL_DAYS - trialElapsedDays()));
+}
+
+// --- Master access gate (synchronous) ---
+// True when the app must block new/edited records: no active paid license
+// AND no active trial. Reads the cached license status maintained by
+// checkLicense() (refreshed on boot + every 5 min), so it is safe to call
+// from the synchronous write path in db.js.
+export function isGated() {
+  const cached = getCachedLicense();
+  if (cached && cached.key && cached.status === 'active') {
+    const expOk = !cached.expires_at || new Date(cached.expires_at) > new Date();
+    if (expOk) return false; // valid, active license
+  }
+  if (isTrialActive()) return false; // within the 14-day trial window
+  return true; // gated — purchase required
+}
